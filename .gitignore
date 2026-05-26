@@ -1,0 +1,6 @@
+.env
+.pixi
+__pycache__/
+*.pyc
+output/
+output_reconstructed/
