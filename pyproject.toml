@@ -17,9 +17,13 @@ sequence_labelling_data_generator = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 generate = "python -m sequence_labelling_data_generator.cli"
+prepare-dataset = "python -m sequence_labelling_data_generator.prepare_dataset"
+upload-dataset = "python -m sequence_labelling_data_generator.upload_dataset"
 
 [tool.pixi.dependencies]
 python = ">=3.14.5,<3.15"
 openai = ">=2.38.0,<3"
 python-dotenv = ">=1.2.2,<2"
 tqdm = ">=4.67.3,<5"
+transformers = ">=5.9.0,<6"
+sentencepiece = ">=0.2.1,<0.3"

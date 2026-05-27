@@ -1,0 +1,36 @@
+{
+  "tag_to_id": {
+    "O": 0,
+    "B-question_label": 1,
+    "I-question_label": 2,
+    "B-stem": 3,
+    "I-stem": 4,
+    "B-option_label": 5,
+    "I-option_label": 6,
+    "B-option_text": 7,
+    "I-option_text": 8,
+    "B-context": 9,
+    "I-context": 10,
+    "B-ordering_item_label": 11,
+    "I-ordering_item_label": 12,
+    "B-ordering_item_text": 13,
+    "I-ordering_item_text": 14
+  },
+  "id_to_tag": {
+    "0": "O",
+    "1": "B-question_label",
+    "2": "I-question_label",
+    "3": "B-stem",
+    "4": "I-stem",
+    "5": "B-option_label",
+    "6": "I-option_label",
+    "7": "B-option_text",
+    "8": "I-option_text",
+    "9": "B-context",
+    "10": "I-context",
+    "11": "B-ordering_item_label",
+    "12": "I-ordering_item_label",
+    "13": "B-ordering_item_text",
+    "14": "I-ordering_item_text"
+  }
+}
