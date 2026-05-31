@@ -1,4 +1,5 @@
 import os
+from typing import Optional, Any
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -14,6 +15,7 @@ def chat(
     prompt: str,
     system: str = "You are a helpful assistant",
     model: str = "deepseek-v4-flash",
+    thinking: Optional[Any] = None,
 ) -> str:
     kwargs = {
         "model": model,
@@ -23,9 +25,19 @@ def chat(
         ],
         "stream": False,
     }
-    if "pro" in model or "reasoner" in model:
-        kwargs["reasoning_effort"] = "high"
-        kwargs["extra_body"] = {"thinking": {"type": "enabled"}}
+    
+    # Resolve reasoning effort
+    effort = None
+    if thinking is True:
+        effort = "high"
+    elif isinstance(thinking, str) and thinking in ["high", "max"]:
+        effort = thinking
+    elif thinking is None:
+        if "pro" in model or "reasoner" in model:
+            effort = "high"
+
+    if effort is not None:
+        kwargs["reasoning_effort"] = effort
 
     response = client.chat.completions.create(**kwargs)
     return response.choices[0].message.content

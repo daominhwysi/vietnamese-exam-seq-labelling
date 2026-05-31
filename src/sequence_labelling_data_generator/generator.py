@@ -13,6 +13,12 @@ from enum import Enum
 from deepseek_client import chat
 from sequence_labelling_data_generator.parser import parse_question_xml
 from sequence_labelling_data_generator.reconstructor import reconstruct_question
+from sequence_labelling_data_generator.curriculum import (
+    load_curriculum,
+    select_curriculum_path,
+    map_cognitive_level_to_difficulty,
+    SUBJECT_DISPLAY
+)
 
 class Subject(str, Enum):
     ECONOMICS_LAW = "economics_law"
@@ -38,16 +44,6 @@ class Difficulty(str, Enum):
     APPLICATION = "application"
     HIGH_APPLICATION = "high_application"
 
-SUBJECT_DISPLAY = {
-    Subject.ECONOMICS_LAW: 'Kinh tế pháp luật',
-    Subject.GEOGRAPHY: 'Địa lý',
-    Subject.HISTORY: 'Lịch sử',
-    Subject.MATH_ALGEBRA: 'Toán Đại số',
-    Subject.MATH_GEOMETRY: 'Toán hình học',
-    Subject.PHYSICS: 'Vật lý',
-    Subject.CHEMISTRY: 'Hóa học'
-}
-
 QUESTION_TYPE_DISPLAY = {
     QuestionType.MULTIPLE_CHOICE: 'trắc nghiệm nhiều phương án',
     QuestionType.TRUE_FALSE: 'đúng sai',
@@ -68,7 +64,13 @@ DIFFICULTY_DISPLAY = {
 GRADES = [8, 9, 10, 11, 12]
 
 
-def make_standard_prompt(subject: Subject, grade: int, q_type: QuestionType, difficulty: Difficulty) -> tuple[str, str]:
+def make_standard_prompt(
+    subject: Subject, 
+    grade: int, 
+    q_type: QuestionType, 
+    difficulty: Difficulty,
+    problem_type_info: Optional[Dict[str, Any]] = None
+) -> tuple[str, str]:
     if q_type == QuestionType.MULTIPLE_CHOICE:
         length_desc = "trung bình phần dẫn (stem) là 30 từ"
         format_example = """<question>
@@ -104,13 +106,27 @@ def make_standard_prompt(subject: Subject, grade: int, q_type: QuestionType, dif
 
     system = "Bạn là một AI chuyên môn cao về biên soạn câu hỏi đề thi và tài liệu học tập tại Việt Nam."
     
+    curriculum_context = ""
+    if problem_type_info:
+        examples_str = ""
+        if problem_type_info.get("examples"):
+            examples_str = "\n- Ví dụ câu hỏi tham khảo:\n" + "\n".join([f"  + {ex}" for ex in problem_type_info["examples"]])
+            
+        curriculum_context = f"""
+Thông tin chương trình học cụ thể để biên soạn câu hỏi:
+- Chương (Chapter): {problem_type_info.get('chapter')}
+- Bài học (Unit): {problem_type_info.get('unit')}
+- Dạng bài tập (Problem Type): {problem_type_info.get('name')}
+- Chi tiết phương pháp/công thức cần áp dụng: {problem_type_info.get('details')}{examples_str}
+"""
+
     prompt = f"""Hãy tạo ngẫu nhiên một câu hỏi cho:
-- Môn học: {SUBJECT_DISPLAY[subject]}
+- Môn học: {SUBJECT_DISPLAY.get(subject.value, subject.value)}
 - Lớp: {grade}
 - Dạng câu hỏi: {QUESTION_TYPE_DISPLAY[q_type]}
 - Mức độ nhận thức: {DIFFICULTY_DISPLAY[difficulty]}
 - Độ dài phần dẫn (stem): {length_desc}
-
+{curriculum_context}
 Yêu cầu định dạng:
 Chỉ xuất ra cấu trúc XML sau đây, không kèm theo bất kỳ lời thoại, văn bản giải thích hay bọc định dạng nào ngoài XML.
 {format_example}
@@ -125,7 +141,13 @@ Quy tắc quan trọng:
 """
     return system, prompt
 
-def make_group_prompt(subject: Subject, grade: int, q_type: QuestionType, difficulty: Difficulty) -> tuple[str, str]:
+def make_group_prompt(
+    subject: Subject, 
+    grade: int, 
+    q_type: QuestionType, 
+    difficulty: Difficulty,
+    problem_type_info: Optional[Dict[str, Any]] = None
+) -> tuple[str, str]:
     if q_type == QuestionType.GROUP_MULTIPLE_CHOICE:
         num_sub = "3 đến 4 câu trắc nghiệm"
         format_example = """<group_question>
@@ -154,12 +176,26 @@ def make_group_prompt(subject: Subject, grade: int, q_type: QuestionType, diffic
 
     system = "Bạn là một AI chuyên môn cao về biên soạn câu hỏi đề thi và tài liệu học tập tại Việt Nam."
     
+    curriculum_context = ""
+    if problem_type_info:
+        examples_str = ""
+        if problem_type_info.get("examples"):
+            examples_str = "\n- Ví dụ câu hỏi tham khảo:\n" + "\n".join([f"  + {ex}" for ex in problem_type_info["examples"]])
+            
+        curriculum_context = f"""
+Thông tin chương trình học cụ thể để biên soạn câu hỏi:
+- Chương (Chapter): {problem_type_info.get('chapter')}
+- Bài học (Unit): {problem_type_info.get('unit')}
+- Dạng bài tập (Problem Type): {problem_type_info.get('name')}
+- Chi tiết phương pháp/công thức cần áp dụng: {problem_type_info.get('details')}{examples_str}
+"""
+
     prompt = f"""Hãy tạo ngẫu nhiên một nhóm câu hỏi đặc biệt (từ một thông tin dùng chung phát sinh ra nhiều câu hỏi) cho:
-- Môn học: {SUBJECT_DISPLAY[subject]}
+- Môn học: {SUBJECT_DISPLAY.get(subject.value, subject.value)}
 - Lớp: {grade}
 - Mức độ nhận thức: {DIFFICULTY_DISPLAY[difficulty]}
 - Định dạng nhóm câu hỏi: Từ một thông tin ngữ cảnh chung, hãy tạo ra {num_sub}.
-
+{curriculum_context}
 Yêu cầu định dạng:
 Chỉ xuất ra cấu trúc XML sau đây, không kèm theo bất kỳ lời thoại, văn bản giải thích hay bọc định dạng nào ngoài XML.
 {format_example}
@@ -175,34 +211,103 @@ Quy tắc quan trọng:
     return system, prompt
 
 
-
-def generate_single_question() -> Optional[Dict[str, Any]]:
-    """Generates a single question/group based on randomized criteria, tries to parse it, and returns the dict representation."""
-    # 1. Randomize parameters
-    subject = random.choice(list(Subject))
-    grade = random.choice(GRADES)
+def generate_single_question(
+    subject: Optional[Subject] = None,
+    grade: Optional[int] = None,
+    chapter_filter: Optional[str] = None,
+    unit_filter: Optional[str] = None,
+    problem_type_filter: Optional[str] = None,
+    model: Optional[str] = None,
+    thinking: Optional[bool] = None
+) -> Optional[Dict[str, Any]]:
+    """Generates a single question/group based on curriculum path or randomized criteria, tries to parse it, and returns the dict representation."""
     
-    # Randomize difficulty with weighted probability:
-    # Nhận biết 30%, Thông hiểu 30%, Vận dụng thấp 10%, Vận dụng thường 20%, Vận dụng cao 10%
-    difficulty = random.choices(
-        [
-            Difficulty.RECOGNIZE,
-            Difficulty.COMPREHEND,
-            Difficulty.LOW_APPLICATION,
-            Difficulty.APPLICATION,
-            Difficulty.HIGH_APPLICATION
-        ],
-        weights=[30, 30, 10, 20, 10],
-        k=1
-    )[0]
+    # 1. Resolve Subject and Grade
+    if subject is None or grade is None:
+        # If filters are present, try to find an existing curriculum JSON that matches
+        matched_curricula = []
+        curriculum_dir = Path("output") / "curriculum"
+        if curriculum_dir.exists():
+            for file in curriculum_dir.glob("*.json"):
+                match = re.match(r"^([a-zA-Z0-9_]+)_(\d+)\.json$", file.name)
+                if match:
+                    matched_curricula.append((match.group(1), int(match.group(2))))
+                    
+        # Filter matching subject/grade if one of them is provided
+        if subject is not None:
+            matched_curricula = [m for m in matched_curricula if m[0] == subject.value]
+        if grade is not None:
+            matched_curricula = [m for m in matched_curricula if m[1] == grade]
+            
+        if matched_curricula and (chapter_filter or unit_filter or problem_type_filter):
+            # Try to find a combination that matches our filters
+            random.shuffle(matched_curricula)
+            found_path = None
+            for subj_str, grd_val in matched_curricula:
+                curr = load_curriculum(subj_str, grd_val, autogenerate=False, model=model, thinking=thinking)
+                if curr:
+                    res = select_curriculum_path(curr, chapter_filter, unit_filter, problem_type_filter)
+                    if res:
+                        subject = Subject(subj_str)
+                        grade = grd_val
+                        found_path = res
+                        break
+            if not found_path:
+                # If filters are requested but no matching combination exists in loaded files, return None (cannot generate)
+                tqdm.write("Warning: No matching curriculum path found with the specified filters.")
+                return None
+        else:
+            # Fallback to random pick
+            if subject is None:
+                subject = random.choice(list(Subject))
+            if grade is None:
+                grade = random.choice(GRADES)
+
+    # 2. Load Curriculum and Choose Problem Type (Dạng)
+    problem_type_info = None
+    difficulty = None
+    
+    # Try to load/generate curriculum
+    curriculum = load_curriculum(subject.value, grade, autogenerate=True, model=model, thinking=thinking)
+    if curriculum:
+        selected_path = select_curriculum_path(curriculum, chapter_filter, unit_filter, problem_type_filter)
+        if selected_path:
+            chapter_dict, unit_dict, pt_dict = selected_path
+            problem_type_info = {
+                "chapter": chapter_dict.get("name"),
+                "unit": unit_dict.get("name"),
+                "id": pt_dict.get("id"),
+                "name": pt_dict.get("name"),
+                "details": pt_dict.get("details", ""),
+                "examples": pt_dict.get("examples", []),
+                "cognitive_level": pt_dict.get("cognitive_level")
+            }
+            difficulty_str = map_cognitive_level_to_difficulty(problem_type_info["cognitive_level"])
+            difficulty = Difficulty(difficulty_str)
+        else:
+            tqdm.write(f"Warning: Curriculum loaded for {subject.value} Grade {grade}, but no items matched filters.")
+            return None
+            
+    # Fallback to random parameters if no curriculum/path found
+    if difficulty is None:
+        difficulty = random.choices(
+            [
+                Difficulty.RECOGNIZE,
+                Difficulty.COMPREHEND,
+                Difficulty.LOW_APPLICATION,
+                Difficulty.APPLICATION,
+                Difficulty.HIGH_APPLICATION
+            ],
+            weights=[30, 30, 10, 20, 10],
+            k=1
+        )[0]
     
     # 5% probability of special group question
     is_group = random.random() < 0.05
     
     if is_group:
-        # Group questions support multiple choice or short answer
         actual_type = random.choice([QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER])
-        system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty)
+        system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
     else:
         actual_type = random.choice([
             QuestionType.MULTIPLE_CHOICE,
@@ -210,13 +315,18 @@ def generate_single_question() -> Optional[Dict[str, Any]]:
             QuestionType.SHORT_ANSWER,
             QuestionType.ORDERING
         ])
-        system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty)
+        system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
 
-    # 2. Call deepseek with retry logic
+    # 3. Call deepseek with retry logic
     max_retries = 3
     for attempt in range(1, max_retries + 1):
         try:
-            response = chat(prompt=user_prompt, system=system_prompt)
+            chat_kwargs = {}
+            if model is not None:
+                chat_kwargs["model"] = model
+            if thinking is not None:
+                chat_kwargs["thinking"] = thinking
+            response = chat(prompt=user_prompt, system=system_prompt, **chat_kwargs)
             
             parsed_data = parse_question_xml(response)
             if parsed_data:
@@ -226,6 +336,20 @@ def generate_single_question() -> Optional[Dict[str, Any]]:
                 parsed_data["question_type"] = actual_type.value
                 parsed_data["difficulty"] = difficulty.value
                 
+                # Add curriculum-based metadata
+                if problem_type_info:
+                    parsed_data["chapter"] = problem_type_info["chapter"]
+                    parsed_data["unit"] = problem_type_info["unit"]
+                    parsed_data["problem_type_id"] = problem_type_info["id"]
+                    parsed_data["problem_type_name"] = problem_type_info["name"]
+                    parsed_data["problem_type_level"] = problem_type_info["cognitive_level"]
+                else:
+                    parsed_data["chapter"] = None
+                    parsed_data["unit"] = None
+                    parsed_data["problem_type_id"] = None
+                    parsed_data["problem_type_name"] = None
+                    parsed_data["problem_type_level"] = None
+                
                 # Reconstruct raw text and track character spans
                 parsed_data = reconstruct_question(parsed_data)
                 
@@ -233,20 +357,47 @@ def generate_single_question() -> Optional[Dict[str, Any]]:
             else:
                 tqdm.write(f"Warning: Failed to parse XML response on attempt {attempt}.")
         except Exception as e:
-
             tqdm.write(f"Error calling API on attempt {attempt}: {e}")
             
     return None
 
-def run_generator(num_questions: int, output_dir: str = "output", max_workers: int = 4):
+def run_generator(
+    num_questions: int, 
+    output_dir: str = "output", 
+    max_workers: int = 4,
+    subject: Optional[str] = None,
+    grade: Optional[int] = None,
+    chapter: Optional[str] = None,
+    unit: Optional[str] = None,
+    problem_type: Optional[str] = None,
+    model: Optional[str] = None,
+    thinking: Optional[bool] = None
+):
     """Generates specified number of questions in parallel and saves each to its own file in the output directory."""
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
     
     success_count = 0
     
+    # Validate Subject if provided
+    subj_enum = None
+    if subject:
+        try:
+            subj_enum = Subject(subject)
+        except ValueError:
+            print(f"Error: Invalid subject '{subject}'. Must be one of: {[s.value for s in Subject]}")
+            return
+            
     def generate_and_save(index: int) -> bool:
-        q_data = generate_single_question()
+        q_data = generate_single_question(
+            subject=subj_enum,
+            grade=grade,
+            chapter_filter=chapter,
+            unit_filter=unit,
+            problem_type_filter=problem_type,
+            model=model,
+            thinking=thinking
+        )
         if q_data:
             subject_slug = q_data["subject"]
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -275,6 +426,3 @@ def run_generator(num_questions: int, output_dir: str = "output", max_workers: i
                 tqdm.write(f"Exception raised during generation of Question {idx+1}: {e}")
             
     print(f"Completed: {success_count}/{num_questions} successfully generated. Saved to '{output_dir}/'")
-
-
-

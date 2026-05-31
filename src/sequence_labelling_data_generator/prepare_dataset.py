@@ -149,7 +149,12 @@ def process_single_question(
             "grade": q_data.get("grade"),
             "question_type": q_data.get("question_type"),
             "difficulty": q_data.get("difficulty"),
-            "is_group": q_data.get("is_group", False)
+            "is_group": q_data.get("is_group", False),
+            "chapter": q_data.get("chapter"),
+            "unit": q_data.get("unit"),
+            "problem_type_id": q_data.get("problem_type_id"),
+            "problem_type_name": q_data.get("problem_type_name"),
+            "problem_type_level": q_data.get("problem_type_level")
         }
     }
 

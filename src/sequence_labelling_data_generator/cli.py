@@ -7,6 +7,7 @@ import concurrent.futures
 from tqdm import tqdm
 
 from sequence_labelling_data_generator.generator import run_generator
+from sequence_labelling_data_generator.curriculum import generate_curriculum
 from sequence_labelling_data_generator.reconstructor import (
     reconstruct_question,
     ReconstructorConfig,
@@ -66,6 +67,11 @@ def main():
     
     # Mode selection
     parser.add_argument(
+        "--create-curriculum",
+        action="store_true",
+        help="Stage 1: Generate a curriculum JSON file using AI for the specified --subject and --grade."
+    )
+    parser.add_argument(
         "--reconstruct",
         action="store_true",
         help="If set, reconstructs raw text and tracks spans for all existing JSON files in the output directory instead of generating new ones."
@@ -102,6 +108,65 @@ def main():
         help="Number of concurrent workers for parallel generation/reconstruction (default: 4)"
     )
     
+    # Curriculum filtering and generation parameters
+    parser.add_argument(
+        "--subject",
+        type=str,
+        default=None,
+        help="Subject slug for curriculum generation or question generation filtering (e.g. 'physics')."
+    )
+    parser.add_argument(
+        "--grade",
+        type=int,
+        default=None,
+        help="Grade level for curriculum generation or question generation filtering (e.g. 11)."
+    )
+    parser.add_argument(
+        "--chapter",
+        type=str,
+        default=None,
+        help="Chapter filter for question generation (substring match, case-insensitive)."
+    )
+    parser.add_argument(
+        "--unit",
+        type=str,
+        default=None,
+        help="Unit filter for question generation (substring match, case-insensitive)."
+    )
+    parser.add_argument(
+        "--problem-type",
+        "--dang",
+        type=str,
+        dest="problem_type",
+        default=None,
+        help="Problem type (Dạng) ID or name filter for question generation (substring match, case-insensitive)."
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="deepseek-v4-flash",
+        help="The model to use (default: 'deepseek-v4-flash')"
+    )
+    parser.add_argument(
+        "--thinking",
+        action="store_true",
+        default=None,
+        help="Enable thinking/reasoning mode (for compatible models)"
+    )
+    parser.add_argument(
+        "--no-thinking",
+        action="store_false",
+        dest="thinking",
+        help="Disable thinking/reasoning mode (for compatible models)"
+    )
+    parser.add_argument(
+        "--reasoning-effort",
+        type=str,
+        choices=["high", "max", "low", "medium", "none"],
+        default=None,
+        help="Configure reasoning effort level for thinking mode (e.g. 'high', 'max')"
+    )
+    
     # Custom reconstructor configurations
     parser.add_argument(
         "--q-prefix",
@@ -132,7 +197,28 @@ def main():
     
     args = parser.parse_args()
     
-    # Construct ReconstructorConfig from CLI arguments
+    # Resolve thinking parameter
+    thinking = args.thinking
+    if args.reasoning_effort is not None:
+        if args.reasoning_effort == "none":
+            thinking = False
+        else:
+            thinking = args.reasoning_effort
+            
+    # Stage 1: Create Curriculum
+    if args.create_curriculum:
+        if not args.subject or not args.grade:
+            print("Error: Generating a curriculum requires both --subject and --grade parameters.")
+            sys.exit(1)
+        try:
+            generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking)
+            print("Curriculum generation completed successfully.")
+        except Exception as e:
+            print(f"Error generating curriculum: {e}")
+            sys.exit(1)
+        return
+        
+    # Reconstructor Config
     reconstruct_config = ReconstructorConfig(
         question_prefix_template=args.q_prefix,
         option_prefix_style=args.opt_style,
@@ -158,7 +244,18 @@ def main():
             sys.exit(1)
             
         print(f"Starting parallel generation of {args.num} question(s) to directory: {args.output} with concurrency: {args.concurrency}")
-        run_generator(num_questions=args.num, output_dir=args.output, max_workers=args.concurrency)
+        run_generator(
+            num_questions=args.num, 
+            output_dir=args.output, 
+            max_workers=args.concurrency,
+            subject=args.subject,
+            grade=args.grade,
+            chapter=args.chapter,
+            unit=args.unit,
+            problem_type=args.problem_type,
+            model=args.model,
+            thinking=thinking
+        )
 
 if __name__ == "__main__":
     main()
