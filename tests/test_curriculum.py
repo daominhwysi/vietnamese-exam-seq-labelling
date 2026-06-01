@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from sequence_labelling_data_generator.curriculum import (
+from src.generation.curriculum import (
     load_curriculum,
     select_curriculum_path,
     map_cognitive_level_to_difficulty,
@@ -140,7 +140,7 @@ class TestCurriculum(unittest.TestCase):
         self.assertIsNone(result)
 
     def test_fix_json_strings(self):
-        from sequence_labelling_data_generator.curriculum import fix_json_strings
+        from src.generation.curriculum import fix_json_strings
         
         # 1. Test escaping single backslashes in LaTeX blocks inside strings
         raw_json_latex = '{"details": "Công thức $v = \\frac{c}{n}$ và $\\lambda = i*a/D$"}' # here the escapes are single backslashes in raw text
@@ -168,13 +168,13 @@ class TestCurriculum(unittest.TestCase):
         fixed_bs_newline = fix_json_strings(json_backslash_newline)
         self.assertIn('Line 1\\\\\\nLine 2', fixed_bs_newline)
 
-    @unittest.mock.patch('sequence_labelling_data_generator.curriculum.chat')
+    @unittest.mock.patch('src.generation.curriculum.chat')
     def test_generate_curriculum_passes_model_and_thinking(self, mock_chat):
         mock_chat.return_value = '{"subject": "physics", "grade": 11, "chapters": []}'
-        from sequence_labelling_data_generator.curriculum import generate_curriculum
+        from src.generation.curriculum import generate_curriculum
         
         with TemporaryDirectory() as tmpdir:
-            with unittest.mock.patch('sequence_labelling_data_generator.curriculum.get_curriculum_path') as mock_path:
+            with unittest.mock.patch('src.generation.curriculum.get_curriculum_path') as mock_path:
                 mock_path.return_value = Path(tmpdir) / "test_subj_11.json"
                 generate_curriculum("test_subj", 11, model="custom-model", thinking=True)
                 
@@ -183,10 +183,10 @@ class TestCurriculum(unittest.TestCase):
                 self.assertEqual(kwargs.get("model"), "custom-model")
                 self.assertEqual(kwargs.get("thinking"), True)
 
-    @unittest.mock.patch('sequence_labelling_data_generator.generator.chat')
-    @unittest.mock.patch('sequence_labelling_data_generator.generator.load_curriculum')
+    @unittest.mock.patch('src.generation.generator.chat')
+    @unittest.mock.patch('src.generation.generator.load_curriculum')
     def test_generate_single_question_passes_model_and_thinking(self, mock_load, mock_chat):
-        from sequence_labelling_data_generator.generator import generate_single_question, Subject
+        from src.generation.generator import generate_single_question, Subject
         
         mock_load.return_value = {
             "subject": "physics",
@@ -228,9 +228,9 @@ class TestCurriculum(unittest.TestCase):
         self.assertEqual(kwargs.get("model"), "custom-model-2")
         self.assertEqual(kwargs.get("thinking"), True)
 
-    @unittest.mock.patch('deepseek_client.client.chat.completions.create')
+    @unittest.mock.patch('src.generation.deepseek_client.client.chat.completions.create')
     def test_chat_thinking_modes(self, mock_create):
-        from deepseek_client import chat
+        from src.generation.deepseek_client import chat
         
         mock_response = unittest.mock.MagicMock()
         mock_response.choices = [unittest.mock.MagicMock()]

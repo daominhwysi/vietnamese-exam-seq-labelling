@@ -1,0 +1,250 @@
+import argparse
+import sys
+import json
+from pathlib import Path
+from typing import Optional
+import concurrent.futures
+from tqdm import tqdm
+
+from src.generation.generator import run_generator
+from src.generation.curriculum import generate_curriculum
+from src.generation.reconstructor import (
+    reconstruct_question,
+    ReconstructorConfig,
+    OPTION_PREFIX_STYLES
+)
+
+def run_reconstructor_on_existing(input_directory: str, dest_directory: Optional[str], config: ReconstructorConfig, max_workers: int = 4):
+    in_dir = Path(input_directory)
+    if not in_dir.exists():
+        print(f"Error: Input directory '{input_directory}' does not exist.")
+        sys.exit(1)
+        
+    json_files = list(in_dir.glob("question_*.json"))
+    if not json_files:
+        print(f"No question JSON files found in '{input_directory}'.")
+        return
+        
+    if dest_directory:
+        dest_path = Path(dest_directory)
+        dest_path.mkdir(parents=True, exist_ok=True)
+        print(f"Found {len(json_files)} question file(s) in '{input_directory}'. Saving reconstructed files to '{dest_directory}'...")
+    else:
+        print(f"WARNING: Modifying {len(json_files)} question file(s) in '{input_directory}' in-place...")
+        
+    def process_file(file_path: Path) -> bool:
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            
+            # Reconstruct (add raw_text and spans)
+            updated_data = reconstruct_question(data, config)
+            
+            # Target path
+            target_path = file_path if not dest_directory else Path(dest_directory) / file_path.name
+            
+            with open(target_path, "w", encoding="utf-8") as f:
+                json.dump(updated_data, f, ensure_ascii=False, indent=2)
+            return True
+        except Exception as e:
+            tqdm.write(f"Error processing {file_path.name}: {e}")
+            return False
+
+    success_count = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {executor.submit(process_file, fp): fp for fp in json_files}
+        for future in tqdm(concurrent.futures.as_completed(futures), total=len(json_files), desc="Reconstructing"):
+            if future.result():
+                success_count += 1
+                
+    if dest_directory:
+        print(f"Completed: Saved {success_count}/{len(json_files)} reconstructed file(s) to '{dest_directory}'.")
+    else:
+        print(f"Completed: Reconstructed {success_count}/{len(json_files)} file(s) in-place.")
+
+def main():
+    parser = argparse.ArgumentParser(description="Mock Exam Question Generator & Text Reconstructor")
+    subparsers = parser.add_subparsers(dest="command", required=True, help="Refactored subcommands")
+    
+    # 1. curriculum
+    p_curr = subparsers.add_parser("curriculum", help="Stage 1: Generate curriculum JSON files")
+    p_curr.add_argument("--all", action="store_true", help="Generate curricula for all subjects & grades concurrently")
+    p_curr.add_argument("--subject", type=str, help="Subject slug (e.g. 'physics')")
+    p_curr.add_argument("--grade", type=int, help="Grade level (e.g. 11)")
+    p_curr.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
+    p_curr.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
+    p_curr.add_argument("-c", "--concurrency", type=int, default=4, help="Number of parallel workers for concurrent generation")
+    
+    # 2. question
+    p_q = subparsers.add_parser("question", help="Stage 2: Generate mock questions")
+    p_q.add_argument("-n", "--num", type=int, default=1, help="Number of questions to generate")
+    p_q.add_argument("-o", "--output", type=str, default="output", help="Output directory path")
+    p_q.add_argument("-c", "--concurrency", type=int, default=4, help="Number of concurrent workers")
+    p_q.add_argument("--subject", type=str, help="Subject slug")
+    p_q.add_argument("--grade", type=int, help="Grade level")
+    p_q.add_argument("--chapter", type=str, help="Chapter filter")
+    p_q.add_argument("--unit", type=str, help="Unit filter")
+    p_q.add_argument("--problem-type", "--dang", type=str, dest="problem_type", help="Problem type ID or name filter")
+    p_q.add_argument("--model", type=str, default="deepseek-v4-flash", help="The model to use")
+    p_q.add_argument("--thinking", action="store_true", default=None, help="Enable thinking/reasoning mode")
+    p_q.add_argument("--no-thinking", action="store_false", dest="thinking", help="Disable thinking/reasoning mode")
+    p_q.add_argument("--reasoning-effort", type=str, choices=["high", "max", "low", "medium", "none"], help="Reasoning effort level")
+
+    # 3. reconstruct
+    p_rec = subparsers.add_parser("reconstruct", help="Stage 3: Reconstruct raw text and track spans")
+    p_rec.add_argument("-i", "--input-dir", type=str, default="output", help="Input directory containing questions")
+    p_rec.add_argument("--in-place", action="store_true", help="Overwrite existing files directly")
+    p_rec.add_argument("--reconstruct-dest", type=str, default="output_reconstructed", help="Destination folder if not in-place")
+    p_rec.add_argument("-c", "--concurrency", type=int, default=4, help="Concurrency for reconstruction")
+    p_rec.add_argument("--q-prefix", type=str, help="Override question prefix template")
+    p_rec.add_argument("--opt-style", type=str, choices=list(OPTION_PREFIX_STYLES.keys()), help="Override option prefix style")
+    p_rec.add_argument("--ord-item-style", type=str, choices=["char", "index"], help="Override ordering item style")
+    p_rec.add_argument("--ord-item-template", type=str, help="Override ordering item template")
+
+    # 4. exam
+    p_exam = subparsers.add_parser("exam", help="Stage 4: Generate mock exams as compiled JSON")
+    p_exam.add_argument("-n", "--num-exams", type=int, default=300, help="Number of exams to generate")
+    p_exam.add_argument("-o", "--output-dir", type=str, default="output/exams", help="Output directory path")
+    p_exam.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
+    p_exam.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
+    p_exam.add_argument("-c", "--concurrency", type=int, default=8, help="Number of concurrent threads per exam")
+
+    # 5. prepare
+    p_prep = subparsers.add_parser("prepare", help="Stage 5: Prepare tokenized datasets for training")
+    p_prep.add_argument("-i", "--input-dir", type=str, default="output", help="Input folder of question files")
+    p_prep.add_argument("-o", "--output-dir", type=str, default="dataset_output", help="Output folder for training dataset split")
+    p_prep.add_argument("--model", type=str, default="FacebookAI/xlm-roberta-base", help="Base model/tokenizer name")
+    p_prep.add_argument("--latex-placeholder", type=str, default="[LATEX]", help="Placeholder for LaTeX equations")
+    p_prep.add_argument("--train-ratio", type=float, default=0.8, help="Ratio of training set")
+    p_prep.add_argument("--val-ratio", type=float, default=0.1, help="Ratio of validation set")
+    p_prep.add_argument("--seed", type=int, default=42, help="Seed for splitting")
+
+    # 6. train
+    p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
+    p_train.add_argument("--repo_id", type=str, default="daominhwysi/synthetic-seq-labelling-vi-exam", help="HF Dataset repository ID")
+    p_train.add_argument("--model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
+    p_train.add_argument("--output_dir", type=str, default="./results", help="Directory to save checkpoints")
+    p_train.add_argument("--epochs", type=int, default=3, help="Number of training epochs")
+    p_train.add_argument("--batch_size", type=int, default=8, help="Training batch size")
+    p_train.add_argument("--eval_batch_size", type=int, default=8, help="Evaluation batch size")
+    p_train.add_argument("--lr", type=float, default=5e-4, help="Learning rate")
+    p_train.add_argument("--lora_r", type=int, default=16, help="LoRA rank")
+    p_train.add_argument("--lora_alpha", type=int, default=32, help="LoRA alpha")
+    p_train.add_argument("--lora_dropout", type=float, default=0.1, help="LoRA dropout rate")
+    p_train.add_argument("--use_bf16", action="store_true", help="Use bfloat16 mixed precision")
+    p_train.add_argument("--no_fp16", action="store_true", help="Disable float16 mixed precision")
+    p_train.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay")
+    p_train.add_argument("--save_total_limit", type=int, default=2, help="Max checkpoints to keep")
+    p_train.add_argument("--push_to_hub", action="store_true", help="Push to Hugging Face Hub")
+    p_train.add_argument("--hf_token", type=str, help="Hugging Face authentication token")
+
+    # 7. inference
+    p_inf = subparsers.add_parser("inference", help="Stage 7: Run inference on sample inputs using trained model")
+    p_inf.add_argument("--model_dir", type=str, default="./results", help="Model adapter directory")
+    p_inf.add_argument("--base_model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
+
+    # 8. upload
+    p_upl = subparsers.add_parser("upload", help="Upload dataset splits to Hugging Face Hub")
+    p_upl.add_argument("--token", type=str, help="HF Token")
+    p_upl.add_argument("--repo-id", type=str, help="HF repository target path")
+
+    # 9. visualize
+    p_vis = subparsers.add_parser("visualize", help="Generate an HTML interactive visualizer for token span labels")
+    p_vis.add_argument("-i", "--input-file", type=str, default="dataset_output/train.jsonl", help="Path to jsonl file to visualize")
+    p_vis.add_argument("-o", "--output-html", type=str, default="dataset_output/sample_visualization.html", help="Output path for HTML")
+    p_vis.add_argument("--max-samples", type=int, default=1000, help="Maximum samples to embed in HTML")
+
+    args = parser.parse_args()
+
+    # Route commands
+    if args.command == "curriculum":
+        from src.generation.curriculum import generate_all_curricula
+        thinking_val = None if args.thinking == "none" else args.thinking
+        if args.all:
+            generate_all_curricula(model=args.model, thinking=thinking_val, concurrency=args.concurrency)
+        else:
+            if not args.subject or not args.grade:
+                print("Error: Single curriculum generation requires both --subject and --grade parameters, or pass --all.")
+                sys.exit(1)
+            generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking_val)
+            print("Curriculum generation completed successfully.")
+
+    elif args.command == "question":
+        # Resolve thinking parameter
+        thinking = args.thinking
+        if args.reasoning_effort is not None:
+            thinking = False if args.reasoning_effort == "none" else args.reasoning_effort
+        
+        if args.num <= 0:
+            print("Error: Number of questions must be greater than 0.")
+            sys.exit(1)
+        if args.concurrency <= 0:
+            print("Error: Concurrency must be greater than 0.")
+            sys.exit(1)
+            
+        print(f"Starting parallel generation of {args.num} question(s) to directory: {args.output} with concurrency: {args.concurrency}")
+        run_generator(
+            num_questions=args.num, 
+            output_dir=args.output, 
+            max_workers=args.concurrency,
+            subject=args.subject,
+            grade=args.grade,
+            chapter=args.chapter,
+            unit=args.unit,
+            problem_type=args.problem_type,
+            model=args.model,
+            thinking=thinking
+        )
+
+    elif args.command == "reconstruct":
+        reconstruct_config = ReconstructorConfig(
+            question_prefix_template=args.q_prefix,
+            option_prefix_style=args.opt_style,
+            ordering_item_label_style=args.ord_item_style,
+            ordering_item_prefix_template=args.ord_item_template
+        )
+        dest_dir = None if args.in_place else args.reconstruct_dest
+        run_reconstructor_on_existing(
+            input_directory=args.input_dir,
+            dest_directory=dest_dir,
+            config=reconstruct_config,
+            max_workers=args.concurrency
+        )
+
+    elif args.command == "exam":
+        from src.generation.exam_compiler import run_batch_exams_generator
+        thinking_val = None if args.thinking == "none" else args.thinking
+        run_batch_exams_generator(
+            num_exams=args.num_exams,
+            output_dir=args.output_dir,
+            model=args.model,
+            thinking=thinking_val,
+            concurrency=args.concurrency
+        )
+
+    elif args.command == "prepare":
+        from src.training.prepare_dataset import run_prepare_dataset
+        run_prepare_dataset(args)
+
+    elif args.command == "train":
+        from src.training.train import run_train
+        run_train(args)
+
+    elif args.command == "inference":
+        from src.training.inference import run_inference
+        run_inference(model_dir=args.model_dir, base_model_name=args.base_model_name)
+
+    elif args.command == "upload":
+        from src.training.upload_dataset import upload_dataset
+        upload_dataset(token=args.token, repo_id=args.repo_id)
+
+    elif args.command == "visualize":
+        from src.training.visualize_samples import generate_visualization
+        generate_visualization(
+            jsonl_path=args.input_file,
+            output_html_path=args.output_html,
+            max_embed_samples=args.max_samples
+        )
+
+if __name__ == "__main__":
+    main()

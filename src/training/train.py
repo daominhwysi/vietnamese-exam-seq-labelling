@@ -105,6 +105,9 @@ def parse_args():
 
 def main():
     args = parse_args()
+    run_train(args)
+
+def run_train(args):
     
     # 1. Hugging Face Authentication & Token Setup
     hf_token = args.hf_token or os.getenv("HF_TOKEN")

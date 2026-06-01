@@ -5,7 +5,7 @@ import random
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 
-from deepseek_client import chat
+from src.generation.deepseek_client import chat
 
 # Display names for subjects to construct prompts
 SUBJECT_DISPLAY = {
@@ -318,3 +318,49 @@ def map_cognitive_level_to_difficulty(level: str) -> str:
     else:
         # Fallback
         return random.choice(["recognize", "comprehend", "low_application", "application", "high_application"])
+
+
+def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] = None, concurrency: int = 4):
+    """Orchestrates concurrent curriculum generation for all subjects and grades [10-12]."""
+    import concurrent.futures
+    from src.generation.generator import Subject
+    
+    subjects = [s.value for s in Subject]
+    grades = [10, 11, 12]
+    
+    print("=" * 60)
+    print(f"Orchestrating concurrent curriculum generation for all subjects and grades [10-12]")
+    print(f"Model: {model}")
+    print(f"Thinking Level: {thinking}")
+    print(f"Concurrency: {concurrency}")
+    print(f"Subjects: {', '.join(subjects)}")
+    print(f"Grades: {', '.join(map(str, grades))}")
+    print("=" * 60)
+    
+    print("\n--- Starting Curriculum Generation (Concurrent) ---")
+    
+    tasks = []
+    for subject in subjects:
+        for grade in grades:
+            tasks.append((subject, grade))
+            
+    def generate_single_curriculum_task(subj, grd):
+        try:
+            print(f"[Curriculum Start] Subject={subj}, Grade={grd}")
+            generate_curriculum(
+                subject=subj,
+                grade=grd,
+                model=model,
+                thinking=thinking
+            )
+            print(f"[Curriculum Success] Subject={subj}, Grade={grd}")
+            return True
+        except Exception as e:
+            print(f"[Curriculum Error] Subject={subj}, Grade={grd}: {e}")
+            return False
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=concurrency) as executor:
+        futures = {executor.submit(generate_single_curriculum_task, s, g): (s, g) for s, g in tasks}
+        concurrent.futures.wait(futures.keys())
+        
+    print("\nCurriculum generation completed.")

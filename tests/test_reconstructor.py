@@ -1,5 +1,5 @@
 import unittest
-from sequence_labelling_data_generator.reconstructor import (
+from src.generation.reconstructor import (
     reconstruct_question,
     ReconstructorConfig,
     generate_ordering_choices

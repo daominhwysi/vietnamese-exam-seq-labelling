@@ -10,10 +10,10 @@ from typing import Dict, Any, Optional
 from tqdm import tqdm
 from enum import Enum
 
-from deepseek_client import chat
-from sequence_labelling_data_generator.parser import parse_question_xml
-from sequence_labelling_data_generator.reconstructor import reconstruct_question
-from sequence_labelling_data_generator.curriculum import (
+from src.generation.deepseek_client import chat
+from src.generation.parser import parse_question_xml
+from src.generation.reconstructor import reconstruct_question
+from src.generation.curriculum import (
     load_curriculum,
     select_curriculum_path,
     map_cognitive_level_to_difficulty,
@@ -218,7 +218,9 @@ def generate_single_question(
     unit_filter: Optional[str] = None,
     problem_type_filter: Optional[str] = None,
     model: Optional[str] = None,
-    thinking: Optional[bool] = None
+    thinking: Optional[bool] = None,
+    question_type: Optional[QuestionType] = None,
+    difficulty: Optional[Difficulty] = None
 ) -> Optional[Dict[str, Any]]:
     """Generates a single question/group based on curriculum path or randomized criteria, tries to parse it, and returns the dict representation."""
     
@@ -265,7 +267,6 @@ def generate_single_question(
 
     # 2. Load Curriculum and Choose Problem Type (Dạng)
     problem_type_info = None
-    difficulty = None
     
     # Try to load/generate curriculum
     curriculum = load_curriculum(subject.value, grade, autogenerate=True, model=model, thinking=thinking)
@@ -282,8 +283,9 @@ def generate_single_question(
                 "examples": pt_dict.get("examples", []),
                 "cognitive_level": pt_dict.get("cognitive_level")
             }
-            difficulty_str = map_cognitive_level_to_difficulty(problem_type_info["cognitive_level"])
-            difficulty = Difficulty(difficulty_str)
+            if difficulty is None:
+                difficulty_str = map_cognitive_level_to_difficulty(problem_type_info["cognitive_level"])
+                difficulty = Difficulty(difficulty_str)
         else:
             tqdm.write(f"Warning: Curriculum loaded for {subject.value} Grade {grade}, but no items matched filters.")
             return None
@@ -302,20 +304,28 @@ def generate_single_question(
             k=1
         )[0]
     
-    # 5% probability of special group question
-    is_group = random.random() < 0.05
-    
-    if is_group:
-        actual_type = random.choice([QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER])
-        system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+    # Resolve the question type and prompts
+    if question_type is not None:
+        actual_type = question_type
+        is_group = actual_type in [QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER]
+        if is_group:
+            system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+        else:
+            system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
     else:
-        actual_type = random.choice([
-            QuestionType.MULTIPLE_CHOICE,
-            QuestionType.TRUE_FALSE,
-            QuestionType.SHORT_ANSWER,
-            QuestionType.ORDERING
-        ])
-        system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+        # 5% probability of special group question
+        is_group = random.random() < 0.05
+        if is_group:
+            actual_type = random.choice([QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER])
+            system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+        else:
+            actual_type = random.choice([
+                QuestionType.MULTIPLE_CHOICE,
+                QuestionType.TRUE_FALSE,
+                QuestionType.SHORT_ANSWER,
+                QuestionType.ORDERING
+            ])
+            system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
 
     # 3. Call deepseek with retry logic
     max_retries = 3

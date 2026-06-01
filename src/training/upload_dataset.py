@@ -6,17 +6,19 @@ from dotenv import load_dotenv
 # Add local path
 sys.path.append(str(Path(__file__).parent.parent))
 
-def upload_dataset():
+def upload_dataset(token=None, repo_id=None):
     # Load environment variables from .env file
     # By default, load_dotenv() looks for a .env file in the current working directory
     load_dotenv()
     
-    token = os.getenv("HF_TOKEN")
+    if not token:
+        token = os.getenv("HF_TOKEN")
     if not token:
         print("Error: HF_TOKEN not found in environment. Please make sure it is defined in your '.env' file.")
         sys.exit(1)
         
-    repo_id = "daominhwysi/synthetic-seq-labelling-vi-exam"
+    if not repo_id:
+        repo_id = "daominhwysi/synthetic-seq-labelling-vi-exam"
     
     # Try importing huggingface_hub
     try:

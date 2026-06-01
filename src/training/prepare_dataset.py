@@ -10,7 +10,7 @@ from typing import Dict, Any, List, Tuple, Optional
 # Set up local import path if needed
 sys.path.append(str(Path(__file__).parent.parent))
 
-from sequence_labelling_data_generator.reconstructor import reconstruct_question, ReconstructorConfig
+from src.generation.reconstructor import reconstruct_question, ReconstructorConfig
 
 # Define base tags and generate tag mapping
 BASE_TAGS = [
@@ -203,7 +203,9 @@ def main():
         help="Random seed for dataset splitting (default: 42)"
     )
     args = parser.parse_args()
-    
+    run_prepare_dataset(args)
+
+def run_prepare_dataset(args):
     # Validation of ratio inputs
     if args.train_ratio + args.val_ratio > 1.0 or args.train_ratio < 0.0 or args.val_ratio < 0.0:
         print("Error: train-ratio and val-ratio must sum to <= 1.0 and be non-negative.")
@@ -240,7 +242,7 @@ def main():
         sys.exit(1)
         
     # Process LaTeX placeholder
-    latex_placeholder = args.latex_placeholder if args.latex_placeholder.strip() else None
+    latex_placeholder = args.latex_placeholder if args.latex_placeholder and args.latex_placeholder.strip() else None
     if latex_placeholder:
         print(f"LaTeX equations will be replaced with placeholder token: '{latex_placeholder}'")
         # Add placeholder to tokenizer as a special token

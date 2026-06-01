@@ -1,5 +1,5 @@
 import unittest
-from sequence_labelling_data_generator.prepare_dataset import (
+from src.training.prepare_dataset import (
     align_tokens_to_spans,
     get_tag_mappings,
     process_single_question,
