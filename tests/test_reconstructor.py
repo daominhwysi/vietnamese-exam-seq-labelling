@@ -171,6 +171,14 @@ class TestReconstructor(unittest.TestCase):
         for opt in option_texts:
             self.assertEqual(len(opt.split(" – ")), 3)
             
+        # Check that answer is resolved to A, B, C, or D
+        self.assertIn("answer", enriched)
+        self.assertIn(enriched["answer"], ["A", "B", "C", "D"])
+        
+        # Verify the choice text corresponding to answer equals correct sequence "a – b – c"
+        correct_index = ["A", "B", "C", "D"].index(enriched["answer"])
+        self.assertEqual(option_texts[correct_index], "a – b – c")
+        
         # Ensure spans are valid slices of raw_text
         for span in spans:
             self.assertEqual(raw_text[span["start"]:span["end"]], span["text"])

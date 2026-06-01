@@ -208,6 +208,14 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 choices = generate_ordering_choices(item_labels, config.ordering_choice_separator, rng)
                 append_segment(config.separator_stem_options, "separator")
                 
+                # Determine which choice is the correct sequence (always matches original item labels)
+                correct_seq = config.ordering_choice_separator.join(item_labels)
+                correct_idx = 0
+                if correct_seq in choices:
+                    correct_idx = choices.index(correct_seq)
+                opt_letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+                result["answer"] = opt_letters[correct_idx % len(opt_letters)]
+                
                 for choice_idx, choice_text in enumerate(choices):
                     opt_lbl = opt_prefixes[choice_idx % len(opt_prefixes)]
                     append_segment(opt_lbl, "option_label")

@@ -10,16 +10,26 @@
         
         <!-- View Toggle & Tag Legends (Notion Menu style) -->
         <div class="p-3 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center space-x-2">
-                <span class="text-xs font-semibold text-stone-500">Chế độ hiển thị:</span>
-                <div class="inline-flex rounded bg-[#efefed] p-0.5 border border-[#e9e9e6]">
-                    <button id="btn-mode-standard" onclick="switchViewMode('standard')" class="px-3 py-1 rounded text-xs font-semibold transition-all duration-100 bg-white text-[#37352f] shadow-sm">
-                        Đề Thi Học Sinh
-                    </button>
-                    <button id="btn-mode-tag" onclick="switchViewMode('tag')" class="px-3 py-1 rounded text-xs font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]">
-                        Sequence Labeling (Nhãn Spans)
-                    </button>
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-semibold text-stone-500">Chế độ hiển thị:</span>
+                    <div class="inline-flex rounded bg-[#efefed] p-0.5 border border-[#e9e9e6]">
+                        <button id="btn-mode-standard" onclick="switchViewMode('standard')" class="px-3 py-1 rounded text-xs font-semibold transition-all duration-100 bg-white text-[#37352f] shadow-sm">
+                            Đề Thi Học Sinh
+                        </button>
+                        <button id="btn-mode-tag" onclick="switchViewMode('tag')" class="px-3 py-1 rounded text-xs font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]">
+                            Sequence Labeling (Nhãn Spans)
+                        </button>
+                    </div>
                 </div>
+                
+                <!-- Toggle explanations -->
+                <button id="btn-toggle-explanations" onclick="toggleExplanations()" class="px-3 py-1 rounded border border-[#e9e9e6] bg-white text-xs font-semibold text-stone-600 hover:bg-[#efefed] transition-all duration-100 flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    <span>Hiện Đáp án & Lời giải</span>
+                </button>
             </div>
             
             <!-- Tags Labels Explanation -->
@@ -71,7 +81,7 @@
                                 {% if q.is_group %}
                                     <div class="p-3 rounded bg-stone-50 border border-stone-200 text-stone-700 text-xs sm:text-sm leading-relaxed mb-3">
                                         <div class="font-bold text-stone-500 text-[10px] uppercase mb-1 tracking-wider">Đọc đoạn thông tin sau:</div>
-                                        <div class="math-content font-serif leading-relaxed">{{ q.context }}</div>
+                                        <div class="math-content font-serif leading-relaxed">{{ q.context | safe }}</div>
                                     </div>
                                     
                                     <!-- Group sub-questions list -->
@@ -81,7 +91,7 @@
                                             <div id="sub-question-{{ sub_num }}" class="space-y-2">
                                                 <div class="font-serif text-stone-800 leading-relaxed text-xs sm:text-sm">
                                                     <span class="font-bold text-stone-900">Câu {{ sub_num }}:</span> 
-                                                    <span class="math-content">{{ sub_q.stem }}</span>
+                                                    <span class="math-content">{{ sub_q.stem | safe }}</span>
                                                 </div>
                                                 
                                                 {% if sub_q.options %}
@@ -97,10 +107,28 @@
                                                                 <span class="option-badge flex-shrink-0 h-5 w-5 rounded-full border border-stone-300 flex items-center justify-center text-[10px] font-bold text-stone-400 bg-stone-50 group-hover:bg-[#efefed] group-hover:text-[#37352f] transition-colors duration-100">
                                                                     {{ opt_letter }}
                                                                 </span>
-                                                                <span class="text-stone-700 text-xs font-serif math-content pt-0.5">{{ opt }}</span>
+                                                                <span class="text-stone-700 text-xs font-serif math-content pt-0.5">{{ opt | safe }}</span>
                                                             </label>
                                                         {% endfor %}
                                                     </div>
+                                                {% endif %}
+                                                
+                                                <!-- Correct Answer & Explanation Card for sub-question -->
+                                                {% if sub_q.answer or sub_q.explanation %}
+                                                <div class="explanation-card hidden mt-3 p-3 bg-emerald-50/50 border border-emerald-150 rounded-lg text-xs leading-relaxed space-y-2 font-sans" data-q-num="{{ sub_num }}">
+                                                    {% if sub_q.answer %}
+                                                    <div>
+                                                        <span class="font-bold text-emerald-800 text-[10px] uppercase tracking-wider block mb-0.5">Đáp án đúng</span>
+                                                        <span class="font-mono bg-emerald-100 px-2 py-0.5 rounded text-emerald-950 font-bold uppercase text-[11px] border border-emerald-200">{{ sub_q.answer }}</span>
+                                                    </div>
+                                                    {% endif %}
+                                                    {% if sub_q.explanation %}
+                                                    <div class="pt-1.5 border-t border-emerald-100/50">
+                                                        <span class="font-bold text-stone-500 text-[10px] uppercase tracking-wider block mb-1">Lời giải chi tiết</span>
+                                                        <div class="text-stone-700 font-serif leading-relaxed math-content">{{ sub_q.explanation | safe }}</div>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
                                                 {% endif %}
                                             </div>
                                         {% endfor %}
@@ -110,10 +138,23 @@
                                     <!-- Standard Question content -->
                                     <div class="font-serif text-stone-800 leading-relaxed text-xs sm:text-sm">
                                         <span class="font-bold text-stone-900">Câu {{ q.start_number }}:</span> 
-                                        <span class="math-content">{{ q.stem }}</span>
+                                        <span class="math-content">{{ q.stem | safe }}</span>
                                     </div>
                                     
                                     {% if q.question_type == 'multiple_choice' or q.question_type == 'ordering' %}
+                                        {% if q.question_type == 'ordering' %}
+                                            <!-- Display the list of items to order -->
+                                            <div class="my-3.5 pl-3 space-y-1.5 text-stone-750 text-xs sm:text-sm font-serif">
+                                                {% for step in q.options %}
+                                                    {% set step_letter = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'][loop.index0] %}
+                                                    <div>
+                                                        <span class="font-bold text-stone-400">{{ step_letter }}.</span>
+                                                        <span class="math-content">{{ step | safe }}</span>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        
                                         {% set target_options = q.ordering_choices if q.question_type == 'ordering' else q.options %}
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pl-3">
                                             {% for opt in target_options %}
@@ -127,7 +168,7 @@
                                                     <span class="option-badge flex-shrink-0 h-5 w-5 rounded-full border border-stone-300 flex items-center justify-center text-[10px] font-bold text-stone-400 bg-stone-50 group-hover:bg-[#efefed] group-hover:text-[#37352f] transition-colors duration-100">
                                                         {{ opt_letter }}
                                                     </span>
-                                                    <span class="text-stone-700 text-xs font-serif math-content pt-0.5">{{ opt }}</span>
+                                                    <span class="text-stone-700 text-xs font-serif math-content pt-0.5">{{ opt | safe }}</span>
                                                 </label>
                                             {% endfor %}
                                         </div>
@@ -150,7 +191,7 @@
                                                             {% set sub_letter = ['a', 'b', 'c', 'd'][sub_idx] %}
                                                             <tr>
                                                                 <td class="px-3 py-1.5 text-left font-serif leading-relaxed math-content">
-                                                                    <span class="font-bold text-stone-400">{{ sub_letter }})</span> {{ opt }}
+                                                                    <span class="font-bold text-stone-400">{{ sub_letter }})</span> {{ opt | safe }}
                                                                 </td>
                                                                 <td class="px-1 py-1.5">
                                                                     <input type="radio" 
@@ -182,6 +223,24 @@
                                                    placeholder="Nhập câu trả lời ngắn của bạn tại đây..."
                                                    class="w-full max-w-md px-3 py-1.5 rounded border border-stone-300 focus:border-stone-500 focus:ring-0 text-stone-800 text-xs font-serif transition-all duration-100">
                                         </div>
+                                    {% endif %}
+                                    
+                                    <!-- Correct Answer & Explanation Card -->
+                                    {% if q.answer or q.explanation %}
+                                    <div class="explanation-card hidden mt-4 p-4 bg-emerald-50/50 border border-emerald-250 rounded-lg text-xs leading-relaxed space-y-2 font-sans" data-q-num="{{ q.start_number }}">
+                                        {% if q.answer %}
+                                        <div>
+                                            <span class="font-bold text-emerald-800 text-[10px] uppercase tracking-wider block mb-0.5">Đáp án đúng</span>
+                                            <span class="font-mono bg-emerald-100 px-2 py-0.5 rounded text-emerald-950 font-bold uppercase text-[11px] border border-emerald-200">{{ q.answer }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if q.explanation %}
+                                        <div class="pt-1.5 border-t border-emerald-100/50">
+                                            <span class="font-bold text-stone-500 text-[10px] uppercase tracking-wider block mb-1">Lời giải chi tiết</span>
+                                            <div class="text-stone-700 font-serif leading-relaxed math-content">{{ q.explanation | safe }}</div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -331,6 +390,20 @@
         });
     });
 
+    const correctAnswers = {};
+    {% for section_name, questions in exam.sections.items() %}
+        {% for q in questions %}
+            {% if q.is_group %}
+                {% for sub_q in q.questions %}
+                    {% set sub_num = q.start_number + loop.index0 %}
+                    correctAnswers[{{ sub_num }}] = "{{ sub_q.answer }}";
+                {% endfor %}
+            {% else %}
+                correctAnswers[{{ q.start_number }}] = "{{ q.answer }}";
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
     // -------------------------------------------------------------
     // ANSWER TRACKING EVENT HANDLERS
     // -------------------------------------------------------------
@@ -340,18 +413,22 @@
         userAnswers[qNum].answer = value;
         updateQuestionBadge(qNum, 'done');
         
-        const qCard = findQuestionContainer(qNum);
-        if(qCard) {
-            const badges = qCard.querySelectorAll('.option-badge');
-            badges.forEach(b => {
-                if (b.textContent.trim() === value) {
-                    b.classList.remove('bg-stone-50', 'text-stone-400', 'border-stone-300');
-                    b.classList.add('bg-[#37352f]', 'text-white', 'border-[#37352f]');
-                } else {
-                    b.classList.add('bg-stone-50', 'text-stone-400', 'border-stone-300');
-                    b.classList.remove('bg-[#37352f]', 'text-white', 'border-[#37352f]');
-                }
-            });
+        if (showExplanations) {
+            highlightOptionStates();
+        } else {
+            const qCard = findQuestionContainer(qNum);
+            if(qCard) {
+                const badges = qCard.querySelectorAll('.option-badge');
+                badges.forEach(b => {
+                    if (b.textContent.trim() === value) {
+                        b.classList.remove('bg-stone-50', 'text-stone-400', 'border-stone-300');
+                        b.classList.add('bg-[#37352f]', 'text-white', 'border-[#37352f]');
+                    } else {
+                        b.classList.add('bg-stone-50', 'text-stone-400', 'border-stone-300');
+                        b.classList.remove('bg-[#37352f]', 'text-white', 'border-[#37352f]');
+                    }
+                });
+            }
         }
     }
     
@@ -472,8 +549,131 @@
         }
     }
     
+    let showExplanations = false;
+    function toggleExplanations() {
+        showExplanations = !showExplanations;
+        const cards = document.querySelectorAll('.explanation-card');
+        const btn = document.getElementById('btn-toggle-explanations');
+        
+        cards.forEach(card => {
+            if (showExplanations) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+        
+        if (showExplanations) {
+            btn.classList.remove('bg-white', 'text-stone-600');
+            btn.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+            btn.querySelector('span').textContent = "Ẩn Đáp án & Lời giải";
+        } else {
+            btn.classList.add('bg-white', 'text-stone-600');
+            btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'border-emerald-300');
+            btn.querySelector('span').textContent = "Hiện Đáp án & Lời giải";
+        }
+        
+        highlightOptionStates();
+        
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise();
+        }
+    }
+
+    function highlightOptionStates() {
+        Object.keys(correctAnswers).forEach(qNum => {
+            const correctVal = correctAnswers[qNum];
+            if (!correctVal) return;
+            
+            const qCard = findQuestionContainer(qNum);
+            if (!qCard) return;
+            
+            const badges = qCard.querySelectorAll('.option-badge');
+            const selectedVal = userAnswers[qNum].answer;
+            
+            badges.forEach(b => {
+                const optLetter = b.textContent.trim();
+                
+                // Clear any previous highlights
+                b.classList.remove('bg-emerald-500', 'text-white', 'border-emerald-500', 'bg-rose-500', 'text-white', 'border-rose-500');
+                
+                if (showExplanations) {
+                    if (optLetter === correctVal) {
+                        b.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
+                        b.classList.remove('bg-stone-50', 'text-stone-400', 'border-stone-300', 'bg-[#37352f]');
+                    } else if (selectedVal && optLetter === selectedVal) {
+                        b.classList.add('bg-rose-500', 'text-white', 'border-rose-500');
+                        b.classList.remove('bg-stone-50', 'text-stone-400', 'border-stone-300', 'bg-[#37352f]');
+                    }
+                } else {
+                    if (selectedVal && optLetter === selectedVal) {
+                        b.classList.add('bg-[#37352f]', 'text-white', 'border-[#37352f]');
+                        b.classList.remove('bg-stone-50', 'text-stone-400', 'border-stone-300');
+                    } else {
+                        b.classList.add('bg-stone-50', 'text-stone-400', 'border-stone-300');
+                        b.classList.remove('bg-[#37352f]', 'text-white', 'border-[#37352f]');
+                    }
+                }
+            });
+        });
+    }
+
+    function formatMultimodalContent() {
+        // 1. Render <figure description="..." label="..." /> tags
+        document.querySelectorAll('figure').forEach(fig => {
+            const desc = fig.getAttribute('description') || '';
+            const label = fig.getAttribute('label') || 'Hình vẽ';
+            
+            const cardHtml = `
+                <div class="my-4 mx-auto max-w-lg p-5 bg-gradient-to-br from-stone-50 to-[#f9f9f7] border border-dashed border-stone-300 rounded-xl shadow-sm hover:shadow transition-all duration-200 flex flex-col items-center justify-center space-y-3 font-sans relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-stone-300 group-hover:bg-[#37352f] transition-colors duration-200"></div>
+                    
+                    <div class="flex items-center justify-center h-10 w-10 rounded-full bg-stone-100 text-stone-500 group-hover:bg-[#37352f] group-hover:text-white transition-all duration-300">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    
+                    <div class="text-center space-y-1">
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-stone-200 text-stone-600 uppercase tracking-wider">${label}</span>
+                        <p class="text-[10px] font-medium text-stone-400">Hình vẽ / Sơ đồ đính kèm</p>
+                    </div>
+                    
+                    <div class="w-full bg-white p-3 rounded-lg border border-stone-200 text-[11px] text-stone-600 text-left font-serif leading-relaxed mt-1 relative shadow-sm">
+                        <span class="absolute top-1 right-2 text-[8px] font-bold text-stone-300 uppercase tracking-wider font-sans">Mô tả</span>
+                        <p class="pr-12 italic leading-relaxed text-stone-600">${desc}</p>
+                    </div>
+                </div>
+            `;
+            fig.outerHTML = cardHtml;
+        });
+
+        // 2. Render standard HTML <table> tags with pretty document styles
+        document.querySelectorAll('.math-content table').forEach(tbl => {
+            tbl.className = "min-w-full divide-y divide-stone-200 border border-stone-200 my-4 text-xs font-sans text-stone-700 rounded-lg overflow-hidden";
+            
+            tbl.querySelectorAll('th').forEach(th => {
+                th.className = "px-3 py-2 bg-stone-100 text-center font-bold text-stone-700 border-b border-stone-200 uppercase tracking-wider text-[10px]";
+            });
+            
+            tbl.querySelectorAll('td').forEach(td => {
+                td.className = "px-3 py-2 text-center border-b border-stone-100 bg-white font-serif";
+            });
+            
+            tbl.querySelectorAll('tr').forEach((tr, idx) => {
+                if (idx > 0 && idx % 2 === 0) {
+                    tr.querySelectorAll('td').forEach(td => {
+                        td.classList.remove('bg-white');
+                        td.classList.add('bg-stone-50/50');
+                    });
+                }
+            });
+        });
+    }
+    
     window.addEventListener('DOMContentLoaded', () => {
         startTimer();
+        formatMultimodalContent();
         renderTagHighlightsView();
     });
 

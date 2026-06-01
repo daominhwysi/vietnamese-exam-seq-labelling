@@ -32,9 +32,17 @@ def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
             option_matches = re.findall(r"<option\s*>(.*?)</option\s*>", q_content, re.DOTALL | re.IGNORECASE)
             options = [clean_text(opt) for opt in option_matches]
             
+            answer_match = re.search(r"<answer\s*>(.*?)</answer\s*>", q_content, re.DOTALL | re.IGNORECASE)
+            answer = clean_text(answer_match.group(1)) if answer_match else ""
+            
+            explanation_match = re.search(r"<explanation\s*>(.*?)</explanation\s*>", q_content, re.DOTALL | re.IGNORECASE)
+            explanation = clean_text(explanation_match.group(1)) if explanation_match else ""
+            
             questions.append({
                 "stem": stem,
-                "options": options
+                "options": options,
+                "answer": answer,
+                "explanation": explanation
             })
             
         if not questions:
@@ -57,10 +65,18 @@ def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
         option_matches = re.findall(r"<option\s*>(.*?)</option\s*>", q_content, re.DOTALL | re.IGNORECASE)
         options = [clean_text(opt) for opt in option_matches]
         
+        answer_match = re.search(r"<answer\s*>(.*?)</answer\s*>", q_content, re.DOTALL | re.IGNORECASE)
+        answer = clean_text(answer_match.group(1)) if answer_match else ""
+        
+        explanation_match = re.search(r"<explanation\s*>(.*?)</explanation\s*>", q_content, re.DOTALL | re.IGNORECASE)
+        explanation = clean_text(explanation_match.group(1)) if explanation_match else ""
+        
         return {
             "is_group": False,
             "stem": stem,
-            "options": options
+            "options": options,
+            "answer": answer,
+            "explanation": explanation
         }
         
     return None

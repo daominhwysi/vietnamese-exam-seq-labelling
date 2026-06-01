@@ -69,7 +69,9 @@ def make_standard_prompt(
     grade: int, 
     q_type: QuestionType, 
     difficulty: Difficulty,
-    problem_type_info: Optional[Dict[str, Any]] = None
+    problem_type_info: Optional[Dict[str, Any]] = None,
+    include_figure: bool = False,
+    include_table: bool = False
 ) -> tuple[str, str]:
     if q_type == QuestionType.MULTIPLE_CHOICE:
         length_desc = "trung bình phần dẫn (stem) là 30 từ"
@@ -79,6 +81,8 @@ def make_standard_prompt(
 <option>Phương án B...</option>
 <option>Phương án C...</option>
 <option>Phương án D...</option>
+<answer>Ký tự phương án đúng (A hoặc B hoặc C hoặc D)</answer>
+<explanation>Lời giải thích ngắn gọn bằng tiếng Việt (cho phép ghi "không có đáp án đúng" nếu cần)</explanation>
 </question>"""
     elif q_type == QuestionType.TRUE_FALSE:
         length_desc = "trung bình phần dẫn (stem) là 100 từ"
@@ -88,6 +92,8 @@ def make_standard_prompt(
 <option>Khẳng định b...</option>
 <option>Khẳng định c...</option>
 <option>Khẳng định d...</option>
+<answer>Kết quả Đúng/Sai tương ứng dưới dạng danh sách ngăn cách bởi dấu phẩy (ví dụ: Đúng, Sai, Đúng, Sai)</answer>
+<explanation>Lời giải thích ngắn gọn bằng tiếng Việt (cho phép ghi "không có đáp án đúng" nếu cần)</explanation>
 </question>"""
     elif q_type == QuestionType.ORDERING:
         length_desc = "trung bình phần dẫn (stem) là 50 từ, yêu cầu sắp xếp thứ tự các sự kiện/bước"
@@ -97,11 +103,15 @@ def make_standard_prompt(
 <option>Sự kiện/Bước thứ hai...</option>
 <option>Sự kiện/Bước thứ ba...</option>
 <option>Sự kiện/Bước thứ tư...</option>
+<answer>Thứ tự đúng của các nhãn bước tương ứng, viết thường và ngăn cách bởi dấu gạch ngang (ví dụ: a - b - c - d hoặc a - c - b - d)</answer>
+<explanation>Lời giải thích ngắn gọn bằng tiếng Việt (cho phép ghi "không có đáp án đúng" nếu cần)</explanation>
 </question>"""
     else:  # QuestionType.SHORT_ANSWER
         length_desc = "trung bình phần dẫn (stem) là 150 từ"
         format_example = """<question>
 <stem>Câu hỏi của bạn...</stem>
+<answer>Đáp án ngắn (ví dụ: 10 hoặc 2/3 hoặc tên chất)</answer>
+<explanation>Lời giải thích ngắn gọn bằng tiếng Việt (cho phép ghi "không có đáp án đúng" nếu cần)</explanation>
 </question>"""
 
     system = "Bạn là một AI chuyên môn cao về biên soạn câu hỏi đề thi và tài liệu học tập tại Việt Nam."
@@ -120,6 +130,17 @@ Thông tin chương trình học cụ thể để biên soạn câu hỏi:
 - Chi tiết phương pháp/công thức cần áp dụng: {problem_type_info.get('details')}{examples_str}
 """
 
+    multimodal_instr = ""
+    if include_figure:
+        multimodal_instr += """
+- HÌNH VẼ: Bạn được khuyến khích chèn một hoặc nhiều thẻ hình vẽ có định dạng: <figure description="mô tả cực kỳ chi tiết hình vẽ bao gồm tất cả các thông tin khai thác được từ hình vẽ này" label="Figure 1" /> (hoặc label="Figure X" với X là số thứ tự tương ứng).
+  Bạn có thể tự do đặt thẻ <figure ... /> này ở bất kỳ vị trí nào bên trong phần dẫn <stem> hoặc bên trong một hoặc nhiều thẻ <option> (ví dụ như hình vẽ biển báo hay hình học của các phương án lựa chọn). Đảm bảo phần mô tả (description) cực kỳ chi tiết, đầy đủ thông tin để người đọc hình dung được chính xác hình vẽ đó.
+"""
+    if include_table:
+        multimodal_instr += """
+- BẢNG SỐ LIỆU: Bạn được khuyến khích chèn một hoặc nhiều bảng số liệu sử dụng các thẻ HTML table chuẩn (như <table>, <tr>, <td>) bên trong phần dẫn <stem>. Bảng phải chứa dữ liệu mô phỏng đề thi thực tế.
+"""
+
     prompt = f"""Hãy tạo ngẫu nhiên một câu hỏi cho:
 - Môn học: {SUBJECT_DISPLAY.get(subject.value, subject.value)}
 - Lớp: {grade}
@@ -127,6 +148,7 @@ Thông tin chương trình học cụ thể để biên soạn câu hỏi:
 - Mức độ nhận thức: {DIFFICULTY_DISPLAY[difficulty]}
 - Độ dài phần dẫn (stem): {length_desc}
 {curriculum_context}
+{multimodal_instr}
 Yêu cầu định dạng:
 Chỉ xuất ra cấu trúc XML sau đây, không kèm theo bất kỳ lời thoại, văn bản giải thích hay bọc định dạng nào ngoài XML.
 {format_example}
@@ -134,10 +156,11 @@ Chỉ xuất ra cấu trúc XML sau đây, không kèm theo bất kỳ lời tho
 Quy tắc quan trọng:
 1. Công thức toán học, ký hiệu vật lý/hóa học bắt buộc phải sử dụng LaTeX và được bọc trong cặp dấu $...$ (ví dụ: $f(x) = x^2$ hoặc $\\vec{{u}} = (a;b;c)$).
 2. Hãy sáng tạo ra câu hỏi độc lạ, ngẫu nhiên nhất có thể, tránh trùng lặp với các dạng câu hỏi cơ bản.
-3. KHÔNG cần cung cấp lời giải hay đáp án.
-4. Câu hỏi không cần đúng thực tế hay hoàn hảo tuyệt đối (chỉ cần sinh ra định dạng đề thi chuẩn, các biểu thức toán học hoặc thông tin có thể giả định tự do vì đây là dữ liệu giả lập phục vụ cho huấn luyện mô hình sequence labeling, không dùng để kiểm tra học sinh).
-5. Hãy trả lời NGAY LẬP TỨC dưới dạng XML, bỏ qua các bước phân tích sâu hay lập luận chi tiết. Nghĩ càng ít càng tốt, đi thẳng vào cấu trúc XML.
-6. KHÔNG được ghi các ký tự đề mục (như "A.", "B.", "C.", "D." hoặc "a)", "b)", "c)", "d)") vào đầu nội dung thẻ <option>. Thẻ <option> chỉ chứa trực tiếp phần chữ/công thức của phương án.
+3. BẮT BUỘC cung cấp lời giải (thẻ <explanation>) và đáp án đúng (thẻ <answer>) theo định dạng ví dụ trên.
+4. Lời giải thích trong thẻ <explanation> phải bằng tiếng Việt, súc tích và ngắn gọn như lời giải thích của giáo viên, cho phép có lỗi biên tập hoặc chính tả nhẹ, và cho phép ghi "không có đáp án đúng" nếu cần thiết.
+5. Câu hỏi không cần đúng thực tế hay hoàn hảo tuyệt đối (chỉ cần sinh ra định dạng đề thi chuẩn, các biểu thức toán học hoặc thông tin có thể giả định tự do vì đây là dữ liệu giả lập phục vụ cho huấn luyện mô hình sequence labeling, không dùng để kiểm tra học sinh).
+6. Hãy trả lời NGAY LẬP TỨC dưới dạng XML, bỏ qua các bước phân tích sâu hay lập luận chi tiết. Nghĩ càng ít càng tốt, đi thẳng vào cấu trúc XML.
+7. KHÔNG được ghi các ký tự đề mục (như "A.", "B.", "C.", "D." hoặc "a)", "b)", "c)", "d)") vào đầu nội dung thẻ <option>. Thẻ <option> chỉ chứa trực tiếp phần chữ/công thức của phương án.
 """
     return system, prompt
 
@@ -146,7 +169,9 @@ def make_group_prompt(
     grade: int, 
     q_type: QuestionType, 
     difficulty: Difficulty,
-    problem_type_info: Optional[Dict[str, Any]] = None
+    problem_type_info: Optional[Dict[str, Any]] = None,
+    include_figure: bool = False,
+    include_table: bool = False
 ) -> tuple[str, str]:
     if q_type == QuestionType.GROUP_MULTIPLE_CHOICE:
         num_sub = "3 đến 4 câu trắc nghiệm"
@@ -158,6 +183,8 @@ def make_group_prompt(
     <option>Phương án B...</option>
     <option>Phương án C...</option>
     <option>Phương án D...</option>
+    <answer>Ký tự phương án đúng (A hoặc B hoặc C hoặc D)</answer>
+    <explanation>Lời giải thích ngắn gọn bằng tiếng Việt</explanation>
   </question>
   ... (tiếp tục cho các câu hỏi 2, 3, 4)
 </group_question>"""
@@ -167,9 +194,13 @@ def make_group_prompt(
   <context>Đoạn thông tin/Ngữ cảnh dùng chung cho các câu hỏi...</context>
   <question>
     <stem>Câu hỏi 1...</stem>
+    <answer>Đáp án ngắn</answer>
+    <explanation>Lời giải thích ngắn gọn bằng tiếng Việt</explanation>
   </question>
   <question>
     <stem>Câu hỏi 2...</stem>
+    <answer>Đáp án ngắn</answer>
+    <explanation>Lời giải thích ngắn gọn bằng tiếng Việt</explanation>
   </question>
   ... (tiếp tục cho các câu hỏi 3)
 </group_question>"""
@@ -190,12 +221,24 @@ Thông tin chương trình học cụ thể để biên soạn câu hỏi:
 - Chi tiết phương pháp/công thức cần áp dụng: {problem_type_info.get('details')}{examples_str}
 """
 
+    multimodal_instr = ""
+    if include_figure:
+        multimodal_instr += """
+- HÌNH VẼ: Bạn được khuyến khích chèn một hoặc nhiều thẻ hình vẽ có định dạng: <figure description="mô tả cực kỳ chi tiết hình vẽ bao gồm tất cả các thông tin khai thác được từ hình vẽ này" label="Figure 1" /> (hoặc label="Figure X" với X là số thứ tự tương ứng).
+  Bạn có thể đặt thẻ <figure ... /> này ở bất kỳ vị trí nào bên trong <context> dùng chung hoặc bên trong <stem> hay <option> của từng câu hỏi nhỏ. Đảm bảo phần mô tả (description) cực kỳ chi tiết, đầy đủ thông tin.
+"""
+    if include_table:
+        multimodal_instr += """
+- BẢNG SỐ LIỆU: Bạn được khuyến khích chèn một hoặc nhiều bảng số liệu sử dụng các thẻ HTML table chuẩn (như <table>, <tr>, <td>) bên trong phần ngữ cảnh <context> dùng chung hoặc phần dẫn <stem> của câu hỏi nhỏ.
+"""
+
     prompt = f"""Hãy tạo ngẫu nhiên một nhóm câu hỏi đặc biệt (từ một thông tin dùng chung phát sinh ra nhiều câu hỏi) cho:
 - Môn học: {SUBJECT_DISPLAY.get(subject.value, subject.value)}
 - Lớp: {grade}
 - Mức độ nhận thức: {DIFFICULTY_DISPLAY[difficulty]}
 - Định dạng nhóm câu hỏi: Từ một thông tin ngữ cảnh chung, hãy tạo ra {num_sub}.
 {curriculum_context}
+{multimodal_instr}
 Yêu cầu định dạng:
 Chỉ xuất ra cấu trúc XML sau đây, không kèm theo bất kỳ lời thoại, văn bản giải thích hay bọc định dạng nào ngoài XML.
 {format_example}
@@ -203,10 +246,11 @@ Chỉ xuất ra cấu trúc XML sau đây, không kèm theo bất kỳ lời tho
 Quy tắc quan trọng:
 1. Công thức toán học, ký hiệu vật lý/hóa học bắt buộc phải sử dụng LaTeX và được bọc trong cặp dấu $...$ (ví dụ: $f(x) = x^2$ hoặc $\\vec{{u}} = (a;b;c)$).
 2. Hãy sáng tạo ra câu hỏi độc lạ, ngẫu nhiên nhất có thể, tránh trùng lặp.
-3. KHÔNG cần cung cấp lời giải hay đáp án.
-4. Câu hỏi không cần đúng thực tế hay hoàn hảo tuyệt đối (chỉ cần sinh ra định dạng đề thi chuẩn, các biểu thức toán học hoặc thông tin có thể giả định tự do vì đây là dữ liệu giả lập phục vụ cho huấn luyện mô hình sequence labeling, không dùng để kiểm tra học sinh).
-5. Hãy trả lời NGAY LẬP TỨC dưới dạng XML, bỏ qua các bước phân tích sâu hay lập luận chi tiết. Nghĩ càng ít càng tốt, đi thẳng vào cấu trúc XML.
-6. KHÔNG được ghi các ký tự đề mục (như "A.", "B.", "C.", "D." hoặc "a)", "b)", "c)", "d)") vào đầu nội dung thẻ <option>. Thẻ <option> chỉ chứa trực tiếp phần chữ/công thức của phương án.
+3. BẮT BUỘC cung cấp lời giải (thẻ <explanation>) và đáp án đúng (thẻ <answer>) cho mỗi câu hỏi thành phần.
+4. Lời giải thích trong thẻ <explanation> phải bằng tiếng Việt, súc tích và ngắn gọn như lời giải thích của giáo viên, cho phép có lỗi biên tập hoặc chính tả nhẹ, và cho phép ghi "không có đáp án đúng" nếu cần thiết.
+5. Câu hỏi không cần đúng thực tế hay hoàn hảo tuyệt đối (chỉ cần sinh ra định dạng đề thi chuẩn, các biểu thức toán học hoặc thông tin có thể giả định tự do vì đây là dữ liệu giả lập phục vụ cho huấn luyện mô hình sequence labeling, không dùng để kiểm tra học sinh).
+6. Hãy trả lời NGAY LẬP TỨC dưới dạng XML, bỏ qua các bước phân tích sâu hay lập luận chi tiết. Nghĩ càng ít càng tốt, đi thẳng vào cấu trúc XML.
+7. KHÔNG được ghi các ký tự đề mục (như "A.", "B.", "C.", "D." hoặc "a)", "b)", "c)", "d)") vào đầu nội dung thẻ <option>. Thẻ <option> chỉ chứa trực tiếp phần chữ/công thức của phương án.
 """
     return system, prompt
 
@@ -305,19 +349,31 @@ def generate_single_question(
         )[0]
     
     # Resolve the question type and prompts
+    include_figure = random.random() < 0.13
+    include_table = random.random() < 0.03
+    
     if question_type is not None:
         actual_type = question_type
         is_group = actual_type in [QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER]
         if is_group:
-            system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+            system_prompt, user_prompt = make_group_prompt(
+                subject, grade, actual_type, difficulty, problem_type_info,
+                include_figure=include_figure, include_table=include_table
+            )
         else:
-            system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+            system_prompt, user_prompt = make_standard_prompt(
+                subject, grade, actual_type, difficulty, problem_type_info,
+                include_figure=include_figure, include_table=include_table
+            )
     else:
         # 5% probability of special group question
         is_group = random.random() < 0.05
         if is_group:
             actual_type = random.choice([QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER])
-            system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+            system_prompt, user_prompt = make_group_prompt(
+                subject, grade, actual_type, difficulty, problem_type_info,
+                include_figure=include_figure, include_table=include_table
+            )
         else:
             actual_type = random.choices(
                 [
@@ -329,7 +385,10 @@ def generate_single_question(
                 weights=[0.45, 0.25, 0.25, 0.05],
                 k=1
             )[0]
-            system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
+            system_prompt, user_prompt = make_standard_prompt(
+                subject, grade, actual_type, difficulty, problem_type_info,
+                include_figure=include_figure, include_table=include_table
+            )
 
     # 3. Call deepseek with retry logic
     max_retries = 3

@@ -126,13 +126,12 @@ def view_exam(request: Request, exam_id: str):
     reconstructed_sections = {}
     
     q_num = 1
-    # We set randomize_q_num=False because in a compiled exam viewer, 
-    # we want standard layout rendering starting sequentially from 1.
-    config = ReconstructorConfig(randomize_q_num=False, include_span_text=True)
-    
     for section_title, questions in sections.items():
         reconstructed_questions = []
         for q in questions:
+            stable_seed = q.get("context", "") or q.get("stem", "") or str(q)
+            config = ReconstructorConfig(randomize_q_num=False, include_span_text=True, seed=stable_seed)
+            
             # Reconstruct to get raw_text and spans
             q_reconstructed = reconstruct_question(q, config=config, start_q_num=q_num)
             
@@ -148,7 +147,6 @@ def view_exam(request: Request, exam_id: str):
                 
             # If ordering question, generate choices based on stable seed
             if q.get("question_type") == "ordering":
-                stable_seed = q.get("stem", "") or str(q)
                 rng = get_stable_random(stable_seed)
                 item_labels = ["a", "b", "c", "d", "e", "f", "g", "h"][:len(q.get("options", []))]
                 choices = generate_ordering_choices(item_labels, " – ", rng)

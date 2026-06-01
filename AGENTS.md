@@ -15,16 +15,20 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 - `pyproject.toml` - Project configuration, dependencies, and Pixi task script registration.
 - `pixi.lock` - Lockfile tracking platform dependencies.
 - `AGENTS.md` - Rules, project structure, schemas, and developer workflows for assistant agents (this file).
+- `README.md` - Comprehensive developer guide, pipeline workflow description, execution tasks, and data contract specifications.
 - `tests/` - Directory housing all unittest suites.
   - `test_curriculum.py` - Tests for curriculum loader, parser, and level mapping.
   - `test_exam_compiler.py` - Tests for exam generator and section compilation.
   - `test_prepare_dataset.py` - Tests for XLM-RoBERTa dataset tokenizer alignments.
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
+- `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
+  - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling all 9 subcommands.
+  - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
   - `generation/` - Core Data Generation Subpackage.
     - `curriculum.py` - Handles subject & grade curriculum loading and generation.
-    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models.
+    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models. Automatically calls `token_tracker.log_response()` after every API call.
     - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams.
     - `generator.py` - Orchestrates question generation with AI prompting.
     - `parser.py` - Parses standard and group question elements from LLM XML output.
@@ -85,6 +89,8 @@ Synthetic question outputs are saved under `output/` as: `question_{subject}_g{g
   "is_group": false,
   "stem": "string — question stem (LaTeX formulas enclosed in $...$)",
   "options": ["string", "string", "..."],
+  "answer": "string — correct answer letter, value, list, or sequence",
+  "explanation": "string — explanation in Vietnamese",
   "subject": "chemistry | physics | ...",
   "grade": 8 | 9 | 10 | 11 | 12,
   "question_type": "multiple_choice | true_false | short_answer | ordering",
@@ -101,7 +107,9 @@ Synthetic question outputs are saved under `output/` as: `question_{subject}_g{g
   "questions": [
     {
       "stem": "string — sub-question stem",
-      "options": ["string", "string", "..."]
+      "options": ["string", "string", "..."],
+      "answer": "string — correct answer for sub-question",
+      "explanation": "string — explanation for sub-question"
     }
   ],
   "subject": "chemistry | physics | ...",
