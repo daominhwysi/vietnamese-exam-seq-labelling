@@ -1,0 +1,653 @@
+{% extends "base.html" %}
+
+{% block title %}Đề Thi #{{ exam.exam_id }} - Antigravity Viewer{% endblock %}
+
+{% block content %}
+<div class="flex-grow flex flex-col lg:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 gap-8">
+    
+    <!-- Left Area: Exam Paper -->
+    <div class="flex-grow lg:w-3/4 flex flex-col">
+        
+        <!-- View Toggle & Legend Panel -->
+        <div class="glass-panel rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-sm font-semibold text-slate-400">Chế độ xem:</span>
+                <div class="inline-flex rounded-xl bg-slate-950 p-1 border border-slate-800">
+                    <button id="btn-mode-standard" onclick="switchViewMode('standard')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 bg-indigo-600 text-white">
+                        Đề Thi Học Sinh
+                    </button>
+                    <button id="btn-mode-tag" onclick="switchViewMode('tag')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 text-slate-400 hover:text-slate-200">
+                        Sequence Labeling (Nhãn)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Highlight Legend (Visible only in Tag Mode) -->
+            <div id="tag-legend" class="hidden flex-wrap gap-2 text-xs font-semibold">
+                <span class="px-2.5 py-1 rounded bg-blue-100 text-blue-800 border-b-2 border-blue-500">Nhãn đề (question_label)</span>
+                <span class="px-2.5 py-1 rounded bg-purple-100 text-purple-800 border-b-2 border-purple-500">Phần dẫn (stem)</span>
+                <span class="px-2.5 py-1 rounded bg-amber-100 text-amber-800 border-b-2 border-amber-500">Nhãn ý (option_label)</span>
+                <span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 border-b-2 border-emerald-500">Nội dung ý (option_text)</span>
+                <span class="px-2.5 py-1 rounded bg-rose-100 text-rose-800 border-b-2 border-rose-500">Ngữ cảnh (context)</span>
+            </div>
+        </div>
+        
+        <!-- The Paper Document Container -->
+        <div id="paper-sheet" class="exam-paper rounded-3xl p-8 sm:p-12 md:p-16 flex-grow shadow-2xl relative">
+            
+            <!-- Standard Academic Header Layout -->
+            <div id="academic-header" class="border-b border-double border-stone-400 pb-6 mb-8 text-stone-800 text-xs sm:text-sm">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center space-y-1">
+                        <p class="uppercase font-bold tracking-tight">KỲ THI THỬ NGHIỆM ĐÁNH GIÁ NĂNG LỰC</p>
+                        <p class="font-medium text-stone-600">ĐỀ THI GIẢ LẬP DỮ LIỆU HUẤN LUYỆN</p>
+                        <p class="text-stone-400">--- * ---</p>
+                    </div>
+                    <div class="text-center space-y-1">
+                        <p class="uppercase font-bold tracking-tight text-indigo-900">MÔN THI: {{ exam.subject_display|upper }}</p>
+                        <p class="font-semibold text-stone-600">Dành cho học sinh Khối {{ exam.grade }}</p>
+                        <p class="text-stone-500">Thời gian làm bài: 50 phút (Không kể thời gian phát đề)</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-stone-200 flex justify-between font-mono text-[11px] text-stone-500">
+                    <span>Mã Đề: {{ exam.exam_id }}</span>
+                    <span>Ngày tạo: {{ exam.created_at }}</span>
+                </div>
+            </div>
+
+            <!-- VIEW 1: Standard Student Interactive Exam -->
+            <div id="view-standard" class="space-y-10">
+                {% for section_name, questions in exam.sections.items() %}
+                    <div class="space-y-6">
+                        <!-- Section title -->
+                        <h2 class="text-base sm:text-lg font-bold text-stone-900 border-l-4 border-stone-800 pl-3 py-0.5 mt-8 mb-4 exam-title-font italic">
+                            {{ section_name }}
+                        </h2>
+                        
+                        {% for q in questions %}
+                            <!-- Single standard or group question container -->
+                            <div id="question-card-{{ q.start_number }}" class="p-4 rounded-xl hover:bg-stone-50/80 transition-colors duration-150 space-y-4">
+                                
+                                <!-- Group Context if applicable -->
+                                {% if q.is_group %}
+                                    <div class="p-4 rounded-xl bg-stone-100/70 border border-stone-200 text-stone-700 text-sm sm:text-base leading-relaxed mb-4 shadow-sm">
+                                        <div class="font-bold text-stone-800 text-xs uppercase mb-1 tracking-wider text-indigo-700">Ngữ cảnh dùng chung:</div>
+                                        <div class="math-content font-serif">{{ q.context }}</div>
+                                    </div>
+                                    
+                                    <!-- Group sub-questions -->
+                                    <div class="space-y-6 pl-2 sm:pl-4 border-l border-stone-200">
+                                        {% for sub_q in q.questions %}
+                                            {% set sub_num = q.start_number + loop.index0 %}
+                                            <div id="sub-question-{{ sub_num }}" class="space-y-3">
+                                                <div class="font-serif text-stone-800 leading-relaxed">
+                                                    <span class="font-bold text-stone-900">Câu {{ sub_num }}:</span> 
+                                                    <span class="math-content">{{ sub_q.stem }}</span>
+                                                </div>
+                                                
+                                                <!-- Sub question options -->
+                                                {% if sub_q.options %}
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
+                                                        {% for opt in sub_q.options %}
+                                                            {% set opt_letter = ['A', 'B', 'C', 'D', 'E', 'F'][loop.index0] %}
+                                                            <label class="flex items-start space-x-3 cursor-pointer group py-1.5 px-3 rounded-lg border border-transparent hover:border-stone-200 hover:bg-white transition-all duration-150">
+                                                                <input type="radio" 
+                                                                       name="ans-{{ sub_num }}" 
+                                                                       value="{{ opt_letter }}" 
+                                                                       onchange="onAnswerSelected({{ sub_num }}, '{{ opt_letter }}')"
+                                                                       class="sr-only">
+                                                                <span class="option-badge flex-shrink-0 h-6 w-6 rounded-full border border-stone-300 flex items-center justify-center text-xs font-bold text-stone-500 bg-stone-50 group-hover:bg-indigo-50 group-hover:text-indigo-600 group-hover:border-indigo-300 transition-colors duration-150">
+                                                                    {{ opt_letter }}
+                                                                </span>
+                                                                <span class="text-stone-700 text-sm font-serif math-content pt-0.5">{{ opt }}</span>
+                                                            </label>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    
+                                {% else %}
+                                    <!-- Standard Question content -->
+                                    <div class="font-serif text-stone-800 leading-relaxed text-sm sm:text-base">
+                                        <span class="font-bold text-stone-900">Câu {{ q.start_number }}:</span> 
+                                        <span class="math-content">{{ q.stem }}</span>
+                                    </div>
+                                    
+                                    <!-- Options mapping depending on question types -->
+                                    {% if q.question_type == 'multiple_choice' or q.question_type == 'ordering' %}
+                                        {% set target_options = q.ordering_choices if q.question_type == 'ordering' else q.options %}
+                                        
+                                        <!-- Grid options layout -->
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-2 sm:pl-4">
+                                            {% for opt in target_options %}
+                                                {% set opt_letter = ['A', 'B', 'C', 'D', 'E', 'F'][loop.index0] %}
+                                                <label class="flex items-start space-x-3 cursor-pointer group py-1.5 px-3 rounded-lg border border-transparent hover:border-stone-200 hover:bg-white transition-all duration-150">
+                                                    <input type="radio" 
+                                                           name="ans-{{ q.start_number }}" 
+                                                           value="{{ opt_letter }}" 
+                                                           onchange="onAnswerSelected({{ q.start_number }}, '{{ opt_letter }}')"
+                                                           class="sr-only">
+                                                    <span class="option-badge flex-shrink-0 h-6 w-6 rounded-full border border-stone-300 flex items-center justify-center text-xs font-bold text-stone-500 bg-stone-50 group-hover:bg-indigo-50 group-hover:text-indigo-600 group-hover:border-indigo-300 transition-colors duration-150">
+                                                        {{ opt_letter }}
+                                                    </span>
+                                                    <span class="text-stone-700 text-sm font-serif math-content pt-0.5">{{ opt }}</span>
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                        
+                                    {% elif q.question_type == 'true_false' %}
+                                        <!-- True False grid layout -->
+                                        <div class="pl-2 sm:pl-4 space-y-3">
+                                            <div class="overflow-x-auto rounded-lg border border-stone-200">
+                                                <table class="min-w-full text-center divide-y divide-stone-200 text-xs sm:text-sm font-serif">
+                                                    <thead class="bg-stone-50 text-stone-600 font-bold">
+                                                        <tr>
+                                                            <th class="px-4 py-2 text-left w-2/3">Khẳng định / Phát biểu</th>
+                                                            <th class="px-2 py-2">Đúng</th>
+                                                            <th class="px-2 py-2">Sai</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-stone-100 text-stone-700">
+                                                        {% for opt in q.options %}
+                                                            {% set sub_idx = loop.index0 %}
+                                                            {% set sub_letter = ['a', 'b', 'c', 'd'][sub_idx] %}
+                                                            <tr>
+                                                                <td class="px-4 py-2 text-left font-serif leading-relaxed math-content">
+                                                                    <span class="font-bold text-stone-500">{{ sub_letter }})</span> {{ opt }}
+                                                                </td>
+                                                                <td class="px-2 py-2">
+                                                                    <input type="radio" 
+                                                                           name="tf-{{ q.start_number }}-{{ sub_letter }}" 
+                                                                           value="Đúng" 
+                                                                           onchange="onTFAnswerSelected({{ q.start_number }}, '{{ sub_letter }}', 'Đúng')"
+                                                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-stone-300">
+                                                                </td>
+                                                                <td class="px-2 py-2">
+                                                                    <input type="radio" 
+                                                                           name="tf-{{ q.start_number }}-{{ sub_letter }}" 
+                                                                           value="Sai" 
+                                                                           onchange="onTFAnswerSelected({{ q.start_number }}, '{{ sub_letter }}', 'Sai')"
+                                                                           class="h-4 w-4 text-red-600 focus:ring-red-500 border-stone-300">
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        
+                                    {% elif q.question_type == 'short_answer' %}
+                                        <!-- Short answer text box -->
+                                        <div class="pl-2 sm:pl-4">
+                                            <div class="relative max-w-lg">
+                                                <input type="text" 
+                                                       name="ans-{{ q.start_number }}" 
+                                                       oninput="onShortAnswerChanged({{ q.start_number }}, this.value)"
+                                                       placeholder="Nhập đáp số hoặc câu trả lời ngắn của bạn tại đây..."
+                                                       class="w-full px-4 py-2.5 rounded-xl border border-stone-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-stone-800 text-sm font-serif shadow-sm transition-all duration-150">
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- VIEW 2: Developer Sequence Labeling Highlight (Hidden by default) -->
+            <div id="view-tag" class="hidden space-y-12">
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs sm:text-sm leading-relaxed mb-6 font-mono">
+                    <p class="font-bold text-white mb-1">Chế độ kiểm tra Spans &amp; Tokens:</p>
+                    <p>Bên dưới là văn bản thô được ghép lại bởi mô đun Reconstructor. Các phần văn bản được tô màu theo nhãn thực tế phục vụ huấn luyện mô hình Token Classification. Rê chuột lên vùng tô màu để xem tên nhãn cụ thể.</p>
+                </div>
+                
+                <div id="tag-content-renderer" class="space-y-10 tag-highlight-active">
+                    <!-- Javascript will populate highlighted cards here -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- Right Area: Sidebar Status & Panel -->
+    <div class="lg:w-1/4 flex flex-col space-y-6">
+        
+        <!-- Stat Meta Board -->
+        <div class="glass-panel rounded-2xl p-5 space-y-4">
+            <div>
+                <span class="text-xs font-semibold text-slate-400 tracking-wider uppercase">Bài Thi</span>
+                <h2 class="text-lg font-bold text-white leading-tight mt-1">{{ exam.subject_display }}</h2>
+                <div class="flex items-center space-x-2 mt-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Lớp {{ exam.grade }}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Mã Đề: {{ exam.exam_id }}</span>
+                </div>
+            </div>
+            
+            <!-- Timer widget -->
+            <div class="border-t border-slate-800/80 pt-4 flex items-center justify-between">
+                <div>
+                    <span class="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Thời Gian Còn Lại</span>
+                    <span id="timer-display" class="text-2xl font-black text-white tracking-widest font-mono">50:00</span>
+                </div>
+                <button id="btn-timer-toggle" onclick="toggleTimer()" class="h-9 w-9 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700/50 flex items-center justify-center text-slate-300 hover:text-white transition-colors duration-150">
+                    <svg id="timer-icon-pause" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <svg id="timer-icon-play" class="h-4 w-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Question Navigation Grid -->
+        <div class="glass-panel rounded-2xl p-5 flex-grow flex flex-col justify-between min-h-[350px]">
+            <div class="space-y-4">
+                <span class="block text-xs font-semibold text-slate-400 tracking-wider uppercase">Bản Đồ Câu Hỏi</span>
+                
+                <div class="grid grid-cols-5 gap-2.5" id="nav-question-grid">
+                    {% for i in range(1, exam.total_questions + 1) %}
+                    <button id="nav-q-{{ i }}" 
+                            onclick="scrollToQuestion({{ i }})" 
+                            class="h-9 rounded-xl border border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 hover:text-white hover:border-slate-600 flex items-center justify-center transition-all duration-150">
+                        {{ i }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800/80 pt-5 mt-6 space-y-3">
+                <button onclick="openSubmitModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold text-sm shadow-lg shadow-indigo-500/15 hover:shadow-indigo-500/25 transition-all duration-150 hover:scale-[1.02]">
+                    NỘP BÀI THI
+                </button>
+                <a href="/" class="block w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold text-center border border-slate-700/40 transition-colors duration-150">
+                    Quay Lại Dashboard
+                </a>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Submission Confirmation Modal -->
+<div id="submit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden animate-fade-in">
+    <div class="glass-panel rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-850 shadow-2xl space-y-6 animate-scale-up">
+        <div class="text-center space-y-2">
+            <div class="h-12 w-12 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center mx-auto mb-4">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white">Xác Nhận Nộp Bài Thi</h3>
+            <p class="text-slate-400 text-xs sm:text-sm">Bạn đang hoàn thành bài kiểm tra trực quan của mình.</p>
+        </div>
+        
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-900 space-y-3 text-sm">
+            <div class="flex justify-between text-slate-400">
+                <span>Số câu hỏi đã làm:</span>
+                <span id="modal-stat-done" class="font-bold text-white">0 / 0</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+                <span>Thời gian đã dùng:</span>
+                <span id="modal-stat-time" class="font-bold text-white">00:00</span>
+            </div>
+            <div class="border-t border-slate-900 pt-3 flex justify-between text-slate-400">
+                <span>Trạng thái grading:</span>
+                <span class="font-bold text-indigo-400">Hoàn tất mô phỏng</span>
+            </div>
+        </div>
+        
+        <div class="flex gap-4">
+            <button onclick="closeSubmitModal()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition-colors duration-150">
+                Làm Tiếp
+            </button>
+            <button onclick="submitExam()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/20 transition-all duration-150 hover:scale-[1.02]">
+                Nộp Đề
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Serialize Python JSON data to JS
+    const examData = {{ exam|tojson|safe }};
+    const totalQuestions = examData.total_questions;
+    
+    // Track user answers
+    // Key: question number (1-based), Value: answer data
+    const userAnswers = {};
+    
+    // Initialize user answers state
+    for(let i = 1; i <= totalQuestions; i++) {
+        userAnswers[i] = {
+            done: false,
+            answer: null,
+            type: null
+        };
+    }
+    
+    // Populate types in answers map
+    Object.values(examData.sections).forEach(questions => {
+        questions.forEach(q => {
+            if(q.is_group) {
+                q.questions.forEach((sub_q, idx) => {
+                    const subNum = q.start_number + idx;
+                    userAnswers[subNum].type = q.question_type; // e.g. group_multiple_choice / group_short_answer
+                });
+            } else {
+                userAnswers[q.start_number].type = q.question_type;
+                if(q.question_type === 'true_false') {
+                    // For true_false, answer stores sub-states for a, b, c, d
+                    userAnswers[q.start_number].answer = { 'a': null, 'b': null, 'c': null, 'd': null };
+                }
+            }
+        });
+    });
+
+    // -------------------------------------------------------------
+    // ANSWER TRACKING EVENT HANDLERS
+    // -------------------------------------------------------------
+    
+    function onAnswerSelected(qNum, value) {
+        userAnswers[qNum].done = true;
+        userAnswers[qNum].answer = value;
+        updateQuestionBadge(qNum, 'done');
+        
+        // Highlight active radio styled option
+        const qCard = findQuestionContainer(qNum);
+        if(qCard) {
+            // Find all badges inside this question container
+            const badges = qCard.querySelectorAll('.option-badge');
+            badges.forEach(b => {
+                if (b.textContent.trim() === value) {
+                    b.classList.remove('bg-stone-50', 'text-stone-500', 'border-stone-300');
+                    b.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+                } else {
+                    b.classList.add('bg-stone-50', 'text-stone-500', 'border-stone-300');
+                    b.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+                }
+            });
+        }
+    }
+    
+    function onTFAnswerSelected(qNum, subLetter, value) {
+        if(!userAnswers[qNum].answer) {
+            userAnswers[qNum].answer = { 'a': null, 'b': null, 'c': null, 'd': null };
+        }
+        userAnswers[qNum].answer[subLetter] = value;
+        
+        // Check if all sub items a, b, c, d are completed
+        const subAnswers = userAnswers[qNum].answer;
+        const totalChecked = Object.values(subAnswers).filter(v => v !== null).length;
+        
+        if (totalChecked === 4) {
+            userAnswers[qNum].done = true;
+            updateQuestionBadge(qNum, 'done');
+        } else if (totalChecked > 0) {
+            userAnswers[qNum].done = false;
+            updateQuestionBadge(qNum, 'partial');
+        }
+    }
+    
+    function onShortAnswerChanged(qNum, value) {
+        if(value.trim().length > 0) {
+            userAnswers[qNum].done = true;
+            userAnswers[qNum].answer = value;
+            updateQuestionBadge(qNum, 'done');
+        } else {
+            userAnswers[qNum].done = false;
+            userAnswers[qNum].answer = null;
+            updateQuestionBadge(qNum, 'empty');
+        }
+    }
+    
+    function updateQuestionBadge(qNum, status) {
+        const btn = document.getElementById(`nav-q-${qNum}`);
+        if(!btn) return;
+        
+        if (status === 'done') {
+            btn.classList.remove('border-slate-800', 'bg-slate-950/40', 'text-slate-400', 'border-amber-500/40', 'bg-amber-500/10', 'text-amber-400');
+            btn.classList.add('border-emerald-500/50', 'bg-emerald-500/20', 'text-emerald-400');
+        } else if (status === 'partial') {
+            btn.classList.remove('border-slate-800', 'bg-slate-950/40', 'text-slate-400', 'border-emerald-500/50', 'bg-emerald-500/20', 'text-emerald-400');
+            btn.classList.add('border-amber-500/40', 'bg-amber-500/10', 'text-amber-400');
+        } else {
+            btn.classList.remove('border-emerald-500/50', 'bg-emerald-500/20', 'text-emerald-400', 'border-amber-500/40', 'bg-amber-500/10', 'text-amber-400');
+            btn.classList.add('border-slate-800', 'bg-slate-950/40', 'text-slate-400');
+        }
+    }
+    
+    function findQuestionContainer(qNum) {
+        // Questions can be in sub_questions for is_group
+        let element = document.getElementById(`sub-question-${qNum}`);
+        if (!element) {
+            element = document.getElementById(`question-card-${qNum}`);
+        }
+        return element;
+    }
+    
+    function scrollToQuestion(qNum) {
+        const el = findQuestionContainer(qNum);
+        if(el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Add a temporary subtle highlight pulse
+            el.classList.add('bg-indigo-50/50');
+            setTimeout(() => {
+                el.classList.remove('bg-indigo-50/50');
+            }, 1000);
+        }
+    }
+    
+    // -------------------------------------------------------------
+    // TIMER UTILITIES
+    // -------------------------------------------------------------
+    let totalSeconds = 50 * 60; // 50 minutes
+    let timerInterval = null;
+    let timerRunning = false;
+    
+    function updateTimerDisplay() {
+        const min = Math.floor(totalSeconds / 60);
+        const sec = totalSeconds % 60;
+        document.getElementById('timer-display').textContent = 
+            `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+    
+    function startTimer() {
+        if(timerRunning) return;
+        timerRunning = true;
+        
+        document.getElementById('timer-icon-pause').classList.remove('hidden');
+        document.getElementById('timer-icon-play').classList.add('hidden');
+        
+        timerInterval = setInterval(() => {
+            if(totalSeconds > 0) {
+                totalSeconds--;
+                updateTimerDisplay();
+            } else {
+                clearInterval(timerInterval);
+                alert("Hết thời gian làm bài!");
+                openSubmitModal();
+            }
+        }, 1000);
+    }
+    
+    function pauseTimer() {
+        if(!timerRunning) return;
+        timerRunning = false;
+        clearInterval(timerInterval);
+        
+        document.getElementById('timer-icon-pause').classList.add('hidden');
+        document.getElementById('timer-icon-play').classList.remove('hidden');
+    }
+    
+    function toggleTimer() {
+        if(timerRunning) {
+            pauseTimer();
+        } else {
+            startTimer();
+        }
+    }
+    
+    // Auto-start timer on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        startTimer();
+        renderTagHighlightsView();
+    });
+
+    // -------------------------------------------------------------
+    // VIEW SWITCH: STANDARD INTERACTIVE vs. SEQUENCE LABEL TAGS
+    // -------------------------------------------------------------
+    let currentViewMode = 'standard';
+    
+    function switchViewMode(mode) {
+        if (mode === currentViewMode) return;
+        currentViewMode = mode;
+        
+        const btnStandard = document.getElementById('btn-mode-standard');
+        const btnTag = document.getElementById('btn-mode-tag');
+        const viewStandard = document.getElementById('view-standard');
+        const viewTag = document.getElementById('view-tag');
+        const tagLegend = document.getElementById('tag-legend');
+        const paperSheet = document.getElementById('paper-sheet');
+        
+        if (mode === 'standard') {
+            btnStandard.classList.add('bg-indigo-600', 'text-white');
+            btnStandard.classList.remove('text-slate-400');
+            btnTag.classList.remove('bg-indigo-600', 'text-white');
+            btnTag.classList.add('text-slate-400');
+            
+            viewStandard.classList.remove('hidden');
+            viewTag.classList.add('hidden');
+            tagLegend.classList.add('hidden');
+            
+            // Re-apply paper styling back to cream
+            paperSheet.classList.remove('bg-slate-900', 'text-slate-200', 'border-slate-800');
+            paperSheet.classList.add('bg-[#fbfbf9]', 'text-stone-800', 'border-stone-200');
+        } else {
+            btnTag.classList.add('bg-indigo-600', 'text-white');
+            btnTag.classList.remove('text-slate-400');
+            btnStandard.classList.remove('bg-indigo-600', 'text-white');
+            btnStandard.classList.add('text-slate-400');
+            
+            viewStandard.classList.add('hidden');
+            viewTag.classList.remove('hidden');
+            tagLegend.classList.remove('hidden');
+            
+            // Adjust paper styles for developer tag mode (slightly darker/contrast slate to fit code tags)
+            paperSheet.classList.add('bg-slate-900', 'text-slate-200', 'border-slate-800');
+            paperSheet.classList.remove('bg-[#fbfbf9]', 'text-stone-800', 'border-stone-200');
+        }
+        
+        // Trigger MathJax re-rendering to handle toggle visibility issues
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise();
+        }
+    }
+    
+    function escapeHtml(str) {
+        if(!str) return "";
+        return str.replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/"/g, "&quot;")
+                  .replace(/'/g, "&#039;");
+    }
+    
+    // Renders the raw text reconstruction with span highlights
+    function renderTagHighlightsView() {
+        const container = document.getElementById('tag-content-renderer');
+        container.innerHTML = "";
+        
+        Object.keys(examData.sections).forEach(sectionTitle => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = "space-y-4";
+            
+            // Section Header
+            const h2 = document.createElement('h2');
+            h2.className = "text-base font-bold text-stone-400 border-l-4 border-slate-700 pl-3 py-0.5 mt-8 mb-4 font-serif italic";
+            h2.textContent = sectionTitle;
+            sectionDiv.appendChild(h2);
+            
+            // Questions
+            const questions = examData.sections[sectionTitle];
+            questions.forEach(q => {
+                const qCard = document.createElement('div');
+                qCard.className = "p-4 rounded-xl border border-slate-800 bg-slate-950/20 font-serif leading-relaxed text-sm sm:text-base whitespace-pre-wrap";
+                
+                // Process raw text and spans
+                const rawText = q.raw_text || "";
+                const spans = q.spans || [];
+                
+                // Contiguous non-overlapping tags sorting
+                const sortedSpans = [...spans].sort((a, b) => a.start - b.start);
+                let htmlStr = "";
+                let lastIdx = 0;
+                
+                sortedSpans.forEach(span => {
+                    if (span.start > lastIdx) {
+                        htmlStr += escapeHtml(rawText.substring(lastIdx, span.start));
+                    }
+                    
+                    const spanText = rawText.substring(span.start, span.end);
+                    const baseClass = `tag-${span.label.toLowerCase()}`;
+                    
+                    htmlStr += `<span class="tag-token ${baseClass}" title="Nhãn: ${span.label}">${escapeHtml(spanText)}</span>`;
+                    lastIdx = span.end;
+                });
+                
+                if (lastIdx < rawText.length) {
+                    htmlStr += escapeHtml(rawText.substring(lastIdx));
+                }
+                
+                qCard.innerHTML = htmlStr;
+                sectionDiv.appendChild(qCard);
+            });
+            
+            container.appendChild(sectionDiv);
+        });
+    }
+    
+    // -------------------------------------------------------------
+    // MODAL & SUBMISSION FLOWS
+    // -------------------------------------------------------------
+    function openSubmitModal() {
+        pauseTimer();
+        
+        // Count answers done
+        let doneCount = 0;
+        Object.values(userAnswers).forEach(ans => {
+            if (ans.done) doneCount++;
+        });
+        
+        // Calculate time taken
+        const timeTakenSec = (50 * 60) - totalSeconds;
+        const min = Math.floor(timeTakenSec / 60);
+        const sec = timeTakenSec % 60;
+        const timeStr = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+        
+        document.getElementById('modal-stat-done').textContent = `${doneCount} / ${totalQuestions}`;
+        document.getElementById('modal-stat-time').textContent = timeStr;
+        
+        document.getElementById('submit-modal').classList.remove('hidden');
+    }
+    
+    function closeSubmitModal() {
+        document.getElementById('submit-modal').classList.add('hidden');
+        startTimer();
+    }
+    
+    function submitExam() {
+        document.getElementById('submit-modal').classList.add('hidden');
+        alert("Nộp bài thành công! Cảm ơn bạn đã tham gia làm bài thi thử nghiệm này.");
+        window.location.href = "/";
+    }
+</script>
+{% endblock %}

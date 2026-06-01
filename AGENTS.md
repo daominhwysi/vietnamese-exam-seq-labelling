@@ -35,6 +35,9 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `inference.py` - Local inference utility using trained LoRA adapter models.
     - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
+  - `webapp/` - Web Application Subpackage.
+    - `main.py` - FastAPI application entry point, routing, and stats computation.
+    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting).
 
 ---
 
@@ -51,6 +54,7 @@ This project uses **Pixi** for environment and dependency management.
 - To train the LoRA model: `pixi run train`
 - To visualize token spans: `pixi run visualize`
 - To upload the dataset to HF Hub: `pixi run upload-dataset`
+- To run the web exam viewer: `pixi run view-exams`
 
 ## Environment Configuration
 
