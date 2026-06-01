@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Hệ Thống Trực Quan Đề Thi & Nhãn Sequence Labeling{% endblock %}</title>
+    <title>{% block title %}Antigravity Exam Viewer{% endblock %}</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Inter (UI), Merriweather (Paper Body), Playfair Display (Headers) -->
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;750&display=swap" rel="stylesheet">
     
     <!-- MathJax Configuration for Inline $...$ and Block $$...$$ -->
     <script>
@@ -32,25 +32,21 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
-    <!-- Custom styling system tokens -->
+    <!-- Custom Notion-like minimalist styling -->
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b0f19;
-            color: #f1f5f9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #37352f;
         }
         
-        /* Exam Paper aesthetics */
+        /* Exam Paper aesthetics - Notion clean document layout */
         .exam-paper {
-            font-family: 'Merriweather', serif;
-            background-color: #fbfbf9; /* Academic Creamy/Ivory Paper */
-            color: #1c1917; /* High contrast charcoal */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid #e7e5e4;
-        }
-
-        .exam-title-font {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            color: #37352f;
+            border: 1px solid #e9e9e6;
+            border-radius: 8px;
         }
         
         /* Custom scrollbar */
@@ -59,97 +55,90 @@
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #f7f7f5;
         }
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: #dfdfde;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: #c1c1c0;
         }
 
-        /* Glassmorphism utility */
+        /* Notion side panels & container blocks */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #f7f7f5;
+            border: 1px solid #e9e9e6;
+            border-radius: 6px;
         }
         
-        /* Sequence Labeling Tag Highlights */
+        /* Sequence Labeling Tag Highlights - Soft Pastel Notion style */
         .tag-question_label {
-            background-color: rgba(59, 130, 246, 0.18) !important;
-            border-bottom: 2px solid #3b82f6 !important;
+            background-color: #e8f4fc !important; /* Light Blue */
+            border-bottom: 2px solid #2e8ae6 !important;
             padding: 0 2px;
             border-radius: 2px;
-            color: #1d4ed8 !important;
-            font-weight: bold;
+            color: #0b5b9e !important;
+            font-weight: 600;
         }
         .tag-stem {
-            background-color: rgba(139, 92, 246, 0.12) !important;
-            border-bottom: 2px solid #8b5cf6 !important;
+            background-color: #f5f0f8 !important; /* Light Purple */
+            border-bottom: 2px solid #8e4ec6 !important;
             padding: 0 2px;
             border-radius: 2px;
-            color: #5b21b6 !important;
+            color: #5c2c8f !important;
         }
         .tag-option_label {
-            background-color: rgba(245, 158, 11, 0.18) !important;
-            border-bottom: 2px solid #f59e0b !important;
+            background-color: #fdf5d3 !important; /* Light Yellow */
+            border-bottom: 2px solid #d4a017 !important;
             padding: 0 2px;
             border-radius: 2px;
-            color: #b45309 !important;
-            font-weight: bold;
+            color: #8f6b00 !important;
+            font-weight: 600;
         }
         .tag-option_text {
-            background-color: rgba(16, 185, 129, 0.12) !important;
-            border-bottom: 2px solid #10b981 !important;
+            background-color: #edf6ec !important; /* Light Green */
+            border-bottom: 2px solid #3fa63f !important;
             padding: 0 2px;
             border-radius: 2px;
-            color: #065f46 !important;
+            color: #1e5a1e !important;
         }
         .tag-context {
-            background-color: rgba(244, 63, 94, 0.12) !important;
-            border-bottom: 2px solid #f43f5e !important;
+            background-color: #fdebee !important; /* Light Red */
+            border-bottom: 2px solid #e03b3b !important;
             padding: 0 2px;
             border-radius: 2px;
-            color: #9f1239 !important;
+            color: #9c1a1a !important;
         }
         
-        .tag-highlight-active .tag-token {
-            transition: all 0.2s ease;
-        }
-        
-        /* Hover tags details */
         .tag-token {
             position: relative;
         }
         
         .tag-highlight-active .tag-token:hover {
-            filter: brightness(0.95);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            filter: brightness(0.97);
             cursor: help;
         }
     </style>
     {% block head %}{% endblock %}
 </head>
-<body class="min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col selection:bg-[#2eaadc]/30 selection:text-inherit">
     
-    <!-- Top Premium Navigation Bar -->
-    <header class="border-b border-slate-800 bg-slate-950/70 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-3 group">
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-extrabold shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
-                    AG
+    <!-- Top Notion-like Navigation Bar -->
+    <header class="border-b border-[#e9e9e6] bg-white sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-2.5 group">
+                <div class="h-7 w-7 rounded bg-[#efefed] flex items-center justify-center text-[#37352f] font-bold border border-[#e9e9e6] text-xs">
+                    📝
                 </div>
                 <div>
-                    <span class="font-extrabold text-lg bg-gradient-to-r from-white via-slate-200 to-indigo-400 bg-clip-text text-transparent">Antigravity Viewer</span>
-                    <span class="block text-xs text-slate-400 font-semibold tracking-wider uppercase">Sinh &amp; Nhãn Đề Thi</span>
+                    <span class="font-semibold text-sm text-[#37352f] group-hover:text-black transition-colors duration-150">Antigravity Viewer</span>
+                    <span class="inline-block text-[10px] text-stone-500 font-medium px-1.5 py-0.5 rounded bg-stone-100 ml-2 border border-stone-200">Seq Labelling</span>
                 </div>
             </a>
-            <div class="flex items-center space-x-4">
-                <a href="/random" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition-all duration-200 hover:scale-[1.02] border border-slate-700/50 flex items-center space-x-2">
-                    <svg class="h-4 w-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div class="flex items-center space-x-3">
+                <a href="/random" class="px-3 py-1.5 rounded border border-[#e9e9e6] hover:bg-[#efefed] text-[#37352f] text-xs font-medium transition-all duration-150 flex items-center space-x-1.5">
+                    <svg class="h-3.5 w-3.5 text-stone-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M9 11l3-3m0 0l3 3m-3-3v12" />
                     </svg>
                     <span>Lấy Đề Ngẫu Nhiên</span>
@@ -159,13 +148,13 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow flex flex-col">
+    <main class="flex-grow flex flex-col bg-[#ffffff]">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-900 bg-slate-950/40 py-6 text-center text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-4">
+    <footer class="border-t border-[#e9e9e6] bg-[#f7f7f5] py-5 text-center text-xs text-[#838380]">
+        <div class="max-w-7xl mx-auto px-6">
             <p>© 2026 Antigravity sequence-labelling-data-generator. Hệ thống trực quan hoá dữ liệu đề thi tự động.</p>
         </div>
     </footer>
