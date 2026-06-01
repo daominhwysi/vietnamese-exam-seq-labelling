@@ -106,55 +106,45 @@ pixi run curriculum --all
 ```
 Generated curricula are cached as JSON files under `output/curriculum/`.
 
-### 3. Stage 2: Question Generation
-Synthesize question items based on curricula in the cache or through random generation:
+### 3. Stage 2: Mock Exam Compilation (Question Generation)
+Synthesize structured, section-grouped mock exams which automatically generate individual questions under the hood using curricula in the cache or through random generation:
 ```bash
-# Generate 10 mock questions
-pixi run generate -n 10
-
-# Generate 50 questions for a specific subject/grade
-pixi run generate -n 50 --subject chemistry --grade 12 --concurrency 8
+# Compile/generate mock exams
+pixi run generate --num-exams 10 --concurrency 8
 ```
-Generated raw question files are stored in `output/question_*.json`.
+Mock exams are saved as JSON files in `output/exams/`.
 
 ### 4. Stage 3: Text Reconstruction & Span Alignment
-Reconstruct plain text from questions and map character offsets. This step runs automatically during generation, but you can re-run or configure it separately:
+(Optional) Reconstruct plain text from legacy question files and map character offsets:
 ```bash
 pixi run reconstruct -i output --reconstruct-dest output_reconstructed
 ```
 
-### 5. Stage 4: Mock Exam Compilation
-Combine individual generated questions into section-grouped mock exams (e.g. matching realistic layouts with specific question structures):
-```bash
-pixi run compile-exams -n 50 --concurrency 8
-```
-Mock exams are saved in `output/exams/`.
-
-### 6. Stage 5: Dataset Preparation
-Preprocess the questions, replace LaTeX math blocks if specified, tokenize, assign BIO sequence labels, and split the dataset into `train.jsonl`, `val.jsonl`, and `test.jsonl`:
+### 5. Stage 4: Dataset Preparation
+Preprocess the generated data, recursively finding compiled exams in `output/exams/` (and falling back to legacy individual questions), then tokenize, assign BIO sequence labels, and split the dataset into `train.jsonl`, `val.jsonl`, and `test.jsonl`:
 ```bash
 pixi run prepare-dataset -i output -o dataset_output --latex-placeholder "[LATEX]"
 ```
 
-### 7. Stage 6: Train Token Classifier
+### 6. Stage 5: Train Token Classifier
 Fine-tune the `FacebookAI/xlm-roberta-base` model using LoRA adapters on the prepared dataset:
 ```bash
 pixi run train --repo_id your_hf_username/repo_name --epochs 3 --batch_size 8
 ```
 
-### 8. Stage 7: Local Inference
+### 7. Stage 6: Local Inference
 Load the trained LoRA adapter weights and run a sequence labeling model against sample input text:
 ```bash
 pixi run inference --model_dir ./results --base_model_name FacebookAI/xlm-roberta-base
 ```
 
-### 9. Stage 8: HTML Visualization
+### 8. Stage 7: HTML Visualization
 Generate an offline HTML visualizer that highlights the sequence tag alignments for verification:
 ```bash
 pixi run visualize -i dataset_output/train.jsonl -o dataset_output/sample_visualization.html
 ```
 
-### 10. Web Interface: Interactive Exam Viewer
+### 9. Stage 8: Web Interface: Interactive Exam Viewer
 Start the FastAPI server to search, view statistics, and display generated exams with highlighted, color-coded token spans:
 ```bash
 pixi run view-exams

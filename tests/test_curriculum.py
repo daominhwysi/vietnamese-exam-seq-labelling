@@ -235,6 +235,15 @@ class TestCurriculum(unittest.TestCase):
         mock_response = unittest.mock.MagicMock()
         mock_response.choices = [unittest.mock.MagicMock()]
         mock_response.choices[0].message.content = "response"
+        mock_response.model = "deepseek-v4-flash"
+        
+        mock_usage = unittest.mock.MagicMock()
+        mock_usage.prompt_tokens = 10
+        mock_usage.completion_tokens = 20
+        mock_usage.completion_tokens_details = unittest.mock.MagicMock()
+        mock_usage.completion_tokens_details.reasoning_tokens = 5
+        mock_response.usage = mock_usage
+        
         mock_create.return_value = mock_response
         
         chat("prompt")

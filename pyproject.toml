@@ -19,10 +19,9 @@ platforms = ["linux-64"]
 sequence_labelling_data_generator = { path = ".", editable = true }
 
 [tool.pixi.tasks]
-generate = "sequence-labelling-generator question"
+generate = "sequence-labelling-generator exam"
 prepare-dataset = "sequence-labelling-generator prepare"
 upload-dataset = "sequence-labelling-generator upload"
-compile-exams = "sequence-labelling-generator exam"
 train = "sequence-labelling-generator train"
 visualize = "sequence-labelling-generator visualize"
 test = "python -m unittest discover -s tests"

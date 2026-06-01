@@ -6,7 +6,6 @@ from typing import Optional
 import concurrent.futures
 from tqdm import tqdm
 
-from src.generation.generator import run_generator
 from src.generation.curriculum import generate_curriculum
 from src.generation.reconstructor import (
     reconstruct_question,
@@ -75,21 +74,6 @@ def main():
     p_curr.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_curr.add_argument("-c", "--concurrency", type=int, default=4, help="Number of parallel workers for concurrent generation")
     
-    # 2. question
-    p_q = subparsers.add_parser("question", help="Stage 2: Generate mock questions")
-    p_q.add_argument("-n", "--num", type=int, default=1, help="Number of questions to generate")
-    p_q.add_argument("-o", "--output", type=str, default="output", help="Output directory path")
-    p_q.add_argument("-c", "--concurrency", type=int, default=4, help="Number of concurrent workers")
-    p_q.add_argument("--subject", type=str, help="Subject slug")
-    p_q.add_argument("--grade", type=int, help="Grade level")
-    p_q.add_argument("--chapter", type=str, help="Chapter filter")
-    p_q.add_argument("--unit", type=str, help="Unit filter")
-    p_q.add_argument("--problem-type", "--dang", type=str, dest="problem_type", help="Problem type ID or name filter")
-    p_q.add_argument("--model", type=str, default="deepseek-v4-flash", help="The model to use")
-    p_q.add_argument("--thinking", action="store_true", default=None, help="Enable thinking/reasoning mode")
-    p_q.add_argument("--no-thinking", action="store_false", dest="thinking", help="Disable thinking/reasoning mode")
-    p_q.add_argument("--reasoning-effort", type=str, choices=["high", "max", "low", "medium", "none"], help="Reasoning effort level")
-
     # 3. reconstruct
     p_rec = subparsers.add_parser("reconstruct", help="Stage 3: Reconstruct raw text and track spans")
     p_rec.add_argument("-i", "--input-dir", type=str, default="output", help="Input directory containing questions")
@@ -168,33 +152,6 @@ def main():
                 sys.exit(1)
             generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking_val)
             print("Curriculum generation completed successfully.")
-
-    elif args.command == "question":
-        # Resolve thinking parameter
-        thinking = args.thinking
-        if args.reasoning_effort is not None:
-            thinking = False if args.reasoning_effort == "none" else args.reasoning_effort
-        
-        if args.num <= 0:
-            print("Error: Number of questions must be greater than 0.")
-            sys.exit(1)
-        if args.concurrency <= 0:
-            print("Error: Concurrency must be greater than 0.")
-            sys.exit(1)
-            
-        print(f"Starting parallel generation of {args.num} question(s) to directory: {args.output} with concurrency: {args.concurrency}")
-        run_generator(
-            num_questions=args.num, 
-            output_dir=args.output, 
-            max_workers=args.concurrency,
-            subject=args.subject,
-            grade=args.grade,
-            chapter=args.chapter,
-            unit=args.unit,
-            problem_type=args.problem_type,
-            model=args.model,
-            thinking=thinking
-        )
 
     elif args.command == "reconstruct":
         reconstruct_config = ReconstructorConfig(

@@ -24,7 +24,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `src/` - Main source package directory.
-  - `cli.py` - Main CLI console entry point handling all 9 subcommands.
+  - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
   - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
   - `generation/` - Core Data Generation Subpackage.
     - `curriculum.py` - Handles subject & grade curriculum loading and generation.
@@ -52,9 +52,8 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 This project uses **Pixi** for environment and dependency management.
 
 - To run the unit tests: `pixi run test`
-- To generate synthetic questions: `pixi run generate -n <num_questions>`
+- To generate synthetic mock exams: `pixi run generate -n <num_exams>`
 - To prepare the tokenized dataset: `pixi run prepare-dataset`
-- To compile mock exams: `pixi run compile-exams`
 - To train the LoRA model: `pixi run train`
 - To visualize token spans: `pixi run visualize`
 - To upload the dataset to HF Hub: `pixi run upload-dataset`

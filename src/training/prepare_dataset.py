@@ -221,8 +221,9 @@ def run_prepare_dataset(args):
         sys.exit(1)
         
     json_files = list(input_path.glob("question_*.json"))
-    if not json_files:
-        print(f"No question JSON files found in '{args.input_dir}'. Please run the generator first.")
+    exam_files = list(input_path.glob("**/exam_*.json"))
+    if not json_files and not exam_files:
+        print(f"No question JSON files or exam JSON files found in '{args.input_dir}'. Please generate data first.")
         sys.exit(1)
         
     # Import Hugging Face Transformers inside main so CLI help works without it installed
@@ -256,9 +257,10 @@ def run_prepare_dataset(args):
     with open(output_path / "label_mapping.json", "w", encoding="utf-8") as f:
         json.dump(label_mapping, f, ensure_ascii=False, indent=2)
         
-    print(f"Processing {len(json_files)} files...")
+    print(f"Processing data: found {len(json_files)} question file(s) and {len(exam_files)} exam file(s)...")
     processed_samples = []
     
+    # 1. Process individual question files
     for file_path in json_files:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -270,7 +272,32 @@ def run_prepare_dataset(args):
         except Exception as e:
             print(f"Warning: Failed to process {file_path.name}: {e}")
             
-    print(f"Successfully processed {len(processed_samples)} / {len(json_files)} questions.")
+    # 2. Process exam files
+    exam_q_count = 0
+    for file_path in exam_files:
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                exam_data = json.load(f)
+            
+            sections = exam_data.get("sections", {})
+            for section_title, questions in sections.items():
+                for idx, q_data in enumerate(questions):
+                    q_copy = dict(q_data)
+                    # Propagate subject and grade from exam if not in question
+                    if "subject" not in q_copy and "subject" in exam_data:
+                        q_copy["subject"] = exam_data["subject"]
+                    if "grade" not in q_copy and "grade" in exam_data:
+                        q_copy["grade"] = exam_data["grade"]
+                        
+                    sample = process_single_question(q_copy, tokenizer, tag_to_id, id_to_tag, latex_placeholder)
+                    if sample:
+                        sample["metadata"]["source_file"] = f"{file_path.name}::{section_title}::q_{idx}"
+                        processed_samples.append(sample)
+                        exam_q_count += 1
+        except Exception as e:
+            print(f"Warning: Failed to process exam {file_path.name}: {e}")
+            
+    print(f"Successfully prepared {len(processed_samples)} question samples ({len(processed_samples) - exam_q_count} from question files, {exam_q_count} from exam files).")
     
     # Shuffle and split
     random.seed(args.seed)
