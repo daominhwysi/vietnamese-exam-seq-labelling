@@ -18,9 +18,7 @@ BASE_TAGS = [
     "stem",
     "option_label",
     "option_text",
-    "context",
-    "ordering_item_label",
-    "ordering_item_text"
+    "context"
 ]
 
 LATEX_REGEX = re.compile(r'\$[^$]+\$')

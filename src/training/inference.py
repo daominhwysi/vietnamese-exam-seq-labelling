@@ -25,7 +25,7 @@ TEST_SAMPLES = [
     },
     {
         "type": "ordering",
-        "text": "Câu 3: Hãy sắp xếp trình tự đúng các bước xác định tiêu cự của thấu kính hội tụ:\n1. Đặt thấu kính và màn ảnh trên giá quang học thẳng hàng.\n2. Bật đèn chiếu sáng nguồn sáng hướng vào thấu kính.\n3. Di chuyển màn ảnh từ từ để nhận được ảnh rõ nét trên màn.\n4. Đo khoảng cách từ thấu kính đến màn ảnh và ghi nhận tiêu cự."
+        "text": "Câu 3: Hãy sắp xếp trình tự đúng các bước xác định tiêu cự của thấu kính hội tụ:\n1. Đặt thấu kính và màn ảnh trên giá quang học thẳng hàng.\n2. Bật đèn chiếu sáng nguồn sáng hướng vào thấu kính.\n3. Di chuyển màn ảnh từ từ để nhận được ảnh rõ nét trên màn.\n4. Đo khoảng cách từ thấu kính đến màn ảnh và ghi nhận tiêu cự.\nA. 1 – 2 – 3 – 4\nB. 2 – 1 – 3 – 4\nC. 3 – 2 – 1 – 4\nD. 4 – 3 – 2 – 1"
     }
 ]
 
@@ -38,7 +38,7 @@ def load_label_mapping(model_dir):
             return mapping["tag_to_id"], {int(k): v for k, v in mapping["id_to_tag"].items()}
             
     # Fallback to standard base tags mapping
-    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "ordering_item_label", "ordering_item_text"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "context"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)

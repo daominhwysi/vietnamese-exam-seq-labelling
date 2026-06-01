@@ -50,7 +50,7 @@ class TestPrepareDataset(unittest.TestCase):
         self.assertEqual(self.tag_to_id["O"], 0)
         self.assertEqual(self.id_to_tag[0], "O")
         # Ensure B- and I- tags are mapped to unique values
-        self.assertEqual(len(self.tag_to_id), 1 + 2 * 7)  # O + B/I for 7 tags
+        self.assertEqual(len(self.tag_to_id), 1 + 2 * 5)  # O + B/I for 5 tags
 
     def test_align_tokens_to_spans_basic(self):
         # Spans:

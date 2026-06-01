@@ -48,8 +48,11 @@ def generate_exam_tasks() -> List[Tuple[str, QuestionType, Optional[Difficulty]]
     # Section 1: 10 - 20 questions
     num_mc = random.randint(10, 20)
     for _ in range(num_mc):
-        # Mostly standard multiple choice, with a small probability of ordering questions
-        qtype = random.choices([QuestionType.MULTIPLE_CHOICE, QuestionType.ORDERING], weights=[0.9, 0.1])[0]
+        # Mostly standard multiple choice, with small probabilities of ordering and grouped questions
+        qtype = random.choices(
+            [QuestionType.MULTIPLE_CHOICE, QuestionType.ORDERING, QuestionType.GROUP_MULTIPLE_CHOICE],
+            weights=[0.90, 0.05, 0.05]
+        )[0]
         tasks.append((SECTION_MC, qtype, None))
         
     # Section 2: 1 - 6 questions
@@ -63,7 +66,12 @@ def generate_exam_tasks() -> List[Tuple[str, QuestionType, Optional[Difficulty]]
     else:
         num_sa = random.randint(0, 6)
     for _ in range(num_sa):
-        tasks.append((SECTION_SA, QuestionType.SHORT_ANSWER, None))
+        # Standard short answer, with a small probability of grouped short answer questions
+        qtype = random.choices(
+            [QuestionType.SHORT_ANSWER, QuestionType.GROUP_SHORT_ANSWER],
+            weights=[0.90, 0.10]
+        )[0]
+        tasks.append((SECTION_SA, qtype, None))
         
     # Section 4: 0 - 4 questions
     num_essay = random.randint(0, 4)

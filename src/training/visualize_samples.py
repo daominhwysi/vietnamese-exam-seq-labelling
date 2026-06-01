@@ -54,14 +54,6 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             --color-context: rgba(244, 63, 94, 0.25);
             --border-context: #f43f5e;
             --text-context: #fda4af;
-            
-            --color-ordering_item_label: rgba(20, 184, 166, 0.25);
-            --border-ordering_item_label: #14b8a6;
-            --text-ordering_item_label: #99f6e4;
-            
-            --color-ordering_item_text: rgba(99, 102, 241, 0.25);
-            --border-ordering_item_text: #6366f1;
-            --text-ordering_item_text: #c7d2fe;
         }}
         
         body {{
@@ -174,16 +166,6 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             background-color: var(--color-context);
             border: 1px solid var(--border-context);
             color: var(--text-context);
-        }}
-        .tag-ordering_item_label {{
-            background-color: var(--color-ordering_item_label);
-            border: 1px solid var(--border-ordering_item_label);
-            color: var(--text-ordering_item_label);
-        }}
-        .tag-ordering_item_text {{
-            background-color: var(--color-ordering_item_text);
-            border: 1px solid var(--border-ordering_item_text);
-            color: var(--text-ordering_item_text);
         }}
         
         .tag-o {{
@@ -305,8 +287,6 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             <div class="legend-item tag-option_label">Option Label</div>
             <div class="legend-item tag-option_text">Option Text</div>
             <div class="legend-item tag-context">Context Passage</div>
-            <div class="legend-item tag-ordering_item_label">Ordering Label</div>
-            <div class="legend-item tag-ordering_item_text">Ordering Text</div>
         </div>
 
         <div id="samples-container"></div>

@@ -146,12 +146,16 @@ class TestReconstructor(unittest.TestCase):
         raw_text = enriched["raw_text"]
         spans = enriched["spans"]
         
-        # Verify ordering item text has spans labeled correctly
-        ordering_item_texts = [s["text"] for s in spans if s["label"] == "ordering_item_text"]
-        ordering_item_labels = [s["text"] for s in spans if s["label"] == "ordering_item_label"]
+        # Verify ordering item text and prefixes are labeled as stem
+        stem_segments = [s["text"] for s in spans if s["label"] == "stem"]
         
-        self.assertEqual(ordering_item_texts, ["Bước 1", "Bước 2", "Bước 3"])
-        self.assertEqual(ordering_item_labels, ["* a. ", "* b. ", "* c. "])
+        self.assertIn("Sắp xếp thứ tự các bước:", stem_segments)
+        self.assertIn("Bước 1", stem_segments)
+        self.assertIn("Bước 2", stem_segments)
+        self.assertIn("Bước 3", stem_segments)
+        self.assertIn("* a. ", stem_segments)
+        self.assertIn("* b. ", stem_segments)
+        self.assertIn("* c. ", stem_segments)
         
         # Verify multiple choice options representing permutations are added
         option_texts = [s["text"] for s in spans if s["label"] == "option_text"]

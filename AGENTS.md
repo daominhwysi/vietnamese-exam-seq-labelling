@@ -1,14 +1,20 @@
 Say hallo to user everytime they say hello
 
+# Project Purpose
+
+This project is a complete synthetic data generation and downstream model training pipeline designed to produce and train **Sequence Labeling** models (like XLM-RoBERTa) on Vietnamese educational exam papers.
+
+The pipeline generates high-quality curriculum-aligned synthetic exam questions using LLMs (DeepSeek), compiles them into mock exams, reconstructs raw exam texts with character offset span mappings, tokenizes and labels them, and trains/evaluates LoRA token classification adapter models to automatically segment and extract exam question structures (such as question stems, option text, option labels, and contexts).
+
 # Agent Instructions: Updating Project Structure
+
 You MUST update the project structure section in this file (`AGENTS.md`) every time you make changes to the files or directories in the project.
 
 # Project Structure
 
 - `pyproject.toml` - Project configuration, dependencies, and Pixi task script registration.
 - `pixi.lock` - Lockfile tracking platform dependencies.
-- `DATA_STRUCTURE.md` - Documentation of output JSON schemas, enums, and API prompt flow.
-- `AGENTS.md` - Rules and detailed project structure for assistant agents (this file).
+- `AGENTS.md` - Rules, project structure, schemas, and developer workflows for assistant agents (this file).
 - `tests/` - Directory housing all unittest suites.
   - `test_curriculum.py` - Tests for curriculum loader, parser, and level mapping.
   - `test_exam_compiler.py` - Tests for exam generator and section compilation.
@@ -29,3 +35,88 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `inference.py` - Local inference utility using trained LoRA adapter models.
     - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
+
+---
+
+# Developer & Agent Workflows
+
+## Environment & Dependency Management
+
+This project uses **Pixi** for environment and dependency management.
+
+- To run the unit tests: `pixi run test`
+- To generate synthetic questions: `pixi run generate -n <num_questions>`
+- To prepare the tokenized dataset: `pixi run prepare-dataset`
+- To compile mock exams: `pixi run compile-exams`
+- To train the LoRA model: `pixi run train`
+- To visualize token spans: `pixi run visualize`
+- To upload the dataset to HF Hub: `pixi run upload-dataset`
+
+## Environment Configuration
+
+The project utilizes the following environment variables:
+
+- `DEEPSEEK_API_KEY`: API key for calling the DeepSeek reasoning and flash models.
+- `HF_TOKEN`: Hugging Face write token for pulling/pushing datasets and LoRA adapter weights.
+- **Important:** Do NOT try to read `.env` to fetch these keys. Prompt the user to provide them if they are missing from the environment context, or use standard environment retrieval.
+
+---
+
+# Data Contracts & Schemas
+
+## 1. Domain Enums
+
+- **Subjects:** `economics_law`, `geography`, `history`, `math_algebra`, `math_geometry`, `physics`, `chemistry`.
+- **Question Types:** `multiple_choice`, `true_false`, `short_answer`, `ordering`, `group_multiple_choice`, `group_short_answer`.
+- **Cognitive/Difficulty Levels:** `recognize`, `comprehend`, `low_application`, `application`, `high_application`.
+
+## 2. Output Question JSON Schemas
+
+Synthetic question outputs are saved under `output/` as: `question_{subject}_g{grade}_{timestamp}_{uuid}.json`.
+
+### Standard Question (`is_group: false`)
+
+```json
+{
+  "is_group": false,
+  "stem": "string — question stem (LaTeX formulas enclosed in $...$)",
+  "options": ["string", "string", "..."],
+  "subject": "chemistry | physics | ...",
+  "grade": 8 | 9 | 10 | 11 | 12,
+  "question_type": "multiple_choice | true_false | short_answer | ordering",
+  "difficulty": "recognize | comprehend | ..."
+}
+```
+
+### Group Question (`is_group: true`)
+
+```json
+{
+  "is_group": true,
+  "context": "string — shared passage/context text (LaTeX formulas in $...$)",
+  "questions": [
+    {
+      "stem": "string — sub-question stem",
+      "options": ["string", "string", "..."]
+    }
+  ],
+  "subject": "chemistry | physics | ...",
+  "grade": 8 | 9 | 10 | 11 | 12,
+  "question_type": "group_multiple_choice | group_short_answer",
+  "difficulty": "recognize | comprehend | ..."
+}
+```
+
+## 3. Sequence Labeling Tag Set
+
+During dataset preparation (Stage 5), text tokens are aligned to character spans and labeled using the following entity categories:
+
+- `question_label`: Labels prefix indicators (e.g. "Câu 1:")
+- `stem`: Labels the main text body of a question/sub-question (including ordering items if present).
+- `option_label`: Labels options letters/prefixes (e.g. "A.", "B.", "a)")
+- `option_text`: Labels the textual content of options.
+- `context`: Labels the shared passage/context block in group questions.
+
+# Privacy and Security Rules
+
+- NEVER attempt to read or access the `.env` file under any circumstances, as it contains sensitive credentials.

@@ -319,12 +319,16 @@ def generate_single_question(
             actual_type = random.choice([QuestionType.GROUP_MULTIPLE_CHOICE, QuestionType.GROUP_SHORT_ANSWER])
             system_prompt, user_prompt = make_group_prompt(subject, grade, actual_type, difficulty, problem_type_info)
         else:
-            actual_type = random.choice([
-                QuestionType.MULTIPLE_CHOICE,
-                QuestionType.TRUE_FALSE,
-                QuestionType.SHORT_ANSWER,
-                QuestionType.ORDERING
-            ])
+            actual_type = random.choices(
+                [
+                    QuestionType.MULTIPLE_CHOICE,
+                    QuestionType.TRUE_FALSE,
+                    QuestionType.SHORT_ANSWER,
+                    QuestionType.ORDERING
+                ],
+                weights=[0.45, 0.25, 0.25, 0.05],
+                k=1
+            )[0]
             system_prompt, user_prompt = make_standard_prompt(subject, grade, actual_type, difficulty, problem_type_info)
 
     # 3. Call deepseek with retry logic

@@ -197,8 +197,8 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 item_labels = ord_labels[:len(options)]
                 for opt_idx, opt_text in enumerate(options):
                     lbl = ord_prefix_tpl.format(label=item_labels[opt_idx])
-                    append_segment(lbl, "ordering_item_label")
-                    append_segment(opt_text, "ordering_item_text")
+                    append_segment(lbl, "stem")
+                    append_segment(opt_text, "stem")
                     
                     if opt_idx < len(options) - 1:
                         append_segment(config.separator_options, "separator")
