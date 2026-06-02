@@ -6,7 +6,9 @@ from src.generation.exam_compiler import (
     SECTION_MC,
     SECTION_TF,
     SECTION_SA,
-    SECTION_ESSAY
+    SECTION_ESSAY,
+    SECTION_LIT_READING,
+    SECTION_LIT_WRITING
 )
 from src.generation.generator import Subject
 
@@ -60,6 +62,93 @@ class TestExamCompiler(unittest.TestCase):
             self.assertNotIn("raw_text", q)
             self.assertNotIn("spans", q)
             self.assertNotIn("problem_type_level", q)
+
+    @patch('src.generation.exam_compiler.generate_single_question')
+    def test_generate_single_exam_english(self, mock_gen):
+        mock_gen.return_value = {
+            "stem": "Dummy English stem",
+            "options": ["A", "B", "C", "D"],
+            "raw_text": "Dummy raw text",
+            "spans": [{"start": 0, "end": 5}],
+            "problem_type_level": "VD"
+        }
+        
+        exam_data = generate_single_exam(
+            subject=Subject.ENGLISH,
+            grade=12,
+            concurrency=2
+        )
+        
+        self.assertIsNotNone(exam_data)
+        self.assertEqual(exam_data["subject"], "english")
+        self.assertEqual(exam_data["grade"], 12)
+        
+        sections = exam_data["sections"]
+        self.assertTrue(len(sections) > 0)
+        
+        # Verify randomized English tasks count matches either New (10) or Old (36) format task counts
+        total_questions = sum(len(q_list) for q_list in sections.values())
+        self.assertIn(total_questions, {10, 36})
+
+    @patch('src.generation.exam_compiler.generate_single_question')
+    def test_generate_single_exam_literature(self, mock_gen):
+        mock_gen.return_value = {
+            "stem": "Dummy Literature stem",
+            "options": [],
+            "raw_text": "Dummy raw text",
+            "spans": [{"start": 0, "end": 5}],
+            "problem_type_level": "VD"
+        }
+        
+        exam_data = generate_single_exam(
+            subject=Subject.LITERATURE,
+            grade=11,
+            concurrency=2
+        )
+        
+        self.assertIsNotNone(exam_data)
+        self.assertEqual(exam_data["subject"], "literature")
+        self.assertEqual(exam_data["grade"], 11)
+        
+        sections = exam_data["sections"]
+        self.assertIn(SECTION_LIT_READING, sections)
+        self.assertIn(SECTION_LIT_WRITING, sections)
+        
+        # Literature must only have these 2 sections
+        self.assertEqual(set(sections.keys()), {SECTION_LIT_READING, SECTION_LIT_WRITING})
+        self.assertEqual(len(sections[SECTION_LIT_READING]), 1)
+        self.assertEqual(len(sections[SECTION_LIT_WRITING]), 2)
+
+    @patch('src.generation.exam_compiler.generate_single_exam')
+    @patch('src.generation.exam_compiler.get_available_curricula')
+    def test_run_batch_exams_generator(self, mock_get_curr, mock_gen_exam):
+        from src.generation.exam_compiler import run_batch_exams_generator
+        from tempfile import TemporaryDirectory
+        import os
+        
+        mock_get_curr.return_value = [("physics", 11)]
+        import uuid
+        mock_gen_exam.side_effect = lambda subject, grade, model=None, thinking=None, concurrency=8: {
+            "exam_id": uuid.uuid4().hex[:8],
+            "subject": subject.value,
+            "grade": grade,
+            "created_at": "2026-06-02T00:00:00",
+            "sections": {}
+        }
+        
+        with TemporaryDirectory() as tmpdir:
+            run_batch_exams_generator(
+                num_exams=2,
+                output_dir=tmpdir,
+                subject="physics",
+                grade=11
+            )
+            
+            # Check that files were written
+            files = os.listdir(tmpdir)
+            self.assertEqual(len(files), 2)
+            for f in files:
+                self.assertTrue(f.startswith("exam_physics_g11_"))
 
 if __name__ == '__main__':
     unittest.main()

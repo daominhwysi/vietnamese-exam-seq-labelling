@@ -18,7 +18,7 @@ def run_reconstructor_on_existing(input_directory: str, dest_directory: Optional
     if not in_dir.exists():
         print(f"Error: Input directory '{input_directory}' does not exist.")
         sys.exit(1)
-        
+
     json_files = list(in_dir.glob("question_*.json"))
     if not json_files:
         print(f"No question JSON files found in '{input_directory}'.")
@@ -30,18 +30,18 @@ def run_reconstructor_on_existing(input_directory: str, dest_directory: Optional
         print(f"Found {len(json_files)} question file(s) in '{input_directory}'. Saving reconstructed files to '{dest_directory}'...")
     else:
         print(f"WARNING: Modifying {len(json_files)} question file(s) in '{input_directory}' in-place...")
-        
+
     def process_file(file_path: Path) -> bool:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            
+
             # Reconstruct (add raw_text and spans)
             updated_data = reconstruct_question(data, config)
-            
+
             # Target path
             target_path = file_path if not dest_directory else Path(dest_directory) / file_path.name
-            
+
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(updated_data, f, ensure_ascii=False, indent=2)
             return True
@@ -55,7 +55,7 @@ def run_reconstructor_on_existing(input_directory: str, dest_directory: Optional
         for future in tqdm(concurrent.futures.as_completed(futures), total=len(json_files), desc="Reconstructing"):
             if future.result():
                 success_count += 1
-                
+
     if dest_directory:
         print(f"Completed: Saved {success_count}/{len(json_files)} reconstructed file(s) to '{dest_directory}'.")
     else:
@@ -64,7 +64,7 @@ def run_reconstructor_on_existing(input_directory: str, dest_directory: Optional
 def main():
     parser = argparse.ArgumentParser(description="Mock Exam Question Generator & Text Reconstructor")
     subparsers = parser.add_subparsers(dest="command", required=True, help="Refactored subcommands")
-    
+
     # 1. curriculum
     p_curr = subparsers.add_parser("curriculum", help="Stage 1: Generate curriculum JSON files")
     p_curr.add_argument("--all", action="store_true", help="Generate curricula for all subjects & grades concurrently")
@@ -73,7 +73,7 @@ def main():
     p_curr.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
     p_curr.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_curr.add_argument("-c", "--concurrency", type=int, default=4, help="Number of parallel workers for concurrent generation")
-    
+
     # 3. reconstruct
     p_rec = subparsers.add_parser("reconstruct", help="Stage 3: Reconstruct raw text and track spans")
     p_rec.add_argument("-i", "--input-dir", type=str, default="output", help="Input directory containing questions")
@@ -92,6 +92,8 @@ def main():
     p_exam.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
     p_exam.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_exam.add_argument("-c", "--concurrency", type=int, default=8, help="Number of concurrent threads per exam")
+    p_exam.add_argument("--subject", type=str, help="Filter generation for a specific subject")
+    p_exam.add_argument("--grade", type=int, help="Filter generation for a specific grade")
 
     # 5. prepare
     p_prep = subparsers.add_parser("prepare", help="Stage 5: Prepare tokenized datasets for training")
@@ -176,7 +178,9 @@ def main():
             output_dir=args.output_dir,
             model=args.model,
             thinking=thinking_val,
-            concurrency=args.concurrency
+            concurrency=args.concurrency,
+            subject=args.subject,
+            grade=args.grade
         )
 
     elif args.command == "prepare":

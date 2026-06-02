@@ -29,7 +29,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `generation/` - Core Data Generation Subpackage.
     - `curriculum.py` - Handles subject & grade curriculum loading and generation.
     - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models. Automatically calls `token_tracker.log_response()` after every API call.
-    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams.
+    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams (supports both old and new English formats).
     - `generator.py` - Orchestrates question generation with AI prompting.
     - `parser.py` - Parses standard and group question elements from LLM XML output.
     - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans.
@@ -73,7 +73,7 @@ The project utilizes the following environment variables:
 
 ## 1. Domain Enums
 
-- **Subjects:** `economics_law`, `geography`, `history`, `math_algebra`, `math_geometry`, `physics`, `chemistry`.
+- **Subjects:** `economics_law`, `geography`, `history`, `math_algebra`, `math_geometry`, `physics`, `chemistry`, `english`, `literature`.
 - **Question Types:** `multiple_choice`, `true_false`, `short_answer`, `ordering`, `group_multiple_choice`, `group_short_answer`.
 - **Cognitive/Difficulty Levels:** `recognize`, `comprehend`, `low_application`, `application`, `high_application`.
 

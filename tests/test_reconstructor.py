@@ -250,5 +250,86 @@ class TestReconstructor(unittest.TestCase):
         self.assertEqual(enriched1["raw_text"], enriched2["raw_text"])
         self.assertEqual(enriched1["spans"], enriched2["spans"])
 
+    def test_reconstruct_literature_no_options(self):
+        # Literature question has no options list
+        q_data = {
+            "is_group": False,
+            "stem": "Đề bài tự luận Ngữ văn...",
+            "question_type": "short_answer",
+            "subject": "literature",
+            "grade": 12,
+            "difficulty": "high_application"
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="Câu {num}: ",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        self.assertEqual(enriched["raw_text"], "Câu 1: Đề bài tự luận Ngữ văn...")
+        
+        spans = enriched["spans"]
+        self.assertEqual(len(spans), 2)
+        self.assertEqual(spans[0]["label"], "question_label")
+        self.assertEqual(spans[1]["label"], "stem")
+
+    def test_reconstruct_english_cloze_blank_normalization(self):
+        # English cloze passages should normalize spaces/underscores/dots into [BLANK]
+        q_data = {
+            "is_group": True,
+            "context": "This is a passage with (1)_____ word and (2).... sentence gap.",
+            "questions": [
+                {
+                    "stem": "Question 1: What does it mean _____?",
+                    "options": ["A", "B"]
+                },
+                {
+                    "stem": "Question 2",
+                    "options": ["C", "D"]
+                }
+            ],
+            "question_type": "group_multiple_choice",
+            "subject": "english",
+            "grade": 10,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="Question {num}: ",
+            option_prefix_style="capital_dot",
+            separator_context_questions="\n",
+            separator_questions="\n",
+            separator_stem_options="\n",
+            separator_options="\n",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        raw_text = enriched["raw_text"]
+        
+        # Check that context has been normalized
+        self.assertTrue(raw_text.startswith("This is a passage with (1) <blank /> word and (2) <blank /> sentence gap."))
+        # Check that group sub-question stem has been normalized
+        self.assertIn("Question 1: What does it mean <blank/>?", raw_text)
+
+    def test_reconstruct_english_standard_blank_normalization(self):
+        q_data = {
+            "is_group": False,
+            "stem": "He ___ a book yesterday.",
+            "options": ["read", "reads", "reading", "has read"],
+            "question_type": "multiple_choice",
+            "subject": "english",
+            "grade": 12,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="Question {num}: ",
+            option_prefix_style="capital_dot",
+            separator_stem_options="\n",
+            separator_options="\n",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        raw_text = enriched["raw_text"]
+        
+        self.assertEqual(raw_text, "Question 1: He <blank/> a book yesterday.\nA. read\nB. reads\nC. reading\nD. has read")
+
 if __name__ == '__main__':
     unittest.main()

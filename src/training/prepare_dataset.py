@@ -242,10 +242,12 @@ def run_prepare_dataset(args):
         
     # Process LaTeX placeholder
     latex_placeholder = args.latex_placeholder if args.latex_placeholder and args.latex_placeholder.strip() else None
+    special_tokens = ["<blank />", "<blank/>", "[BLANK]"]
     if latex_placeholder:
         print(f"LaTeX equations will be replaced with placeholder token: '{latex_placeholder}'")
-        # Add placeholder to tokenizer as a special token
-        tokenizer.add_special_tokens({"additional_special_tokens": [latex_placeholder]})
+        special_tokens.append(latex_placeholder)
+    
+    tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
         
     tag_to_id, id_to_tag = get_tag_mappings()
     

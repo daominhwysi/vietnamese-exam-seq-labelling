@@ -15,7 +15,9 @@ SUBJECT_DISPLAY = {
     "math_algebra": "Toán Đại số",
     "math_geometry": "Toán hình học",
     "physics": "Vật lý",
-    "chemistry": "Hóa học"
+    "chemistry": "Hóa học",
+    "english": "Tiếng Anh",
+    "literature": "Ngữ văn"
 }
 
 def get_curriculum_path(subject: str, grade: int) -> Path:
@@ -127,10 +129,31 @@ def generate_curriculum(
         "(GDPT 2018) và các đề thi tốt nghiệp, thi học sinh giỏi."
     )
     
+    subject_guideline = ""
+    if subject == "english":
+        subject_guideline = """
+YÊU CẦU ĐẶC BIỆT cho môn Tiếng Anh:
+Chương trình học bắt buộc phải chứa các Chương và Dạng bài sau:
+1. Phát âm và Trọng âm (Pronunciation & Word Stress), với dạng bài "pronunciation" và "stress".
+2. Ngữ pháp và Từ vựng (Vocabulary & Grammar), với dạng bài "grammar_vocabulary".
+3. Sửa lỗi sai và Kết hợp câu (Error Correction & Sentence Combination), với dạng bài "error_correction_combination".
+4. Điền từ (Cloze Word), với dạng bài "cloze_word".
+5. Điền câu (Cloze Sentence), với dạng bài "cloze_sentence".
+6. Đọc hiểu (Reading Comprehension), với dạng bài "reading_comprehension".
+"""
+    elif subject == "literature":
+        subject_guideline = """
+YÊU CẦU ĐẶC BIỆT cho môn Ngữ văn:
+Chương trình học bắt buộc phải chứa các Chương và Dạng bài sau:
+1. Đọc hiểu văn bản (Reading Comprehension), với dạng bài "reading_comprehension_literature" (văn bản tự luận đọc hiểu).
+2. Nghị luận xã hội (Social Argumentation Essay), với dạng bài "social_argumentation_essay" (~200 chữ).
+3. Nghị luận văn học (Literary Analysis Essay), với dạng bài "literary_analysis_essay" (~600 chữ).
+"""
+
     prompt = f"""Hãy biên soạn một chương trình học (curriculum) chi tiết cho môn học '{subject_display}' lớp {grade} của Việt Nam.
 Chương trình học này phải được cấu trúc thành các Chương (Chapters), mỗi Chương có các Bài học (Units), và mỗi Bài học có các Dạng bài tập (Dạng - ở đây dịch là 'problem_types') cụ thể.
-
-Mỗi Bài học (Unit) nên có khoảng 3 đến 8 Dạng bài tập (problem_types), bao quát từ mức độ Nhận biết - Thông hiểu (NB_TH), Vận dụng (VD) đến Vận dụng cao (VDC).
+{subject_guideline}
+Chương trình học này phải bao quát từ mức độ Nhận biết - Thông hiểu (NB_TH), Vận dụng (VD) đến Vận dụng cao (VDC).
 
 Đối với mỗi Dạng bài tập (problem_type), bạn phải cung cấp:
 - `id`: Mã dạng bài tập duy nhất dạng snake_case, ví dụ: `{subject}_{grade}_wave_light_wave_dang1`
@@ -325,7 +348,7 @@ def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] 
     import concurrent.futures
     from src.generation.generator import Subject
     
-    subjects = [s.value for s in Subject]
+    subjects = [s.value for s in Subject if s.value not in ["english", "literature"]]
     grades = [10, 11, 12]
     
     print("=" * 60)

@@ -135,6 +135,24 @@ def view_exam(request: Request, exam_id: str):
             # Reconstruct to get raw_text and spans
             q_reconstructed = reconstruct_question(q, config=config, start_q_num=q_num)
             
+            # Normalize `<blank/>` to `<blank></blank>` for safe HTML rendering without layout breakage in standard view
+            if q_reconstructed.get("subject") == "english":
+                import re
+                def normalize_blanks(text: str) -> str:
+                    if not text:
+                        return text
+                    return re.sub(r'<\s*blank\s*/?\s*>', '<blank></blank>', text)
+                
+                if "stem" in q_reconstructed:
+                    q_reconstructed["stem"] = normalize_blanks(q_reconstructed["stem"])
+                if "context" in q_reconstructed:
+                    q_reconstructed["context"] = normalize_blanks(q_reconstructed["context"])
+                if "questions" in q_reconstructed:
+                    q_reconstructed["questions"] = [dict(sub) for sub in q_reconstructed["questions"]]
+                    for sub_q in q_reconstructed["questions"]:
+                        if "stem" in sub_q:
+                            sub_q["stem"] = normalize_blanks(sub_q["stem"])
+            
             # Record starting and ending question numbers for this item
             q_reconstructed["start_number"] = q_num
             if q.get("is_group"):

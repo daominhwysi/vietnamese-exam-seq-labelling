@@ -145,6 +145,11 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
     if is_group:
         # Group question: context followed by sub-questions
         context = q_data.get("context", "")
+        if q_data.get("subject") == "english":
+            import re
+            for i in range(1, 40):
+                # Standardize (i) <blank /> format
+                context = re.sub(rf'\({i}\)\s*(?:_{{2,}}|\.{{2,}}|\[\s*BLANK\s*\]|<\s*blank\s*/?>)', f'({i}) <blank />', context)
         append_segment(context, "context")
         
         # Sub-questions
@@ -161,6 +166,14 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 
                 # Stem
                 stem = sub_q.get("stem", "")
+                if q_data.get("subject") == "english":
+                    import re
+                    # Strip duplicate leading Question/Câu XX: prefixes
+                    stem = re.sub(r'^(?:Question|Câu)\s*\d+\s*:\s*', '', stem, flags=re.IGNORECASE)
+                    # Strip instruction prefixes
+                    stem = re.sub(r'^Mark the letter [A-Z,\s/]+(?:or [A-Z\s]+)? on your answer sheet to indicate the [^.]+\.\s*', '', stem, flags=re.IGNORECASE)
+                    # Normalize underscores, dots, [BLANK] or other blank tokens in stem to <blank/>
+                    stem = re.sub(r'(?:_{2,}|\.{3,}|\[\s*BLANK\s*\]|<\s*blank\s*/?>)', '<blank/>', stem)
                 append_segment(stem, "stem")
                 
                 # Options
@@ -185,6 +198,14 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
         append_segment(q_label, "question_label")
         
         stem = q_data.get("stem", "")
+        if q_data.get("subject") == "english":
+            import re
+            # Strip duplicate leading Question/Câu XX: prefixes
+            stem = re.sub(r'^(?:Question|Câu)\s*\d+\s*:\s*', '', stem, flags=re.IGNORECASE)
+            # Strip instruction prefixes
+            stem = re.sub(r'^Mark the letter [A-Z,\s/]+(?:or [A-Z\s]+)? on your answer sheet to indicate the [^.]+\.\s*', '', stem, flags=re.IGNORECASE)
+            # Normalize underscores, dots, [BLANK] or other blank tokens in stem to <blank/>
+            stem = re.sub(r'(?:_{2,}|\.{3,}|\[\s*BLANK\s*\]|<\s*blank\s*/?>)', '<blank/>', stem)
         append_segment(stem, "stem")
         
         options = q_data.get("options", [])
