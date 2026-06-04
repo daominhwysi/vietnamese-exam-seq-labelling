@@ -9,6 +9,7 @@ from tqdm import tqdm
 from src.generation.curriculum import generate_curriculum
 from src.generation.reconstructor import (
     reconstruct_question,
+    reconstruct_exam,
     ReconstructorConfig,
     OPTION_PREFIX_STYLES
 )
@@ -19,28 +20,32 @@ def run_reconstructor_on_existing(input_directory: str, dest_directory: Optional
         print(f"Error: Input directory '{input_directory}' does not exist.")
         sys.exit(1)
 
-    json_files = list(in_dir.glob("question_*.json"))
+    json_files = list(in_dir.glob("question_*.json")) + list(in_dir.glob("**/exam_*.json"))
     if not json_files:
-        print(f"No question JSON files found in '{input_directory}'.")
+        print(f"No question JSON or exam JSON files found in '{input_directory}'.")
         return
         
     if dest_directory:
         dest_path = Path(dest_directory)
         dest_path.mkdir(parents=True, exist_ok=True)
-        print(f"Found {len(json_files)} question file(s) in '{input_directory}'. Saving reconstructed files to '{dest_directory}'...")
+        print(f"Found {len(json_files)} file(s) in '{input_directory}'. Saving reconstructed files to '{dest_directory}'...")
     else:
-        print(f"WARNING: Modifying {len(json_files)} question file(s) in '{input_directory}' in-place...")
+        print(f"WARNING: Modifying {len(json_files)} file(s) in '{input_directory}' in-place...")
 
     def process_file(file_path: Path) -> bool:
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            # Reconstruct (add raw_text and spans)
-            updated_data = reconstruct_question(data, config)
+            if "sections" in data:
+                updated_data = reconstruct_exam(data, config)
+            else:
+                updated_data = reconstruct_question(data, config)
 
-            # Target path
-            target_path = file_path if not dest_directory else Path(dest_directory) / file_path.name
+            if not dest_directory:
+                target_path = file_path
+            else:
+                target_path = Path(dest_directory) / file_path.name
 
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(updated_data, f, ensure_ascii=False, indent=2)
@@ -78,12 +83,23 @@ def main():
     p_rec = subparsers.add_parser("reconstruct", help="Stage 3: Reconstruct raw text and track spans")
     p_rec.add_argument("-i", "--input-dir", type=str, default="output", help="Input directory containing questions")
     p_rec.add_argument("--in-place", action="store_true", help="Overwrite existing files directly")
-    p_rec.add_argument("--reconstruct-dest", type=str, default="output_reconstructed", help="Destination folder if not in-place")
+    p_rec.add_argument("--reconstruct-dest", type=str, default="output/reconstructed", help="Destination folder if not in-place")
     p_rec.add_argument("-c", "--concurrency", type=int, default=4, help="Concurrency for reconstruction")
     p_rec.add_argument("--q-prefix", type=str, help="Override question prefix template")
     p_rec.add_argument("--opt-style", type=str, choices=list(OPTION_PREFIX_STYLES.keys()), help="Override option prefix style")
     p_rec.add_argument("--ord-item-style", type=str, choices=["char", "index"], help="Override ordering item style")
     p_rec.add_argument("--ord-item-template", type=str, help="Override ordering item template")
+    
+    # Reconstruct augmentations
+    p_rec.add_argument("--typo-rate", type=float, default=0.0, help="Spelling mistake typo injection rate")
+    p_rec.add_argument("--space-noise-rate", type=float, default=0.0, help="Spacing noise injection rate")
+    p_rec.add_argument("--latex-mask-prob", type=float, default=0.0, help="LaTeX masking probability")
+    p_rec.add_argument("--latex-placeholder", type=str, default="[LATEX]", help="LaTeX masking placeholder")
+    p_rec.add_argument("--enable-permutations", action="store_true", help="Enable random permutations")
+    p_rec.add_argument("--option-drop-prob", type=float, default=0.0, help="Option drop probability")
+    p_rec.add_argument("--casing-noise-prob", type=float, default=0.0, help="Casing noise probability")
+    p_rec.add_argument("--synonym-swap-prob", type=float, default=0.0, help="Synonym swap probability")
+    p_rec.add_argument("--formatting-noise-prob", type=float, default=0.0, help="Formatting tag noise probability")
 
     # 4. exam
     p_exam = subparsers.add_parser("exam", help="Stage 4: Generate mock exams as compiled JSON")
@@ -104,6 +120,17 @@ def main():
     p_prep.add_argument("--train-ratio", type=float, default=0.8, help="Ratio of training set")
     p_prep.add_argument("--val-ratio", type=float, default=0.1, help="Ratio of validation set")
     p_prep.add_argument("--seed", type=int, default=42, help="Seed for splitting")
+    p_prep.add_argument("--exam-level", action="store_true", help="Process at exam level")
+    p_prep.add_argument("--max-len", type=str, default="512,768,1024,2048", help="Sequence lengths")
+    p_prep.add_argument("--stride", type=str, default="128,192,256,512", help="Strides")
+    p_prep.add_argument("--typo-rate", type=float, default=0.02, help="Typo rate")
+    p_prep.add_argument("--space-noise-rate", type=float, default=0.15, help="Space noise rate")
+    p_prep.add_argument("--latex-mask-prob", type=float, default=0.5, help="LaTeX mask probability")
+    p_prep.add_argument("--enable-permutations", action="store_true", help="Enable permutations")
+    p_prep.add_argument("--option-drop-prob", type=float, default=0.05, help="Option drop probability")
+    p_prep.add_argument("--casing-noise-prob", type=float, default=0.10, help="Casing noise probability")
+    p_prep.add_argument("--synonym-swap-prob", type=float, default=0.10, help="Synonym swap probability")
+    p_prep.add_argument("--formatting-noise-prob", type=float, default=0.10, help="Formatting tag noise probability")
 
     # 6. train
     p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
@@ -160,7 +187,16 @@ def main():
             question_prefix_template=args.q_prefix,
             option_prefix_style=args.opt_style,
             ordering_item_label_style=args.ord_item_style,
-            ordering_item_prefix_template=args.ord_item_template
+            ordering_item_prefix_template=args.ord_item_template,
+            typo_rate=args.typo_rate,
+            space_noise_rate=args.space_noise_rate,
+            latex_mask_prob=args.latex_mask_prob,
+            latex_placeholder=args.latex_placeholder,
+            enable_permutations=args.enable_permutations,
+            option_drop_prob=args.option_drop_prob,
+            casing_noise_prob=args.casing_noise_prob,
+            synonym_swap_prob=args.synonym_swap_prob,
+            formatting_noise_prob=args.formatting_noise_prob
         )
         dest_dir = None if args.in_place else args.reconstruct_dest
         run_reconstructor_on_existing(

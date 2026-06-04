@@ -331,5 +331,112 @@ class TestReconstructor(unittest.TestCase):
         
         self.assertEqual(raw_text, "Question 1: He <blank/> a book yesterday.\nA. read\nB. reads\nC. reading\nD. has read")
 
+    def test_reconstruct_entire_exam(self):
+        from src.generation.reconstructor import reconstruct_exam
+        exam_data = {
+            "exam_id": "test_exam_123",
+            "subject": "physics",
+            "grade": 11,
+            "sections": {
+                "PHẦN I. Trắc nghiệm": [
+                    {
+                        "is_group": False,
+                        "stem": "Câu hỏi vật lý.",
+                        "options": ["A1", "B1"],
+                        "question_type": "multiple_choice",
+                        "subject": "physics",
+                        "grade": 11
+                    }
+                ]
+            }
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="Câu {num}: ",
+            option_prefix_style="capital_dot",
+            separator_questions="\n",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        
+        self.assertIn("ĐỀ THI MÔN: VẬT LÝ - LỚP 11", raw_text)
+        self.assertIn("PHẦN I. Trắc nghiệm", raw_text)
+        self.assertIn("Câu 1: Câu hỏi vật lý.", raw_text)
+        self.assertIn("A. A1", raw_text)
+        
+        for span in spans:
+            self.assertEqual(raw_text[span["start"]:span["end"]], span["text"])
+
+    def test_inject_vietnamese_typos(self):
+        from src.generation.reconstructor import inject_vietnamese_typos, get_stable_random
+        rng = get_stable_random("test_seed")
+        text = "hàm số đồng biến trên khoảng"
+        typo_text = inject_vietnamese_typos(text, typo_rate=1.0, rng=rng)
+        self.assertNotEqual(text, typo_text)
+
+    def test_randomize_blank_tokens(self):
+        from src.generation.reconstructor import randomize_blank_tokens, get_stable_random
+        rng = get_stable_random("test_seed_blank")
+        text = "This is a <blank/> space."
+        randomized = randomize_blank_tokens(text, rng)
+        self.assertNotIn("<blank/>", randomized)
+
+    def test_process_latex_variations(self):
+        from src.generation.reconstructor import process_latex_variations, get_stable_random
+        rng = get_stable_random("test_seed_latex")
+        text = "Hàm số $y = x^2$ liên tục."
+        
+        masked = process_latex_variations(text, "[LATEX]", mask_prob=1.0, rng=rng)
+        self.assertIn("[LATEX]", masked)
+        self.assertNotIn("y = x^2", masked)
+        
+        raw_var = process_latex_variations(text, "[LATEX]", mask_prob=0.0, rng=rng)
+        self.assertTrue(any(x in raw_var for x in ["$y = x^2$", "\\( y = x^2 \\)", "y = x^2"]))
+
+    def test_option_dropping(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Câu hỏi test option drop.",
+            "options": ["A1", "B1", "C1", "D1"],
+            "question_type": "multiple_choice",
+            "subject": "chemistry",
+            "grade": 10,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(option_drop_prob=1.0, seed="drop_seed")
+        enriched = reconstruct_question(q_data, config)
+        options_in_spans = [s["text"] for s in enriched["spans"] if s["label"] == "option_text"]
+        self.assertTrue(len(options_in_spans) < 4)
+
+    def test_option_permutation(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Câu hỏi trắc nghiệm.",
+            "options": ["Đáp án A (Đúng)", "Đáp án B", "Đáp án C", "Đáp án D"],
+            "answer": "A",
+            "question_type": "multiple_choice",
+            "subject": "chemistry",
+            "grade": 10,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(enable_permutations=True, seed="perm_seed")
+        
+        shuffled = False
+        for i in range(10):
+            config.seed = f"seed_{i}"
+            enriched = reconstruct_question(q_data, config)
+            options_in_spans = [s["text"] for s in enriched["spans"] if s["label"] == "option_text"]
+            if options_in_spans != q_data["options"]:
+                shuffled = True
+                new_ans_letter = enriched.get("answer", "")
+                opt_letters = ["A", "B", "C", "D"]
+                if new_ans_letter in opt_letters:
+                    new_idx = opt_letters.index(new_ans_letter)
+                    self.assertEqual(options_in_spans[new_idx], "Đáp án A (Đúng)")
+                break
+                
+        self.assertTrue(shuffled)
+
 if __name__ == '__main__':
     unittest.main()

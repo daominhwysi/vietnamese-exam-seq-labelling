@@ -1,11 +1,44 @@
 import re
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional
 
 def clean_text(text: str) -> str:
     """Cleans up leading/trailing whitespaces and newlines from extracted text."""
     if not text:
         return ""
     return text.strip()
+
+def check_and_clean_options(options: List[str]) -> List[str]:
+    """
+    Checks if all elements in the options list are prefixed with matching alphabetical labels (e.g. A., B., C., D.),
+    and if so, strips the prefix and returns the cleaned options.
+    """
+    if not isinstance(options, list) or len(options) < 2:
+        return options
+        
+    cleaned = []
+    matches_all = True
+    
+    for i, opt in enumerate(options):
+        if not isinstance(opt, str):
+            matches_all = False
+            break
+        # Expected letters for index i: 'A'/'a' for 0, 'B'/'b' for 1, etc.
+        upper_char = chr(65 + i)
+        lower_char = chr(97 + i)
+        
+        # Regex to match prefix: letter, followed by divider (. or ) or : or - or space), followed by optional space
+        pattern = rf"^\s*([{upper_char}{lower_char}])\s*([\.\)\:\-\s])\s*(.*)"
+        match = re.match(pattern, opt, re.DOTALL)
+        
+        if match:
+            cleaned.append(match.group(3))
+        else:
+            matches_all = False
+            break
+            
+    if matches_all:
+        return cleaned
+    return options
 
 def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
     """
@@ -31,6 +64,7 @@ def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
             
             option_matches = re.findall(r"<option\s*>(.*?)</option\s*>", q_content, re.DOTALL | re.IGNORECASE)
             options = [clean_text(opt) for opt in option_matches]
+            options = check_and_clean_options(options)
             
             answer_match = re.search(r"<answer\s*>(.*?)</answer\s*>", q_content, re.DOTALL | re.IGNORECASE)
             answer = clean_text(answer_match.group(1)) if answer_match else ""
@@ -64,6 +98,7 @@ def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
         
         option_matches = re.findall(r"<option\s*>(.*?)</option\s*>", q_content, re.DOTALL | re.IGNORECASE)
         options = [clean_text(opt) for opt in option_matches]
+        options = check_and_clean_options(options)
         
         answer_match = re.search(r"<answer\s*>(.*?)</answer\s*>", q_content, re.DOTALL | re.IGNORECASE)
         answer = clean_text(answer_match.group(1)) if answer_match else ""
