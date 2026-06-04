@@ -114,7 +114,7 @@ def main():
     # 5. prepare
     p_prep = subparsers.add_parser("prepare", help="Stage 5: Prepare tokenized datasets for training")
     p_prep.add_argument("-i", "--input-dir", type=str, default="output", help="Input folder of question files")
-    p_prep.add_argument("-o", "--output-dir", type=str, default="dataset_output", help="Output folder for training dataset split")
+    p_prep.add_argument("-o", "--output-dir", type=str, default="output/dataset", help="Output folder for training dataset split")
     p_prep.add_argument("--model", type=str, default="FacebookAI/xlm-roberta-base", help="Base model/tokenizer name")
     p_prep.add_argument("--latex-placeholder", type=str, default="[LATEX]", help="Placeholder for LaTeX equations")
     p_prep.add_argument("--train-ratio", type=float, default=0.8, help="Ratio of training set")
@@ -134,7 +134,7 @@ def main():
 
     # 6. train
     p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
-    p_train.add_argument("--repo_id", type=str, default="daominhwysi/synthetic-seq-labelling-vi-exam", help="HF Dataset repository ID")
+    p_train.add_argument("--repo_id", type=str, default="daominhwysi/synthetic-seq-labelling-vi-exam-v2", help="HF Dataset repository ID")
     p_train.add_argument("--model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
     p_train.add_argument("--output_dir", type=str, default="./results", help="Directory to save checkpoints")
     p_train.add_argument("--epochs", type=int, default=3, help="Number of training epochs")
@@ -148,6 +148,9 @@ def main():
     p_train.add_argument("--no_fp16", action="store_true", help="Disable float16 mixed precision")
     p_train.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay")
     p_train.add_argument("--save_total_limit", type=int, default=2, help="Max checkpoints to keep")
+    p_train.add_argument("--no-lora", action="store_true", help="Disable LoRA and perform full fine-tuning")
+    p_train.add_argument("--gradient-checkpointing", action="store_true", help="Enable gradient checkpointing to save memory")
+    p_train.add_argument("--gradient-accumulation-steps", type=int, default=1, help="Number of update steps to accumulate before performing a backward pass")
     p_train.add_argument("--push_to_hub", action="store_true", help="Push to Hugging Face Hub")
     p_train.add_argument("--hf_token", type=str, help="Hugging Face authentication token")
 
@@ -163,8 +166,8 @@ def main():
 
     # 9. visualize
     p_vis = subparsers.add_parser("visualize", help="Generate an HTML interactive visualizer for token span labels")
-    p_vis.add_argument("-i", "--input-file", type=str, default="dataset_output/train.jsonl", help="Path to jsonl file to visualize")
-    p_vis.add_argument("-o", "--output-html", type=str, default="dataset_output/sample_visualization.html", help="Output path for HTML")
+    p_vis.add_argument("-i", "--input-file", type=str, default="output/dataset/train.jsonl", help="Path to jsonl file to visualize")
+    p_vis.add_argument("-o", "--output-html", type=str, default="output/dataset/sample_visualization.html", help="Output path for HTML")
     p_vis.add_argument("--max-samples", type=int, default=1000, help="Maximum samples to embed in HTML")
 
     args = parser.parse_args()

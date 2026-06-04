@@ -38,14 +38,23 @@ def align_tokens_to_spans(offset_mapping: List[Tuple[int, int]], spans: List[Dic
     Aligns tokenizer offset mapping with character-level spans to assign token-level labels.
     Special tokens (with offset (0, 0)) are assigned -100.
     """
+    import bisect
     labels = []
+    span_ends = [span["end"] for span in spans]
+    
     for start, end in offset_mapping:
         if start == 0 and end == 0:
             labels.append(-100)
             continue
             
+        # Find the first span that ends after the token starts
+        idx = bisect.bisect_right(span_ends, start)
+        
         matching_span = None
-        for span in spans:
+        for i in range(idx, len(spans)):
+            span = spans[i]
+            if span["start"] >= end:
+                break
             overlap_start = max(start, span["start"])
             overlap_end = min(end, span["end"])
             if overlap_start < overlap_end:
@@ -281,8 +290,8 @@ def main():
     parser.add_argument(
         "-o", "--output-dir",
         type=str,
-        default="dataset_output",
-        help="Directory to save the output dataset splits (default: 'dataset_output')"
+        default="output/dataset",
+        help="Directory to save the output dataset splits (default: 'output/dataset')"
     )
     parser.add_argument(
         "--model",
@@ -463,7 +472,8 @@ def run_prepare_dataset(args):
     processed_samples = []
     
     # 1. Process individual question files
-    for file_path in json_files:
+    num_q_files = len(json_files)
+    for q_idx, file_path in enumerate(json_files):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 q_data = json.load(f)
@@ -481,9 +491,13 @@ def run_prepare_dataset(args):
         except Exception as e:
             print(f"Warning: Failed to process question {file_path.name}: {e}")
             
+        if (q_idx + 1) % 50 == 0 or (q_idx + 1) == num_q_files:
+            print(f"[Progress] Processed {q_idx + 1}/{num_q_files} individual questions...")
+            
     # 2. Process exam files
     exam_q_count = 0
-    for file_path in exam_files:
+    num_exam_files = len(exam_files)
+    for exam_idx, file_path in enumerate(exam_files):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 exam_data = json.load(f)
@@ -513,6 +527,9 @@ def run_prepare_dataset(args):
                             exam_q_count += 1
         except Exception as e:
             print(f"Warning: Failed to process exam {file_path.name}: {e}")
+            
+        if (exam_idx + 1) % 10 == 0 or (exam_idx + 1) == num_exam_files:
+            print(f"[Progress] Processed {exam_idx + 1}/{num_exam_files} exams...")
             
     print(f"Successfully prepared {len(processed_samples)} training samples (sources include individual question files and compiled exam files).")
     

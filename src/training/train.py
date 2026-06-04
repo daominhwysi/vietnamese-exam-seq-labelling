@@ -11,7 +11,7 @@ def parse_args():
     parser.add_argument(
         "--repo_id",
         type=str,
-        default="daominhwysi/synthetic-seq-labelling-vi-exam",
+        default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
         help="Hugging Face Dataset repository ID"
     )
     parser.add_argument(
@@ -100,6 +100,22 @@ def parse_args():
         type=str,
         default=None,
         help="Hugging Face authentication token (or set HF_TOKEN env var)"
+    )
+    parser.add_argument(
+        "--no-lora",
+        action="store_true",
+        help="Disable LoRA and perform full fine-tuning"
+    )
+    parser.add_argument(
+        "--gradient-checkpointing",
+        action="store_true",
+        help="Enable gradient checkpointing to save memory"
+    )
+    parser.add_argument(
+        "--gradient-accumulation-steps",
+        type=int,
+        default=1,
+        help="Number of update steps to accumulate before performing a backward/update pass"
     )
     return parser.parse_args()
 
@@ -220,31 +236,40 @@ def run_train(args):
     if has_latex_placeholder:
         model.resize_token_embeddings(len(tokenizer))
 
-    # 6. Apply LoRA (PEFT)
-    print("Applying Low-Rank Adaptation (LoRA)...")
-    # Bypass torchao compatibility check bug on older pre-installed versions in Google Colab
-    try:
-        import peft.import_utils
-        peft.import_utils.is_torchao_available = lambda: False
-    except Exception:
-        pass
+    # 6. Apply LoRA (PEFT) if enabled
+    if not getattr(args, "no_lora", False):
+        print("Applying Low-Rank Adaptation (LoRA)...")
+        # Bypass torchao compatibility check bug on older pre-installed versions in Google Colab
+        try:
+            import peft.import_utils
+            peft.import_utils.is_torchao_available = lambda: False
+        except Exception:
+            pass
 
-    from peft import LoraConfig, get_peft_model, TaskType
-    
-    # Standard XLM-RoBERTa self-attention target modules are query and value
-    target_modules = ["query", "value"]
-    
-    peft_config = LoraConfig(
-        task_type=TaskType.TOKEN_CLS,
-        r=args.lora_r,
-        lora_alpha=args.lora_alpha,
-        lora_dropout=args.lora_dropout,
-        target_modules=target_modules,
-        modules_to_save=["classifier"]  # Ensures classifier head is trained fully (not frozen)
-    )
-    
-    model = get_peft_model(model, peft_config)
-    model.print_trainable_parameters()
+        from peft import LoraConfig, get_peft_model, TaskType
+        
+        # Select target modules dynamically based on the model architecture
+        model_name_lower = args.model_name.lower()
+        if "modernbert" in model_name_lower or "mmbert" in model_name_lower:
+            target_modules = ["Wqkv", "Wo"]
+            print(f"Detected ModernBERT/mmBERT architecture. Targeting modules: {target_modules}")
+        else:
+            target_modules = ["query", "value"]
+            print(f"Targeting standard attention modules: {target_modules}")
+        
+        peft_config = LoraConfig(
+            task_type=TaskType.TOKEN_CLS,
+            r=args.lora_r,
+            lora_alpha=args.lora_alpha,
+            lora_dropout=args.lora_dropout,
+            target_modules=target_modules,
+            modules_to_save=["classifier"]  # Ensures classifier head is trained fully (not frozen)
+        )
+        
+        model = get_peft_model(model, peft_config)
+        model.print_trainable_parameters()
+    else:
+        print("LoRA is disabled. Preparing for Full Fine-Tuning...")
 
     # 7. Metrics Definition
     def compute_metrics(p):
@@ -293,7 +318,7 @@ def run_train(args):
         per_device_eval_batch_size=args.eval_batch_size,
         learning_rate=args.lr,
         weight_decay=args.weight_decay,
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         logging_strategy="steps",
         logging_steps=50,
@@ -305,19 +330,29 @@ def run_train(args):
         save_total_limit=args.save_total_limit,
         report_to="none",  # Change to "wandb" or "tensorboard" if configured
         push_to_hub=args.push_to_hub,
-        hub_token=hf_token
+        hub_token=hf_token,
+        gradient_checkpointing=getattr(args, "gradient_checkpointing", False),
+        gradient_accumulation_steps=getattr(args, "gradient_accumulation_steps", 1),
     )
 
-    # 10. Instantiate Trainer
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=dataset["train"],
-        eval_dataset=dataset["validation"],
-        data_collator=data_collator,
-        tokenizer=tokenizer,
-        compute_metrics=compute_metrics
-    )
+    # 10. Instantiate Trainer (support both processing_class and tokenizer dynamically)
+    import inspect
+    trainer_kwargs = {
+        "model": model,
+        "args": training_args,
+        "train_dataset": dataset["train"],
+        "eval_dataset": dataset["validation"],
+        "data_collator": data_collator,
+        "compute_metrics": compute_metrics,
+    }
+    
+    trainer_signature = inspect.signature(Trainer.__init__)
+    if "processing_class" in trainer_signature.parameters:
+        trainer_kwargs["processing_class"] = tokenizer
+    else:
+        trainer_kwargs["tokenizer"] = tokenizer
+        
+    trainer = Trainer(**trainer_kwargs)
 
     # 11. Run Training
     print("Starting training...")

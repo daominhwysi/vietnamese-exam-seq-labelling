@@ -24,6 +24,8 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
+- `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
+  - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`).
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
   - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.

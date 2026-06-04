@@ -123,7 +123,7 @@ pixi run reconstruct -i output --reconstruct-dest output_reconstructed
 ### 5. Stage 4: Dataset Preparation
 Preprocess the generated data, recursively finding compiled exams in `output/exams/` (and falling back to legacy individual questions), then tokenize, assign BIO sequence labels, and split the dataset into `train.jsonl`, `val.jsonl`, and `test.jsonl`:
 ```bash
-pixi run prepare-dataset -i output -o dataset_output --latex-placeholder "[LATEX]"
+pixi run prepare-dataset -i output -o output/dataset --latex-placeholder "[LATEX]"
 ```
 
 ### 6. Stage 5: Train Token Classifier
@@ -141,7 +141,7 @@ pixi run inference --model_dir ./results --base_model_name FacebookAI/xlm-robert
 ### 8. Stage 7: HTML Visualization
 Generate an offline HTML visualizer that highlights the sequence tag alignments for verification:
 ```bash
-pixi run visualize -i dataset_output/train.jsonl -o dataset_output/sample_visualization.html
+pixi run visualize -i output/dataset/train.jsonl -o output/dataset/sample_visualization.html
 ```
 
 ### 9. Stage 8: Web Interface: Interactive Exam Viewer

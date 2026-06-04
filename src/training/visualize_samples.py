@@ -409,4 +409,4 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
     print(f"Successfully generated visualizer at: {out_file.absolute()}")
 
 if __name__ == "__main__":
-    generate_visualization("dataset_output/train.jsonl", "dataset_output/sample_visualization.html")
+    generate_visualization("output/dataset/train.jsonl", "output/dataset/sample_visualization.html")
