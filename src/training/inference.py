@@ -46,15 +46,37 @@ def load_label_mapping(model_dir):
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
 
-def run_inference(model_dir="./results", base_model_name="FacebookAI/xlm-roberta-base"):
+def run_inference(model_dir="./results", base_model_name=None):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
     
+    # Auto-detect base model name from adapter config if not specified
+    if base_model_name is None:
+        adapter_config_path = os.path.join(model_dir, "adapter_config.json")
+        if os.path.exists(adapter_config_path):
+            try:
+                with open(adapter_config_path, "r", encoding="utf-8") as f:
+                    config = json.load(f)
+                    base_model_name = config.get("base_model_name_or_path")
+                    print(f"Auto-detected base model name from adapter config: {base_model_name}")
+            except Exception:
+                pass
+        if not base_model_name:
+            base_model_name = "FacebookAI/xlm-roberta-base"
+            print(f"Defaulting base model name to: {base_model_name}")
+            
     # 1. Load tokenizer
-    print(f"Loading tokenizer: {base_model_name}...")
-    tokenizer = AutoTokenizer.from_pretrained(base_model_name)
-    # Check if latex token is needed
-    tokenizer.add_special_tokens({"additional_special_tokens": ["[LATEX]"]})
+    print(f"Loading tokenizer...")
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_dir)
+        print(f"  Successfully loaded tokenizer from local checkpoint: {model_dir}")
+    except Exception:
+        print(f"  Local tokenizer not found. Loading base tokenizer: {base_model_name}...")
+        tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+        # Add the exact same special tokens in the exact same order as during training
+        special_tokens = ["<blank />", "<blank/>", "[BLANK]", "[LATEX]"]
+        tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
+        print(f"  Added special tokens: {special_tokens}")
     
     # 2. Load label mapping
     tag_to_id, id_to_tag = load_label_mapping(model_dir)
@@ -87,9 +109,8 @@ def run_inference(model_dir="./results", base_model_name="FacebookAI/xlm-roberta
         print("-" * 30)
         
         # Pre-process LaTeX equations in text if your training dataset had it
-        # (This replacement is optional and depends on whether you used --latex-placeholder in prepare_dataset.py)
         import re
-        processed_text = re.sub(r'\$[^$]+\$', '[LATEX]', text)
+        processed_text = re.sub(r'\$\$.*?\$\$|\$.*?\$', '[LATEX]', text, flags=re.DOTALL)
         
         # Tokenize
         inputs = tokenizer(processed_text, return_tensors="pt", truncation=True)

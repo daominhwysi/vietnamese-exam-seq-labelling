@@ -22,6 +22,12 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_prepare_dataset.py` - Tests for XLM-RoBERTa dataset tokenizer alignments.
   - `test_parser.py` - Tests for question XML parsing and option prefix cleaning.
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
+- `scratch/` - Directory housing temporary and utility debug scripts.
+  - `debug_model.py` - Checks token-level predictions and LaTeX replacements on test inputs.
+  - `test_train_sample.py` - Sanity check script to run token prediction on a real training sample.
+  - `count_tokens.py` - Counts input and output tokens for cost estimation.
+  - `detect_and_clean_options.py` - Utility to test option prefix cleaning regex.
+  - `test_generation.py` - Simple end-to-end question generation test script.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
@@ -40,6 +46,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
     - `train.py` - Performs token-classification training with LoRA adapters.
     - `inference.py` - Local inference utility using trained LoRA adapter models.
+    - `inference_folder.py` - Batch inference utility for segmenting raw text files from an input folder.
     - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.

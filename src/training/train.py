@@ -117,6 +117,36 @@ def parse_args():
         default=1,
         help="Number of update steps to accumulate before performing a backward/update pass"
     )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for training reproducibility"
+    )
+    parser.add_argument(
+        "--lr-scheduler-type",
+        type=str,
+        default="linear",
+        help="Learning rate scheduler type (linear, cosine, cosine_with_restarts, constant, etc.)"
+    )
+    parser.add_argument(
+        "--warmup-ratio",
+        type=float,
+        default=0.0,
+        help="Warmup ratio for learning rate scheduler"
+    )
+    parser.add_argument(
+        "--warmup-steps",
+        type=int,
+        default=0,
+        help="Warmup steps for learning rate scheduler"
+    )
+    parser.add_argument(
+        "--ema-decay",
+        type=float,
+        default=0.0,
+        help="Decay rate for Exponential Moving Average (EMA). Set > 0.0 (e.g. 0.999) to enable."
+    )
     return parser.parse_args()
 
 def main():
@@ -124,7 +154,7 @@ def main():
     run_train(args)
 
 def run_train(args):
-    
+
     # 1. Hugging Face Authentication & Token Setup
     hf_token = args.hf_token or os.getenv("HF_TOKEN")
     if hf_token:
@@ -132,11 +162,11 @@ def run_train(args):
         from huggingface_hub import login
         login(token=hf_token)
         print("Logged into Hugging Face Hub successfully.")
-    
+
     # 2. Check GPU/Device
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
-    
+
     # Set mixed precision defaults
     fp16_enabled = torch.cuda.is_available() and not args.no_fp16
     bf16_enabled = torch.cuda.is_available() and args.use_bf16
@@ -166,7 +196,7 @@ def run_train(args):
         print(f"Error loading dataset: {e}")
         print("Make sure you specify the correct --repo_id and provide a valid token if private.")
         sys.exit(1)
-        
+
     try:
         from huggingface_hub import hf_hub_download
         label_mapping_path = hf_hub_download(
@@ -177,7 +207,7 @@ def run_train(args):
         )
         with open(label_mapping_path, "r", encoding="utf-8") as f:
             label_mapping = json.load(f)
-            
+
         tag_to_id = label_mapping["tag_to_id"]
         id_to_tag = {int(k): v for k, v in label_mapping["id_to_tag"].items()}
         print(f"Loaded label mapping from Hub. Found {len(tag_to_id)} labels.")
@@ -193,7 +223,7 @@ def run_train(args):
         unique_labels.discard(-100)
         # Sort labels to be deterministic
         sorted_labels = sorted(list(unique_labels))
-        
+
         # Build standard mappings (assuming standard schema tags)
         # Note: If label_mapping.json is missing, we try to reconstruct labels
         print(f"Found unique label IDs in dataset: {sorted_labels}")
@@ -201,7 +231,7 @@ def run_train(args):
         id_to_tag = {l: f"LABEL_{l}" for l in sorted_labels}
         id_to_tag[0] = "O" # Ensure label 0 is marked "O"
         tag_to_id = {v: k for k, v in id_to_tag.items()}
-        
+
     num_labels = len(tag_to_id)
     label_list = [id_to_tag[i] for i in sorted(id_to_tag.keys())]
 
@@ -209,18 +239,12 @@ def run_train(args):
     print(f"Loading Tokenizer: '{args.model_name}'...")
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, token=hf_token)
-    
-    # Check if we need to add special LaTeX token to token embeddings if dataset used it
-    has_latex_placeholder = False
-    for sample in dataset["train"]:
-        if "[LATEX]" in sample.get("tokens", []):
-            has_latex_placeholder = True
-            break
-            
-    if has_latex_placeholder:
-        print("Detected '[LATEX]' token in dataset. Adding it to the tokenizer...")
-        tokenizer.add_special_tokens({"additional_special_tokens": ["[LATEX]"]})
-        
+
+    # Add the exact same special tokens in the exact same order as during dataset preparation
+    special_tokens = ["<blank />", "<blank/>", "[BLANK]", "[LATEX]"]
+    print(f"Adding additional special tokens to the tokenizer: {special_tokens}")
+    tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
+
     # 5. Initialize Model
     print(f"Loading Model: '{args.model_name}'...")
     from transformers import AutoModelForTokenClassification
@@ -231,10 +255,9 @@ def run_train(args):
         label2id=tag_to_id,
         token=hf_token
     )
-    
-    # Resize token embeddings if we added special tokens
-    if has_latex_placeholder:
-        model.resize_token_embeddings(len(tokenizer))
+
+    # Resize token embeddings to match tokenizer with added special tokens
+    model.resize_token_embeddings(len(tokenizer))
 
     # 6. Apply LoRA (PEFT) if enabled
     if not getattr(args, "no_lora", False):
@@ -247,7 +270,7 @@ def run_train(args):
             pass
 
         from peft import LoraConfig, get_peft_model, TaskType
-        
+
         # Select target modules dynamically based on the model architecture
         model_name_lower = args.model_name.lower()
         if "modernbert" in model_name_lower or "mmbert" in model_name_lower:
@@ -256,7 +279,7 @@ def run_train(args):
         else:
             target_modules = ["query", "value"]
             print(f"Targeting standard attention modules: {target_modules}")
-        
+
         peft_config = LoraConfig(
             task_type=TaskType.TOKEN_CLS,
             r=args.lora_r,
@@ -265,7 +288,7 @@ def run_train(args):
             target_modules=target_modules,
             modules_to_save=["classifier"]  # Ensures classifier head is trained fully (not frozen)
         )
-        
+
         model = get_peft_model(model, peft_config)
         model.print_trainable_parameters()
     else:
@@ -310,7 +333,7 @@ def run_train(args):
 
     # 9. Training Arguments
     from transformers import TrainingArguments, Trainer
-    
+
     training_args = TrainingArguments(
         output_dir=args.output_dir,
         num_train_epochs=args.epochs,
@@ -333,6 +356,10 @@ def run_train(args):
         hub_token=hf_token,
         gradient_checkpointing=getattr(args, "gradient_checkpointing", False),
         gradient_accumulation_steps=getattr(args, "gradient_accumulation_steps", 1),
+        seed=getattr(args, "seed", 42),
+        lr_scheduler_type=getattr(args, "lr_scheduler_type", "linear"),
+        warmup_ratio=getattr(args, "warmup_ratio", 0.0),
+        warmup_steps=getattr(args, "warmup_steps", 0),
     )
 
     # 10. Instantiate Trainer (support both processing_class and tokenizer dynamically)
@@ -345,28 +372,82 @@ def run_train(args):
         "data_collator": data_collator,
         "compute_metrics": compute_metrics,
     }
-    
+
     trainer_signature = inspect.signature(Trainer.__init__)
     if "processing_class" in trainer_signature.parameters:
         trainer_kwargs["processing_class"] = tokenizer
     else:
         trainer_kwargs["tokenizer"] = tokenizer
-        
+
     trainer = Trainer(**trainer_kwargs)
+
+    # 10.5 Apply EMA Callback if enabled
+    if getattr(args, "ema_decay", 0.0) > 0.0:
+        from transformers import TrainerCallback
+        class EMACallback(TrainerCallback):
+            def __init__(self, decay=0.999):
+                self.decay = decay
+                self.shadow = {}
+                self.backup = {}
+                self.ema_active = False
+
+            def on_step_end(self, args, state, control, model=None, **kwargs):
+                if model is None:
+                    return
+                active_model = model.module if hasattr(model, "module") else model
+                for name, param in active_model.named_parameters():
+                    if param.requires_grad:
+                        if name not in self.shadow:
+                            self.shadow[name] = param.data.clone()
+                        else:
+                            self.shadow[name] -= (1.0 - self.decay) * (self.shadow[name] - param.data)
+
+            def on_epoch_begin(self, args, state, control, model=None, **kwargs):
+                self._restore_regular_weights(model)
+
+            def on_epoch_end(self, args, state, control, model=None, **kwargs):
+                self._apply_ema_weights(model)
+
+            def on_train_end(self, args, state, control, model=None, **kwargs):
+                self._apply_ema_weights(model)
+                print("Final EMA weights permanently applied to the model.")
+
+            def _apply_ema_weights(self, model):
+                if model is None or self.ema_active:
+                    return
+                active_model = model.module if hasattr(model, "module") else model
+                for name, param in active_model.named_parameters():
+                    if param.requires_grad and name in self.shadow:
+                        self.backup[name] = param.data.clone()
+                        param.data.copy_(self.shadow[name])
+                self.ema_active = True
+
+            def _restore_regular_weights(self, model):
+                if model is None or not self.ema_active:
+                    return
+                active_model = model.module if hasattr(model, "module") else model
+                for name, param in active_model.named_parameters():
+                    if param.requires_grad and name in self.backup:
+                        param.data.copy_(self.backup[name])
+                self.backup.clear()
+                self.ema_active = False
+
+        trainer.add_callback(EMACallback(decay=args.ema_decay))
+        print(f"EMA (Exponential Moving Average) enabled with decay rate: {args.ema_decay}")
 
     # 11. Run Training
     print("Starting training...")
     trainer.train()
-    
+
     # 12. Run final test split evaluation
     print("Evaluating on test split...")
     test_results = trainer.evaluate(eval_dataset=dataset["test"])
     print(f"\nFinal Test Set Results:\n{json.dumps(test_results, indent=2)}")
-    
+
     # Save the final adapter model
     print(f"Saving final model adapter to '{args.output_dir}'...")
     trainer.save_model(args.output_dir)
-    
+
     if args.push_to_hub:
         print(f"Pushing model adapters to HF Hub...")
         trainer.push_to_hub(commit_message="Add trained XLM-RoBERTa LoRA sequence labeler adapters")

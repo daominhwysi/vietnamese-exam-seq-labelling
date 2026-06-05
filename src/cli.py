@@ -151,6 +151,11 @@ def main():
     p_train.add_argument("--no-lora", action="store_true", help="Disable LoRA and perform full fine-tuning")
     p_train.add_argument("--gradient-checkpointing", action="store_true", help="Enable gradient checkpointing to save memory")
     p_train.add_argument("--gradient-accumulation-steps", type=int, default=1, help="Number of update steps to accumulate before performing a backward pass")
+    p_train.add_argument("--seed", type=int, default=42, help="Seed for training reproducibility")
+    p_train.add_argument("--lr-scheduler-type", type=str, default="linear", help="Learning rate scheduler type (linear, cosine, constant, etc.)")
+    p_train.add_argument("--warmup-ratio", type=float, default=0.0, help="Warmup ratio for scheduler")
+    p_train.add_argument("--warmup-steps", type=int, default=0, help="Warmup steps for scheduler")
+    p_train.add_argument("--ema-decay", type=float, default=0.0, help="Decay rate for Exponential Moving Average (EMA). Set > 0.0 (e.g. 0.999) to enable.")
     p_train.add_argument("--push_to_hub", action="store_true", help="Push to Hugging Face Hub")
     p_train.add_argument("--hf_token", type=str, help="Hugging Face authentication token")
 
