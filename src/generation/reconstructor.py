@@ -353,7 +353,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 
         elif label == "separator":
             if config.space_noise_rate > 0.0:
-                if "\n" in text:
+                if "\n" in text and not any(c.isalnum() for c in text):
                     val = rng.random()
                     if val < 0.10:
                         text = " "
@@ -527,7 +527,7 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
             return
             
         if label == "separator" and config.space_noise_rate > 0.0:
-            if "\n" in text:
+            if "\n" in text and not any(c.isalnum() for c in text):
                 val = rng.random()
                 if val < 0.10:
                     text = " "
@@ -630,7 +630,16 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
                 
         append_document_segment(config.separator_questions, "separator")
         
-    result["raw_text"] = full_text.strip()
+    stripped_text = full_text.lstrip()
+    leading_stripped = len(full_text) - len(stripped_text)
+    raw_text = stripped_text.rstrip()
+    
+    if leading_stripped > 0:
+        for span in global_spans:
+            span["start"] -= leading_stripped
+            span["end"] -= leading_stripped
+            
+    result["raw_text"] = raw_text
     result["spans"] = global_spans
     return result
 

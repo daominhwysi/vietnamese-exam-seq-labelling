@@ -23,6 +23,8 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_parser.py` - Tests for question XML parsing and option prefix cleaning.
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
 - `scratch/` - Directory housing temporary and utility debug scripts.
+  - `check_alignment.py` - Minimal check script verifying token-label alignments for sample questions.
+  - `debug_alignment.py` - Checks character-level offset mismatch and alignments for reconstructed exams.
   - `debug_model.py` - Checks token-level predictions and LaTeX replacements on test inputs.
   - `test_train_sample.py` - Sanity check script to run token prediction on a real training sample.
   - `count_tokens.py` - Counts input and output tokens for cost estimation.
@@ -46,12 +48,12 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
     - `train.py` - Performs token-classification training with LoRA adapters.
     - `inference.py` - Local inference utility using trained LoRA adapter models.
-    - `inference_folder.py` - Batch inference utility for segmenting raw text files from an input folder.
+    - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments and outputting human-readable token-class text mappings.
     - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.
-    - `main.py` - FastAPI application entry point, routing, and stats computation.
-    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting).
+    - `main.py` - FastAPI application entry point, routing, exam/dataset stats computation.
+    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting, dataset dashboard, dataset viewer).
 
 ---
 

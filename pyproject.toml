@@ -20,7 +20,7 @@ sequence_labelling_data_generator = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 generate = "sequence-labelling-generator exam"
-prepare-dataset = "sequence-labelling-generator prepare --model jhu-clsp/mmbert-base"
+prepare-dataset = "sequence-labelling-generator prepare --model jhu-clsp/mmbert-base --exam-level"
 upload-dataset = "sequence-labelling-generator upload"
 train = "sequence-labelling-generator train --model_name jhu-clsp/mmbert-base"
 visualize = "sequence-labelling-generator visualize"

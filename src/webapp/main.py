@@ -24,6 +24,65 @@ BASE_DIR = Path(__file__).parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 EXAMS_DIR = Path("output/exams")
+DATASET_DIR = Path("output/dataset")
+
+def load_or_compute_dataset_stats(split: str) -> Dict[str, Any]:
+    stats_file = DATASET_DIR / f"{split}_stats.json"
+    filepath = DATASET_DIR / f"{split}.jsonl"
+    if not filepath.exists():
+        return {}
+        
+    # Check if cache file exists and is newer than the dataset file
+    if stats_file.exists() and stats_file.stat().st_mtime > filepath.stat().st_mtime:
+        try:
+            with open(stats_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+            
+    # Compute stats
+    stats = {
+        "split": split,
+        "total_samples": 0,
+        "subjects": {},
+        "grades": {},
+        "tag_counts": {},
+        "file_size_mb": round(filepath.stat().st_size / (1024 * 1024), 2)
+    }
+    
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            try:
+                sample = json.loads(line)
+            except Exception:
+                continue
+            stats["total_samples"] += 1
+            
+            metadata = sample.get("metadata", {})
+            subj = metadata.get("subject", "unknown")
+            grade = metadata.get("grade", "unknown")
+            
+            stats["subjects"][subj] = stats["subjects"].get(subj, 0) + 1
+            try:
+                grade_key = int(grade)
+            except Exception:
+                grade_key = str(grade)
+            stats["grades"][str(grade_key)] = stats["grades"].get(str(grade_key), 0) + 1
+            
+            tags = sample.get("tags", [])
+            for tag in tags:
+                if tag != "IGNORE" and tag != "O":
+                    stats["tag_counts"][tag] = stats["tag_counts"].get(tag, 0) + 1
+                    
+    # Save cache
+    try:
+        with open(stats_file, "w", encoding="utf-8") as f:
+            json.dump(stats, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Failed to write stats cache for {split}: {e}")
+        
+    return stats
+
 
 def get_all_exams() -> List[Dict[str, Any]]:
     if not EXAMS_DIR.exists():
@@ -188,3 +247,99 @@ def view_exam(request: Request, exam_id: str):
             "DIFFICULTY_DISPLAY": DIFFICULTY_DISPLAY
         }
     )
+
+@app.get("/dataset")
+def dataset_dashboard(request: Request):
+    splits = ["train", "val", "test"]
+    stats_data = {}
+    for split in splits:
+        stats_data[split] = load_or_compute_dataset_stats(split)
+        
+    return templates.TemplateResponse(
+        request=request,
+        name="dataset_dashboard.html",
+        context={
+            "stats": stats_data,
+            "SUBJECT_DISPLAY": SUBJECT_DISPLAY
+        }
+    )
+
+@app.get("/dataset/{split}")
+def view_dataset_split(
+    request: Request, 
+    split: str, 
+    page: int = 1, 
+    page_size: int = 20, 
+    subject: Optional[str] = None, 
+    grade: Optional[int] = None
+):
+    if split not in ["train", "val", "test"]:
+        raise HTTPException(status_code=404, detail="Dataset split not found. Must be train, val, or test.")
+        
+    filepath = DATASET_DIR / f"{split}.jsonl"
+    if not filepath.exists():
+        raise HTTPException(status_code=404, detail=f"Dataset split file for '{split}' not found. Please prepare the dataset first.")
+        
+    # Read the data paginated and filtered
+    samples = []
+    total_matching = 0
+    start_idx = (page - 1) * page_size
+    end_idx = start_idx + page_size
+    
+    # Available values for filtering selectors
+    stats = load_or_compute_dataset_stats(split)
+    available_subjects = list(stats.get("subjects", {}).keys())
+    available_grades = sorted([int(g) for g in stats.get("grades", {}).keys() if g.isdigit()])
+    
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            try:
+                sample = json.loads(line)
+            except Exception:
+                continue
+            metadata = sample.get("metadata", {})
+            
+            # Apply filters
+            if subject and metadata.get("subject") != subject:
+                continue
+            if grade and metadata.get("grade") != grade:
+                try:
+                    if int(metadata.get("grade")) != int(grade):
+                        continue
+                except Exception:
+                    if metadata.get("grade") != grade:
+                        continue
+                
+            if start_idx <= total_matching < end_idx:
+                samples.append(sample)
+            total_matching += 1
+            
+    total_pages = max(1, (total_matching + page_size - 1) // page_size)
+    page = min(page, total_pages)
+    page = max(1, page)
+    
+    start_sample_idx = (page - 1) * page_size + 1 if total_matching > 0 else 0
+    end_sample_idx = min(page * page_size, total_matching)
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="dataset_viewer.html",
+        context={
+            "split": split,
+            "samples": samples,
+            "page": page,
+            "page_size": page_size,
+            "total_matching": total_matching,
+            "total_pages": total_pages,
+            "start_sample_idx": start_sample_idx,
+            "end_sample_idx": end_sample_idx,
+            "selected_subject": subject,
+            "selected_grade": grade,
+            "available_subjects": available_subjects,
+            "available_grades": available_grades,
+            "SUBJECT_DISPLAY": SUBJECT_DISPLAY,
+            "QUESTION_TYPE_DISPLAY": QUESTION_TYPE_DISPLAY,
+            "DIFFICULTY_DISPLAY": DIFFICULTY_DISPLAY
+        }
+    )
+

@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+
+{% block title %}Split {{ split|upper }} - Trình Xem Dataset{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-6 flex-grow w-full space-y-6">
+    
+    <!-- Breadcrumbs and Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between pb-4 border-b border-[#e9e9e6] gap-4">
+        <div class="space-y-1">
+            <div class="flex items-center space-x-2 text-stone-500 text-xs font-semibold uppercase tracking-wider">
+                <a href="/dataset" class="hover:text-[#37352f]">Dataset</a>
+                <span>/</span>
+                <span class="text-stone-800">{{ split|upper }}</span>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight text-[#37352f] flex items-center">
+                📁 Bộ Dữ Liệu: {{ split|upper }}
+            </h1>
+            <p class="text-stone-400 text-xs font-mono">Tệp nguồn: output/dataset/{{ split }}.jsonl</p>
+        </div>
+        
+        <div class="flex flex-wrap gap-2 text-[10px] font-semibold bg-[#f7f7f5] p-2.5 rounded-lg border border-[#e9e9e6]">
+            <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 border-b border-blue-500">question_label</span>
+            <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 border-b border-purple-500">stem</span>
+            <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 border-b border-amber-500">option_label</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border-b border-emerald-500">option_text</span>
+            <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 border-b border-rose-500">context</span>
+        </div>
+    </div>
+
+    <!-- Filters Panel (Notion-like bar layout) -->
+    <div class="p-3.5 border border-[#e9e9e6] rounded-xl bg-[#f7f7f5] flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-3 text-xs">
+            <!-- Subject filter -->
+            <div class="flex items-center space-x-1.5">
+                <span class="text-stone-500 font-medium">Môn học:</span>
+                <select id="filter-subject" onchange="applyFilters()" class="px-2 py-1 rounded border border-[#e9e9e6] bg-white focus:outline-none focus:border-stone-500">
+                    <option value="">-- Tất cả --</option>
+                    {% for subj in available_subjects %}
+                        <option value="{{ subj }}" {% if selected_subject == subj %}selected{% endif %}>
+                            {{ SUBJECT_DISPLAY.get(subj, subj) }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Grade filter -->
+            <div class="flex items-center space-x-1.5">
+                <span class="text-stone-500 font-medium">Khối lớp:</span>
+                <select id="filter-grade" onchange="applyFilters()" class="px-2 py-1 rounded border border-[#e9e9e6] bg-white focus:outline-none focus:border-stone-500">
+                    <option value="">-- Tất cả --</option>
+                    {% for grade_val in available_grades %}
+                        <option value="{{ grade_val }}" {% if selected_grade|string == grade_val|string %}selected{% endif %}>
+                            Lớp {{ grade_val }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Page size -->
+            <div class="flex items-center space-x-1.5">
+                <span class="text-stone-500 font-medium">Số mẫu/trang:</span>
+                <select id="filter-pagesize" onchange="applyFilters()" class="px-2 py-1 rounded border border-[#e9e9e6] bg-white focus:outline-none focus:border-stone-500">
+                    {% for sz in [10, 20, 50, 100] %}
+                        <option value="{{ sz }}" {% if page_size == sz %}selected{% endif %}>{{ sz }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            {% if selected_subject or selected_grade %}
+                <a href="/dataset/{{ split }}" class="text-[#2e8ae6] hover:underline font-semibold text-[11px] ml-2">Clear filters</a>
+            {% endif %}
+        </div>
+        
+        <!-- Pagination controls -->
+        <div class="flex items-center space-x-3 text-xs">
+            <span class="text-stone-500 font-medium">
+                Tìm thấy <strong>{{ total_matching }}</strong> mẫu (Trang {{ page }} / {{ total_pages }})
+            </span>
+            <div class="inline-flex rounded border border-[#e9e9e6] bg-white overflow-hidden shadow-sm">
+                <!-- Prev Button -->
+                {% if page > 1 %}
+                    <a href="/dataset/{{ split }}?page={{ page - 1 }}&page_size={{ page_size }}{% if selected_subject %}&subject={{ selected_subject }}{% endif %}{% if selected_grade %}&grade={{ selected_grade }}{% endif %}" 
+                       class="px-3 py-1.5 hover:bg-[#efefed] text-stone-700 transition-colors duration-100 font-bold border-r border-[#e9e9e6] flex items-center justify-center">
+                       ❮
+                    </a>
+                {% else %}
+                    <span class="px-3 py-1.5 text-stone-300 cursor-not-allowed border-r border-[#e9e9e6] flex items-center justify-center select-none">❮</span>
+                {% endif %}
+                
+                <!-- Next Button -->
+                {% if page < total_pages %}
+                    <a href="/dataset/{{ split }}?page={{ page + 1 }}&page_size={{ page_size }}{% if selected_subject %}&subject={{ selected_subject }}{% endif %}{% if selected_grade %}&grade={{ selected_grade }}{% endif %}" 
+                       class="px-3 py-1.5 hover:bg-[#efefed] text-stone-700 transition-colors duration-100 font-bold flex items-center justify-center">
+                       ❯
+                    </a>
+                {% else %}
+                    <span class="px-3 py-1.5 text-stone-300 cursor-not-allowed flex items-center justify-center select-none">❯</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Samples List -->
+    {% if total_matching == 0 %}
+        <!-- Empty state -->
+        <div class="p-16 rounded-xl border border-dashed border-stone-300 bg-[#f7f7f5]/50 text-center max-w-xl mx-auto space-y-3">
+            <div class="text-4xl">🔍</div>
+            <h3 class="text-sm font-bold text-[#37352f]">Không tìm thấy mẫu nào khớp bộ lọc</h3>
+            <p class="text-stone-500 text-xs">
+                Hãy thử chọn môn học hoặc khối lớp khác, hoặc nhấn "Clear filters" để xem toàn bộ dữ liệu.
+            </p>
+        </div>
+    {% else %}
+        <div class="space-y-6">
+            {% for sample in samples %}
+                {% set loop_idx = loop.index0 %}
+                {% set metadata = sample.get("metadata", {}) %}
+                {% set absolute_idx = (page - 1) * page_size + loop.index %}
+                
+                <div class="border border-[#e9e9e6] rounded-xl bg-white shadow-sm overflow-hidden flex flex-col">
+                    
+                    <!-- Card Header -->
+                    <div class="px-5 py-3 border-b border-[#e9e9e6] bg-[#f7f7f5] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs">
+                        <div class="flex items-center flex-wrap gap-2.5">
+                            <span class="font-bold text-stone-800 text-sm">Mẫu #{{ absolute_idx }}</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-stone-200 text-stone-700 border border-stone-300 uppercase">
+                                {{ SUBJECT_DISPLAY.get(metadata.get("subject"), metadata.get("subject", "N/A")) }}
+                            </span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-stone-200 text-stone-700 border border-stone-300">
+                                Lớp {{ metadata.get("grade", "N/A") }}
+                            </span>
+                            {% if metadata.get("chunk_idx") is not none %}
+                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                    Chunk {{ metadata.get("chunk_idx") + 1 }}/{{ metadata.get("total_chunks", "?") }} (Len: {{ metadata.get("max_len", "?") }})
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="font-mono text-[10px] text-stone-400 truncate max-w-sm" title="{{ metadata.get('source_file') }}">
+                            Nguồn: {{ metadata.get("source_file", "unknown") }}
+                        </div>
+                    </div>
+                    
+                    <!-- Card Body -->
+                    <div class="p-5 flex-grow space-y-4">
+                        
+                        <!-- Toggle Views (Notion styled tab buttons) -->
+                        <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+                            <div class="inline-flex rounded bg-[#efefed] p-0.5 border border-[#e9e9e6]">
+                                <button id="btn-merged-{{ loop_idx }}" onclick="switchSampleViewMode({{ loop_idx }}, 'merged')" class="px-3 py-1 rounded text-[11px] font-semibold transition-all duration-100 bg-white text-[#37352f] shadow-sm">
+                                    Văn Bản (Merged Spans)
+                                </button>
+                                <button id="btn-flow-{{ loop_idx }}" onclick="switchSampleViewMode({{ loop_idx }}, 'flow')" class="px-3 py-1 rounded text-[11px] font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]">
+                                    Token Flow (Subwords)
+                                </button>
+                                <button id="btn-table-{{ loop_idx }}" onclick="switchSampleViewMode({{ loop_idx }}, 'table')" class="px-3 py-1 rounded text-[11px] font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]">
+                                    Bảng Dữ Liệu (Table Debug)
+                                </button>
+                            </div>
+                            
+                            <!-- Stats badges for this sample -->
+                            <div class="text-[10px] text-stone-400 font-medium">
+                                Tokens: <strong>{{ sample.tokens|length }}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Rendered content blocks -->
+                        <div>
+                            <!-- Mode 1: Merged View (Default) -->
+                            <div id="render-merged-{{ loop_idx }}" class="math-content font-serif text-sm leading-relaxed whitespace-pre-wrap text-stone-850 p-2 border border-transparent">
+                                <!-- JS populated -->
+                            </div>
+                            
+                            <!-- Mode 2: Token Flow -->
+                            <div id="render-flow-{{ loop_idx }}" class="hidden flex flex-wrap gap-1.5 leading-relaxed p-2 font-mono border border-transparent">
+                                <!-- JS populated -->
+                            </div>
+                            
+                            <!-- Mode 3: Data Table -->
+                            <div id="render-table-{{ loop_idx }}" class="hidden overflow-x-auto max-h-96 border border-stone-200 rounded-lg">
+                                <!-- JS populated -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Bottom Pagination -->
+        <div class="py-4 border-t border-[#e9e9e6] flex items-center justify-between">
+            <span class="text-xs text-stone-500 font-medium">
+                Hiển thị trang {{ page }} / {{ total_pages }} (Mẫu từ {{ start_sample_idx }} đến {{ end_sample_idx }} trên {{ total_matching }})
+            </span>
+            <div class="inline-flex rounded border border-[#e9e9e6] bg-white overflow-hidden shadow-sm text-xs">
+                <!-- Prev Button -->
+                {% if page > 1 %}
+                    <a href="/dataset/{{ split }}?page={{ page - 1 }}&page_size={{ page_size }}{% if selected_subject %}&subject={{ selected_subject }}{% endif %}{% if selected_grade %}&grade={{ selected_grade }}{% endif %}" 
+                       class="px-4 py-2 hover:bg-[#efefed] text-stone-700 transition-colors duration-100 font-semibold border-r border-[#e9e9e6]">
+                       Trang trước
+                    </a>
+                {% else %}
+                    <span class="px-4 py-2 text-stone-300 cursor-not-allowed border-r border-[#e9e9e6] select-none">Trang trước</span>
+                {% endif %}
+                
+                <!-- Next Button -->
+                {% if page < total_pages %}
+                    <a href="/dataset/{{ split }}?page={{ page + 1 }}&page_size={{ page_size }}{% if selected_subject %}&subject={{ selected_subject }}{% endif %}{% if selected_grade %}&grade={{ selected_grade }}{% endif %}" 
+                       class="px-4 py-2 hover:bg-[#efefed] text-stone-700 transition-colors duration-100 font-semibold">
+                       Trang sau
+                    </a>
+                {% else %}
+                    <span class="px-4 py-2 text-stone-300 cursor-not-allowed select-none">Trang sau</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Embedded paginated samples JSON
+    const samples = {{ samples|tojson|safe }};
+    
+    // CSS classes mapping for styling highlights
+    const TAG_CLASSES = {
+        "question_label": "tag-question_label",
+        "stem": "tag-stem",
+        "option_label": "tag-option_label",
+        "option_text": "tag-option_text",
+        "context": "tag-context"
+    };
+
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/"/g, "&quot;")
+                  .replace(/'/g, "&#039;");
+    }
+
+    function renderSpanHtml(span) {
+        const cls = TAG_CLASSES[span.tag.toLowerCase()] || "";
+        if (cls) {
+            return `<span class="${cls}" title="Nhãn: ${span.tag}">${escapeHtml(span.text)}</span>`;
+        }
+        return escapeHtml(span.text);
+    }
+
+    function renderSample(sample, idx) {
+        const tokens = sample.tokens || [];
+        const tags = sample.tags || [];
+        const inputIds = sample.input_ids || [];
+        const attentionMask = sample.attention_mask || [];
+        const labels = sample.labels || [];
+        
+        // --- 1. RENDER MERGED SPANS ---
+        const mergedContainer = document.getElementById(`render-merged-${idx}`);
+        if (!mergedContainer) return;
+        
+        let mergedHtml = "";
+        let currentSpan = null; 
+        
+        for (let i = 0; i < tokens.length; i++) {
+            let tok = tokens[i];
+            const tag = tags[i];
+            
+            // Skip special tokens
+            if (tok === "<s>" || tok === "</s>" || tok === "<pad>" || tok === "<unk>" || tok === "<mask>" || tok === "<bos>" || tok === "<eos>") {
+                continue;
+            }
+            if (tag === "IGNORE") {
+                continue;
+            }
+            
+            // Check if SentencePiece space boundary: U+2581 (lower half block) or custom space character '▁'
+            let hasSpace = false;
+            if (tok.startsWith(" ") || tok.startsWith("▁") || tok.startsWith(" ")) {
+                hasSpace = true;
+                tok = tok.substring(1);
+            }
+            
+            const baseTag = tag !== "O" ? tag.split("-").pop() : "O";
+            const isStart = tag.startsWith("B-");
+            
+            if (baseTag === "O") {
+                // End active span if any
+                if (currentSpan) {
+                    mergedHtml += renderSpanHtml(currentSpan);
+                    currentSpan = null;
+                }
+                if (hasSpace) mergedHtml += " ";
+                mergedHtml += escapeHtml(tok);
+            } else {
+                if (isStart || !currentSpan || currentSpan.tag !== baseTag) {
+                    // End previous span
+                    if (currentSpan) {
+                        mergedHtml += renderSpanHtml(currentSpan);
+                    }
+                    currentSpan = {
+                        tag: baseTag,
+                        text: (hasSpace ? " " : "") + tok
+                    };
+                } else {
+                    currentSpan.text += (hasSpace ? " " : "") + tok;
+                }
+            }
+        }
+        if (currentSpan) {
+            mergedHtml += renderSpanHtml(currentSpan);
+        }
+        
+        // Normalize lines for standard HTML layout representation
+        mergedHtml = mergedHtml.replace(/\n/g, "<br>");
+        mergedContainer.innerHTML = mergedHtml;
+        
+        // --- 2. RENDER TOKEN FLOW (Subwords Flow) ---
+        const flowContainer = document.getElementById(`render-flow-${idx}`);
+        if (!flowContainer) return;
+        
+        let flowHtml = "";
+        
+        for (let i = 0; i < tokens.length; i++) {
+            let tok = tokens[i];
+            const tag = tags[i];
+            
+            if (tok === "<s>" || tok === "</s>" || tok === "<pad>" || tok === "<unk>" || tok === "<mask>" || tok === "<bos>" || tok === "<eos>") {
+                flowHtml += `<span class="inline-block px-1.5 py-0.5 rounded bg-stone-150 text-stone-400 border border-stone-200 text-[10px] select-all cursor-help" title="Special Token">${escapeHtml(tok)}</span> `;
+                continue;
+            }
+            if (tag === "IGNORE") {
+                continue;
+            }
+            
+            let hasSpace = false;
+            if (tok.startsWith(" ") || tok.startsWith("▁") || tok.startsWith(" ")) {
+                hasSpace = true;
+                tok = tok.substring(1);
+            }
+            
+            const baseTag = tag !== "O" ? tag.split("-").pop() : "O";
+            const tagClass = TAG_CLASSES[baseTag.toLowerCase()] || "";
+            
+            const spaceIndicator = hasSpace ? `<span class="text-stone-300 font-bold text-[8px] mr-0.5 select-none" title="Word Boundary (Space)">␣</span>` : "";
+            const badgeColorClass = tagClass ? `${tagClass} border-b border-stone-300` : "bg-white text-stone-600 border border-stone-200";
+            
+            flowHtml += `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] select-all cursor-help hover:brightness-95 transition-all duration-100 ${badgeColorClass}" title="Nhãn: ${tag}\nIndex: ${i}\nID: ${inputIds[i]}">
+                ${spaceIndicator}${escapeHtml(tok || "∅")}
+            </span> `;
+        }
+        flowContainer.innerHTML = flowHtml;
+        
+        // --- 3. RENDER DETAILED DEBUG TABLE ---
+        const tableContainer = document.getElementById(`render-table-${idx}`);
+        if (!tableContainer) return;
+        
+        let tableHtml = `
+            <table class="min-w-full divide-y divide-stone-200 text-left text-xs font-mono">
+                <thead class="bg-stone-50 text-stone-500 font-bold">
+                    <tr>
+                        <th class="px-4 py-2 border-b border-stone-200">#</th>
+                        <th class="px-4 py-2 border-b border-stone-200">Token</th>
+                        <th class="px-4 py-2 border-b border-stone-200">Input ID</th>
+                        <th class="px-4 py-2 border-b border-stone-200">Mask</th>
+                        <th class="px-4 py-2 border-b border-stone-200">Label ID</th>
+                        <th class="px-4 py-2 border-b border-stone-200">Tag Label</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-150 text-stone-700 bg-white">
+        `;
+        
+        for (let i = 0; i < tokens.length; i++) {
+            const tok = tokens[i];
+            const tag = tags[i];
+            const tagId = labels[i];
+            const mask = attentionMask[i];
+            
+            const baseTag = tag !== "O" && tag !== "IGNORE" ? tag.split("-").pop() : "O";
+            const tagClass = TAG_CLASSES[baseTag.toLowerCase()] || "";
+            const tagSpan = tag !== "O" && tag !== "IGNORE" ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${tagClass}">${tag}</span>` : `<span class="text-stone-400">${tag}</span>`;
+            
+            tableHtml += `
+                <tr class="hover:bg-stone-50/50">
+                    <td class="px-4 py-1 text-stone-400 font-sans">${i}</td>
+                    <td class="px-4 py-1 font-semibold">${escapeHtml(tok)}</td>
+                    <td class="px-4 py-1 text-stone-500">${inputIds[i]}</td>
+                    <td class="px-4 py-1 text-stone-400">${mask}</td>
+                    <td class="px-4 py-1 text-stone-500">${tagId}</td>
+                    <td class="px-4 py-1">${tagSpan}</td>
+                </tr>
+            `;
+        }
+        
+        tableHtml += `
+                </tbody>
+            </table>
+        `;
+        tableContainer.innerHTML = tableHtml;
+    }
+
+    // Toggle tabs handler
+    function switchSampleViewMode(sampleIdx, mode) {
+        const merged = document.getElementById(`render-merged-${sampleIdx}`);
+        const flow = document.getElementById(`render-flow-${sampleIdx}`);
+        const table = document.getElementById(`render-table-${sampleIdx}`);
+        
+        const btnMerged = document.getElementById(`btn-merged-${sampleIdx}`);
+        const btnFlow = document.getElementById(`btn-flow-${sampleIdx}`);
+        const btnTable = document.getElementById(`btn-table-${sampleIdx}`);
+        
+        merged.classList.add('hidden');
+        flow.classList.add('hidden');
+        table.classList.add('hidden');
+        
+        btnMerged.className = "px-3 py-1 rounded-l text-[11px] font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]";
+        btnFlow.className = "px-3 py-1 text-[11px] font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]";
+        btnTable.className = "px-3 py-1 rounded-r text-[11px] font-semibold transition-all duration-100 text-stone-500 hover:text-[#37352f]";
+        
+        if (mode === 'merged') {
+            merged.classList.remove('hidden');
+            btnMerged.className = "px-3 py-1 rounded-l text-[11px] font-semibold transition-all duration-100 bg-white text-[#37352f] shadow-sm";
+        } else if (mode === 'flow') {
+            flow.classList.remove('hidden');
+            btnFlow.className = "px-3 py-1 text-[11px] font-semibold transition-all duration-100 bg-white text-[#37352f] shadow-sm";
+        } else if (mode === 'table') {
+            table.classList.remove('hidden');
+            btnTable.className = "px-3 py-1 rounded-r text-[11px] font-semibold transition-all duration-100 bg-white text-[#37352f] shadow-sm";
+        }
+        
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise();
+        }
+    }
+
+    // Filter changes handler
+    function applyFilters() {
+        const subject = document.getElementById('filter-subject').value;
+        const grade = document.getElementById('filter-grade').value;
+        const pageSize = document.getElementById('filter-pagesize').value;
+        
+        let url = `/dataset/{{ split }}?page=1&page_size=${pageSize}`;
+        if (subject) url += `&subject=${subject}`;
+        if (grade) url += `&grade=${grade}`;
+        
+        window.location.href = url;
+    }
+
+    // Render all samples on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        samples.forEach((sample, idx) => {
+            renderSample(sample, idx);
+        });
+        
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise();
+        }
+    });
+</script>
+{% endblock %}

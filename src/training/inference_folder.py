@@ -102,7 +102,7 @@ def main():
         "-o", "--output-dir",
         type=str,
         default="inference_output",
-        help="Path to folder where structured JSON results will be saved (default: 'inference_output')"
+        help="Path to folder where prediction results will be saved (default: 'inference_output')"
     )
     parser.add_argument(
         "--model-dir",
@@ -115,6 +115,18 @@ def main():
         type=str,
         default="jhu-clsp/mmbert-base",
         help="Base model/tokenizer name used (default: 'jhu-clsp/mmbert-base')"
+    )
+    parser.add_argument(
+        "--max-length",
+        type=int,
+        default=1024,
+        help="Maximum sequence length for tokenization window (default: 1024)"
+    )
+    parser.add_argument(
+        "--stride",
+        type=int,
+        default=256,
+        help="Overlap stride for sliding window tokenization (default: 256)"
     )
     
     args = parser.parse_args()
@@ -134,11 +146,11 @@ def main():
     # 1. Load Tokenizer (prefer local checkpoint, fallback to base model with correct special tokens)
     print(f"Loading tokenizer...")
     try:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_dir)
+        tokenizer = AutoTokenizer.from_pretrained(args.model_dir, use_fast=True)
         print(f"  Successfully loaded tokenizer from local checkpoint: {args.model_dir}")
     except Exception:
         print(f"  Local tokenizer files not found. Loading base tokenizer: {args.base_model_name}...")
-        tokenizer = AutoTokenizer.from_pretrained(args.base_model_name)
+        tokenizer = AutoTokenizer.from_pretrained(args.base_model_name, use_fast=True)
         # Add the exact same special tokens in the exact same order as during training
         special_tokens = ["<blank />", "<blank/>", "[BLANK]", "[LATEX]"]
         tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
@@ -210,20 +222,17 @@ def main():
                 last_idx = end
             processed_text += raw_text[last_idx:]
             
-            # Tokenize the processed text to match training format
+            # Tokenize the processed text using sliding window config
             tokenized = tokenizer(
                 processed_text,
                 return_offsets_mapping=True,
                 truncation=True,
-                max_length=512,  # Window size for inference segment
-                return_tensors="pt"
+                max_length=args.max_length,
+                stride=args.stride,
+                return_overflowing_tokens=True
             )
             
-            input_ids = tokenized["input_ids"][0].numpy()
-            attention_mask = tokenized["attention_mask"][0].numpy()
-            mod_offsets = tokenized["offset_mapping"][0].numpy()
-            
-            # Map modified offsets back to original raw_text character positions
+            # Map modified offsets back to original raw_text character positions helper
             def map_idx(idx):
                 mod_pos = 0
                 orig_pos = 0
@@ -237,39 +246,102 @@ def main():
                         return o_start
                 return orig_pos + (idx - mod_pos)
 
-            offsets = []
-            for start, end in mod_offsets:
-                if start == 0 and end == 0:
-                    offsets.append((0, 0))
-                else:
-                    offsets.append((map_idx(start), map_idx(end)))
+            span_logits = {}
+            span_tokens = {}
             
-            # Convert modified arrays back to tensors and send to model device
-            inputs = {
-                "input_ids": torch.tensor([input_ids]).to(device),
-                "attention_mask": torch.tensor([attention_mask]).to(device)
-            }
+            num_chunks = len(tokenized["input_ids"])
+            print(f"  Tokenized into {num_chunks} chunks.")
             
-            with torch.no_grad():
-                outputs = model(**inputs)
+            for chunk_idx in range(num_chunks):
+                chunk_input_ids = tokenized["input_ids"][chunk_idx]
+                chunk_attention_mask = tokenized["attention_mask"][chunk_idx]
+                chunk_mod_offsets = tokenized["offset_mapping"][chunk_idx]
                 
-            predictions = torch.argmax(outputs.logits, dim=-1)[0].cpu().numpy()
+                # Map chunk offsets back to original positions
+                chunk_offsets = []
+                for start, end in chunk_mod_offsets:
+                    if start == 0 and end == 0:
+                        chunk_offsets.append((0, 0))
+                    else:
+                        chunk_offsets.append((map_idx(start), map_idx(end)))
+                
+                inputs = {
+                    "input_ids": torch.tensor([chunk_input_ids]).to(device),
+                    "attention_mask": torch.tensor([chunk_attention_mask]).to(device)
+                }
+                
+                with torch.no_grad():
+                    outputs = model(**inputs)
+                    
+                chunk_logits = outputs.logits[0].cpu()
+                chunk_tokens = tokenizer.convert_ids_to_tokens(chunk_input_ids)
+                
+                for i, (token, offset, mask) in enumerate(zip(chunk_tokens, chunk_offsets, chunk_attention_mask)):
+                    start, end = offset
+                    # Skip special tokens and padding tokens
+                    if (start == 0 and end == 0) or mask == 0:
+                        continue
+                        
+                    span = (start, end)
+                    if span not in span_logits:
+                        span_logits[span] = []
+                        span_tokens[span] = token
+                    span_logits[span].append(chunk_logits[i])
+                    
+            # Reconstruct unique token sequence sorted by start position
+            sorted_spans = sorted(span_logits.keys(), key=lambda x: (x[0], x[1]))
             
-            # Extract structured sections
+            predictions = []
+            offsets = []
+            tokens = []
+            attention_mask = []
+            
+            for span in sorted_spans:
+                start, end = span
+                # Average predictions from multiple windows
+                avg_logits = torch.mean(torch.stack(span_logits[span]), dim=0)
+                pred_id = torch.argmax(avg_logits).item()
+                
+                predictions.append(pred_id)
+                offsets.append(span)
+                tokens.append(span_tokens[span])
+                attention_mask.append(1)
+            
+            # 1. Structured JSON (Parsing Version)
             segments = extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag)
-            
-            # Save output as structured JSON
             result_data = {
                 "file_name": file_path.name,
                 "original_text_length": len(raw_text),
                 "segments": segments
             }
-            
-            output_file = output_path / f"{file_path.stem}_structured.json"
-            with open(output_file, "w", encoding="utf-8") as f:
+            output_json_file = output_path / f"{file_path.stem}_structured.json"
+            with open(output_json_file, "w", encoding="utf-8") as f:
                 json.dump(result_data, f, ensure_ascii=False, indent=2)
                 
-            print(f"  [Success] Saved structured segments to '{output_file.name}'")
+            # 2. Human-Readable Token-Class Predictions (.txt)
+            lines = []
+            lines.append(f"File: {file_path.name}")
+            lines.append(f"Original Text Length: {len(raw_text)}")
+            lines.append(f"Window Size: {args.max_length} | Overlap Stride: {args.stride}")
+            lines.append("-" * 75)
+            lines.append(f"{'Token':<30} | {'Prediction':<20} | Offsets")
+            lines.append("-" * 75)
+            
+            for token, pred_id, offset in zip(tokens, predictions, offsets):
+                start, end = offset
+                tag = id_to_tag[pred_id]
+                
+                readable_token = token.replace(" ", " ").replace("▁", "")
+                lines.append(f"{readable_token:<30} | {tag:<20} | [{start}, {end}]")
+            
+            lines.append("-" * 75)
+            
+            output_txt_file = output_path / f"{file_path.stem}_predictions.txt"
+            with open(output_txt_file, "w", encoding="utf-8") as f:
+                f.write("\n".join(lines))
+                
+            print(f"  [Success] Saved structured JSON to '{output_json_file.name}'")
+            print(f"  [Success] Saved readable predictions to '{output_txt_file.name}'")
             
         except Exception as e:
             print(f"  [Error] Failed to process '{file_path.name}': {e}")

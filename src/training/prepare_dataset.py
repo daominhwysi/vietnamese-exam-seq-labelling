@@ -51,16 +51,41 @@ def align_tokens_to_spans(offset_mapping: List[Tuple[int, int]], spans: List[Dic
         idx = bisect.bisect_right(span_ends, start)
         
         matching_span = None
+        max_overlap = 0
+        fallback_span = None
+        max_fallback_overlap = 0
+        
         for i in range(idx, len(spans)):
             span = spans[i]
             if span["start"] >= end:
                 break
             overlap_start = max(start, span["start"])
             overlap_end = min(end, span["end"])
-            if overlap_start < overlap_end:
-                matching_span = span
-                break
-                
+            overlap_len = overlap_end - overlap_start
+            
+            if overlap_len > 0:
+                # Calculate non-whitespace overlap
+                span_text = span.get("text", "")
+                overlap_non_space = 0
+                for char_idx in range(overlap_start, overlap_end):
+                    if span_text:
+                        span_char_idx = char_idx - span["start"]
+                        if 0 <= span_char_idx < len(span_text) and not span_text[span_char_idx].isspace():
+                            overlap_non_space += 1
+                    else:
+                        overlap_non_space += 1
+                        
+                if overlap_non_space > max_overlap:
+                    max_overlap = overlap_non_space
+                    matching_span = span
+                    
+                if overlap_len > max_fallback_overlap:
+                    max_fallback_overlap = overlap_len
+                    fallback_span = span
+                    
+        if matching_span is None:
+            matching_span = fallback_span
+            
         if matching_span is None:
             labels.append(tag_to_id["O"])
         else:

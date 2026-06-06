@@ -147,6 +147,11 @@ def parse_args():
         default=0.0,
         help="Decay rate for Exponential Moving Average (EMA). Set > 0.0 (e.g. 0.999) to enable."
     )
+    parser.add_argument(
+        "--no-class-weights",
+        action="store_true",
+        help="Disable class weights for cross-entropy loss penalty"
+    )
     return parser.parse_args()
 
 def main():
@@ -362,6 +367,57 @@ def run_train(args):
         warmup_steps=getattr(args, "warmup_steps", 0),
     )
 
+    # 9.5 Calculate class weights if enabled
+    class_weights = None
+    if not getattr(args, "no_class_weights", False):
+        print("Calculating class weights from training dataset...")
+        from collections import Counter
+        label_counts = Counter()
+        for sample in dataset["train"]:
+            label_counts.update([l for l in sample["labels"] if l != -100])
+        
+        weights = np.ones(num_labels, dtype=np.float32)
+        total_count = sum(label_counts.values())
+        
+        if total_count > 0:
+            for label_id in range(num_labels):
+                count = label_counts.get(label_id, 0)
+                if count > 0:
+                    # Smoothed inverse frequency weighting
+                    weights[label_id] = total_count / (num_labels * np.sqrt(count))
+            # Normalize so mean weight is 1.0
+            weights = weights / weights.mean()
+            class_weights = torch.tensor(weights, dtype=torch.float32).to(device)
+            print(f"Computed class weights: {weights.tolist()}")
+            # Print mapping with weights for debugging
+            for label_name, label_id in tag_to_id.items():
+                print(f"  {label_name} (ID: {label_id}): Weight = {weights[label_id]:.4f}")
+        else:
+            print("Warning: No labels found in training dataset. Skipping class weights.")
+
+    # Define custom Trainer with class weights support
+    class WeightedTrainer(Trainer):
+        def __init__(self, class_weights=None, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.class_weights = class_weights
+
+        def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
+            labels = inputs.get("labels")
+            outputs = model(**inputs)
+            
+            # Save past state if required (e.g. for evaluation metrics)
+            if getattr(self.args, "past_index", -1) >= 0:
+                self._past = outputs[self.args.past_index]
+
+            if labels is not None and self.class_weights is not None:
+                logits = outputs.get("logits")
+                loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
+                loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+            else:
+                loss = outputs.loss if isinstance(outputs, dict) else outputs[0]
+
+            return (loss, outputs) if return_outputs else loss
+
     # 10. Instantiate Trainer (support both processing_class and tokenizer dynamically)
     import inspect
     trainer_kwargs = {
@@ -379,7 +435,7 @@ def run_train(args):
     else:
         trainer_kwargs["tokenizer"] = tokenizer
 
-    trainer = Trainer(**trainer_kwargs)
+    trainer = WeightedTrainer(class_weights=class_weights, **trainer_kwargs)
 
     # 10.5 Apply EMA Callback if enabled
     if getattr(args, "ema_decay", 0.0) > 0.0:
