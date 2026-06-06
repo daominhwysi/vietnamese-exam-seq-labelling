@@ -30,6 +30,9 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `count_tokens.py` - Counts input and output tokens for cost estimation.
   - `detect_and_clean_options.py` - Utility to test option prefix cleaning regex.
   - `test_generation.py` - Simple end-to-end question generation test script.
+  - `inspect_local_data.py` - Inspects local generated exams and dataset splits.
+  - `count_ordering_in_dataset.py` - Counts and analyzes ordering questions in dataset splits.
+  - `inspect_inline.py` - Checks for inline formatted option sequences in dataset splits.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).

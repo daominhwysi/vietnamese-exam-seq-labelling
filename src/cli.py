@@ -100,6 +100,11 @@ def main():
     p_rec.add_argument("--casing-noise-prob", type=float, default=0.0, help="Casing noise probability")
     p_rec.add_argument("--synonym-swap-prob", type=float, default=0.0, help="Synonym swap probability")
     p_rec.add_argument("--formatting-noise-prob", type=float, default=0.0, help="Formatting tag noise probability")
+    p_rec.add_argument("--inline-option-prob", type=float, default=0.0, help="Probability of formatting options inline")
+    p_rec.add_argument("--min-inline-spaces", type=int, default=5, help="Minimum random spaces to inject between inline options")
+    p_rec.add_argument("--max-inline-spaces", type=int, default=30, help="Maximum random spaces to inject between inline options")
+    p_rec.add_argument("--min-inline-tabs", type=int, default=1, help="Minimum random tabs to inject between inline options")
+    p_rec.add_argument("--max-inline-tabs", type=int, default=3, help="Maximum random tabs to inject between inline options")
 
     # 4. exam
     p_exam = subparsers.add_parser("exam", help="Stage 4: Generate mock exams as compiled JSON")
@@ -131,6 +136,11 @@ def main():
     p_prep.add_argument("--casing-noise-prob", type=float, default=0.10, help="Casing noise probability")
     p_prep.add_argument("--synonym-swap-prob", type=float, default=0.10, help="Synonym swap probability")
     p_prep.add_argument("--formatting-noise-prob", type=float, default=0.10, help="Formatting tag noise probability")
+    p_prep.add_argument("--inline-option-prob", type=float, default=0.0, help="Probability of formatting options inline")
+    p_prep.add_argument("--min-inline-spaces", type=int, default=5, help="Minimum random spaces to inject between inline options")
+    p_prep.add_argument("--max-inline-spaces", type=int, default=30, help="Maximum random spaces to inject between inline options")
+    p_prep.add_argument("--min-inline-tabs", type=int, default=1, help="Minimum random tabs to inject between inline options")
+    p_prep.add_argument("--max-inline-tabs", type=int, default=3, help="Maximum random tabs to inject between inline options")
 
     # 6. train
     p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
@@ -204,7 +214,12 @@ def main():
             option_drop_prob=args.option_drop_prob,
             casing_noise_prob=args.casing_noise_prob,
             synonym_swap_prob=args.synonym_swap_prob,
-            formatting_noise_prob=args.formatting_noise_prob
+            formatting_noise_prob=args.formatting_noise_prob,
+            inline_option_prob=getattr(args, "inline_option_prob", 0.0),
+            min_inline_spaces=getattr(args, "min_inline_spaces", 5),
+            max_inline_spaces=getattr(args, "max_inline_spaces", 30),
+            min_inline_tabs=getattr(args, "min_inline_tabs", 1),
+            max_inline_tabs=getattr(args, "max_inline_tabs", 3)
         )
         dest_dir = None if args.in_place else args.reconstruct_dest
         run_reconstructor_on_existing(

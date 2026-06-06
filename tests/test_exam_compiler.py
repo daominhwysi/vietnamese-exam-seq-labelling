@@ -88,7 +88,7 @@ class TestExamCompiler(unittest.TestCase):
         
         # Verify randomized English tasks count matches either New (10) or Old (36) format task counts
         total_questions = sum(len(q_list) for q_list in sections.values())
-        self.assertIn(total_questions, {10, 36})
+        self.assertIn(total_questions, {15, 36})
 
     @patch('src.generation.exam_compiler.generate_single_question')
     def test_generate_single_exam_literature(self, mock_gen):

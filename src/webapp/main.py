@@ -189,7 +189,25 @@ def view_exam(request: Request, exam_id: str):
         reconstructed_questions = []
         for q in questions:
             stable_seed = q.get("context", "") or q.get("stem", "") or str(q)
-            config = ReconstructorConfig(randomize_q_num=False, include_span_text=True, seed=stable_seed)
+            is_english = q.get("subject") == "english" or exam_data.get("subject") == "english"
+            config = ReconstructorConfig(
+                randomize_q_num=False, 
+                include_span_text=True, 
+                seed=stable_seed,
+                inline_option_prob=0.50 if is_english else 0.10,
+                typo_rate=0.02,
+                space_noise_rate=0.15,
+                latex_mask_prob=0.50,
+                enable_permutations=False,
+                option_drop_prob=0.05,
+                casing_noise_prob=0.10,
+                synonym_swap_prob=0.10,
+                formatting_noise_prob=0.10,
+                min_inline_spaces=4,
+                max_inline_spaces=12,
+                min_inline_tabs=1,
+                max_inline_tabs=2
+            )
             
             # Reconstruct to get raw_text and spans
             q_reconstructed = reconstruct_question(q, config=config, start_q_num=q_num)

@@ -33,64 +33,84 @@ def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
 
-def align_tokens_to_spans(offset_mapping: List[Tuple[int, int]], spans: List[Dict[str, Any]], tag_to_id: Dict[str, int]) -> List[int]:
+def align_tokens_to_spans(
+    offset_mapping: List[Tuple[int, int]], 
+    spans: List[Dict[str, Any]], 
+    tag_to_id: Dict[str, int],
+    raw_text: Optional[str] = None
+) -> List[int]:
     """
-    Aligns tokenizer offset mapping with character-level spans to assign token-level labels.
-    Special tokens (with offset (0, 0)) are assigned -100.
+    Aligns tokenizer offset mapping with character-level spans to assign token-level labels
+    using the V2 Character-Anchor Lookup method.
     """
-    import bisect
+    # 1. Clean spans (strip whitespaces/tabs)
+    clean_spans = []
+    for span in spans:
+        span_text = span.get("text", "")
+        start = span["start"]
+        end = span["end"]
+        
+        if span_text:
+            stripped = span_text.strip()
+            if not stripped:
+                continue
+            leading = len(span_text) - len(span_text.lstrip())
+            trailing = len(span_text) - len(span_text.rstrip())
+            clean_start = start + leading
+            clean_end = end - trailing
+        else:
+            if raw_text is not None:
+                raw_span_text = raw_text[start:end]
+                stripped = raw_span_text.strip()
+                if not stripped:
+                    continue
+                leading = len(raw_span_text) - len(raw_span_text.lstrip())
+                trailing = len(raw_span_text) - len(raw_span_text.rstrip())
+                clean_start = start + leading
+                clean_end = end - trailing
+            else:
+                clean_start = start
+                clean_end = end
+                
+        clean_spans.append({
+            "start": clean_start,
+            "end": clean_end,
+            "label": span["label"]
+        })
+        
     labels = []
-    span_ends = [span["end"] for span in spans]
     
+    # 2. Map tokens based on first non-whitespace character offset lookup
     for start, end in offset_mapping:
         if start == 0 and end == 0:
             labels.append(-100)
             continue
             
-        # Find the first span that ends after the token starts
-        idx = bisect.bisect_right(span_ends, start)
-        
-        matching_span = None
-        max_overlap = 0
-        fallback_span = None
-        max_fallback_overlap = 0
-        
-        for i in range(idx, len(spans)):
-            span = spans[i]
-            if span["start"] >= end:
+        non_space_char_idx = -1
+        if raw_text is not None:
+            for char_idx in range(start, end):
+                if char_idx < len(raw_text) and not raw_text[char_idx].isspace():
+                    non_space_char_idx = char_idx
+                    break
+        else:
+            # Fallback if raw_text is not provided
+            non_space_char_idx = start
+            
+        if non_space_char_idx == -1:
+            labels.append(tag_to_id["O"])
+            continue
+            
+        matched_span = None
+        for span in clean_spans:
+            if span["start"] <= non_space_char_idx < span["end"]:
+                matched_span = span
                 break
-            overlap_start = max(start, span["start"])
-            overlap_end = min(end, span["end"])
-            overlap_len = overlap_end - overlap_start
-            
-            if overlap_len > 0:
-                # Calculate non-whitespace overlap
-                span_text = span.get("text", "")
-                overlap_non_space = 0
-                for char_idx in range(overlap_start, overlap_end):
-                    if span_text:
-                        span_char_idx = char_idx - span["start"]
-                        if 0 <= span_char_idx < len(span_text) and not span_text[span_char_idx].isspace():
-                            overlap_non_space += 1
-                    else:
-                        overlap_non_space += 1
-                        
-                if overlap_non_space > max_overlap:
-                    max_overlap = overlap_non_space
-                    matching_span = span
-                    
-                if overlap_len > max_fallback_overlap:
-                    max_fallback_overlap = overlap_len
-                    fallback_span = span
-                    
-        if matching_span is None:
-            matching_span = fallback_span
-            
-        if matching_span is None:
+                
+        if matched_span is None:
             labels.append(tag_to_id["O"])
         else:
-            span_label = matching_span["label"]
-            if start <= matching_span["start"] < end:
+            span_label = matched_span["label"]
+            if non_space_char_idx == matched_span["start"]:
                 tag = f"B-{span_label}"
             else:
                 tag = f"I-{span_label}"
@@ -133,7 +153,7 @@ def process_exam_level(
             attention_mask = tokenized["attention_mask"][chunk_idx]
             offset_mapping = tokenized["offset_mapping"][chunk_idx]
             
-            labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id)
+            labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id, raw_text)
             tags = [id_to_tag.get(label_id, "O") if label_id != -100 else "IGNORE" for label_id in labels]
             tokens = tokenizer.convert_ids_to_tokens(input_ids)
             
@@ -190,7 +210,7 @@ def process_question_as_exam_level(
             attention_mask = tokenized["attention_mask"][chunk_idx]
             offset_mapping = tokenized["offset_mapping"][chunk_idx]
             
-            labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id)
+            labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id, raw_text)
             tags = [id_to_tag.get(label_id, "O") if label_id != -100 else "IGNORE" for label_id in labels]
             tokens = tokenizer.convert_ids_to_tokens(input_ids)
             
@@ -239,7 +259,7 @@ def process_single_question_legacy(
     input_ids = tokenized["input_ids"]
     attention_mask = tokenized["attention_mask"]
     
-    labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id)
+    labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id, raw_text)
     tags = [id_to_tag.get(label_id, "O") if label_id != -100 else "IGNORE" for label_id in labels]
     tokens = tokenizer.convert_ids_to_tokens(input_ids)
     
@@ -416,6 +436,36 @@ def main():
         default=0.10,
         help="Probability of wrapping labels in random Markdown/HTML formatting (default: 0.10)"
     )
+    parser.add_argument(
+        "--inline-option-prob",
+        type=float,
+        default=0.0,
+        help="Probability of formatting options inline (default: 0.0)"
+    )
+    parser.add_argument(
+        "--min-inline-spaces",
+        type=int,
+        default=5,
+        help="Minimum random spaces to inject between inline options (default: 5)"
+    )
+    parser.add_argument(
+        "--max-inline-spaces",
+        type=int,
+        default=30,
+        help="Maximum random spaces to inject between inline options (default: 30)"
+    )
+    parser.add_argument(
+        "--min-inline-tabs",
+        type=int,
+        default=1,
+        help="Minimum random tabs to inject between inline options (default: 1)"
+    )
+    parser.add_argument(
+        "--max-inline-tabs",
+        type=int,
+        default=3,
+        help="Maximum random tabs to inject between inline options (default: 3)"
+    )
 
     args = parser.parse_args()
     run_prepare_dataset(args)
@@ -490,7 +540,12 @@ def run_prepare_dataset(args):
         option_drop_prob=args.option_drop_prob,
         casing_noise_prob=args.casing_noise_prob,
         synonym_swap_prob=args.synonym_swap_prob,
-        formatting_noise_prob=args.formatting_noise_prob
+        formatting_noise_prob=args.formatting_noise_prob,
+        inline_option_prob=getattr(args, "inline_option_prob", 0.0),
+        min_inline_spaces=getattr(args, "min_inline_spaces", 5),
+        max_inline_spaces=getattr(args, "max_inline_spaces", 30),
+        min_inline_tabs=getattr(args, "min_inline_tabs", 1),
+        max_inline_tabs=getattr(args, "max_inline_tabs", 3)
     )
         
     print(f"Processing data: found {len(json_files)} question file(s) and {len(exam_files)} exam file(s)...")

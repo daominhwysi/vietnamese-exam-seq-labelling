@@ -64,6 +64,28 @@ class ReconstructorConfig:
     casing_noise_prob: float = 0.0
     synonym_swap_prob: float = 0.0
     formatting_noise_prob: float = 0.0
+    
+    # Inline option layout simulation
+    inline_option_prob: float = 0.0
+    min_inline_spaces: int = 5
+    max_inline_spaces: int = 30
+    min_inline_tabs: int = 1
+    max_inline_tabs: int = 3
+
+def generate_random_inline_separator(config: ReconstructorConfig, rng: random.Random) -> str:
+    """Generates a highly randomized whitespace/tab separator to simulate raw paper-saving layouts."""
+    sep_type = rng.choice(["tabs", "spaces", "mixed"])
+    
+    if sep_type == "tabs":
+        num_tabs = rng.randint(config.min_inline_tabs, config.max_inline_tabs)
+        return "\t" * num_tabs
+    elif sep_type == "spaces":
+        num_spaces = rng.randint(config.min_inline_spaces, config.max_inline_spaces)
+        return " " * num_spaces
+    else:  # mixed
+        num_tabs = rng.randint(1, max(1, config.min_inline_tabs))
+        num_spaces = rng.randint(5, max(5, config.min_inline_spaces))
+        return ("\t" * num_tabs) + (" " * num_spaces)
 
 def get_stable_random(seed_obj: Any) -> random.Random:
     """Generates a stable random number generator from any seed object."""
@@ -309,6 +331,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
         stable_seed = q_data.get("context", "") or q_data.get("stem", "") or str(q_data)
         
     rng = get_stable_random(stable_seed)
+    is_inline = rng.random() < config.inline_option_prob
     
     actual_start_q_num = start_q_num
     if config.randomize_q_num:
@@ -419,7 +442,11 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                         append_segment(opt_lbl, "option_label")
                         append_segment(opt_text, "option_text")
                         if opt_idx < len(options) - 1:
-                            append_segment(config.separator_options, "separator")
+                            if is_inline:
+                                sep = generate_random_inline_separator(config, rng)
+                                append_segment(sep, "separator")
+                            else:
+                                append_segment(config.separator_options, "separator")
                             
                 if idx < len(sub_questions) - 1:
                     append_segment(config.separator_questions, "separator")
@@ -483,7 +510,11 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     append_segment(opt_lbl, "option_label")
                     append_segment(choice_text, "option_text")
                     if choice_idx < len(choices) - 1:
-                        append_segment(config.separator_options, "separator")
+                        if is_inline:
+                            sep = generate_random_inline_separator(config, rng)
+                            append_segment(sep, "separator")
+                        else:
+                            append_segment(config.separator_options, "separator")
             else:
                 current_prefixes = opt_prefixes
                 if q_type == "true_false" and config.option_prefix_style is None:
@@ -496,7 +527,11 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     append_segment(opt_lbl, "option_label")
                     append_segment(opt_text, "option_text")
                     if opt_idx < len(options) - 1:
-                        append_segment(config.separator_options, "separator")
+                        if is_inline:
+                            sep = generate_random_inline_separator(config, rng)
+                            append_segment(sep, "separator")
+                        else:
+                            append_segment(config.separator_options, "separator")
                         
     result["raw_text"] = raw_text
     result["spans"] = spans

@@ -74,7 +74,8 @@ class TestPrepareDataset(unittest.TestCase):
             (0, 0)     # Special token (</s>)
         ]
         
-        labels = align_tokens_to_spans(offsets, spans, self.tag_to_id)
+        raw_text = "Starttext Hello world  Answer A "
+        labels = align_tokens_to_spans(offsets, spans, self.tag_to_id, raw_text)
         
         expected_labels = [
             -100,                                 # <s>
