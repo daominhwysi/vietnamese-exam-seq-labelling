@@ -173,15 +173,41 @@ def run_train(args):
     print(f"Using device: {device}")
 
     # Set mixed precision defaults
-    fp16_enabled = torch.cuda.is_available() and not args.no_fp16
-    bf16_enabled = torch.cuda.is_available() and args.use_bf16
-    if bf16_enabled:
+    # bfloat16 requires hardware support (compute capability >= 8.0, i.e., Ampere or newer) to run fast.
+    # On older architectures like Turing (e.g., T4 with compute capability 7.5), BF16 runs extremely slowly via emulation.
+    gpu_supports_bf16 = torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8
+
+    # Load model config to check its native precision/dtype
+    from transformers import AutoConfig
+    try:
+        config = AutoConfig.from_pretrained(args.model_name, token=hf_token)
+        config_dtype = getattr(config, "torch_dtype", None)
+    except Exception as e:
+        print(f"Warning: Could not load model configuration: {e}")
+        config_dtype = None
+
+    # Handle bfloat16 compatibility and automatic selection
+    if args.use_bf16:
+        bf16_enabled = True
         fp16_enabled = False
+    elif config_dtype in [torch.bfloat16, "bfloat16", "bf16"] and gpu_supports_bf16 and not args.no_fp16:
+        bf16_enabled = True
+        fp16_enabled = False
+        print("Model configuration specifies bfloat16 and GPU supports it. Automatically enabling bfloat16 training.")
+    else:
+        bf16_enabled = False
+        fp16_enabled = torch.cuda.is_available() and not args.no_fp16
+
+    # Select the model loading torch_dtype based on precision settings
+    if bf16_enabled:
+        load_dtype = torch.bfloat16
         print("Automatic Mixed Precision (AMP) enabled: bfloat16")
     elif fp16_enabled:
+        load_dtype = torch.float32
         print("Automatic Mixed Precision (AMP) enabled: float16 (standard GPU)")
     else:
-        print("Automatic Mixed Precision (AMP) disabled")
+        load_dtype = torch.float32
+        print("Automatic Mixed Precision (AMP) disabled (training in float32)")
 
     # 3. Download Label Mapping & Dataset
     print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
@@ -251,14 +277,15 @@ def run_train(args):
     tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
 
     # 5. Initialize Model
-    print(f"Loading Model: '{args.model_name}'...")
+    print(f"Loading Model: '{args.model_name}' with dtype: {load_dtype}...")
     from transformers import AutoModelForTokenClassification
     model = AutoModelForTokenClassification.from_pretrained(
         args.model_name,
         num_labels=num_labels,
         id2label={i: id_to_tag[i] for i in id_to_tag},
         label2id=tag_to_id,
-        token=hf_token
+        token=hf_token,
+        torch_dtype=load_dtype
     )
 
     # Resize token embeddings to match tokenizer with added special tokens

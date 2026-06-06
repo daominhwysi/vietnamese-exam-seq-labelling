@@ -97,7 +97,17 @@ def align_tokens_to_spans(
             non_space_char_idx = start
             
         if non_space_char_idx == -1:
-            labels.append(tag_to_id["O"])
+            # It's a whitespace-only token. Check if it falls entirely within some span.
+            # If so, label it as part of that span (using "I-label" so that the entity is contiguous).
+            matched_span = None
+            for span in clean_spans:
+                if span["start"] <= start and end <= span["end"]:
+                    matched_span = span
+                    break
+            if matched_span is not None:
+                labels.append(tag_to_id.get(f"I-{matched_span['label']}", tag_to_id["O"]))
+            else:
+                labels.append(tag_to_id["O"])
             continue
             
         matched_span = None

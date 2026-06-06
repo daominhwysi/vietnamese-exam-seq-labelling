@@ -49,7 +49,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans.
   - `training/` - Downstream Training & Evaluation Subpackage.
     - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
-    - `train.py` - Performs token-classification training with LoRA adapters.
+    - `train.py` - Performs token-classification training with LoRA adapters (supports dynamic T4/BF16/FP16 precision fallback).
     - `inference.py` - Local inference utility using trained LoRA adapter models.
     - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments and outputting human-readable token-class text mappings.
     - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
