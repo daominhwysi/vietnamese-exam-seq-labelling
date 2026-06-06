@@ -153,6 +153,9 @@ Yêu cầu định dạng riêng cho bài thi tiếng Anh dạng '{pt_id}':
 - Nếu là dạng điền từ/điền câu (cloze_word, cloze_sentence, cloze_word_news, cloze_word_leaflet): Ngữ cảnh văn bản (context) phải chứa các chỗ trống được đánh số cụ thể dạng '(26) <blank />', '(27) <blank />'.
 - Nếu là dạng ngữ pháp/từ vựng (grammar_vocabulary): Thẻ <stem> chứa câu văn tiếng Anh có một chỗ trống cần điền từ/cụm từ. Chỗ trống PHẢI được biểu diễn bằng thẻ XML <blank /> (TUYỆT ĐỐI KHÔNG dùng dấu gạch dưới ______ hay dấu chấm ...). Ví dụ: "She wishes she <blank /> harder for the final exam."
 - Nếu là dạng hội thoại/giao tiếp (exchange): Thẻ <stem> chứa lượt nói của người A. Lượt trả lời của người B có chỗ trống PHẢI dùng thẻ <blank /> (TUYỆT ĐỐI KHÔNG dùng ______). Ví dụ: 'John: "I am thinking of taking a gap year." - Mary: "<blank />"'
+- Nếu là dạng sắp xếp hội thoại (reordering_dialogue): Thẻ <stem> chứa lượt nói của cuộc đối thoại, mỗi dòng bắt đầu bằng ký tự thường kèm dấu chấm và tên người nói (ví dụ: "a. Tom: ...\nb. Mary: ..."). Các phương án <option> là các tổ hợp thứ tự các câu thoại (ví dụ: "a-b-c", "b-c-a").
+- Nếu là dạng sắp xếp thư (reordering_letter): Thẻ <stem> chứa một bức thư hoàn chỉnh có các phần nội dung chính được chia thành các câu bắt đầu bằng ký tự thường kèm dấu chấm (ví dụ: "a. ...\nb. ..."), đồng thời PHẢI chứa câu chào mở đầu (ví dụ: "Dear Ms Smith,") và chữ ký kết thúc bức thư (ví dụ: "Yours sincerely,\nABC Bank"). Các phương án <option> là các tổ hợp thứ tự các câu thư (ví dụ: "d-a-c-b-e").
+- Nếu là dạng sắp xếp đoạn văn (reordering_text): Thẻ <stem> chứa một đoạn văn học thuật/nghị luận ngắn có các câu được chia thành các phần bắt đầu bằng ký tự thường kèm dấu chấm (ví dụ: "a. ...\nb. ..."). Mỗi câu có độ dài hợp lý, mang văn phong học thuật (IELTS/THPT). Các phương án <option> là các tổ hợp thứ tự các câu văn (ví dụ: "e-c-d-b-a").
 """
 
     system_prompt = (

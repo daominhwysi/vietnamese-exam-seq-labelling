@@ -65,7 +65,7 @@ def generate_exam_tasks(
     tasks = []
 
     if subject == Subject.ENGLISH:
-        # 60% lựa chọn cấu trúc mới (GDPT 2018), 40% lựa chọn cấu trúc cũ
+        # 60% lựa chọn cấu trúc mới (GDPT 2018) , 40% cấu trúc cũ
         if random.random() < 0.6:
             # --- CẤU TRÚC MỚI (40 câu hỏi) ---
             tasks.append(
@@ -109,6 +109,7 @@ def generate_exam_tasks(
                 )
             )
 
+            # 4 dialogue ordering questions
             tasks.append(
                 (
                     ENG_INST_REORDERING,
@@ -123,6 +124,31 @@ def generate_exam_tasks(
                     QuestionType.MULTIPLE_CHOICE,
                     None,
                     {"problem_type_filter": "reordering_dialogue"},
+                )
+            )
+            tasks.append(
+                (
+                    ENG_INST_REORDERING,
+                    QuestionType.MULTIPLE_CHOICE,
+                    None,
+                    {"problem_type_filter": "reordering_dialogue"},
+                )
+            )
+            tasks.append(
+                (
+                    ENG_INST_REORDERING,
+                    QuestionType.MULTIPLE_CHOICE,
+                    None,
+                    {"problem_type_filter": "reordering_dialogue"},
+                )
+            )
+            # 2 letter ordering questions
+            tasks.append(
+                (
+                    ENG_INST_REORDERING,
+                    QuestionType.MULTIPLE_CHOICE,
+                    None,
+                    {"problem_type_filter": "reordering_letter"},
                 )
             )
             tasks.append(
@@ -131,6 +157,23 @@ def generate_exam_tasks(
                     QuestionType.MULTIPLE_CHOICE,
                     None,
                     {"problem_type_filter": "reordering_letter"},
+                )
+            )
+            # 4 text/paragraph ordering questions
+            tasks.append(
+                (
+                    ENG_INST_REORDERING,
+                    QuestionType.MULTIPLE_CHOICE,
+                    None,
+                    {"problem_type_filter": "reordering_text"},
+                )
+            )
+            tasks.append(
+                (
+                    ENG_INST_REORDERING,
+                    QuestionType.MULTIPLE_CHOICE,
+                    None,
+                    {"problem_type_filter": "reordering_text"},
                 )
             )
             tasks.append(
