@@ -42,13 +42,13 @@ The festival is well-known for its religious rituals and vibrant cultural progra
 
 Over the years, the event has contributed significantly to promoting Hanoi as a **(6)** _______ in Vietnam.
 
-- **Question 1.** A. the &nbsp;&nbsp;&nbsp;&nbsp; B. a &nbsp;&nbsp;&nbsp;&nbsp; C. Ø &nbsp;&nbsp;&nbsp;&nbsp; D. an
-- **Question 2.** A. which locates &nbsp;&nbsp;&nbsp;&nbsp; B. locating &nbsp;&nbsp;&nbsp;&nbsp; C. which is located &nbsp;&nbsp;&nbsp;&nbsp; D. located
-- **Question 3.** A. the others &nbsp;&nbsp;&nbsp;&nbsp; B. others &nbsp;&nbsp;&nbsp;&nbsp; C. other &nbsp;&nbsp;&nbsp;&nbsp; D. another
-- **Question 4.** A. stepped up &nbsp;&nbsp;&nbsp;&nbsp; B. turned up &nbsp;&nbsp;&nbsp;&nbsp; C. ended up &nbsp;&nbsp;&nbsp;&nbsp; D. used up
-- **Question 5.** A. each &nbsp;&nbsp;&nbsp;&nbsp; B. many &nbsp;&nbsp;&nbsp;&nbsp; C. much &nbsp;&nbsp;&nbsp;&nbsp; D. some
-- **Question 6.** A. tourism leading destination &nbsp;&nbsp;&nbsp;&nbsp; B. leading destination tourism
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; C. destination leading tourism &nbsp;&nbsp;&nbsp;&nbsp; D. leading tourism destination
+- **Question 1.** A. the      B. a      C. Ø      D. an
+- **Question 2.** A. which locates      B. locating      C. which is located      D. located
+- **Question 3.** A. the others      B. others      C. other      D. another
+- **Question 4.** A. stepped up      B. turned up      C. ended up      D. used up
+- **Question 5.** A. each      B. many      C. much      D. some
+- **Question 6.** A. tourism leading destination      B. leading destination tourism
+          C. destination leading tourism      D. leading tourism destination
 
 *Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 7 to 12.*
 
@@ -74,12 +74,12 @@ Imagine this scenario: You've taken up a new job or started a new course, **(7)*
 
 term results. Ultimately, consistent effort enhances long-term sustainability and personal **(12)** _______.
 
-- **Question 7.** A. or &nbsp;&nbsp;&nbsp;&nbsp; B. as &nbsp;&nbsp;&nbsp;&nbsp; C. so &nbsp;&nbsp;&nbsp;&nbsp; D. but
-- **Question 8.** A. reject &nbsp;&nbsp;&nbsp;&nbsp; B. postpone &nbsp;&nbsp;&nbsp;&nbsp; C. abandon &nbsp;&nbsp;&nbsp;&nbsp; D. cancel
-- **Question 9.** A. Making &nbsp;&nbsp;&nbsp;&nbsp; B. Getting &nbsp;&nbsp;&nbsp;&nbsp; C. Taking &nbsp;&nbsp;&nbsp;&nbsp; D. Doing
-- **Question 10.** A. a little &nbsp;&nbsp;&nbsp;&nbsp; B. little &nbsp;&nbsp;&nbsp;&nbsp; C. few &nbsp;&nbsp;&nbsp;&nbsp; D. a few
-- **Question 11.** A. instinct &nbsp;&nbsp;&nbsp;&nbsp; B. habit &nbsp;&nbsp;&nbsp;&nbsp; C. routine &nbsp;&nbsp;&nbsp;&nbsp; D. nature
-- **Question 12.** A. effect &nbsp;&nbsp;&nbsp;&nbsp; B. effectively &nbsp;&nbsp;&nbsp;&nbsp; C. effectiveness &nbsp;&nbsp;&nbsp;&nbsp; D. effective
+- **Question 7.** A. or      B. as      C. so      D. but
+- **Question 8.** A. reject      B. postpone      C. abandon      D. cancel
+- **Question 9.** A. Making      B. Getting      C. Taking      D. Doing
+- **Question 10.** A. a little      B. little      C. few      D. a few
+- **Question 11.** A. instinct      B. habit      C. routine      D. nature
+- **Question 12.** A. effect      B. effectively      C. effectiveness      D. effective
 
 *Mark the letter A, B, C or D on your answer sheet to indicate the best arrangement of utterances or sentences to make a cohesive and coherent exchange or text in each of the following questions.*
 
@@ -88,7 +88,7 @@ a. Mike: Not bad, thanks. I'm just glad it's over! How about you? How'd your pre
 b. Lucy: Sure thing! Come over around 10:00, after breakfast.
 c. Lucy: Hey! How did your Pragmatics exam go? d. Mike: No problem. So… do you feel like studying tomorrow for our English exam? e. Lucy: Oh, it went really well. Thanks for helping me with it!
 
-A. e – d – b – c – a &nbsp;&nbsp;&nbsp;&nbsp; B. c – a – e – d – b &nbsp;&nbsp;&nbsp;&nbsp; C. c – d – e – a – b &nbsp;&nbsp;&nbsp;&nbsp; D. e – a – c – d – b
+A. e – d – b – c – a      B. c – a – e – d – b      C. c – d – e – a – b      D. e – a – c – d – b
 
 **Question 14.**
 a. The upward trend continued and in 2020, more than half of its population lived in urban areas. In the next twenty years, the urban population is expected to reach 65 per cent of the total population.
@@ -97,7 +97,7 @@ c. By contrast, the urban population grew throughout the same period. In 1950, t
 d. Overall, the urban population has increased and will continue to grow while the rural population has decreased and will continue to fall.
 e. In 1950, 94 per cent or most of Fantasia's population lived in rural areas; this figure remained stable until 1960 before falling to 48 per cent in 2020 and is expected to drop to 35 per cent in 2040.
 
-A. b – c – d – a – e &nbsp;&nbsp;&nbsp;&nbsp; B. b – a – d – c – e &nbsp;&nbsp;&nbsp;&nbsp; C. b – e – d – a – c &nbsp;&nbsp;&nbsp;&nbsp; D. b – d – e – c – a
+A. b – c – d – a – e      B. b – a – d – c – e      C. b – e – d – a – c      D. b – d – e – c – a
 
 **Question 15.**
 Dear Customer Service Team,
@@ -109,14 +109,14 @@ e. As this is a brand-new product and still under warranty, I would like to requ
 Yours faithfully,
 Laura Brown
 
-A. e – d – b – c – a &nbsp;&nbsp;&nbsp;&nbsp; B. c – a – d – b – e &nbsp;&nbsp;&nbsp;&nbsp; C. a – e – d – c – b &nbsp;&nbsp;&nbsp;&nbsp; D. d – a – c – e – b
+A. e – d – b – c – a      B. c – a – d – b – e      C. a – e – d – c – b      D. d – a – c – e – b
 
 **Question 16.**
 a. Katy: Honestly, I'm not sure if I'll go. I don't know Sam that well.
 b. Jane: Hi, Katy. Are you going to Sam's party at the weekend?
 c. Jane: Don't worry. He's very friendly, so I think you two will get along.
 
-A. c – a – b &nbsp;&nbsp;&nbsp;&nbsp; B. b – a – c &nbsp;&nbsp;&nbsp;&nbsp; C. b – c – a &nbsp;&nbsp;&nbsp;&nbsp; D. a – b – c
+A. c – a – b      B. b – a – c      C. b – c – a      D. a – b – c
 
 **Question 17.**
 a. Firstly, it helps people distinguish between reliable sources and misleading or false content.
@@ -125,7 +125,7 @@ c. Media literacy also encourages audiences to recognize bias, persuasive techni
 d. On a larger scale, integrating media literacy education into school curricula is crucial for developing responsible and critical thinkers.
 e. Media literacy is an essential skill in the modern world because it enables individuals to critically evaluate the vast amount of information they encounter every day.
 
-A. e – c – a – d – b &nbsp;&nbsp;&nbsp;&nbsp; B. c – a – b – d – e &nbsp;&nbsp;&nbsp;&nbsp; C. e – a – c – b – d &nbsp;&nbsp;&nbsp;&nbsp; D. c – b – a – e – d
+A. e – c – a – d – b      B. c – a – b – d – e      C. e – a – c – b – d      D. c – b – a – e – d
 
 <|page|>Page 3
 
@@ -146,8 +146,8 @@ The first method involves creating a vivid and unusual story. For example, pictu
 The second technique is called the "memory palace". Visualize your home and mentally walk through each room. Place the items from your list in specific locations, such as bread on the doormat or coffee in front of the TV. **(21)** _______, you make the information easier to recall. Not only is this strategy useful for shopping lists **(22)** _______.
 
 **Question 18.**
-A. may be use imagination &nbsp;&nbsp;&nbsp;&nbsp; B. is to avoid using imagination
-C. is to use imagination &nbsp;&nbsp;&nbsp;&nbsp; D. are imagining effectively
+A. may be use imagination      B. is to avoid using imagination
+C. is to use imagination      D. are imagining effectively
 
 **Question 19.**
 A. flowing into a river that passed under a bridge made from steak
@@ -162,8 +162,8 @@ C. In this way, the stories appear more entertaining and engaging
 D. These strange and colourful images may confuse your memory
 
 **Question 21.**
-A. By forming personal and clear associations &nbsp;&nbsp;&nbsp;&nbsp; B. If the information is defined several times
-C. When you create vivid yet impersonal images &nbsp;&nbsp;&nbsp;&nbsp; D. Despite the use of detailed mental pictures
+A. By forming personal and clear associations      B. If the information is defined several times
+C. When you create vivid yet impersonal images      D. Despite the use of detailed mental pictures
 
 **Question 22.**
 A. although it is also helpful when some people give speeches without cues Y
@@ -202,13 +202,13 @@ C. The brain requires additional energy during periods of stress.
 D. Carbohydrates serve as a rapid source of energy for the body.
 
 **Question 24.** The phrase <u>gravitate towards</u> in paragraph 1 is OPPOSITE in meaning to _______.
-A. abstain from &nbsp;&nbsp;&nbsp;&nbsp; B. derive from &nbsp;&nbsp;&nbsp;&nbsp; C. incline to &nbsp;&nbsp;&nbsp;&nbsp; D. predispose to
+A. abstain from      B. derive from      C. incline to      D. predispose to
 
 **Question 25.** The word <u>registers</u> in paragraph 3 can be best replaced by _______.
-A. suppresses &nbsp;&nbsp;&nbsp;&nbsp; B. perceives &nbsp;&nbsp;&nbsp;&nbsp; C. monitors &nbsp;&nbsp;&nbsp;&nbsp; D. applies
+A. suppresses      B. perceives      C. monitors      D. applies
 
 **Question 26.** The word <u>they</u> in paragraph 6 refers to _______.
-A. sweets &nbsp;&nbsp;&nbsp;&nbsp; B. people &nbsp;&nbsp;&nbsp;&nbsp; C. cravings &nbsp;&nbsp;&nbsp;&nbsp; D. habits
+A. sweets      B. people      C. cravings      D. habits
 
 **Question 27.** Which of the following best paraphrases the underlined sentence in paragraph 5?
 A. A sustained increase in stress hormones may arise when the brain lacks energy, eventually raising the risk of heart disease or depression.
@@ -223,10 +223,10 @@ C. Eating sugary foods is the most effective way to reduce stress hormones in th
 D. The hypothalamus is the only part of the brain that is responsible for controlling hunger.
 
 **Question 29.** Which paragraph suggests that cravings for sweet foods may not indicate an individual's deficiency?
-A. Paragraph 5 &nbsp;&nbsp;&nbsp;&nbsp; B. Paragraph 6 &nbsp;&nbsp;&nbsp;&nbsp; C. Paragraph 3 &nbsp;&nbsp;&nbsp;&nbsp; D. Paragraph 4
+A. Paragraph 5      B. Paragraph 6      C. Paragraph 3      D. Paragraph 4
 
 **Question 30.** Which paragraph provides experimental evidence that eating carbohydrates can improve task performance?
-A. Paragraph 2 &nbsp;&nbsp;&nbsp;&nbsp; B. Paragraph 1 &nbsp;&nbsp;&nbsp;&nbsp; C. Paragraph 3 &nbsp;&nbsp;&nbsp;&nbsp; D. Paragraph 4
+A. Paragraph 2      B. Paragraph 1      C. Paragraph 3      D. Paragraph 4
 
 *Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions.*
 
@@ -257,8 +257,8 @@ C. illustrate how individual cases can obscure a broader structural issue
 D. suggest that media attention exaggerates environmental concerns
 
 **Question 32.** The phrase <u>such efforts</u> in paragraph 2 refers to _______.
-A. high-profile individuals &nbsp;&nbsp;&nbsp;&nbsp; B. environmental initiatives
-C. renewable energy projects &nbsp;&nbsp;&nbsp;&nbsp; D. carbon emissions
+A. high-profile individuals      B. environmental initiatives
+C. renewable energy projects      D. carbon emissions
 
 **Question 33.** According to paragraph 2, how do some celebrities attempt to manage their environmental impact?
 A. By investing exclusively in large-scale renewable infrastructure
@@ -285,7 +285,7 @@ C. Carbon offset markets operate under strict international regulation.
 D. Some offset transactions occur in poorly regulated environments.
 
 **Question 37.** The word <u>legitimise</u> in paragraph 4 is closest in meaning to:
-A. conceal &nbsp;&nbsp;&nbsp;&nbsp; B. justify &nbsp;&nbsp;&nbsp;&nbsp; C. restrict &nbsp;&nbsp;&nbsp;&nbsp; D. calculate
+A. conceal      B. justify      C. restrict      D. calculate
 
 **Question 38.** Which of the following can be inferred from the passage?
 A. Carbon offsetting may alleviate certain environmental pressures but does not fundamentally transform emission-producing behaviour.
@@ -306,7 +306,7 @@ D. Carbon offsetting guarantees measurable climate benefits through market-based
 **Question 39.** Where in the passage does the following sentence best fit?
 *<u>This environment creates space for exaggerated claims of carbon neutrality without verifiable outcomes.</u>*
 
-A. [III] &nbsp;&nbsp;&nbsp;&nbsp; B. [I] &nbsp;&nbsp;&nbsp;&nbsp; C. [IV] &nbsp;&nbsp;&nbsp;&nbsp; D. [II]
+A. [III]      B. [I]      C. [IV]      D. [II]
 
 **Question 40.** Which of the following best summarises the passage?
 A. Carbon offset markets provide a practical mechanism for reducing the environmental impact of luxury air travel among high-profile individuals in response to growing criticism.

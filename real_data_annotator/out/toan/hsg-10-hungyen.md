@@ -19,15 +19,15 @@ Họ, tên thí sinh: ……………………………………..SBD: ………
 
 [Hình vẽ: Ba vòng tròn giao nhau A, B, C với phần gạch sọc ở phần giao của A và B]
 
-**A.** $(A \cap B) \cup C$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $(A \cap B) \setminus C$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $(A \cup B) \setminus C$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $(A \setminus C) \cup (A \setminus B)$.
+**A.** $(A \cap B) \cup C$.      **B.** $(A \cap B) \setminus C$.      **C.** $(A \cup B) \setminus C$.      **D.** $(A \setminus C) \cup (A \setminus B)$.
 
 **Câu 2:** Có bao nhiêu số tự nhiên có 5 chữ số đôi một khác nhau chia hết cho 6 và các chữ số không vượt quá 6 ?
 
-**A.** 420. &nbsp;&nbsp;&nbsp;&nbsp; **B.** 342. &nbsp;&nbsp;&nbsp;&nbsp; **C.** 360. &nbsp;&nbsp;&nbsp;&nbsp; **D.** 348.
+**A.** 420.      **B.** 342.      **C.** 360.      **D.** 348.
 
 **Câu 3:** Cho điểm $M(3;1)$, đường thẳng $(d)$ đi qua $M(3;1)$ và cắt $Ox, Oy$ lần lượt tại $A(a;0), B(0;b)$ với $a, b > 0$. Phương trình đường thẳng $(d)$ sao cho $\frac{1}{OA^2} + \frac{1}{OB^2}$ nhỏ nhất là
 
-**A.** $2x + y - 10 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $3x + y - 10 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $3x + y + 10 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $3x - y - 10 = 0$.
+**A.** $2x + y - 10 = 0$.      **B.** $3x + y - 10 = 0$.      **C.** $3x + y + 10 = 0$.      **D.** $3x - y - 10 = 0$.
 
 **Câu 4:** Cho hàm số $y = ax^2 + bx + c$ có đồ thị như hình vẽ.
 
@@ -35,43 +35,43 @@ Họ, tên thí sinh: ……………………………………..SBD: ………
 
 Khi đó dấu của các hệ số $a, b, c$ là
 
-**A.** $a > 0, b > 0, c < 0$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $a > 0, b < 0, c < 0$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $a > 0, b > 0, c > 0$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $a > 0, b < 0, c > 0$.
+**A.** $a > 0, b > 0, c < 0$.      **B.** $a > 0, b < 0, c < 0$.      **C.** $a > 0, b > 0, c > 0$.      **D.** $a > 0, b < 0, c > 0$.
 
 <|page|>Page 2
 
 **Câu 5:** Cho tam giác $ABC$ có $BC = a, CA = b, AB = c$ và $R, r$ lần lượt là bán kính đường tròn ngoại tiếp, nội tiếp tam giác $ABC$ thoả mãn $\frac{a^3 + b^3 + c^3}{abc} + \frac{2r}{R} = 4$. Phát biểu nào sau đây là đúng?
 
-**A.** Tam giác $ABC$ vuông cân. &nbsp;&nbsp;&nbsp;&nbsp; **B.** Tam giác $ABC$ vuông.
+**A.** Tam giác $ABC$ vuông cân.      **B.** Tam giác $ABC$ vuông.
 
-**C.** Tam giác $ABC$ cân. &nbsp;&nbsp;&nbsp;&nbsp; **D.** Tam giác $ABC$ đều.
+**C.** Tam giác $ABC$ cân.      **D.** Tam giác $ABC$ đều.
 
 **Câu 6:** Ông Cường dùng 100m lưới b40 để rào một mảnh vườn hình chữ nhật với mục đích để thả gia súc. Biết một cạnh của hình chữ nhật là bức tường (không phải rào). Diện tích lớn nhất của mảnh vườn để có thể rào được là
 
-**A.** 1350m². &nbsp;&nbsp;&nbsp;&nbsp; **B.** 1150m². &nbsp;&nbsp;&nbsp;&nbsp; **C.** 1250m². &nbsp;&nbsp;&nbsp;&nbsp; **D.** 625m².
+**A.** 1350m².      **B.** 1150m².      **C.** 1250m².      **D.** 625m².
 
 **Câu 7:** Cho $\triangle ABC$, điểm $M$ thoả mãn $\overrightarrow{MA} + \overrightarrow{BC} - \overrightarrow{BM} - \overrightarrow{AB} = \overrightarrow{BA}$. Mệnh đề nào sau đây đúng?
 
-**A.** $M$ là trung điểm $BC$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $M$ là trung điểm $CA$.
+**A.** $M$ là trung điểm $BC$.      **B.** $M$ là trung điểm $CA$.
 
-**C.** $M$ là trọng tâm $\triangle ABC$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $M$ là trung điểm $AB$.
+**C.** $M$ là trọng tâm $\triangle ABC$.      **D.** $M$ là trung điểm $AB$.
 
 **Câu 8:** Cổng *Gateway Arch* ở thành phố *Missouri* (Mỹ) có hình dạng là parabol (như hình vẽ), người ta đo được khoảng cách giữa hai chân cổng là $AB = 162$ m. Từ một điểm $M$ trên thân cổng người ta đo được khoảng cách tới mặt đất là $MH = 43$ m và khoảng cách từ $H$ tới điểm chân cổng gần nhất là $HA = 10$ m. Chiều cao của cổng *Gateway Arch* được làm tròn đến hàng phần chục là
 
 [Hình vẽ: Cổng Gateway Arch với parabol và hình vẽ minh họa với M, A, B, H, 43m, 162m, 10m]
 
-**A.** $h = 180$ m. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $h = 184$ m. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $h = 175,6$ m. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $h = 185,6$ m.
+**A.** $h = 180$ m.      **B.** $h = 184$ m.      **C.** $h = 175,6$ m.      **D.** $h = 185,6$ m.
 
 **Câu 9:** Với giá trị nào của $m$ thì hàm số $y = \frac{2x+1}{x^2 - 2x - 3 - m}$ xác định trên $\mathbb{R}$ ?
 
-**A.** $m > 0$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $m < -4$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $m < 4$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $m \leq -4$.
+**A.** $m > 0$.      **B.** $m < -4$.      **C.** $m < 4$.      **D.** $m \leq -4$.
 
 **Câu 10:** Có bao nhiêu số tự nhiên có bảy chữ số khác nhau từng đôi một, trong đó chữ số 2 đứng liền giữa hai chữ số 1 và 3 ?
 
-**A.** 840. &nbsp;&nbsp;&nbsp;&nbsp; **B.** 7440. &nbsp;&nbsp;&nbsp;&nbsp; **C.** 2880. &nbsp;&nbsp;&nbsp;&nbsp; **D.** 3720.
+**A.** 840.      **B.** 7440.      **C.** 2880.      **D.** 3720.
 
 **Câu 11:** Cho bất phương trình $f(x) = mx^2 + (2m-1)x + m + 1 < 0$ ($m$ là tham số). Gọi $S$ là tập tất cả các giá trị của $m$ để bất phương trình có nghiệm. $S$ chứa khoảng nào trong các khoảng dưới đây?
 
-**A.** $(0;1)$ &nbsp;&nbsp;&nbsp;&nbsp; **B.** $(-1;0)$ &nbsp;&nbsp;&nbsp;&nbsp; **C.** $(-2;3)$ &nbsp;&nbsp;&nbsp;&nbsp; **D.** $(1;2)$
+**A.** $(0;1)$      **B.** $(-1;0)$      **C.** $(-2;3)$      **D.** $(1;2)$
 
 **Câu 12:** Một ngọn hải đăng đặt tại vị trí $A$ cách bờ biển một khoảng cách $AB = 4$ km. Trên bờ biển có một cái kho ở vị trí $C$ cách $B$ một khoảng là 7 km. Người canh hải đăng có thể chèo thuyền từ $A$ đến vị trí $M$ trên bờ biển với vận tốc 3 km/h rồi đi bộ đến $C$ với vận tốc 5 km/h như hình vẽ, biết thời gian người đó đi
 
@@ -81,41 +81,41 @@ Khi đó dấu của các hệ số $a, b, c$ là
 
 Khoảng cách từ vị trí $B$ đến $M$ bằng
 
-**A.** 4(km). &nbsp;&nbsp;&nbsp;&nbsp; **B.** 3(km). &nbsp;&nbsp;&nbsp;&nbsp; **C.** 3,5(km). &nbsp;&nbsp;&nbsp;&nbsp; **D.** 2(km).
+**A.** 4(km).      **B.** 3(km).      **C.** 3,5(km).      **D.** 2(km).
 
 **Câu 13:** Cho tam giác $ABC$ có $AB = 1$, $AC = x$ $(x > 0)$ và $\widehat{BAC} = 60°$. Các điểm $M, N$ được xác định bởi $\overrightarrow{MC} = -2\overrightarrow{MB}$ và $\overrightarrow{NB} = -2\overrightarrow{NA}$. Khi đó $AM$ và $CN$ vuông góc với nhau khi $x$ bằng
 
-**A.** 2. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $\frac{1}{3}$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** 3. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $\frac{1}{2}$.
+**A.** 2.      **B.** $\frac{1}{3}$.      **C.** 3.      **D.** $\frac{1}{2}$.
 
 **Câu 14:** Bác Hà có 8 sào đất trồng hoa màu. Biết rằng 1 sào trồng đậu cần 20 công và lãi được 3 triệu đồng, 1 sào trồng cà cần 30 công và lãi được 4 triệu đồng. Bác Hà trồng được $x$ sào đậu và $y$ sào cà thì thu được tiền lãi cao nhất. Giá trị biểu thức $F = 3x + 4y$ bằng bao nhiêu biết rằng tổng số công không quá 180 ?
 
-**A.** $F = 18$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $F = 20$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $F = 26$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $F = 16$.
+**A.** $F = 18$.      **B.** $F = 20$.      **C.** $F = 26$.      **D.** $F = 16$.
 
 **Câu 15:** Biết phương trình $\sqrt{2x^2 - 5x + 2} = x - 1$ có một nghiệm $x = \frac{a + \sqrt{b}}{2}$ với $a, b \in \mathbb{R}$. Tổng $S = a + b$ bằng
 
-**A.** $S = 2$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $S = 3$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $S = 8$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $S = 10$.
+**A.** $S = 2$.      **B.** $S = 3$.      **C.** $S = 8$.      **D.** $S = 10$.
 
 **Câu 16:** Phần không gạch chéo ở hình sau đây là biểu diễn miền nghiệm của hệ bất phương trình nào sau đây?
 
 [Hình vẽ: Hệ trục tọa độ Oxy với đường thẳng đi qua các điểm (0;3) và (2;0), vùng không gạch chéo nằm phía dưới đường thẳng]
 
-**A.** $\begin{cases} x \geq 0 \\ 3x + 2y > 6 \end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp; **B.** $\begin{cases} y \geq 0 \\ 3x + 2y \leq -6 \end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp; **C.** $\begin{cases} y \geq 0 \\ 3x + 2y \leq 6 \end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp; **D.** $\begin{cases} x \geq 0 \\ 3x + 2y > -6 \end{cases}$
+**A.** $\begin{cases} x \geq 0 \\ 3x + 2y > 6 \end{cases}$      **B.** $\begin{cases} y \geq 0 \\ 3x + 2y \leq -6 \end{cases}$      **C.** $\begin{cases} y \geq 0 \\ 3x + 2y \leq 6 \end{cases}$      **D.** $\begin{cases} x \geq 0 \\ 3x + 2y > -6 \end{cases}$
 
 **Câu 17:** Cho hai tập hợp $A = \{x \in \mathbb{R} \mid 1 \leq |x| \leq 2\}$; $B = (-\infty; m-2] \cup [m; +\infty)$. Tất cả các giá trị của $m$ để $A \subset B$ là
 
 <|page|>Page 4
 
-**A.** $\begin{cases} m \geq 4 \\ m \leq -2 \\ m = 1 \end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp; **B.** $\begin{cases} m \geq 4 \\ m \leq -2 \end{cases}$ &nbsp;&nbsp;&nbsp;&nbsp; **C.** $-2 < m < 4$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $\begin{cases} m > 4 \\ m < -2 \\ m = 1 \end{cases}$
+**A.** $\begin{cases} m \geq 4 \\ m \leq -2 \\ m = 1 \end{cases}$      **B.** $\begin{cases} m \geq 4 \\ m \leq -2 \end{cases}$      **C.** $-2 < m < 4$.      **D.** $\begin{cases} m > 4 \\ m < -2 \\ m = 1 \end{cases}$
 
 **Câu 18:** Cho tam giác $ABC$ có $A(1;3)$ và hai đường trung tuyến $BM: x + 7y - 10 = 0$ và $CN: x - 2y + 2 = 0$. Phương trình đường thẳng chứa cạnh $BC$ của tam giác $ABC$ là
 
-**A.** $x - y + 2 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $x - 5y + 2 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **C.** $x + y + 2 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $x + 5y + 2 = 0$.
+**A.** $x - y + 2 = 0$.      **B.** $x - 5y + 2 = 0$.      **C.** $x + y + 2 = 0$.      **D.** $x + 5y + 2 = 0$.
 
 **Câu 19:** Đường thẳng $(\Delta): 3x - 2y - 7 = 0$ cắt đường thẳng nào sau đây?
 
-**A.** $(d_4): 6x - 4y - 14 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **B.** $(d_1): 3x + 2y = 0$.
+**A.** $(d_4): 6x - 4y - 14 = 0$.      **B.** $(d_1): 3x + 2y = 0$.
 
-**C.** $(d_3): -3x + 2y - 7 = 0$. &nbsp;&nbsp;&nbsp;&nbsp; **D.** $(d_2): 3x - 2y = 0$.
+**C.** $(d_3): -3x + 2y - 7 = 0$.      **D.** $(d_2): 3x - 2y = 0$.
 
 **Câu 20:** Để đo chiều cao của một ngọn núi người ta đứng ở các vị trí $A, B$ cách nhau 50 m (như hình vẽ) và đo được các góc tại $A$ và $B$ lần lượt là $34°$ và $38°$.
 
@@ -123,7 +123,7 @@ Khoảng cách từ vị trí $B$ đến $M$ bằng
 
 Chiều cao của ngọn núi được làm tròn đến chữ số thập phân thứ nhất bằng
 
-**A.** 266,8 m. &nbsp;&nbsp;&nbsp;&nbsp; **B.** 246,8 m. &nbsp;&nbsp;&nbsp;&nbsp; **C.** 244,8 m. &nbsp;&nbsp;&nbsp;&nbsp; **D.** 264,8 m.
+**A.** 266,8 m.      **B.** 246,8 m.      **C.** 244,8 m.      **D.** 264,8 m.
 
 **PHẦN II. Câu trắc nghiệm đúng sai.** Thí sinh trả lời từ câu 1 đến câu 8. Trong mỗi ý **a). b). c). d)** ở mỗi câu, thí sinh chọn đúng hoặc sai
 

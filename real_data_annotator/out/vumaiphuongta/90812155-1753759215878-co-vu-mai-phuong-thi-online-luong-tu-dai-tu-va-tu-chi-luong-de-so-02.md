@@ -122,14 +122,14 @@
 **Chọn đáp án đúng cho từng câu hỏi của mỗi đoạn văn sau:**
 
 **Question 28.**
-&nbsp;&nbsp;&nbsp;&nbsp;India has witnessed a rapid rise in the gig economy, especially among young professionals. Many individuals now choose freelancing over traditional jobs because <u>**it**</u> offers flexibility and control. Platforms like Upwork and Fiverr are booming, and they connect skilled workers to global clients.
+    India has witnessed a rapid rise in the gig economy, especially among young professionals. Many individuals now choose freelancing over traditional jobs because <u>**it**</u> offers flexibility and control. Platforms like Upwork and Fiverr are booming, and they connect skilled workers to global clients.
 *The word <u>it</u> refers to ______.*
 
 | **A.** India | **B.** freelancing | **C.** a rapid rise | **D.** flexibility |
 |---|---|---|---|
 
 **Question 29.**
-&nbsp;&nbsp;&nbsp;&nbsp;Fake news has become a major threat in the digital age, especially on social media. Many people struggle to tell real information from false claims because <u>**they**</u> lack media literacy skills. When individuals believe fake stories, they often share them without checking facts, and this spreads misinformation even further.
+    Fake news has become a major threat in the digital age, especially on social media. Many people struggle to tell real information from false claims because <u>**they**</u> lack media literacy skills. When individuals believe fake stories, they often share them without checking facts, and this spreads misinformation even further.
 *The word "they" refers to ______.*
 
 | **A.** social media | | **B.** many people | |
@@ -137,7 +137,7 @@
 | **C.** false claims | | **D.** media literacy skills | |
 
 **Question 30.**
-&nbsp;&nbsp;&nbsp;&nbsp;In countries like the United States, hospitals are using AI to detect diseases such as cancer at earlier stages. <u>**It**</u> can analyze medical images and patient data much faster than humans, helping doctors make better decisions. AI-powered chatbots and virtual assistants also support patients by answering health questions and scheduling appointments.
+    In countries like the United States, hospitals are using AI to detect diseases such as cancer at earlier stages. <u>**It**</u> can analyze medical images and patient data much faster than humans, helping doctors make better decisions. AI-powered chatbots and virtual assistants also support patients by answering health questions and scheduling appointments.
 *The word "It" refers to ______.*
 
 | **A.** patient | **B.** cancer | **C.** AI | **D.** the United States |

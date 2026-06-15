@@ -110,31 +110,6 @@ def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
     return raw_text, spans
 
 
-def get_fallback_metadata(file_path: Path) -> Tuple[str, int]:
-    # Subject mapping from folder structure
-    parent_name = file_path.parent.name.lower()
-    subject_map = {
-        "toan": "math_algebra",
-        "ta": "english",
-        "vl": "physics",
-        "vumaiphuongta": "english",
-        "hoa": "chemistry",
-        "su": "history",
-        "dia": "geography",
-        "gdcd": "economics_law",
-        "van": "literature",
-    }
-    subject = subject_map.get(parent_name, "math_algebra")
-
-    # Grade extraction
-    grade = 12
-    path_str = str(file_path).lower()
-    grade_match = re.search(r"\b(lop|lớp|g)?(10|11|12|8|9)\b", path_str)
-    if grade_match:
-        grade = int(grade_match.group(2))
-    return subject, grade
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Annotate raw OCR Vietnamese exams using LLMs"
@@ -173,25 +148,38 @@ def main():
 
     args = parser.parse_args()
 
-    # 1. Setup Client based on available keys
+    # 1. Setup Client based on available keys and requested model
+    model_name = args.model
     deepseek_key = os.environ.get("DEEPSEEK_API_KEY")
     llm_key = os.environ.get("LLM_API_KEY")
 
-    if deepseek_key:
-        print("Using DeepSeek API for annotation.")
-        client = OpenAI(api_key=deepseek_key, base_url="https://api.deepseek.com")
-        default_model = "deepseek-chat"
-    elif llm_key:
+    # If they requested a minimax model explicitly, force Vilao.ai setup
+    is_minimax = model_name and ("minimax" in model_name.lower() or model_name.startswith("mn/"))
+
+    if is_minimax:
+        if not llm_key:
+            print("Error: Model requires LLM_API_KEY (Vilao.ai) but it is not set in the environment.")
+            sys.exit(1)
         print("Using Vilao.ai (Minimax-M3) API for annotation.")
         client = OpenAI(api_key=llm_key, base_url="https://api.vilao.ai/v1")
-        default_model = "mn/Minimax-M3"
     else:
-        print(
-            "Error: Neither DEEPSEEK_API_KEY nor LLM_API_KEY is configured in the environment."
-        )
-        sys.exit(1)
+        # Default fallback chain
+        if deepseek_key:
+            print("Using DeepSeek API for annotation.")
+            client = OpenAI(api_key=deepseek_key, base_url="https://api.deepseek.com")
+            if not model_name:
+                model_name = "deepseek-chat"
+        elif llm_key:
+            print("Using Vilao.ai (Minimax-M3) API for annotation.")
+            client = OpenAI(api_key=llm_key, base_url="https://api.vilao.ai/v1")
+            if not model_name:
+                model_name = "mn/Minimax-M3"
+        else:
+            print(
+                "Error: Neither DEEPSEEK_API_KEY nor LLM_API_KEY is configured in the environment."
+            )
+            sys.exit(1)
 
-    model_name = args.model or default_model
     print(f"Using model: {model_name}")
 
     input_path = Path(args.input)
@@ -281,8 +269,6 @@ def main():
             # Build and save result
             result_data = {
                 "exam_id": f"real_{path_hash}",
-                "subject": subject,
-                "grade": grade,
                 "created_at": datetime.now().isoformat(),
                 "is_real": True,
                 "raw_text": raw_text,

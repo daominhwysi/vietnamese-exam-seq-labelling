@@ -26,23 +26,23 @@ Cô Vũ Thị Mai Phương
 We hiked for hours through the forest and finally found a **(5)** _______ hut to rest in. I pulled out a **(6)** _______ water bottle from my bag and shared it with everyone.
 
 **Question 5.** A. quiet little wooden
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. wooden quiet little
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. little wooden quiet
+          B. wooden quiet little
+          C. little wooden quiet
 
 **Question 6.** A. big blue plastic
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. blue big plastic
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. plastic big blue
+          B. blue big plastic
+          C. plastic big blue
 
 **Chọn đáp án chứa danh từ ghép phù hợp:**
 
 **(7)** _______ is becoming a major threat to biodiversity. In many regions, **(8)** _______ for farming destroys the natural homes of countless species, pushing many of them toward extinction. To address this issue, governments are investing more in **(9)** _______, supporting protected areas and launching awareness campaigns to encourage sustainable land use.
 
 **Question 7.** A. Habitat loss
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. Loss habitat
+          B. Loss habitat
 **Question 8.** A. clearance forest
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. forest clearance
+          B. forest clearance
 **Question 9.** A. wildlife conservation
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. conservation wildlife
+          B. conservation wildlife
 
 **Chọn đáp án chứa từ loại phù hợp để hoàn thành đoạn văn:**
 
@@ -87,32 +87,32 @@ Fanpage: https://www.Facebook.com/TaiLieuOnThiOfficial/
 **1.** After finishing school or university, many young people struggle to find **(22)** _______. One reason is the gap between education and **(23)** _______, which leaves graduates unprepared for the demands of the workplace. To reduce youth unemployment, we need better career guidance and more **(24)** _______ that align with current industry needs.
 
 **Question 22.** A. financially stable jobs
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. stable financially jobs
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. stable jobs financially
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. jobs stable financially
+          B. stable financially jobs
+          C. stable jobs financially
+          D. jobs stable financially
 **Question 23.** A. skills job real-world
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. job real-world skills
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. real-world job skills
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. skills real-world job
+          B. job real-world skills
+          C. real-world job skills
+          D. skills real-world job
 **Question 24.** A. programs training practical
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. training practical programs
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. practical training programs
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. programs practical training
+          B. training practical programs
+          C. practical training programs
+          D. programs practical training
 
 **2.** A job interview is an important step in a(n) **(25)** _______. During the interview, candidates need to answer questions clearly and demonstrate their **(26)** _______. So, it's good to prepare some thoughtful short answers in advance. A successful interview can lead to a **(27)** _______.
 
 **Question 25.** A. recruitment ordinary process
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. process recruitment ordinary
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. ordinary recruitment process
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. ordinary process recruitment
+          B. process recruitment ordinary
+          C. ordinary recruitment process
+          D. ordinary process recruitment
 **Question 26.** A. strong skills work
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. strong work skills
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. skills strong work
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. work skills strong
+          B. strong work skills
+          C. skills strong work
+          D. work skills strong
 **Question 27.** A. higher chance recruitment
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. chance higher recruitment
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. recruitment higher chance
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. higher recruitment chance
+          B. chance higher recruitment
+          C. recruitment higher chance
+          D. higher recruitment chance
 
 *Vì quyền lợi chính đáng của chính các em, TUYỆT ĐỐI KHÔNG chia sẻ tài liệu ĐỘC QUYỀN này cho người khác!*
 View Full: https://bit.ly/ComBoLuyenThiTHPTQG
@@ -126,17 +126,17 @@ Fanpage: https://www.Facebook.com/TaiLieuOnThiOfficial/
 **3.** Big cities often face a **(28)** _______, especially during rush hours. The **(29)** _______ leads to overcrowded streets and limited living space. People also have to breathe **(30)** _______ every day, which can cause serious health problems. To fix these issues, better urban planning and cleaner transportation are needed.
 
 **Question 28.** A. serious problem traffic
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. serious traffic problem
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. problem serious traffic
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. traffic serious problem
+          B. serious traffic problem
+          C. problem serious traffic
+          D. traffic serious problem
 **Question 29.** A. high population density
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. high density population
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. density high population
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. population high density
+          B. high density population
+          C. density high population
+          D. population high density
 **Question 30.** A. highly air polluted
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B. polluted highly air
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C. polluted air highly
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D. highly polluted air
+          B. polluted highly air
+          C. polluted air highly
+          D. highly polluted air
 
 *Vì quyền lợi chính đáng của chính các em, TUYỆT ĐỐI KHÔNG chia sẻ tài liệu ĐỘC QUYỀN này cho người khác!*
 View Full: https://bit.ly/ComBoLuyenThiTHPTQG

@@ -29,6 +29,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_train_sample.py` - Sanity check script to run token prediction on a real training sample.
   - `count_tokens.py` - Counts input and output tokens for cost estimation.
   - `detect_and_clean_options.py` - Utility to test option prefix cleaning regex.
+  - `replace_html_entity.py` - General recursive text replacement utility for generated outputs, including `&nbsp;` normalization in `real_data_annotator/out`.
   - `test_generation.py` - Simple end-to-end question generation test script.
   - `inspect_local_data.py` - Inspects local generated exams and dataset splits.
   - `count_ordering_in_dataset.py` - Counts and analyzes ordering questions in dataset splits.
@@ -42,6 +43,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 - `real_data_annotator/` - Directory for real OCR data processing and annotation.
   - `pdf_converter.py` - Runs OCR on raw PDF files and extracts raw markdown text.
   - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
+  - `out/` - Generated OCR markdown outputs and intermediate annotated files used for cleanup and review.
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
   - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
