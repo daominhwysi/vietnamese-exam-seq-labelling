@@ -13,7 +13,10 @@ DEFAULT_QUESTION_PREFIXES = [
     "C{num}: ",
     "C{num}. ",
     "Q{num}: ",
-    "Q{num}. "
+    "Q{num}. ",
+    "{num}. ",
+    "{num}: ",
+    "{num}) "
 ]
 
 # Available styles for option prefixes

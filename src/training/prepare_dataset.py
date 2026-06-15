@@ -128,6 +128,67 @@ def align_tokens_to_spans(
             
     return labels
 
+def mask_latex_in_real_data(
+    raw_text: str,
+    spans: List[Dict[str, Any]],
+    placeholder: str,
+    mask_prob: float,
+    rng: random.Random
+) -> Tuple[str, List[Dict[str, Any]]]:
+    """
+    Finds LaTeX formulas ($...$ and $$...$$) in raw_text, masks them with placeholder with probability mask_prob,
+    and shifts span offsets accordingly.
+    """
+    if mask_prob <= 0.0 or not raw_text:
+        return raw_text, spans
+
+    pattern = re.compile(r"\$\$.*?\$\$|\$.*?\$", re.DOTALL)
+    matches = list(pattern.finditer(raw_text))
+    if not matches:
+        return raw_text, spans
+        
+    current_text = raw_text
+    new_spans = [dict(s) for s in spans]
+    
+    # Process from back to front to avoid shifting indices of earlier matches
+    for match in reversed(matches):
+        if rng.random() > mask_prob:
+            continue
+            
+        m_start, m_end = match.span()
+        diff = len(placeholder) - (m_end - m_start)
+        
+        # Replace in text
+        current_text = current_text[:m_start] + placeholder + current_text[m_end:]
+        
+        # Adjust spans
+        updated_spans = []
+        for span in new_spans:
+            s_start = span["start"]
+            s_end = span["end"]
+            
+            # If the span starts after the replaced segment, shift it
+            if s_start >= m_end:
+                span["start"] += diff
+                span["end"] += diff
+            # If the span starts before but ends after/during
+            elif s_start < m_start and s_end > m_end:
+                span["end"] += diff
+            # If the span is entirely within the masked LaTeX
+            elif s_start >= m_start and s_end <= m_end:
+                span["start"] = m_start
+                span["end"] = m_start + len(placeholder)
+            # If the span overlaps the beginning but not the end
+            elif s_start < m_start and s_end > m_start:
+                span["end"] = m_start + len(placeholder)
+            
+            if "text" in span:
+                span["text"] = current_text[span["start"]:span["end"]]
+            updated_spans.append(span)
+        new_spans = updated_spans
+        
+    return current_text, new_spans
+
 def process_exam_level(
     exam_data: Dict[str, Any],
     tokenizer: Any,
@@ -140,9 +201,20 @@ def process_exam_level(
     Reconstructs the full exam document, tokenizes it across multiple sliding window configs,
     aligns labels, and returns a list of prepared samples.
     """
-    exam_reconstructed = reconstruct_exam(exam_data, reconstructor_config)
-    raw_text = exam_reconstructed["raw_text"]
-    spans = exam_reconstructed["spans"]
+    if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
+        raw_text = exam_data["raw_text"]
+        spans = exam_data["spans"]
+        if reconstructor_config.latex_mask_prob > 0.0:
+            import hashlib
+            h = hashlib.md5((exam_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
+            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
+            raw_text, spans = mask_latex_in_real_data(
+                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
+            )
+    else:
+        exam_reconstructed = reconstruct_exam(exam_data, reconstructor_config)
+        raw_text = exam_reconstructed["raw_text"]
+        spans = exam_reconstructed["spans"]
     
     samples = []
     
@@ -197,9 +269,20 @@ def process_question_as_exam_level(
     """
     Treats an individual question as a mini-exam and tokenizes it using sliding window configs.
     """
-    q_reconstructed = reconstruct_question(q_data, reconstructor_config)
-    raw_text = q_reconstructed["raw_text"]
-    spans = q_reconstructed["spans"]
+    if q_data.get("is_real", False) and "raw_text" in q_data and "spans" in q_data:
+        raw_text = q_data["raw_text"]
+        spans = q_data["spans"]
+        if reconstructor_config.latex_mask_prob > 0.0:
+            import hashlib
+            h = hashlib.md5((q_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
+            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
+            raw_text, spans = mask_latex_in_real_data(
+                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
+            )
+    else:
+        q_reconstructed = reconstruct_question(q_data, reconstructor_config)
+        raw_text = q_reconstructed["raw_text"]
+        spans = q_reconstructed["spans"]
     
     samples = []
     
@@ -254,9 +337,20 @@ def process_single_question_legacy(
     """
     Legacy method for single question parsing (keeps original question-level split layout).
     """
-    q_reconstructed = reconstruct_question(q_data, reconstructor_config)
-    raw_text = q_reconstructed["raw_text"]
-    spans = q_reconstructed["spans"]
+    if q_data.get("is_real", False) and "raw_text" in q_data and "spans" in q_data:
+        raw_text = q_data["raw_text"]
+        spans = q_data["spans"]
+        if reconstructor_config.latex_mask_prob > 0.0:
+            import hashlib
+            h = hashlib.md5((q_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
+            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
+            raw_text, spans = mask_latex_in_real_data(
+                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
+            )
+    else:
+        q_reconstructed = reconstruct_question(q_data, reconstructor_config)
+        raw_text = q_reconstructed["raw_text"]
+        spans = q_reconstructed["spans"]
     
     tokenized = tokenizer(
         raw_text,
@@ -498,9 +592,12 @@ def run_prepare_dataset(args):
         
     json_files = list(input_path.glob("question_*.json"))
     exam_files = list(input_path.glob("**/exam_*.json"))
-    if not json_files and not exam_files:
-        print(f"No question JSON files or exam JSON files found in '{args.input_dir}'. Please generate data first.")
+    real_exam_files = list(input_path.glob("**/real_exam_*.json"))
+    if not json_files and not exam_files and not real_exam_files:
+        print(f"No question JSON files, exam JSON files, or real exam JSON files found in '{args.input_dir}'. Please generate data first.")
         sys.exit(1)
+    # Combine real exams into exam_files list
+    exam_files.extend(real_exam_files)
         
     try:
         from transformers import AutoTokenizer

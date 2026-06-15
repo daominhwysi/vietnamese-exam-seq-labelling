@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 EXAMS_DIR = Path("output/exams")
+REAL_EXAMS_DIR = Path("output/real_exams")
 DATASET_DIR = Path("output/dataset")
 
 def load_or_compute_dataset_stats(split: str) -> Dict[str, Any]:
@@ -85,24 +86,33 @@ def load_or_compute_dataset_stats(split: str) -> Dict[str, Any]:
 
 
 def get_all_exams() -> List[Dict[str, Any]]:
-    if not EXAMS_DIR.exists():
+    exam_files = []
+    if EXAMS_DIR.exists():
+        exam_files.extend(list(EXAMS_DIR.glob("*.json")))
+    if REAL_EXAMS_DIR.exists():
+        exam_files.extend(list(REAL_EXAMS_DIR.glob("*.json")))
+        
+    if not exam_files:
         return []
     
     exams = []
-    for file in EXAMS_DIR.glob("*.json"):
+    for file in exam_files:
         try:
             with open(file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 
             # Count total questions
-            q_count = 0
-            sections = data.get("sections", {})
-            for sec_name, q_list in sections.items():
-                for q in q_list:
-                    if q.get("is_group"):
-                        q_count += len(q.get("questions", []))
-                    else:
-                        q_count += 1
+            if data.get("is_real", False):
+                q_count = 1
+            else:
+                q_count = 0
+                sections = data.get("sections", {})
+                for sec_name, q_list in sections.items():
+                    for q in q_list:
+                        if q.get("is_group"):
+                            q_count += len(q.get("questions", []))
+                        else:
+                            q_count += 1
                         
             # Format datetime
             created_str = data.get("created_at", "")
@@ -126,7 +136,7 @@ def get_all_exams() -> List[Dict[str, Any]]:
             print(f"Error loading exam {file}: {e}")
             
     # Sort by created time descending
-    exams.sort(key=lambda x: x["raw_created_at"], reverse=True)
+    exams.sort(key=lambda x: x["raw_created_at"] or "", reverse=True)
     return exams
 
 @app.get("/")
@@ -164,96 +174,121 @@ def get_random_exam():
 
 @app.get("/exam/{exam_id}")
 def view_exam(request: Request, exam_id: str):
-    # Find the file with matching exam_id
-    if not EXAMS_DIR.exists():
-        raise HTTPException(status_code=404, detail="Exams directory not found.")
-        
+    # Find the file with matching exam_id in either exams or real_exams folder
     target_file = None
-    for file in EXAMS_DIR.glob("*.json"):
-        if exam_id in file.name:
-            target_file = file
-            break
-            
+    search_dirs = [EXAMS_DIR, REAL_EXAMS_DIR]
+    for directory in search_dirs:
+        if directory.exists():
+            for file in directory.glob("*.json"):
+                if exam_id in file.name:
+                    target_file = file
+                    break
+            if target_file:
+                break
+                
     if not target_file:
         raise HTTPException(status_code=404, detail=f"Exam with ID {exam_id} not found.")
         
     with open(target_file, "r", encoding="utf-8") as f:
         exam_data = json.load(f)
         
-    # Standardize question formats, sequential numbering, and run reconstructor for span highlights
-    sections = exam_data.get("sections", {})
-    reconstructed_sections = {}
-    
-    q_num = 1
-    for section_title, questions in sections.items():
-        reconstructed_questions = []
-        for q in questions:
-            stable_seed = q.get("context", "") or q.get("stem", "") or str(q)
-            is_english = q.get("subject") == "english" or exam_data.get("subject") == "english"
-            config = ReconstructorConfig(
-                randomize_q_num=False, 
-                include_span_text=True, 
-                seed=stable_seed,
-                inline_option_prob=0.50 if is_english else 0.10,
-                typo_rate=0.02,
-                space_noise_rate=0.15,
-                latex_mask_prob=0.50,
-                enable_permutations=False,
-                option_drop_prob=0.05,
-                casing_noise_prob=0.10,
-                synonym_swap_prob=0.10,
-                formatting_noise_prob=0.10,
-                min_inline_spaces=4,
-                max_inline_spaces=12,
-                min_inline_tabs=1,
-                max_inline_tabs=2
-            )
-            
-            # Reconstruct to get raw_text and spans
-            q_reconstructed = reconstruct_question(q, config=config, start_q_num=q_num)
-            
-            # Normalize `<blank/>` to `<blank></blank>` for safe HTML rendering without layout breakage in standard view
-            if q_reconstructed.get("subject") == "english":
-                import re
-                def normalize_blanks(text: str) -> str:
-                    if not text:
-                        return text
-                    return re.sub(r'<\s*blank\s*/?\s*>', '<blank></blank>', text)
-                
-                if "stem" in q_reconstructed:
-                    q_reconstructed["stem"] = normalize_blanks(q_reconstructed["stem"])
-                if "context" in q_reconstructed:
-                    q_reconstructed["context"] = normalize_blanks(q_reconstructed["context"])
-                if "questions" in q_reconstructed:
-                    q_reconstructed["questions"] = [dict(sub) for sub in q_reconstructed["questions"]]
-                    for sub_q in q_reconstructed["questions"]:
-                        if "stem" in sub_q:
-                            sub_q["stem"] = normalize_blanks(sub_q["stem"])
-            
-            # Record starting and ending question numbers for this item
-            q_reconstructed["start_number"] = q_num
-            if q.get("is_group"):
-                sub_q_count = len(q.get("questions", []))
-                q_reconstructed["end_number"] = q_num + sub_q_count - 1
-                q_num += sub_q_count
-            else:
-                q_reconstructed["end_number"] = q_num
-                q_num += 1
-                
-            # If ordering question, generate choices based on stable seed
-            if q.get("question_type") == "ordering":
-                rng = get_stable_random(stable_seed)
-                item_labels = ["a", "b", "c", "d", "e", "f", "g", "h"][:len(q.get("options", []))]
-                choices = generate_ordering_choices(item_labels, " – ", rng)
-                q_reconstructed["ordering_choices"] = choices
-                
-            reconstructed_questions.append(q_reconstructed)
-            
-        reconstructed_sections[section_title] = reconstructed_questions
+    if exam_data.get("is_real", False):
+        # Format real exams as a single question under a dummy section
+        exam_data["sections"] = {
+            "ĐỀ THI THỰC TẾ (REAL EXAM PAPER)": [
+                {
+                    "is_group": False,
+                    "stem": exam_data.get("raw_text", ""),
+                    "options": [],
+                    "answer": "",
+                    "explanation": "Đây là đề thi thực tế đã được gán nhãn OCR.",
+                    "subject": exam_data.get("subject"),
+                    "grade": exam_data.get("grade"),
+                    "question_type": "real_exam",
+                    "raw_text": exam_data.get("raw_text", ""),
+                    "spans": exam_data.get("spans", []),
+                    "start_number": 1,
+                    "end_number": 1
+                }
+            ]
+        }
+        exam_data["total_questions"] = 1
+        exam_data["subject_display"] = SUBJECT_DISPLAY.get(exam_data.get("subject"), exam_data.get("subject"))
+    else:
+        # Standard question reconstruction loop
+        sections = exam_data.get("sections", {})
+        reconstructed_sections = {}
         
-    exam_data["sections"] = reconstructed_sections
-    exam_data["total_questions"] = q_num - 1
-    exam_data["subject_display"] = SUBJECT_DISPLAY.get(exam_data.get("subject"), exam_data.get("subject"))
+        q_num = 1
+        for section_title, questions in sections.items():
+            reconstructed_questions = []
+            for q in questions:
+                stable_seed = q.get("context", "") or q.get("stem", "") or str(q)
+                is_english = q.get("subject") == "english" or exam_data.get("subject") == "english"
+                config = ReconstructorConfig(
+                    randomize_q_num=False, 
+                    include_span_text=True, 
+                    seed=stable_seed,
+                    inline_option_prob=0.50 if is_english else 0.10,
+                    typo_rate=0.02,
+                    space_noise_rate=0.15,
+                    latex_mask_prob=0.50,
+                    enable_permutations=False,
+                    option_drop_prob=0.05,
+                    casing_noise_prob=0.10,
+                    synonym_swap_prob=0.10,
+                    formatting_noise_prob=0.10,
+                    min_inline_spaces=4,
+                    max_inline_spaces=12,
+                    min_inline_tabs=1,
+                    max_inline_tabs=2
+                )
+                
+                # Reconstruct to get raw_text and spans
+                q_reconstructed = reconstruct_question(q, config=config, start_q_num=q_num)
+                
+                # Normalize `<blank/>` to `<blank></blank>` for safe HTML rendering without layout breakage in standard view
+                if q_reconstructed.get("subject") == "english":
+                    import re
+                    def normalize_blanks(text: str) -> str:
+                        if not text:
+                            return text
+                        return re.sub(r'<\s*blank\s*/?\s*>', '<blank></blank>', text)
+                    
+                    if "stem" in q_reconstructed:
+                        q_reconstructed["stem"] = normalize_blanks(q_reconstructed["stem"])
+                    if "context" in q_reconstructed:
+                        q_reconstructed["context"] = normalize_blanks(q_reconstructed["context"])
+                    if "questions" in q_reconstructed:
+                        q_reconstructed["questions"] = [dict(sub) for sub in q_reconstructed["questions"]]
+                        for sub_q in q_reconstructed["questions"]:
+                            if "stem" in sub_q:
+                                sub_q["stem"] = normalize_blanks(sub_q["stem"])
+                
+                # Record starting and ending question numbers for this item
+                q_reconstructed["start_number"] = q_num
+                if q.get("is_group"):
+                    sub_q_count = len(q.get("questions", []))
+                    q_reconstructed["end_number"] = q_num + sub_q_count - 1
+                    q_num += sub_q_count
+                else:
+                    q_reconstructed["end_number"] = q_num
+                    q_num += 1
+                    
+                # If ordering question, generate choices based on stable seed
+                if q.get("question_type") == "ordering":
+                    rng = get_stable_random(stable_seed)
+                    item_labels = ["a", "b", "c", "d", "e", "f", "g", "h"][:len(q.get("options", []))]
+                    choices = generate_ordering_choices(item_labels, " – ", rng)
+                    q_reconstructed["ordering_choices"] = choices
+                    
+                reconstructed_questions.append(q_reconstructed)
+                
+            reconstructed_sections[section_title] = reconstructed_questions
+            
+        exam_data["sections"] = reconstructed_sections
+        exam_data["total_questions"] = q_num - 1
+        exam_data["subject_display"] = SUBJECT_DISPLAY.get(exam_data.get("subject"), exam_data.get("subject"))
     
     return templates.TemplateResponse(
         request=request,

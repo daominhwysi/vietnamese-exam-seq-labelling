@@ -33,10 +33,14 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `inspect_local_data.py` - Inspects local generated exams and dataset splits.
   - `count_ordering_in_dataset.py` - Counts and analyzes ordering questions in dataset splits.
   - `inspect_inline.py` - Checks for inline formatted option sequences in dataset splits.
+  - `incremental_train.py` - Performs incremental/continual training on an existing adapter model.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
   - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`).
+- `real_data_annotator/` - Directory for real OCR data processing and annotation.
+  - `pdf_converter.py` - Runs OCR on raw PDF files and extracts raw markdown text.
+  - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
   - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
