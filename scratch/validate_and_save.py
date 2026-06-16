@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Tuple, List, Dict, Any
 
 def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
-    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "instruction"}
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "section"}
     raw_chars = []
     spans = []
 

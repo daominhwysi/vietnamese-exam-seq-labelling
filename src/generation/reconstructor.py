@@ -611,7 +611,7 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
         if config.formatting_noise_prob > 0.0 and rng.random() < config.formatting_noise_prob:
             sec_title_text = apply_formatting_tag_noise(sec_title_text.strip(), 1.0, rng) + "\n"
             
-        append_document_segment(sec_title_text, "instruction")
+        append_document_segment(sec_title_text, "section")
         append_document_segment(config.separator_stem_options, "separator")
         
         questions_list = list(questions)

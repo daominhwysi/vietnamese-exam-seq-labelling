@@ -23,7 +23,7 @@ BASE_TAGS = [
     "option_label",
     "option_text",
     "context",
-    "instruction"
+    "section"
 ]
 
 def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:

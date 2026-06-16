@@ -33,7 +33,7 @@ You MUST wrap the following entities:
 3. <option_label>...</option_label>: Wrap options letters/prefixes or sub-question letters/prefixes (e.g. "A.", "B.", "C.", "D.", "a)", "b)", "c)", "d)", "a.", "b.", "c.", "d.").
 4. <option_text>...</option_text>: Wrap the textual content of options or sub-questions (e.g., the requirement/proof statement of part a, b, etc.).
 5. <context>...</context>: Wrap the shared passage/context block in group questions (passages, reading texts, shared diagrams description). Do NOT use context for standard question introductions that have parts a), b), c) treated as options.
-6. <instruction>...</instruction>: Wrap section headers, subheaders, and directions (e.g., "PHẦN I. Câu trắc nghiệm...", "Mark the letter A, B, C, or D...", "Phần II: Đúng sai", "Đọc đoạn văn sau và trả lời...").
+6. <section>...</section>: Wrap section headers, subheaders, and directions (e.g., "PHẦN I. Câu trắc nghiệm...", "Mark the letter A, B, C, or D...", "Phần II: Đúng sai", "Đọc đoạn văn sau và trả lời...").
 
 CRITICAL RULES:
 1. Do NOT modify, correct, rephrase, or change any part of the input text. Preserve all spelling mistakes, typos, symbols, page markers (like "<|page|>Page X"), LaTeX formulas (enclosed in $...$ or $$...$$), and formatting exactly as they are in the input. ONLY insert the opening and closing XML tags.
@@ -110,7 +110,7 @@ In today's digital age, Vietnamese young people are depending on the virtual wor
 </think><question_label>**Question 1.**</question_label> <stem>Choose the word whose underlined part is pronounced differently:</stem>
     <option_label>A.</option_label> <option_text>fini<u>sh</u>ed</option_text>    <option_label>B.</option_label> <option_text>expla<u>i</u>ned</option_text>
 
-<instruction>*Read the passage and choose the correct answer:*</instruction>
+<section>*Read the passage and choose the correct answer:*</section>
 <context>In today's digital age, Vietnamese young people are depending on the virtual world.</context>
 <question_label>**Question 2.**</question_label> <stem>What is the main topic of the passage?</stem>
     <option_label>A.</option_label> <option_text>Tech trends.</option_text>    <option_label>B.</option_label> <option_text>Virtual reality.</option_text>
@@ -180,6 +180,59 @@ Câu 3. Kim loại nào dưới đây hoạt động hóa học mạnh nhất?
 | <option_label>C.</option_label> <option_text>Cu</option_text> | <option_label>D.</option_label> <option_text>Zn</option_text> |
 
 --- HẾT ---
+
+---
+
+### Example 4: Sentence-Arrangement / Letter-Ordering Questions
+
+This type presents scrambled sentences (labeled a, b, c, … with lowercase letters) that must be rearranged into a coherent passage or letter. The MCQ choices (A, B, C, D) then give candidate orderings of those sentences.
+
+#### Input:
+**5.** Read the following letter and choose the option that shows the correct arrangement of the sentences to make a meaningful letter.
+
+Dear Minh,
+a. The contest is about whether technology helps or harms human connection.
+b. I've seen people at lunch staring at those tiny screens without saying a word.
+c. What's your opinion on this? I'm excited to hear from you.
+d. I noticed a poster near the school gate about a debate competition.
+e. It's an interesting topic, considering how often we text but rarely talk.
+Sincerely,
+
+    A. d – a – e – b – c     B. c – d – b – a – e     C. e – d – c – a – b     D. d – e – c – b – a
+
+#### Output:
+<think>
+**Document Structure Analysis:**
+- Subject: English letter-ordering question.
+- Layout: A question label "**5.**" followed by a stem directing the reader to arrange sentences. Then a partial letter frame ("Dear Minh," / "Sincerely,") with five scrambled sentences labeled a–e, followed by four MCQ answer choices A–D showing possible orderings.
+
+**Layout & Tagging Strategy by Section:**
+- "**5.**" → Tag as <question_label>.
+- "Read the following letter and choose the option that shows the correct arrangement of the sentences to make a meaningful letter." → Tag as <stem>.
+- "Dear Minh," → Do NOT tag. It is a letter salutation / frame text, not an entity.
+- Lowercase sentence labels "a.", "b.", "c.", "d.", "e." → Tag each as <option_label>.
+- Each sentence text after the label → Tag as <option_text>.
+- "Sincerely," → Do NOT tag. It is a letter closing / frame text, not an entity.
+- Uppercase MCQ prefixes "A.", "B.", "C.", "D." → Tag each as <option_label>.
+- Each ordering sequence "d – a – e – b – c", etc. → Tag as <option_text>.
+
+**Sequential Verification:**
+- Ensure "Dear Minh," and "Sincerely," remain completely outside all tags.
+- Ensure no nesting: every open tag is immediately closed before the next opens.
+- All whitespace and inline spacing between inline MCQ options is preserved exactly.
+</think><question_label>**5.**</question_label> <stem>Read the following letter and choose the option that shows the correct arrangement of the sentences to make a meaningful letter.</stem>
+
+Dear Minh,
+<option_label>a.</option_label> <option_text>The contest is about whether technology helps or harms human connection.</option_text>
+<option_label>b.</option_label> <option_text>I've seen people at lunch staring at those tiny screens without saying a word.</option_text>
+<option_label>c.</option_label> <option_text>What's your opinion on this? I'm excited to hear from you.</option_text>
+<option_label>d.</option_label> <option_text>I noticed a poster near the school gate about a debate competition.</option_text>
+<option_label>e.</option_label> <option_text>It's an interesting topic, considering how often we text but rarely talk.</option_text>
+Sincerely,
+
+    <option_label>A.</option_label> <option_text>d – a – e – b – c</option_text>     <option_label>B.</option_label> <option_text>c – d – b – a – e</option_text>     <option_label>C.</option_label> <option_text>e – d – c – a – b</option_text>     <option_label>D.</option_label> <option_text>d – e – c – b – a</option_text>
+
+--- HẾT ---
 """
 
 
@@ -201,7 +254,7 @@ def clean_llm_response(text: str) -> str:
 
 
 def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
-    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "instruction"}
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "section"}
     raw_chars = []
     spans = []
 
@@ -422,7 +475,12 @@ def main():
         rel_sig = str(file_path.relative_to(input_path))
         path_hash = hashlib.md5(rel_sig.encode("utf-8")).hexdigest()[:8]
         out_filename = f"real_exam_{path_hash}.json"
-        out_file_path = output_path / out_filename
+
+        # Mirror the input subfolder structure under the output root
+        rel_subdir = file_path.relative_to(input_path).parent
+        out_subdir = output_path / rel_subdir
+        out_subdir.mkdir(parents=True, exist_ok=True)
+        out_file_path = out_subdir / out_filename
 
         if out_file_path.exists() and not args.force:
             print(
@@ -542,7 +600,7 @@ def main():
                             print(f"  Done. Prompt: {prompt_tokens} t, Reasoning: {reasoning_tokens} t, Output: {output_tokens} t")
 
                     # Save raw XML file for debugging (successful or ratio mismatch case)
-                    xml_out_file_path = output_path / f"real_exam_{path_hash}.xml"
+                    xml_out_file_path = out_subdir / f"real_exam_{path_hash}.xml"
                     with open(xml_out_file_path, "w", encoding="utf-8") as f:
                         f.write(raw_result)
                     print(f"  Saved raw XML for debugging to: {xml_out_file_path.name}")

@@ -49,8 +49,8 @@ class TestPrepareDataset(unittest.TestCase):
         self.assertIn("B-option_text", self.tag_to_id)
         self.assertEqual(self.tag_to_id["O"], 0)
         self.assertEqual(self.id_to_tag[0], "O")
-        self.assertIn("B-instruction", self.tag_to_id)
-        self.assertIn("I-instruction", self.tag_to_id)
+        self.assertIn("B-section", self.tag_to_id)
+        self.assertIn("I-section", self.tag_to_id)
         self.assertEqual(len(self.tag_to_id), 1 + 2 * 6)  # O + B/I for 6 tags
 
     def test_align_tokens_to_spans_basic(self):
