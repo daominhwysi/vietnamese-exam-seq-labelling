@@ -9,8 +9,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 def upload_dataset(token=None, repo_id=None):
     # Load environment variables from .env file
-    # By default, load_dotenv() looks for a .env file in the current working directory
-    load_dotenv()
+    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
 
     if not token:
         token = os.getenv("HF_TOKEN")

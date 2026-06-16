@@ -116,7 +116,8 @@ def generate_curriculum(
     subject: str,
     grade: int,
     model: Optional[str] = None,
-    thinking: Optional[bool] = None
+    thinking: Optional[bool] = None,
+    provider: Optional[str] = None,
 ) -> dict:
     """
     Calls the LLM to generate a curriculum structured with chapters, units, and problem types (Dạng)
@@ -203,6 +204,8 @@ Yêu cầu định dạng và quy tắc cú pháp JSON cực kỳ quan trọng:
         chat_kwargs["model"] = model
     if thinking is not None:
         chat_kwargs["thinking"] = thinking
+    if provider:
+        chat_kwargs["provider"] = provider
         
     response = chat(prompt=prompt, system=system_prompt, **chat_kwargs)
     cleaned_res = clean_json_response(response)
@@ -343,7 +346,7 @@ def map_cognitive_level_to_difficulty(level: str) -> str:
         return random.choice(["recognize", "comprehend", "low_application", "application", "high_application"])
 
 
-def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] = None, concurrency: int = 4):
+def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] = None, concurrency: int = 4, provider: Optional[str] = None):
     """Orchestrates concurrent curriculum generation for all subjects and grades [10-12]."""
     import concurrent.futures
     from src.generation.generator import Subject
@@ -354,6 +357,7 @@ def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] 
     print("=" * 60)
     print(f"Orchestrating concurrent curriculum generation for all subjects and grades [10-12]")
     print(f"Model: {model}")
+    print(f"Provider: {provider}")
     print(f"Thinking Level: {thinking}")
     print(f"Concurrency: {concurrency}")
     print(f"Subjects: {', '.join(subjects)}")
@@ -374,7 +378,8 @@ def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] 
                 subject=subj,
                 grade=grd,
                 model=model,
-                thinking=thinking
+                thinking=thinking,
+                provider=provider
             )
             print(f"[Curriculum Success] Subject={subj}, Grade={grd}")
             return True

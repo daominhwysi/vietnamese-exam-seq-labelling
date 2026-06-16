@@ -4,6 +4,7 @@ import os
 import random
 import re
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
 import fitz  # PyMuPDF
 from openai import OpenAI
@@ -13,7 +14,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 # Load environment variables from .env file
-load_dotenv()
+workspace_dir = Path(__file__).resolve().parent.parent
+load_dotenv(dotenv_path=workspace_dir / ".env")
 
 # Access the API key from environment variables
 api_key = os.environ.get("LLM_API_KEY")

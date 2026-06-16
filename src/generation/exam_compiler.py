@@ -446,6 +446,7 @@ def generate_single_exam(
     model: Optional[str] = None,
     thinking: Optional[bool] = None,
     concurrency: int = 8,
+    provider: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
     """
     Biên dịch và điều phối tạo đề thi hoàn chỉnh.
@@ -476,6 +477,7 @@ def generate_single_exam(
                         thinking=thinking,
                         question_type=qtype,
                         difficulty=diff,
+                        provider=provider,
                         **extra_filters,
                     )
                 ] = idx
@@ -537,6 +539,7 @@ def run_batch_exams_generator(
     concurrency: int = 8,
     subject: Optional[str] = None,
     grade: Optional[int] = None,
+    provider: Optional[str] = None,
 ):
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -585,6 +588,7 @@ def run_batch_exams_generator(
                 model=model,
                 thinking=thinking,
                 concurrency=concurrency,
+                provider=provider,
             )
 
             if exam_data:

@@ -76,6 +76,7 @@ def main():
     p_curr.add_argument("--subject", type=str, help="Subject slug (e.g. 'physics')")
     p_curr.add_argument("--grade", type=int, help="Grade level (e.g. 11)")
     p_curr.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
+    p_curr.add_argument("--provider", type=str, choices=["deepseek", "nvidia", "vilao"], default=None, help="LLM provider to use")
     p_curr.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_curr.add_argument("-c", "--concurrency", type=int, default=4, help="Number of parallel workers for concurrent generation")
 
@@ -111,6 +112,7 @@ def main():
     p_exam.add_argument("-n", "--num-exams", type=int, default=300, help="Number of exams to generate")
     p_exam.add_argument("-o", "--output-dir", type=str, default="output/exams", help="Output directory path")
     p_exam.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
+    p_exam.add_argument("--provider", type=str, choices=["deepseek", "nvidia", "vilao"], default=None, help="LLM provider to use")
     p_exam.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_exam.add_argument("-c", "--concurrency", type=int, default=8, help="Number of concurrent threads per exam")
     p_exam.add_argument("--subject", type=str, help="Filter generation for a specific subject")
@@ -192,12 +194,12 @@ def main():
         from src.generation.curriculum import generate_all_curricula
         thinking_val = None if args.thinking == "none" else args.thinking
         if args.all:
-            generate_all_curricula(model=args.model, thinking=thinking_val, concurrency=args.concurrency)
+            generate_all_curricula(model=args.model, thinking=thinking_val, concurrency=args.concurrency, provider=args.provider)
         else:
             if not args.subject or not args.grade:
                 print("Error: Single curriculum generation requires both --subject and --grade parameters, or pass --all.")
                 sys.exit(1)
-            generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking_val)
+            generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking_val, provider=args.provider)
             print("Curriculum generation completed successfully.")
 
     elif args.command == "reconstruct":
@@ -239,7 +241,8 @@ def main():
             thinking=thinking_val,
             concurrency=args.concurrency,
             subject=args.subject,
-            grade=args.grade
+            grade=args.grade,
+            provider=args.provider
         )
 
     elif args.command == "prepare":

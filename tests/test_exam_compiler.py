@@ -128,7 +128,7 @@ class TestExamCompiler(unittest.TestCase):
         
         mock_get_curr.return_value = [("physics", 11)]
         import uuid
-        mock_gen_exam.side_effect = lambda subject, grade, model=None, thinking=None, concurrency=8: {
+        mock_gen_exam.side_effect = lambda subject, grade, **kwargs: {
             "exam_id": uuid.uuid4().hex[:8],
             "subject": subject.value,
             "grade": grade,

@@ -36,6 +36,8 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `inspect_inline.py` - Checks for inline formatted option sequences in dataset splits.
   - `incremental_train.py` - Performs incremental/continual training on an existing adapter model.
   - `get_balance.py` - Fetches DeepSeek API balance from the environment.
+  - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
+  - `inspect_exam_spans.py` - Inspects annotated exam tag distributions and span content previews.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
