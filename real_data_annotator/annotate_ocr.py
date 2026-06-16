@@ -41,7 +41,8 @@ CRITICAL RULES:
 3. Text that does not belong to any entity (e.g., page numbers, header information like "SỞ GD-ĐT...", "ĐỀ CHÍNH THỨC", horizontal separators) must NOT be wrapped in any tags. Keep it outside the XML tags.
 4. Output ONLY the annotated text. Do not write any markdown code blocks (e.g. ```xml), introduction, or conversational filler.
 5. You MUST output the ENTIRE input text from the very first character to the very last character. Do NOT omit, truncate, or skip any sections (such as headers, footers, page indicators, end markers like "HẾT", or reference tables/answer keys at the end). Everything that is not tagged must still be outputted exactly as it is in the input, outside of XML tags.
-6. Structure your reasoning in the `<think>` block systematically using this framework:
+6. **ORDERING QUESTIONS (câu sắp xếp / arrangement)**: When a question asks you to arrange items into the correct order, the scrambled items themselves (labeled a. b. c. d. e. or similar lowercase letters) are NOT options — they are the material to be arranged. You MUST include ALL scrambled items (plus any surrounding introductory/closing text like "Dear...", "Sincerely,") inside a SINGLE <stem> tag. Only the final lettered choices (A. B. C. D.) showing the ordering sequences (e.g. "d – a – e – b – c") are real options and should be tagged as <option_label>/<option_text>. The KEY signal is: if option texts contain dash-separated letter sequences (e.g. "b – d – a – c – e"), it is an ordering question.
+7. Structure your reasoning in the `<think>` block systematically using this framework:
    - **Document Structure**: Briefly state the overall exam sections, formatting style (e.g. standard layout, inline options, tables, list items), and presence of shared contexts/passages.
    - **Edge Cases & Ambiguities**: Identify tricky layouts (e.g., table cells, arrangement questions, sub-questions inside stems, non-annotated elements like page indicators) and explicitly plan how to handle them.
    - **Sequential Verification plan**: Outline the tagging sequence to ensure no tags nest, all open tags close, and every single character of the original text is preserved exactly.
@@ -183,13 +184,10 @@ Câu 3. Kim loại nào dưới đây hoạt động hóa học mạnh nhất?
 
 ---
 
-### Example 4: Sentence-Arrangement / Letter-Ordering Questions
-
-This type presents scrambled sentences (labeled a, b, c, … with lowercase letters) that must be rearranged into a coherent passage or letter. The MCQ choices (A, B, C, D) then give candidate orderings of those sentences.
+### Example 4: Ordering / Arrangement Question (câu sắp xếp)
 
 #### Input:
-**5.** Read the following letter and choose the option that shows the correct arrangement of the sentences to make a meaningful letter.
-
+**5.** 
 Dear Minh,
 a. The contest is about whether technology helps or harms human connection.
 b. I've seen people at lunch staring at those tiny screens without saying a word.
@@ -197,43 +195,33 @@ c. What's your opinion on this? I'm excited to hear from you.
 d. I noticed a poster near the school gate about a debate competition.
 e. It's an interesting topic, considering how often we text but rarely talk.
 Sincerely,
-
-    A. d – a – e – b – c     B. c – d – b – a – e     C. e – d – c – a – b     D. d – e – c – b – a
+A. d – a – e – b – c     B. c – d – b – a – e     C. e – d – c – a – b     D. d – e – c – b – a
 
 #### Output:
 <think>
 **Document Structure Analysis:**
-- Subject: English letter-ordering question.
-- Layout: A question label "**5.**" followed by a stem directing the reader to arrange sentences. Then a partial letter frame ("Dear Minh," / "Sincerely,") with five scrambled sentences labeled a–e, followed by four MCQ answer choices A–D showing possible orderings.
+- Subject: English. An ordering/arrangement question (câu sắp xếp) where scrambled sentences a–e must be placed in the correct order to form a coherent letter.
+- The answer choices A–D show dash-separated sequences (e.g. "d – a – e – b – c"), which is the definitive signal this is an ordering question.
 
-**Layout & Tagging Strategy by Section:**
-- "**5.**" → Tag as <question_label>.
-- "Read the following letter and choose the option that shows the correct arrangement of the sentences to make a meaningful letter." → Tag as <stem>.
-- "Dear Minh," → Do NOT tag. It is a letter salutation / frame text, not an entity.
-- Lowercase sentence labels "a.", "b.", "c.", "d.", "e." → Tag each as <option_label>.
-- Each sentence text after the label → Tag as <option_text>.
-- "Sincerely," → Do NOT tag. It is a letter closing / frame text, not an entity.
-- Uppercase MCQ prefixes "A.", "B.", "C.", "D." → Tag each as <option_label>.
-- Each ordering sequence "d – a – e – b – c", etc. → Tag as <option_text>.
+**Edge Cases & Ambiguities:**
+- The items labeled a. b. c. d. e. look like option_label/option_text, but they are NOT. They are the SCRAMBLED MATERIAL to be arranged. They must be wrapped entirely inside a single <stem> tag together with the letter salutation "Dear Minh," and sign-off "Sincerely,".
+- Only the uppercase A. B. C. D. with dash-sequence values are real answer options → <option_label>/<option_text>.
 
 **Sequential Verification:**
-- Ensure "Dear Minh," and "Sincerely," remain completely outside all tags.
-- Ensure no nesting: every open tag is immediately closed before the next opens.
-- All whitespace and inline spacing between inline MCQ options is preserved exactly.
-</think><question_label>**5.**</question_label> <stem>Read the following letter and choose the option that shows the correct arrangement of the sentences to make a meaningful letter.</stem>
-
-Dear Minh,
-<option_label>a.</option_label> <option_text>The contest is about whether technology helps or harms human connection.</option_text>
-<option_label>b.</option_label> <option_text>I've seen people at lunch staring at those tiny screens without saying a word.</option_text>
-<option_label>c.</option_label> <option_text>What's your opinion on this? I'm excited to hear from you.</option_text>
-<option_label>d.</option_label> <option_text>I noticed a poster near the school gate about a debate competition.</option_text>
-<option_label>e.</option_label> <option_text>It's an interesting topic, considering how often we text but rarely talk.</option_text>
-Sincerely,
-
-    <option_label>A.</option_label> <option_text>d – a – e – b – c</option_text>     <option_label>B.</option_label> <option_text>c – d – b – a – e</option_text>     <option_label>C.</option_label> <option_text>e – d – c – a – b</option_text>     <option_label>D.</option_label> <option_text>d – e – c – b – a</option_text>
-
---- HẾT ---
+- question_label: "**5.**"
+- stem: everything from "Dear Minh," through "Sincerely," (including a. b. c. d. e. items)
+- option_label/option_text: A–D with their dash-sequences.
+</think><question_label>**5.**</question_label>
+<stem>Dear Minh,
+a. The contest is about whether technology helps or harms human connection.
+b. I've seen people at lunch staring at those tiny screens without saying a word.
+c. What's your opinion on this? I'm excited to hear from you.
+d. I noticed a poster near the school gate about a debate competition.
+e. It's an interesting topic, considering how often we text but rarely talk.
+Sincerely,</stem>
+<option_label>A.</option_label> <option_text>d – a – e – b – c</option_text>     <option_label>B.</option_label> <option_text>c – d – b – a – e</option_text>     <option_label>C.</option_label> <option_text>e – d – c – a – b</option_text>     <option_label>D.</option_label> <option_text>d – e – c – b – a</option_text>
 """
+
 
 
 def clean_llm_response(text: str) -> str:
@@ -475,12 +463,7 @@ def main():
         rel_sig = str(file_path.relative_to(input_path))
         path_hash = hashlib.md5(rel_sig.encode("utf-8")).hexdigest()[:8]
         out_filename = f"real_exam_{path_hash}.json"
-
-        # Mirror the input subfolder structure under the output root
-        rel_subdir = file_path.relative_to(input_path).parent
-        out_subdir = output_path / rel_subdir
-        out_subdir.mkdir(parents=True, exist_ok=True)
-        out_file_path = out_subdir / out_filename
+        out_file_path = output_path / out_filename
 
         if out_file_path.exists() and not args.force:
             print(
@@ -600,7 +583,7 @@ def main():
                             print(f"  Done. Prompt: {prompt_tokens} t, Reasoning: {reasoning_tokens} t, Output: {output_tokens} t")
 
                     # Save raw XML file for debugging (successful or ratio mismatch case)
-                    xml_out_file_path = out_subdir / f"real_exam_{path_hash}.xml"
+                    xml_out_file_path = output_path / f"real_exam_{path_hash}.xml"
                     with open(xml_out_file_path, "w", encoding="utf-8") as f:
                         f.write(raw_result)
                     print(f"  Saved raw XML for debugging to: {xml_out_file_path.name}")
