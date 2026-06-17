@@ -24,7 +24,7 @@ def main():
     raw_text = q_rec['raw_text']
     spans = q_rec['spans']
 
-    tokenizer = AutoTokenizer.from_pretrained('jhu-clsp/mmbert-base')
+    tokenizer = AutoTokenizer.from_pretrained('aisingapore/SEA-LION-ModernBERT-300M')
     special_tokens = ['<blank />', '<blank/>', '[BLANK]', '[LATEX]']
     tokenizer.add_special_tokens({'additional_special_tokens': special_tokens})
 

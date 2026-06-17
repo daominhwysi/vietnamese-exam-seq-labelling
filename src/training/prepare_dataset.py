@@ -34,6 +34,49 @@ def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
 
+def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
+    """
+    Converts raw_text + ground-truth character-level spans into an inline-tagged
+    XML string that matches the format produced by annotate_ocr.py:
+
+        <question_label>Câu 1.</question_label> <stem>Nội dung...</stem>
+
+    Spans are sorted by start offset. Untagged gaps between spans (page headers,
+    separators, etc.) are preserved verbatim outside any tag.
+    """
+    if not spans:
+        return raw_text
+
+    # Sort spans by start position; resolve overlaps by taking first occurrence
+    sorted_spans = sorted(spans, key=lambda s: s["start"])
+
+    result = []
+    cursor = 0
+
+    for span in sorted_spans:
+        start = span["start"]
+        end = span["end"]
+        label = span["label"]
+
+        # Skip malformed or already-passed spans
+        if end <= start or start < cursor:
+            continue
+
+        # Untagged gap before this span
+        if start > cursor:
+            result.append(raw_text[cursor:start])
+
+        # Tagged span content
+        span_text = raw_text[start:end]
+        result.append(f"<{label}>{span_text}</{label}>")
+        cursor = end
+
+    # Trailing untagged text
+    if cursor < len(raw_text):
+        result.append(raw_text[cursor:])
+
+    return "".join(result)
+
 def align_tokens_to_spans(
     offset_mapping: List[Tuple[int, int]], 
     spans: List[Dict[str, Any]], 
@@ -250,6 +293,7 @@ def process_exam_level(
                     "subject": exam_data.get("subject"),
                     "grade": exam_data.get("grade"),
                     "exam_id": exam_data.get("exam_id"),
+                    "is_real": exam_data.get("is_real", False),
                     "max_len": max_len,
                     "stride": stride,
                     "chunk_idx": chunk_idx,
@@ -319,6 +363,7 @@ def process_question_as_exam_level(
                     "grade": q_data.get("grade"),
                     "question_type": q_data.get("question_type"),
                     "difficulty": q_data.get("difficulty"),
+                    "is_real": q_data.get("is_real", False),
                     "max_len": max_len,
                     "stride": stride,
                     "chunk_idx": chunk_idx,
@@ -380,6 +425,7 @@ def process_single_question_legacy(
             "question_type": q_data.get("question_type"),
             "difficulty": q_data.get("difficulty"),
             "is_group": q_data.get("is_group", False),
+            "is_real": q_data.get("is_real", False),
             "chapter": q_data.get("chapter"),
             "unit": q_data.get("unit"),
             "problem_type_id": q_data.get("problem_type_id"),
@@ -446,8 +492,8 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="FacebookAI/xlm-roberta-base",
-        help="Hugging Face model / tokenizer name (default: 'FacebookAI/xlm-roberta-base')"
+        default="aisingapore/SEA-LION-ModernBERT-300M",
+        help="Hugging Face model / tokenizer name (default: 'aisingapore/SEA-LION-ModernBERT-300M')"
     )
     parser.add_argument(
         "--latex-placeholder",
@@ -658,14 +704,28 @@ def run_prepare_dataset(args):
         
     print(f"Processing data: found {len(json_files)} question file(s) and {len(exam_files)} exam file(s)...")
     processed_samples = []
-    
+
+    # Prepare xml output directory for annotated XML files
+    xml_output_path = output_path / "xml"
+    xml_output_path.mkdir(parents=True, exist_ok=True)
+
+    def _save_xml(stem: str, raw_text: str, spans: List[Dict[str, Any]]) -> None:
+        """Write ground-truth inline-tagged XML for a source file."""
+        try:
+            xml_content = spans_to_xml(raw_text, spans)
+            xml_file = xml_output_path / f"{stem}_annotated.xml"
+            with open(xml_file, "w", encoding="utf-8") as xf:
+                xf.write(xml_content)
+        except Exception as xe:
+            print(f"Warning: Could not write XML for '{stem}': {xe}")
+
     # 1. Process individual question files
     num_q_files = len(json_files)
     for q_idx, file_path in enumerate(json_files):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 q_data = json.load(f)
-                
+
             if args.exam_level:
                 samples = process_question_as_exam_level(q_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
                 for s in samples:
@@ -676,9 +736,17 @@ def run_prepare_dataset(args):
                 if sample:
                     sample["metadata"]["source_file"] = file_path.name
                     processed_samples.append(sample)
+
+            # Generate XML from ground-truth spans
+            try:
+                q_rec = reconstruct_question(q_data, ReconstructorConfig())
+                _save_xml(file_path.stem, q_rec["raw_text"], q_rec["spans"])
+            except Exception:
+                pass
+
         except Exception as e:
             print(f"Warning: Failed to process question {file_path.name}: {e}")
-            
+
         if (q_idx + 1) % 50 == 0 or (q_idx + 1) == num_q_files:
             print(f"[Progress] Processed {q_idx + 1}/{num_q_files} individual questions...")
             
@@ -689,16 +757,14 @@ def run_prepare_dataset(args):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 exam_data = json.load(f)
-            
+
             if args.exam_level:
-                # Compile exam level
                 samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
                 for s in samples:
                     s["metadata"]["source_file"] = file_path.name
                     processed_samples.append(s)
                     exam_q_count += 1
             else:
-                # Process exam at question level (legacy fallback)
                 sections = exam_data.get("sections", {})
                 for section_title, questions in sections.items():
                     for idx, q_data in enumerate(questions):
@@ -707,17 +773,29 @@ def run_prepare_dataset(args):
                             q_copy["subject"] = exam_data["subject"]
                         if "grade" not in q_copy and "grade" in exam_data:
                             q_copy["grade"] = exam_data["grade"]
-                            
+
                         sample = process_single_question_legacy(q_copy, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
                         if sample:
                             sample["metadata"]["source_file"] = f"{file_path.name}::{section_title}::q_{idx}"
                             processed_samples.append(sample)
                             exam_q_count += 1
+
+            # Generate XML from ground-truth spans (one XML per source exam)
+            try:
+                if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
+                    _save_xml(file_path.stem, exam_data["raw_text"], exam_data["spans"])
+                else:
+                    exam_rec = reconstruct_exam(exam_data, ReconstructorConfig())
+                    _save_xml(file_path.stem, exam_rec["raw_text"], exam_rec["spans"])
+            except Exception:
+                pass
+
         except Exception as e:
             print(f"Warning: Failed to process exam {file_path.name}: {e}")
-            
+
         if (exam_idx + 1) % 10 == 0 or (exam_idx + 1) == num_exam_files:
             print(f"[Progress] Processed {exam_idx + 1}/{num_exam_files} exams...")
+
             
     print(f"Successfully prepared {len(processed_samples)} training samples (sources include individual question files and compiled exam files).")
     

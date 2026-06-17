@@ -174,17 +174,30 @@ def get_random_exam():
 
 @app.get("/exam/{exam_id}")
 def view_exam(request: Request, exam_id: str):
-    # Find the file with matching exam_id in either exams or real_exams folder
+    # Find the file with matching exam_id in either exams or real_exams folder.
+    # Match against filename first (fast path), then fall back to reading exam_id
+    # from the JSON itself — needed because real exam filenames use the pattern
+    # "real_exam_<hash>.json" while the stored exam_id is "real_<hash>".
     target_file = None
     search_dirs = [EXAMS_DIR, REAL_EXAMS_DIR]
     for directory in search_dirs:
-        if directory.exists():
-            for file in directory.glob("*.json"):
-                if exam_id in file.name:
+        if not directory.exists():
+            continue
+        for file in directory.glob("*.json"):
+            if exam_id in file.name:
+                target_file = file
+                break
+            # Fallback: peek inside the file to check its exam_id field
+            try:
+                with open(file, "r", encoding="utf-8") as _f:
+                    _data = json.load(_f)
+                if _data.get("exam_id") == exam_id:
                     target_file = file
                     break
-            if target_file:
-                break
+            except Exception:
+                continue
+        if target_file:
+            break
                 
     if not target_file:
         raise HTTPException(status_code=404, detail=f"Exam with ID {exam_id} not found.")

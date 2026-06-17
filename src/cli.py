@@ -176,10 +176,54 @@ def main():
     p_inf.add_argument("--model_dir", type=str, default="./results", help="Model adapter directory")
     p_inf.add_argument("--base_model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
 
-    # 8. upload
+    # 8. upload (dataset)
     p_upl = subparsers.add_parser("upload", help="Upload dataset splits to Hugging Face Hub")
     p_upl.add_argument("--token", type=str, help="HF Token")
-    p_upl.add_argument("--repo-id", type=str, help="HF repository target path")
+    p_upl.add_argument("--repo-id", type=str, help="HF dataset repository target path")
+    p_upl.add_argument(
+        "--dataset-dir",
+        type=str,
+        default="output/dataset",
+        help="Local folder with train/val/test JSONL splits and xml/ subfolder (default: 'output/dataset')",
+    )
+
+    # 8b. upload-model
+    p_upl_m = subparsers.add_parser("upload-model", help="Upload trained model/adapter checkpoint to Hugging Face Hub")
+    p_upl_m.add_argument(
+        "--model-dir",
+        type=str,
+        default="./results",
+        help="Path to the trained model/adapter directory (default: './results')",
+    )
+    p_upl_m.add_argument(
+        "--repo-id",
+        type=str,
+        default=None,
+        help="HF model repository ID, e.g. 'username/repo-name' (default: 'daominhwysi/vi-exam-seq-labeller')",
+    )
+    p_upl_m.add_argument(
+        "--token",
+        type=str,
+        default=None,
+        help="Hugging Face write token (falls back to HF_TOKEN env var)",
+    )
+    p_upl_m.add_argument(
+        "--private",
+        action="store_true",
+        help="Create the repository as private (default: public)",
+    )
+    p_upl_m.add_argument(
+        "--commit-message",
+        type=str,
+        default=None,
+        help="Custom commit message for the upload",
+    )
+    p_upl_m.add_argument(
+        "--dataset-repo",
+        type=str,
+        default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
+        help="HF dataset repo to reference in the model card (default: 'daominhwysi/synthetic-seq-labelling-vi-exam-v2')",
+    )
 
     # 9. visualize
     p_vis = subparsers.add_parser("visualize", help="Generate an HTML interactive visualizer for token span labels")
@@ -259,7 +303,22 @@ def main():
 
     elif args.command == "upload":
         from src.training.upload_dataset import upload_dataset
-        upload_dataset(token=args.token, repo_id=args.repo_id)
+        upload_dataset(
+            token=args.token,
+            repo_id=args.repo_id,
+            dataset_dir=args.dataset_dir,
+        )
+
+    elif args.command == "upload-model":
+        from src.training.upload_model import upload_model
+        upload_model(
+            model_dir=args.model_dir,
+            repo_id=args.repo_id,
+            token=args.token,
+            private=args.private,
+            commit_message=args.commit_message,
+            dataset_repo=args.dataset_repo,
+        )
 
     elif args.command == "visualize":
         from src.training.visualize_samples import generate_visualization

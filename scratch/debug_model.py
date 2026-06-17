@@ -38,7 +38,7 @@ def main():
         # Read base model from config
         with open(os.path.join(model_dir, "adapter_config.json"), "r") as f:
             config = json.load(f)
-            base_model_name = config.get("base_model_name_or_path", "jhu-clsp/mmbert-base")
+            base_model_name = config.get("base_model_name_or_path", "aisingapore/SEA-LION-ModernBERT-300M")
         print(f"Detected LoRA adapter. Loading base model: {base_model_name}")
         from peft import PeftModel
         base_model = AutoModelForTokenClassification.from_pretrained(

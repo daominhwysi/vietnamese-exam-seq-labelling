@@ -60,8 +60,9 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
     - `train.py` - Performs token-classification training with LoRA adapters (supports dynamic T4/BF16/FP16 precision fallback).
     - `inference.py` - Local inference utility using trained LoRA adapter models.
-    - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments and outputting human-readable token-class text mappings.
-    - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
+    - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments, human-readable token-class text mappings, and inline-tagged XML annotation files (`*_annotated.xml`).
+    - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub, auto-generates a dataset card (README.md), and optionally uploads XML annotation files under `xml/` in the dataset repo.
+    - `upload_model.py` - Uploads a trained LoRA adapter or full fine-tuned model checkpoint to the Hugging Face hub, auto-generates a model card (README.md) from `adapter_config.json` and `label_mapping.json`.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.
     - `main.py` - FastAPI application entry point, routing, exam/dataset stats computation.

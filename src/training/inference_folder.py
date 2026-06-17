@@ -90,6 +90,48 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
         
     return segments
 
+def segments_to_xml(raw_text: str, segments: list) -> str:
+    """
+    Reconstructs the full raw text with inline XML tags around each labeled segment,
+    matching the format produced by annotate_ocr.py:
+        <question_label>Câu 1.</question_label> <stem>Nội dung câu hỏi...</stem>
+
+    Untagged text between segments (e.g. page headers, separators) is preserved
+    verbatim outside any tag. Character offsets on the segments are used to find
+    the exact gap text from raw_text.
+    """
+    # Re-derive character offsets by searching for each segment's text in order.
+    # The segments list from extract_segments() only carries stripped text,
+    # so we locate each one forward from the previous match end.
+    result = []
+    cursor = 0
+
+    for seg in segments:
+        label = seg["label"]
+        text = seg["text"]
+        if not text:
+            continue
+
+        # Find next occurrence of this text starting from cursor
+        idx = raw_text.find(text, cursor)
+        if idx == -1:
+            # Fallback: skip this segment gracefully
+            continue
+
+        # Append any untagged gap text before this segment
+        if idx > cursor:
+            result.append(raw_text[cursor:idx])
+
+        # Append the tagged segment
+        result.append(f"<{label}>{text}</{label}>")
+        cursor = idx + len(text)
+
+    # Append any trailing untagged text after the last segment
+    if cursor < len(raw_text):
+        result.append(raw_text[cursor:])
+
+    return "".join(result)
+
 def main():
     parser = argparse.ArgumentParser(description="Batch inference for exam document segmentation from a folder of text files")
     parser.add_argument(
@@ -113,8 +155,8 @@ def main():
     parser.add_argument(
         "--base-model-name",
         type=str,
-        default="jhu-clsp/mmbert-base",
-        help="Base model/tokenizer name used (default: 'jhu-clsp/mmbert-base')"
+        default="aisingapore/SEA-LION-ModernBERT-300M",
+        help="Base model/tokenizer name used (default: 'aisingapore/SEA-LION-ModernBERT-300M')"
     )
     parser.add_argument(
         "--max-length",
@@ -342,6 +384,13 @@ def main():
                 
             print(f"  [Success] Saved structured JSON to '{output_json_file.name}'")
             print(f"  [Success] Saved readable predictions to '{output_txt_file.name}'")
+
+            # 3. Inline-tagged XML (matches annotate_ocr.py format)
+            xml_content = segments_to_xml(raw_text, segments)
+            output_xml_file = output_path / f"{file_path.stem}_annotated.xml"
+            with open(output_xml_file, "w", encoding="utf-8") as f:
+                f.write(xml_content)
+            print(f"  [Success] Saved annotated XML to '{output_xml_file.name}'")
             
         except Exception as e:
             print(f"  [Error] Failed to process '{file_path.name}': {e}")

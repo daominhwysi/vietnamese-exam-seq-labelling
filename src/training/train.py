@@ -152,6 +152,13 @@ def parse_args():
         action="store_true",
         help="Disable class weights for cross-entropy loss penalty"
     )
+    parser.add_argument(
+        "--real-upsample-factor",
+        type=float,
+        default=1.0,
+        help="Sampling weight multiplier for real exam samples relative to synthetic ones. "
+             "e.g. 5.0 means real samples are drawn 5x more often per epoch. Default: 1.0 (no upsampling)."
+    )
     return parser.parse_args()
 
 def main():
@@ -422,16 +429,77 @@ def run_train(args):
         else:
             print("Warning: No labels found in training dataset. Skipping class weights.")
 
-    # Define custom Trainer with class weights support
+    # Define custom Trainer with class weights + real-sample upsampling support
+    real_upsample_factor = getattr(args, "real_upsample_factor", 1.0)
+
     class WeightedTrainer(Trainer):
-        def __init__(self, class_weights=None, *args, **kwargs):
+        def __init__(self, class_weights=None, real_upsample_factor=1.0, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.class_weights = class_weights
+            self.real_upsample_factor = real_upsample_factor
+
+        def get_train_dataloader(self):
+            """Override to inject WeightedRandomSampler for real vs synthetic upsampling."""
+            if self.real_upsample_factor <= 1.0:
+                # No upsampling requested — use the default dataloader
+                return super().get_train_dataloader()
+
+            train_dataset = self.train_dataset
+            n_real = 0
+            n_synth = 0
+            sample_weights = []
+
+            # Build per-sample weights from raw dataset BEFORE column removal,
+            # since metadata (which holds is_real) is stripped afterwards.
+            for sample in train_dataset:
+                meta = sample.get("metadata", {})
+                # HuggingFace datasets may deserialize nested dicts as plain dicts
+                is_real = meta.get("is_real", False) if isinstance(meta, dict) else False
+                if is_real:
+                    sample_weights.append(self.real_upsample_factor)
+                    n_real += 1
+                else:
+                    sample_weights.append(1.0)
+                    n_synth += 1
+
+            print(
+                f"[WeightedSampler] Synth samples: {n_synth}, Real samples: {n_real} "
+                f"(effective weight: synth=1.0, real={self.real_upsample_factor})"
+            )
+
+            if n_real == 0:
+                print("[WeightedSampler] Warning: no real samples found in train split (is_real=False for all). "
+                      "Falling back to uniform sampling. Re-run prepare-dataset to propagate is_real metadata.")
+                return super().get_train_dataloader()
+
+            from torch.utils.data import WeightedRandomSampler, DataLoader
+
+            sampler = WeightedRandomSampler(
+                weights=sample_weights,
+                num_samples=len(sample_weights),
+                replacement=True,
+                generator=torch.Generator().manual_seed(self.args.seed),
+            )
+
+            # Mirror what Trainer.get_train_dataloader() does internally:
+            # strip non-model columns (tokens, tags, metadata) so the collator
+            # only sees tensor-compatible fields (input_ids, attention_mask, labels).
+            train_dataset = self._remove_unused_columns(train_dataset, description="training")
+
+            return DataLoader(
+                train_dataset,
+                batch_size=self.args.per_device_train_batch_size,
+                sampler=sampler,
+                collate_fn=self.data_collator,
+                drop_last=self.args.dataloader_drop_last,
+                num_workers=self.args.dataloader_num_workers,
+                pin_memory=self.args.dataloader_pin_memory,
+            )
 
         def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
             labels = inputs.get("labels")
             outputs = model(**inputs)
-            
+
             # Save past state if required (e.g. for evaluation metrics)
             if getattr(self.args, "past_index", -1) >= 0:
                 self._past = outputs[self.args.past_index]
@@ -462,7 +530,7 @@ def run_train(args):
     else:
         trainer_kwargs["tokenizer"] = tokenizer
 
-    trainer = WeightedTrainer(class_weights=class_weights, **trainer_kwargs)
+    trainer = WeightedTrainer(class_weights=class_weights, real_upsample_factor=real_upsample_factor, **trainer_kwargs)
 
     # 10.5 Apply EMA Callback if enabled
     if getattr(args, "ema_decay", 0.0) > 0.0:
