@@ -31,11 +31,67 @@ def load_label_mapping(model_dir):
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
 
+def is_valid_latex(content):
+    content_stripped = content.strip()
+    if not content_stripped:
+        return False
+    
+    # Case 1: Single variable or number (e.g. $x$, $a$, $1$)
+    if len(content_stripped) == 1:
+        return content_stripped.isalnum()
+        
+    # Case 2: Balanced braces, brackets, and parentheses
+    brackets = {'{': '}', '(': ')', '[': ']'}
+    stack = []
+    for char in content_stripped:
+        if char in brackets:
+            stack.append(char)
+        elif char in brackets.values():
+            if not stack:
+                return False
+            last = stack.pop()
+            if brackets[last] != char:
+                return False
+    if stack:
+        return False
+        
+    # Case 3: Contains standard math/latex character indicators
+    math_indicators = ['\\', '^', '_', '+', '-', '*', '/', '=', '<', '>', '{', '}', '[', ']']
+    if any(ind in content_stripped for ind in math_indicators):
+        return True
+        
+    # Case 4: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
+    if len(content_stripped) < 10 and re.match(r'^[a-zA-Z0-9]+$', content_stripped):
+        return True
+        
+    return False
+
 def get_latex_spans(text):
     spans = []
-    # Matches $$...$$ and $...$
-    for match in re.finditer(r"\$\$.*?\$\$|\$.*?\$", text, re.DOTALL):
-        spans.append(match.span())
+    # 1. Matches $$...$$ (display math)
+    for match in re.finditer(r"\$\$.*?\$\$", text, re.DOTALL):
+        # Verify content inside $$
+        content = match.group(0)[2:-2]
+        if is_valid_latex(content):
+            spans.append(match.span())
+        
+    # 2. Matches $...$ (inline math)
+    for match in re.finditer(r"\$(?!\s)[^\$\n]+?(?<!\s)\$", text):
+        span = match.span()
+        content = match.group(0)[1:-1]
+        if not is_valid_latex(content):
+            continue
+            
+        # Avoid overlapping with display math
+        overlap = False
+        for d_start, d_end in spans:
+            if not (span[1] <= d_start or span[0] >= d_end):
+                overlap = True
+                break
+        if not overlap:
+            spans.append(span)
+            
+    spans.sort(key=lambda x: x[0])
     return spans
 
 def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):

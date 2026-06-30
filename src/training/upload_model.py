@@ -7,6 +7,7 @@ Usage:
     pixi run upload-model
     python -m src.training.upload_model --model-dir ./results --repo-id <username>/<repo-name>
 """
+
 import os
 import sys
 import json
@@ -23,6 +24,7 @@ DEFAULT_DATASET_REPO = "daominhwysi/synthetic-seq-labelling-vi-exam-v2"
 # Model card (README.md)
 # ---------------------------------------------------------------------------
 
+
 def _generate_model_card(
     repo_id: str,
     base_model: str,
@@ -31,8 +33,7 @@ def _generate_model_card(
     dataset_repo: str,
 ) -> str:
     label_table_rows = "\n".join(
-        f"| {i} | `{label}` |"
-        for i, label in enumerate(label_list)
+        f"| {i} | `{label}` |" for i, label in enumerate(label_list)
     )
 
     lora_note = (
@@ -157,6 +158,7 @@ Training features:
 # Main upload function
 # ---------------------------------------------------------------------------
 
+
 def upload_model(
     model_dir: str = "./results",
     repo_id: str = None,
@@ -164,6 +166,8 @@ def upload_model(
     private: bool = False,
     commit_message: str = None,
     dataset_repo: str = DEFAULT_DATASET_REPO,
+    onnx_dir: str = "./output/onnx",
+    onnx_only: bool = False,
 ):
     """
     Upload the contents of `model_dir` to a Hugging Face model repository.
@@ -172,10 +176,12 @@ def upload_model(
     Supports both:
     - LoRA / PEFT adapter checkpoints (detected by adapter_config.json)
     - Full fine-tuned model checkpoints
+    - ONNX model files (uploaded under 'onnx/' folder if present)
     """
     # -- Resolve HF token --------------------------------------------------
     if not token:
         from dotenv import load_dotenv
+
         load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
         token = os.getenv("HF_TOKEN")
 
@@ -220,8 +226,17 @@ def upload_model(
 
     if not label_list:
         # Fallback to standard tag schema
-        base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
-        label_list = ["O"] + [f"{prefix}-{tag}" for tag in base_tags for prefix in ("B", "I")]
+        base_tags = [
+            "question_label",
+            "stem",
+            "option_label",
+            "option_text",
+            "context",
+            "section",
+        ]
+        label_list = ["O"] + [
+            f"{prefix}-{tag}" for tag in base_tags for prefix in ("B", "I")
+        ]
 
     # -- Resolve repo_id ---------------------------------------------------
     if not repo_id:
@@ -238,7 +253,13 @@ def upload_model(
 
     print(f"\nEnsuring model repository '{repo_id}' exists on Hugging Face Hub...")
     try:
-        create_repo(repo_id=repo_id, repo_type="model", token=token, private=private, exist_ok=True)
+        create_repo(
+            repo_id=repo_id,
+            repo_type="model",
+            token=token,
+            private=private,
+            exist_ok=True,
+        )
         print("Repository is ready.")
     except Exception as e:
         print(f"Notice during repository creation: {e}")
@@ -274,23 +295,53 @@ def upload_model(
         Path(tmp_readme_path).unlink(missing_ok=True)
 
     # -- Upload model files ------------------------------------------------
-    if not commit_message:
-        commit_message = f"Upload {checkpoint_type} for Vietnamese exam sequence labelling"
+    if not onnx_only:
+        if not commit_message:
+            commit_message = (
+                f"Upload {checkpoint_type} for Vietnamese exam sequence labelling"
+            )
 
-    print(f"\nUploading '{model_dir}' → '{repo_id}' ...")
-    print(f"  Commit message: {commit_message}")
+        print(f"\nUploading '{model_dir}' → '{repo_id}' ...")
+        print(f"  Commit message: {commit_message}")
 
-    try:
-        api.upload_folder(
-            folder_path=str(model_path),
-            repo_id=repo_id,
-            repo_type="model",
-            commit_message=commit_message,
+        try:
+            api.upload_folder(
+                folder_path=str(model_path),
+                repo_id=repo_id,
+                repo_type="model",
+                commit_message=commit_message,
+                ignore_patterns=["checkpoint-*", "**/checkpoint-*/**"],
+            )
+            print(f"Success! PyTorch/LoRA model uploaded.")
+        except Exception as e:
+            print(f"Error uploading model: {e}")
+            sys.exit(1)
+    else:
+        print(
+            "\nSkipping PyTorch/LoRA model checkpoint upload (--onnx-only specified)."
         )
-        print(f"\nSuccess! Model uploaded to: https://huggingface.co/{repo_id}")
-    except Exception as e:
-        print(f"Error uploading model: {e}")
-        sys.exit(1)
+
+    # -- Upload ONNX model files if present --------------------------------
+    if onnx_dir:
+        onnx_path = Path(onnx_dir)
+        if onnx_path.exists() and onnx_path.is_dir():
+            print(f"\nDetected ONNX model directory at '{onnx_dir}'.")
+            print(f"Uploading ONNX model files → '{repo_id}/onnx'...")
+            try:
+                api.upload_folder(
+                    folder_path=str(onnx_path),
+                    path_in_repo="onnx",
+                    repo_id=repo_id,
+                    repo_type="model",
+                    commit_message="Upload ONNX model format",
+                )
+                print("Success! ONNX model uploaded under 'onnx/' folder.")
+            except Exception as e:
+                print(f"Warning: Could not upload ONNX model: {e}")
+        else:
+            print(
+                f"\nONNX model directory '{onnx_dir}' not found. Skipping ONNX upload."
+            )
 
 
 def main():
@@ -332,6 +383,17 @@ def main():
         default=DEFAULT_DATASET_REPO,
         help=f"HF dataset repo to reference in the model card (default: '{DEFAULT_DATASET_REPO}')",
     )
+    parser.add_argument(
+        "--onnx-dir",
+        type=str,
+        default="./output/onnx",
+        help="Path to the exported ONNX model directory (default: './output/onnx')",
+    )
+    parser.add_argument(
+        "--onnx-only",
+        action="store_true",
+        help="Upload only the ONNX model files and README.md (skips PyTorch weights/adapter checkpoint)",
+    )
     args = parser.parse_args()
 
     upload_model(
@@ -341,6 +403,8 @@ def main():
         private=args.private,
         commit_message=args.commit_message,
         dataset_repo=args.dataset_repo,
+        onnx_dir=args.onnx_dir,
+        onnx_only=args.onnx_only,
     )
 
 

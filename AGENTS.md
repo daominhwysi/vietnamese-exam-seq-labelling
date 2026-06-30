@@ -38,6 +38,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `get_balance.py` - Fetches DeepSeek API balance from the environment.
   - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
   - `inspect_exam_spans.py` - Inspects annotated exam tag distributions and span content previews.
+  - `inference_onnx.py` - Runs sequence labeling inference using ONNX Runtime without PyTorch.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
@@ -61,12 +62,15 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `train.py` - Performs token-classification training with LoRA adapters (supports dynamic T4/BF16/FP16 precision fallback).
     - `inference.py` - Local inference utility using trained LoRA adapter models.
     - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments, human-readable token-class text mappings, and inline-tagged XML annotation files (`*_annotated.xml`).
+    - `export_onnx.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX using HF Optimum with dynamic dimensions.
     - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub, auto-generates a dataset card (README.md), and optionally uploads XML annotation files under `xml/` in the dataset repo.
     - `upload_model.py` - Uploads a trained LoRA adapter or full fine-tuned model checkpoint to the Hugging Face hub, auto-generates a model card (README.md) from `adapter_config.json` and `label_mapping.json`.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.
     - `main.py` - FastAPI application entry point, routing, exam/dataset stats computation.
-    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting, dataset dashboard, dataset viewer).
+    - `inference_helper.py` - Helper utilities for sequence labeling predictions (sliding window aggregation, LaTeX masking, offset mapping).
+    - `inference_app.py` - Standalone FastAPI web application running the model inference interface on port 8001.
+    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting, dataset dashboard, dataset viewer, and inference website).
 
 ---
 
@@ -83,6 +87,7 @@ This project uses **Pixi** for environment and dependency management.
 - To visualize token spans: `pixi run visualize`
 - To upload the dataset to HF Hub: `pixi run upload-dataset`
 - To run the web exam viewer: `pixi run view-exams`
+- To run the standalone web inference app: `pixi run view-inference`
 
 ## Environment Configuration
 
