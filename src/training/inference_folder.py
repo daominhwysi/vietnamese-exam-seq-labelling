@@ -23,7 +23,7 @@ def load_label_mapping(model_dir):
             return mapping["tag_to_id"], {int(k): v for k, v in mapping["id_to_tag"].items()}
             
     # Fallback to standard base tags mapping
-    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section", "explanation"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)
@@ -330,25 +330,16 @@ def main():
                 return_overflowing_tokens=True
             )
             
-            # Map modified offsets back to original raw_text character positions helper
-            def map_idx(idx):
-                mod_pos = 0
-                orig_pos = 0
-                for o_start, o_end in latex_spans:
-                    segment_len = o_start - orig_pos
-                    if idx <= mod_pos + segment_len:
-                        return orig_pos + (idx - mod_pos)
-                    orig_pos = o_end
-                    mod_pos += segment_len + len("[LATEX]")
-                    if idx < mod_pos:
-                        return o_start
-                return orig_pos + (idx - mod_pos)
-
+            # Offset mapper helper back to original raw_text character positions using efficient binary search
+            mapper = OffsetMapper(latex_spans)
+            map_idx = mapper.map_idx
+ 
             span_logits = {}
             span_tokens = {}
             
             num_chunks = len(tokenized["input_ids"])
             print(f"  Tokenized into {num_chunks} chunks.")
+            sigma = 64  # boundary margin for trapezoidal/Gaussian weight decay
             
             for chunk_idx in range(num_chunks):
                 chunk_input_ids = tokenized["input_ids"][chunk_idx]
@@ -373,6 +364,7 @@ def main():
                     
                 chunk_logits = outputs.logits[0].cpu()
                 chunk_tokens = tokenizer.convert_ids_to_tokens(chunk_input_ids)
+                chunk_len = len(chunk_input_ids)
                 
                 for i, (token, offset, mask) in enumerate(zip(chunk_tokens, chunk_offsets, chunk_attention_mask)):
                     start, end = offset
@@ -381,10 +373,18 @@ def main():
                         continue
                         
                     span = (start, end)
+                    
+                    # Compute Gaussian/trapezoidal boundary weight for position i
+                    dist_to_boundary = min(i, chunk_len - 1 - i)
+                    w = min(1.0, dist_to_boundary / sigma)
+                    w = max(0.0001, w)
+                    
                     if span not in span_logits:
-                        span_logits[span] = []
+                        span_logits[span] = {"logits_sum": chunk_logits[i] * w, "weight_sum": w}
                         span_tokens[span] = token
-                    span_logits[span].append(chunk_logits[i])
+                    else:
+                        span_logits[span]["logits_sum"] += chunk_logits[i] * w
+                        span_logits[span]["weight_sum"] += w
                     
             # Reconstruct unique token sequence sorted by start position
             sorted_spans = sorted(span_logits.keys(), key=lambda x: (x[0], x[1]))
@@ -396,14 +396,20 @@ def main():
             
             for span in sorted_spans:
                 start, end = span
-                # Average predictions from multiple windows
-                avg_logits = torch.mean(torch.stack(span_logits[span]), dim=0)
+                logits_sum = span_logits[span]["logits_sum"]
+                weight_sum = span_logits[span]["weight_sum"]
+                avg_logits = logits_sum / weight_sum
+                
                 pred_id = torch.argmax(avg_logits).item()
                 
                 predictions.append(pred_id)
                 offsets.append(span)
                 tokens.append(span_tokens[span])
                 attention_mask.append(1)
+                
+            # Resolve any invalid BIO transitions to guarantee syntactic validity
+            tag_to_id = {v: k for k, v in id_to_tag.items()}
+            predictions = resolve_bio_violations(predictions, id_to_tag, tag_to_id)
             
             # 1. Structured JSON (Parsing Version)
             segments = extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag)
@@ -455,3 +461,53 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+class OffsetMapper:
+    def __init__(self, latex_spans: list[tuple[int, int]]):
+        self.shifts = []
+        mod_pos = 0
+        orig_pos = 0
+        for o_start, o_end in latex_spans:
+            segment_len = o_start - orig_pos
+            mod_start = mod_pos + segment_len
+            mod_end = mod_start + len("[LATEX]")
+            shift = o_end - mod_end
+            self.shifts.append((mod_start, mod_end, shift, o_start))
+            
+            orig_pos = o_end
+            mod_pos = mod_end
+            
+        self.starts = [s[0] for s in self.shifts]
+
+    def map_idx(self, idx: int) -> int:
+        if not self.shifts:
+            return idx
+        import bisect
+        pos = bisect.bisect_right(self.starts, idx) - 1
+        if pos >= 0:
+            mod_start, mod_end, shift, o_start = self.shifts[pos]
+            if idx < mod_end:
+                return o_start
+            return idx + shift
+        return idx
+
+
+def resolve_bio_violations(predictions: list[int], id_to_tag: dict[int, str], tag_to_id: dict[str, int]) -> list[int]:
+    corrected_predictions = list(predictions)
+    prev_tag = "O"
+    for idx, pred_id in enumerate(corrected_predictions):
+        tag = id_to_tag[pred_id]
+        if tag.startswith("I-"):
+            tag_class = tag[2:]
+            if prev_tag != f"B-{tag_class}" and prev_tag != f"I-{tag_class}":
+                b_tag = f"B-{tag_class}"
+                if b_tag in tag_to_id:
+                    corrected_predictions[idx] = tag_to_id[b_tag]
+                    tag = b_tag
+                else:
+                    corrected_predictions[idx] = tag_to_id.get("O", 0)
+                    tag = "O"
+        prev_tag = tag
+    return corrected_predictions
+

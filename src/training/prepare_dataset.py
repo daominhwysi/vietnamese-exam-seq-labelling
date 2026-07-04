@@ -1,479 +1,30 @@
 import os
 import sys
 import json
-import re
 import argparse
 import random
 from pathlib import Path
-from typing import Dict, Any, List, Tuple, Optional
 
-# Set up local import path if needed
-sys.path.append(str(Path(__file__).parent.parent))
+# Setup local import paths
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from src.generation.reconstructor import (
     reconstruct_question, 
     reconstruct_exam, 
     ReconstructorConfig
 )
-
-# Define base tags and generate tag mapping
-BASE_TAGS = [
-    "question_label",
-    "stem",
-    "option_label",
-    "option_text",
-    "context",
-    "section"
-]
-
-def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
-    tag_to_id = {"O": 0}
-    for tag in BASE_TAGS:
-        tag_to_id[f"B-{tag}"] = len(tag_to_id)
-        tag_to_id[f"I-{tag}"] = len(tag_to_id)
-    id_to_tag = {v: k for k, v in tag_to_id.items()}
-    return tag_to_id, id_to_tag
-
-def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
-    """
-    Converts raw_text + ground-truth character-level spans into an inline-tagged
-    XML string that matches the format produced by annotate_ocr.py:
-
-        <question_label>Câu 1.</question_label> <stem>Nội dung...</stem>
-
-    Spans are sorted by start offset. Untagged gaps between spans (page headers,
-    separators, etc.) are preserved verbatim outside any tag.
-    """
-    if not spans:
-        return raw_text
-
-    # Sort spans by start position; resolve overlaps by taking first occurrence
-    sorted_spans = sorted(spans, key=lambda s: s["start"])
-
-    result = []
-    cursor = 0
-
-    for span in sorted_spans:
-        start = span["start"]
-        end = span["end"]
-        label = span["label"]
-
-        # Skip malformed or already-passed spans
-        if end <= start or start < cursor:
-            continue
-
-        # Untagged gap before this span
-        if start > cursor:
-            result.append(raw_text[cursor:start])
-
-        # Tagged span content
-        span_text = raw_text[start:end]
-        result.append(f"<{label}>{span_text}</{label}>")
-        cursor = end
-
-    # Trailing untagged text
-    if cursor < len(raw_text):
-        result.append(raw_text[cursor:])
-
-    return "".join(result)
-
-def align_tokens_to_spans(
-    offset_mapping: List[Tuple[int, int]], 
-    spans: List[Dict[str, Any]], 
-    tag_to_id: Dict[str, int],
-    raw_text: Optional[str] = None
-) -> List[int]:
-    """
-    Aligns tokenizer offset mapping with character-level spans to assign token-level labels
-    using the V2 Character-Anchor Lookup method.
-    """
-    # 1. Clean spans (strip whitespaces/tabs)
-    clean_spans = []
-    for span in spans:
-        span_text = span.get("text", "")
-        start = span["start"]
-        end = span["end"]
-        
-        if span_text:
-            stripped = span_text.strip()
-            if not stripped:
-                continue
-            leading = len(span_text) - len(span_text.lstrip())
-            trailing = len(span_text) - len(span_text.rstrip())
-            clean_start = start + leading
-            clean_end = end - trailing
-        else:
-            if raw_text is not None:
-                raw_span_text = raw_text[start:end]
-                stripped = raw_span_text.strip()
-                if not stripped:
-                    continue
-                leading = len(raw_span_text) - len(raw_span_text.lstrip())
-                trailing = len(raw_span_text) - len(raw_span_text.rstrip())
-                clean_start = start + leading
-                clean_end = end - trailing
-            else:
-                clean_start = start
-                clean_end = end
-                
-        clean_spans.append({
-            "start": clean_start,
-            "end": clean_end,
-            "label": span["label"]
-        })
-        
-    labels = []
-    
-    # 2. Map tokens based on first non-whitespace character offset lookup
-    for start, end in offset_mapping:
-        if start == 0 and end == 0:
-            labels.append(-100)
-            continue
-            
-        non_space_char_idx = -1
-        if raw_text is not None:
-            for char_idx in range(start, end):
-                if char_idx < len(raw_text) and not raw_text[char_idx].isspace():
-                    non_space_char_idx = char_idx
-                    break
-        else:
-            # Fallback if raw_text is not provided
-            non_space_char_idx = start
-            
-        if non_space_char_idx == -1:
-            # It's a whitespace-only token. Check if it falls entirely within some span.
-            # If so, label it as part of that span (using "I-label" so that the entity is contiguous).
-            matched_span = None
-            for span in clean_spans:
-                if span["start"] <= start and end <= span["end"]:
-                    matched_span = span
-                    break
-            if matched_span is not None:
-                labels.append(tag_to_id.get(f"I-{matched_span['label']}", tag_to_id["O"]))
-            else:
-                labels.append(tag_to_id["O"])
-            continue
-            
-        matched_span = None
-        for span in clean_spans:
-            if span["start"] <= non_space_char_idx < span["end"]:
-                matched_span = span
-                break
-                
-        if matched_span is None:
-            labels.append(tag_to_id["O"])
-        else:
-            span_label = matched_span["label"]
-            if non_space_char_idx == matched_span["start"]:
-                tag = f"B-{span_label}"
-            else:
-                tag = f"I-{span_label}"
-            labels.append(tag_to_id.get(tag, tag_to_id["O"]))
-            
-    return labels
-
-def mask_latex_in_real_data(
-    raw_text: str,
-    spans: List[Dict[str, Any]],
-    placeholder: str,
-    mask_prob: float,
-    rng: random.Random
-) -> Tuple[str, List[Dict[str, Any]]]:
-    """
-    Finds LaTeX formulas ($...$ and $$...$$) in raw_text, masks them with placeholder with probability mask_prob,
-    and shifts span offsets accordingly.
-    """
-    if mask_prob <= 0.0 or not raw_text:
-        return raw_text, spans
-
-    pattern = re.compile(r"\$\$.*?\$\$|\$.*?\$", re.DOTALL)
-    matches = list(pattern.finditer(raw_text))
-    if not matches:
-        return raw_text, spans
-        
-    current_text = raw_text
-    new_spans = [dict(s) for s in spans]
-    
-    # Process from back to front to avoid shifting indices of earlier matches
-    for match in reversed(matches):
-        if rng.random() > mask_prob:
-            continue
-            
-        m_start, m_end = match.span()
-        diff = len(placeholder) - (m_end - m_start)
-        
-        # Replace in text
-        current_text = current_text[:m_start] + placeholder + current_text[m_end:]
-        
-        # Adjust spans
-        updated_spans = []
-        for span in new_spans:
-            s_start = span["start"]
-            s_end = span["end"]
-            
-            # If the span starts after the replaced segment, shift it
-            if s_start >= m_end:
-                span["start"] += diff
-                span["end"] += diff
-            # If the span starts before but ends after/during
-            elif s_start < m_start and s_end > m_end:
-                span["end"] += diff
-            # If the span is entirely within the masked LaTeX
-            elif s_start >= m_start and s_end <= m_end:
-                span["start"] = m_start
-                span["end"] = m_start + len(placeholder)
-            # If the span overlaps the beginning but not the end
-            elif s_start < m_start and s_end > m_start:
-                span["end"] = m_start + len(placeholder)
-            
-            if "text" in span:
-                span["text"] = current_text[span["start"]:span["end"]]
-            updated_spans.append(span)
-        new_spans = updated_spans
-        
-    return current_text, new_spans
-
-def process_exam_level(
-    exam_data: Dict[str, Any],
-    tokenizer: Any,
-    tag_to_id: Dict[str, int],
-    id_to_tag: Dict[int, str],
-    window_configs: List[Tuple[int, int]],
-    reconstructor_config: ReconstructorConfig
-) -> List[Dict[str, Any]]:
-    """
-    Reconstructs the full exam document, tokenizes it across multiple sliding window configs,
-    aligns labels, and returns a list of prepared samples.
-    """
-    if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
-        raw_text = exam_data["raw_text"]
-        spans = exam_data["spans"]
-        if reconstructor_config.latex_mask_prob > 0.0:
-            import hashlib
-            h = hashlib.md5((exam_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
-            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
-            raw_text, spans = mask_latex_in_real_data(
-                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
-            )
-    else:
-        exam_reconstructed = reconstruct_exam(exam_data, reconstructor_config)
-        raw_text = exam_reconstructed["raw_text"]
-        spans = exam_reconstructed["spans"]
-    
-    samples = []
-    
-    for max_len, stride in window_configs:
-        tokenized = tokenizer(
-            raw_text,
-            return_offsets_mapping=True,
-            truncation=True,
-            max_length=max_len,
-            stride=stride,
-            return_overflowing_tokens=True,
-            add_special_tokens=True
-        )
-        
-        num_chunks = len(tokenized["input_ids"])
-        for chunk_idx in range(num_chunks):
-            input_ids = tokenized["input_ids"][chunk_idx]
-            attention_mask = tokenized["attention_mask"][chunk_idx]
-            offset_mapping = tokenized["offset_mapping"][chunk_idx]
-            
-            labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id, raw_text)
-            tags = [id_to_tag.get(label_id, "O") if label_id != -100 else "IGNORE" for label_id in labels]
-            tokens = tokenizer.convert_ids_to_tokens(input_ids)
-            
-            samples.append({
-                "tokens": tokens,
-                "input_ids": input_ids,
-                "attention_mask": attention_mask,
-                "labels": labels,
-                "tags": tags,
-                "metadata": {
-                    "subject": exam_data.get("subject"),
-                    "grade": exam_data.get("grade"),
-                    "exam_id": exam_data.get("exam_id"),
-                    "is_real": exam_data.get("is_real", False),
-                    "max_len": max_len,
-                    "stride": stride,
-                    "chunk_idx": chunk_idx,
-                    "total_chunks": num_chunks
-                }
-            })
-            
-    return samples
-
-def process_question_as_exam_level(
-    q_data: Dict[str, Any],
-    tokenizer: Any,
-    tag_to_id: Dict[str, int],
-    id_to_tag: Dict[int, str],
-    window_configs: List[Tuple[int, int]],
-    reconstructor_config: ReconstructorConfig
-) -> List[Dict[str, Any]]:
-    """
-    Treats an individual question as a mini-exam and tokenizes it using sliding window configs.
-    """
-    if q_data.get("is_real", False) and "raw_text" in q_data and "spans" in q_data:
-        raw_text = q_data["raw_text"]
-        spans = q_data["spans"]
-        if reconstructor_config.latex_mask_prob > 0.0:
-            import hashlib
-            h = hashlib.md5((q_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
-            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
-            raw_text, spans = mask_latex_in_real_data(
-                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
-            )
-    else:
-        q_reconstructed = reconstruct_question(q_data, reconstructor_config)
-        raw_text = q_reconstructed["raw_text"]
-        spans = q_reconstructed["spans"]
-    
-    samples = []
-    
-    for max_len, stride in window_configs:
-        tokenized = tokenizer(
-            raw_text,
-            return_offsets_mapping=True,
-            truncation=True,
-            max_length=max_len,
-            stride=stride,
-            return_overflowing_tokens=True,
-            add_special_tokens=True
-        )
-        
-        num_chunks = len(tokenized["input_ids"])
-        for chunk_idx in range(num_chunks):
-            input_ids = tokenized["input_ids"][chunk_idx]
-            attention_mask = tokenized["attention_mask"][chunk_idx]
-            offset_mapping = tokenized["offset_mapping"][chunk_idx]
-            
-            labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id, raw_text)
-            tags = [id_to_tag.get(label_id, "O") if label_id != -100 else "IGNORE" for label_id in labels]
-            tokens = tokenizer.convert_ids_to_tokens(input_ids)
-            
-            samples.append({
-                "tokens": tokens,
-                "input_ids": input_ids,
-                "attention_mask": attention_mask,
-                "labels": labels,
-                "tags": tags,
-                "metadata": {
-                    "subject": q_data.get("subject"),
-                    "grade": q_data.get("grade"),
-                    "question_type": q_data.get("question_type"),
-                    "difficulty": q_data.get("difficulty"),
-                    "is_real": q_data.get("is_real", False),
-                    "max_len": max_len,
-                    "stride": stride,
-                    "chunk_idx": chunk_idx,
-                    "total_chunks": num_chunks
-                }
-            })
-            
-    return samples
-
-def process_single_question_legacy(
-    q_data: Dict[str, Any], 
-    tokenizer: Any, 
-    tag_to_id: Dict[str, int], 
-    id_to_tag: Dict[int, str],
-    reconstructor_config: ReconstructorConfig
-) -> Optional[Dict[str, Any]]:
-    """
-    Legacy method for single question parsing (keeps original question-level split layout).
-    """
-    if q_data.get("is_real", False) and "raw_text" in q_data and "spans" in q_data:
-        raw_text = q_data["raw_text"]
-        spans = q_data["spans"]
-        if reconstructor_config.latex_mask_prob > 0.0:
-            import hashlib
-            h = hashlib.md5((q_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
-            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
-            raw_text, spans = mask_latex_in_real_data(
-                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
-            )
-    else:
-        q_reconstructed = reconstruct_question(q_data, reconstructor_config)
-        raw_text = q_reconstructed["raw_text"]
-        spans = q_reconstructed["spans"]
-    
-    tokenized = tokenizer(
-        raw_text,
-        return_offsets_mapping=True,
-        truncation=True,
-        add_special_tokens=True
-    )
-    
-    offset_mapping = tokenized["offset_mapping"]
-    input_ids = tokenized["input_ids"]
-    attention_mask = tokenized["attention_mask"]
-    
-    labels = align_tokens_to_spans(offset_mapping, spans, tag_to_id, raw_text)
-    tags = [id_to_tag.get(label_id, "O") if label_id != -100 else "IGNORE" for label_id in labels]
-    tokens = tokenizer.convert_ids_to_tokens(input_ids)
-    
-    return {
-        "tokens": tokens,
-        "input_ids": input_ids,
-        "attention_mask": attention_mask,
-        "labels": labels,
-        "tags": tags,
-        "metadata": {
-            "subject": q_data.get("subject"),
-            "grade": q_data.get("grade"),
-            "question_type": q_data.get("question_type"),
-            "difficulty": q_data.get("difficulty"),
-            "is_group": q_data.get("is_group", False),
-            "is_real": q_data.get("is_real", False),
-            "chapter": q_data.get("chapter"),
-            "unit": q_data.get("unit"),
-            "problem_type_id": q_data.get("problem_type_id"),
-            "problem_type_name": q_data.get("problem_type_name"),
-            "problem_type_level": q_data.get("problem_type_level")
-        }
-    }
-
-def replace_latex_in_question(q_data: Dict[str, Any], placeholder: str) -> Dict[str, Any]:
-    import copy
-    q_copy = copy.deepcopy(q_data)
-    
-    def process_field(val):
-        if isinstance(val, str):
-            return re.sub(r"\$\$.*?\$\$|\$.*?\$", placeholder, val)
-        elif isinstance(val, list):
-            return [process_field(x) for x in val]
-        return val
-
-    if q_copy.get("is_group", False):
-        if "context" in q_copy:
-            q_copy["context"] = process_field(q_copy["context"])
-        if "questions" in q_copy and isinstance(q_copy["questions"], list):
-            for sub_q in q_copy["questions"]:
-                if "stem" in sub_q:
-                    sub_q["stem"] = process_field(sub_q["stem"])
-                if "options" in sub_q:
-                    sub_q["options"] = process_field(sub_q["options"])
-    else:
-        if "stem" in q_copy:
-            q_copy["stem"] = process_field(q_copy["stem"])
-        if "options" in q_copy:
-            q_copy["options"] = process_field(q_copy["options"])
-            
-    return q_copy
-
-def process_single_question(
-    q_data: Dict[str, Any],
-    tokenizer: Any,
-    tag_to_id: Dict[str, int],
-    id_to_tag: Dict[int, str],
-    latex_placeholder: Optional[str] = None
-) -> Optional[Dict[str, Any]]:
-    config = ReconstructorConfig()
-    if latex_placeholder is not None:
-        config.latex_placeholder = latex_placeholder
-        config.latex_mask_prob = 1.0
-    return process_single_question_legacy(q_data, tokenizer, tag_to_id, id_to_tag, config)
+from src.training.dataset import (
+    get_tag_mappings,
+    spans_to_xml,
+    align_tokens_to_spans,
+    process_exam_level,
+    process_question_as_exam_level,
+    process_single_question_legacy,
+    process_single_question,
+    replace_latex_in_question,
+    scan_input_files,
+    save_jsonl_split
+)
 
 def main():
     parser = argparse.ArgumentParser(description="XLM-RoBERTa Sequence Labelling Dataset Preparer")
@@ -617,6 +168,33 @@ def main():
         default=3,
         help="Maximum random tabs to inject between inline options (default: 3)"
     )
+    parser.add_argument(
+        "--answer-table-format",
+        type=str,
+        choices=["md", "html", "csv", "random"],
+        default="random",
+        help="Answer table format (default: random)"
+    )
+    parser.add_argument(
+        "--answer-table-direction",
+        type=str,
+        choices=["horizontal", "vertical", "random"],
+        default="random",
+        help="Answer table direction (default: random)"
+    )
+    parser.add_argument(
+        "--answer-table-chunk-size",
+        type=int,
+        default=None,
+        help="Answer table chunk size (default: None)"
+    )
+    parser.add_argument(
+        "--no-paraphrase-section-titles",
+        action="store_false",
+        dest="paraphrase_section_titles",
+        default=True,
+        help="Disable random paraphrasing of section titles (default: enabled)"
+    )
 
     args = parser.parse_args()
     run_prepare_dataset(args)
@@ -637,14 +215,10 @@ def run_prepare_dataset(args):
         print(f"Error: Input directory '{args.input_dir}' does not exist.")
         sys.exit(1)
         
-    json_files = list(input_path.glob("question_*.json"))
-    exam_files = list(input_path.glob("**/exam_*.json"))
-    real_exam_files = list(input_path.glob("**/real_exam_*.json"))
-    if not json_files and not exam_files and not real_exam_files:
-        print(f"No question JSON files, exam JSON files, or real exam JSON files found in '{args.input_dir}'. Please generate data first.")
+    json_files, exam_files = scan_input_files(args.input_dir)
+    if not json_files and not exam_files:
+        print(f"No question JSON files or exam JSON files found in '{args.input_dir}'. Please generate data first.")
         sys.exit(1)
-    # Combine real exams into exam_files list
-    exam_files.extend(real_exam_files)
         
     try:
         from transformers import AutoTokenizer
@@ -699,7 +273,11 @@ def run_prepare_dataset(args):
         min_inline_spaces=getattr(args, "min_inline_spaces", 5),
         max_inline_spaces=getattr(args, "max_inline_spaces", 30),
         min_inline_tabs=getattr(args, "min_inline_tabs", 1),
-        max_inline_tabs=getattr(args, "max_inline_tabs", 3)
+        max_inline_tabs=getattr(args, "max_inline_tabs", 3),
+        answer_table_format=getattr(args, "answer_table_format", "random"),
+        answer_table_direction=getattr(args, "answer_table_direction", "random"),
+        answer_table_chunk_size=getattr(args, "answer_table_chunk_size", None),
+        paraphrase_section_titles=getattr(args, "paraphrase_section_titles", True)
     )
         
     print(f"Processing data: found {len(json_files)} question file(s) and {len(exam_files)} exam file(s)...")
@@ -819,9 +397,7 @@ def run_prepare_dataset(args):
     
     for split_name, samples in splits.items():
         split_file = output_path / f"{split_name}.jsonl"
-        with open(split_file, "w", encoding="utf-8") as f:
-            for s in samples:
-                f.write(json.dumps(s, ensure_ascii=False) + "\n")
+        save_jsonl_split(samples, split_file)
         print(f"Saved {len(samples)} samples to '{split_file}'")
         
     print("\nDataset preparation completed successfully!")

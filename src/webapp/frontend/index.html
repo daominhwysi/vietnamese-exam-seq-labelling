@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Antigravity Sequence Labeling Workspace</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;750&display=swap" rel="stylesheet">
+    
+    <!-- MathJax Configuration for LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #37352f;
+        }
+        
+        .exam-paper {
+            font-family: 'Georgia', serif;
+            background-color: #ffffff;
+            color: #37352f;
+            border: 1px solid #e9e9e6;
+            border-radius: 8px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f7f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dfdfde;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c1c1c0;
+        }
+        
+        /* Sequence Labeling Tag Highlights - Soft Pastel Notion style */
+        .tag-question_label {
+            background-color: #e8f4fc !important; /* Light Blue */
+            border-bottom: 2px solid #2e8ae6 !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #0b5b9e !important;
+            font-weight: 600;
+        }
+        .tag-stem {
+            background-color: #f5f0f8 !important; /* Light Purple */
+            border-bottom: 2px solid #8e4ec6 !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #5c2c8f !important;
+        }
+        .tag-option_label {
+            background-color: #fdf5d3 !important; /* Light Yellow */
+            border-bottom: 2px solid #d4a017 !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #8f6b00 !important;
+            font-weight: 600;
+        }
+        .tag-option_text {
+            background-color: #edf6ec !important; /* Light Green */
+            border-bottom: 2px solid #3fa63f !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #1e5a1e !important;
+        }
+        .tag-context {
+            background-color: #fdebee !important; /* Light Red */
+            border-bottom: 2px solid #e03b3b !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #9c1a1a !important;
+        }
+        .tag-section {
+            background-color: #f1f3f5 !important; /* Soft Gray */
+            border-bottom: 2px solid #6c757d !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #495057 !important;
+            font-weight: 550;
+        }
+        .tag-explanation {
+            background-color: #fef0e6 !important; /* Soft Orange */
+            border-bottom: 2px solid #f2711c !important;
+            padding: 0 2px;
+            border-radius: 2px;
+            color: #b54a05 !important;
+        }
+        
+        .tag-token {
+            position: relative;
+        }
+        
+        .tag-highlight-active .tag-token:hover {
+            filter: brightness(0.97);
+            cursor: help;
+        }
+
+        blank {
+            display: inline-block;
+            border-bottom: 1.5px solid #37352f;
+            width: 50px;
+            height: 16px;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+    </style>
+  </head>
+  <body class="bg-white min-h-screen flex flex-col">
+    <div id="root" class="flex-grow flex flex-col"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

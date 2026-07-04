@@ -233,6 +233,7 @@ def upload_model(
             "option_text",
             "context",
             "section",
+            "explanation",
         ]
         label_list = ["O"] + [
             f"{prefix}-{tag}" for tag in base_tags for prefix in ("B", "I")

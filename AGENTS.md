@@ -1,5 +1,3 @@
-Say hallo to user everytime they say hello
-
 # Project Purpose
 
 This project is a complete synthetic data generation and downstream model training pipeline designed to produce and train **Sequence Labeling** models (like XLM-RoBERTa) on Vietnamese educational exam papers.
@@ -22,55 +20,80 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_prepare_dataset.py` - Tests for XLM-RoBERTa dataset tokenizer alignments.
   - `test_parser.py` - Tests for question XML parsing and option prefix cleaning.
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
-- `scratch/` - Directory housing temporary and utility debug scripts.
-  - `check_alignment.py` - Minimal check script verifying token-label alignments for sample questions.
-  - `debug_alignment.py` - Checks character-level offset mismatch and alignments for reconstructed exams.
-  - `debug_model.py` - Checks token-level predictions and LaTeX replacements on test inputs.
-  - `test_train_sample.py` - Sanity check script to run token prediction on a real training sample.
-  - `count_tokens.py` - Counts input and output tokens for cost estimation.
-  - `detect_and_clean_options.py` - Utility to test option prefix cleaning regex.
-  - `replace_html_entity.py` - General recursive text replacement utility for generated outputs, including `&nbsp;` normalization in `real_data_annotator/out`.
-  - `test_generation.py` - Simple end-to-end question generation test script.
-  - `inspect_local_data.py` - Inspects local generated exams and dataset splits.
-  - `count_ordering_in_dataset.py` - Counts and analyzes ordering questions in dataset splits.
-  - `inspect_inline.py` - Checks for inline formatted option sequences in dataset splits.
-  - `incremental_train.py` - Performs incremental/continual training on an existing adapter model.
-  - `get_balance.py` - Fetches DeepSeek API balance from the environment.
-  - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
-  - `inspect_exam_spans.py` - Inspects annotated exam tag distributions and span content previews.
-  - `inference_onnx.py` - Runs sequence labeling inference using ONNX Runtime without PyTorch.
+- `scratch/` - Used for temporary utility scripts, tagging helpers, and debugging utilities.
+  - `annotate_math_files.py` - Helper script to tag, align, save, and verify math exam files.
+  - `automatic_tagger.py` - Script to automatically tag OCR text using inference heuristics or models.
+  - `check_xml_errors.py` - Script validating XML annotations and alignment.
+  - `find_hash.py` - Script to find math files by hash.
+  - `parse_xml_to_json.py` - Parses manually or subagent annotated XML files into spans and writes JSON outputs.
+  - `process_all_vl.py` - Script to tag, align, parse, and verify the physics exam files.
+  - `process_exams.py` - Processes exams and prepares annotation mappings.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
   - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`).
+  - `real-exams/` - Directory containing annotated real OCR exams as JSON/XML files.
 - `real_data_annotator/` - Directory for real OCR data processing and annotation.
   - `pdf_converter.py` - Runs OCR on raw PDF files and extracts raw markdown text.
   - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
   - `out/` - Generated OCR markdown outputs and intermediate annotated files used for cleanup and review.
 - `src/` - Main source package directory.
-  - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
-  - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
+  - `cli.py` - Main CLI console entry point (wrapper module importing from the `cli` package).
+  - `cli/` - Command-line interface package containing argument parsing and subcommand execution.
+    - `parser.py` - CLI options and subcommand config.
+    - `commands.py` - Action routers executing curricula, reconstruct, exam compilers, preparing, training, and uploading.
+    - `__init__.py` - Package entry point.
+  - `token_tracker.py` - Thread-safe token-usage logger.
   - `generation/` - Core Data Generation Subpackage.
     - `curriculum.py` - Handles subject & grade curriculum loading and generation.
-    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models. Automatically calls `token_tracker.log_response()` after every API call.
-    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams (supports both old and new English formats).
+    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models.
+    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams.
     - `generator.py` - Orchestrates question generation with AI prompting.
     - `parser.py` - Parses standard and group question elements from LLM XML output.
-    - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans.
+    - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans (wrapper module importing from the `reconstruction` package).
+    - `reconstruction/` - Core Text Reconstruction Subpackage.
+      - `config.py` - Constants, configurations (`ReconstructorConfig`), and stable random helpers.
+      - `augment.py` - Typo injection, blank tokens randomization, LaTeX masking, and formatting wrappers.
+      - `layout.py` - Whitespace layout separators, section title paraphrasing, answer table formatting, and ordering choices.
+      - `core.py` - Core reconstruction functions (`reconstruct_question`, `reconstruct_exam`).
+      - `__init__.py` - Package entry point.
   - `training/` - Downstream Training & Evaluation Subpackage.
-    - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
-    - `train.py` - Performs token-classification training with LoRA adapters (supports dynamic T4/BF16/FP16 precision fallback).
+    - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into dataset splits (wrapper module importing from the `dataset` package).
+    - `dataset/` - Dataset Preparation and Alignment Subpackage.
+      - `alignment.py` - Token-to-span offset alignments, XML tag utilities.
+      - `processing.py` - Multi-scale sliding window tokenization, LaTeX masking.
+      - `io.py` - Dataset loading, directory scanning, and JSONL saving splits.
+      - `__init__.py` - Package entry point.
+    - `train.py` - Performs token-classification training with LoRA adapters (wrapper module importing from the `training_pipeline` package).
+    - `training_pipeline/` - Downstream Training Pipeline Subpackage.
+      - `config.py` - Training configurations, arguments, environment setups, and devices.
+      - `metrics.py` - Token-level evaluation and entity F1 metrics using seqeval.
+      - `trainer.py` - Custom WeightedTrainer with class-weight and real-sample upsampling.
+      - `callbacks.py` - Exponential Moving Average (EMA) callback tracker.
+      - `__init__.py` - Package entry point.
     - `inference.py` - Local inference utility using trained LoRA adapter models.
-    - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments, human-readable token-class text mappings, and inline-tagged XML annotation files (`*_annotated.xml`).
-    - `export_onnx.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX using HF Optimum with dynamic dimensions.
-    - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub, auto-generates a dataset card (README.md), and optionally uploads XML annotation files under `xml/` in the dataset repo.
-    - `upload_model.py` - Uploads a trained LoRA adapter or full fine-tuned model checkpoint to the Hugging Face hub, auto-generates a model card (README.md) from `adapter_config.json` and `label_mapping.json`.
+    - `inference_folder.py` - Batch inference utility for segmenting raw text files.
+    - `export_onnx.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX.
+    - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
+    - `upload_model.py` - Uploads a trained LoRA adapter or full fine-tuned model checkpoint to HF hub.
     - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.
-    - `main.py` - FastAPI application entry point, routing, exam/dataset stats computation.
-    - `inference_helper.py` - Helper utilities for sequence labeling predictions (sliding window aggregation, LaTeX masking, offset mapping).
+    - `main.py` - FastAPI application entry point, routing layer (imports from the `webapp/backend` package).
+    - `backend/` - Web Application Backend logic.
+      - `stats.py` - Computes and caches training split dataset statistics.
+      - `exams.py` - Handles JSON file discovery, parsing, and retrieval metadata.
+      - `__init__.py` - Package entry point.
+    - `inference_helper.py` - Helper utilities for sequence labeling predictions (wrapper module importing from the `inference` package).
+    - `inference/` - Model Sequence Labeling Inference subpackage.
+      - `latex.py` - LaTeX math validators, formula detection, and offset mapper.
+      - `bio.py` - Transition correctors resolving BIO boundary violations.
+      - `parser.py` - Converts span segments to inline XML and groups entities to questions.
+      - `manager.py` - Manages backend PyTorch and ONNX inference runtime sessions.
+      - `core.py` - Integrates tokenizer, sliding windows, and label outputs.
+      - `__init__.py` - Package entry point.
     - `inference_app.py` - Standalone FastAPI web application running the model inference interface on port 8001.
-    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting, dataset dashboard, dataset viewer, and inference website).
+    - `frontend/` - Decoupled React + TypeScript + Vite SPA frontend application.
+    - `templates/` - Jinja2 HTML templates.
 
 ---
 
@@ -157,7 +180,42 @@ During dataset preparation (Stage 5), text tokens are aligned to character spans
 - `option_label`: Labels options letters/prefixes (e.g. "A.", "B.", "a)")
 - `option_text`: Labels the textual content of options.
 - `context`: Labels the shared passage/context block in group questions.
+- `section`: Labels section headers, directions, and reference titles (e.g., "ĐÁP ÁN THAM KHẢO").
+- `explanation`: Labels reference explanations and solutions for questions (e.g., "**Câu 1: B** ...").
 
 # Privacy and Security Rules
 
 - NEVER attempt to read or access the `.env` file under any circumstances, as it contains sensitive credentials.
+
+# RTK - Rust Token Killer (Google Antigravity)
+
+**Usage**: Token-optimized CLI proxy for shell commands.
+
+## Rule
+
+Always prefix shell commands with `rtk` to minimize token consumption.
+
+Examples:
+
+```bash
+rtk git status
+rtk cargo test
+rtk ls src/
+rtk grep "pattern" src/
+rtk find "*.rs" .
+rtk docker ps
+rtk gh pr list
+```
+
+## Meta Commands
+
+```bash
+rtk gain              # Show token savings
+rtk gain --history    # Command history with savings
+rtk discover          # Find missed RTK opportunities
+rtk proxy <cmd>       # Run raw (no filtering, for debugging)
+```
+
+## Why
+
+RTK filters and compresses command output before it reaches the LLM context, saving 60-90% tokens on common operations. Always use `rtk <cmd>` instead of raw commands.

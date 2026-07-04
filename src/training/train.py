@@ -2,186 +2,37 @@
 import os
 import sys
 import json
-import argparse
 import numpy as np
 import torch
+import inspect
 
-def parse_args():
-    parser = argparse.ArgumentParser(description="Train XLM-RoBERTa for Sequence Labeling using LoRA and AMP")
-    parser.add_argument(
-        "--repo_id",
-        type=str,
-        default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
-        help="Hugging Face Dataset repository ID"
-    )
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        default="FacebookAI/xlm-roberta-base",
-        help="Hugging Face base model name"
-    )
-    parser.add_argument(
-        "--output_dir",
-        type=str,
-        default="./results",
-        help="Directory to save checkpoint results and models"
-    )
-    parser.add_argument(
-        "--epochs",
-        type=int,
-        default=3,
-        help="Number of training epochs"
-    )
-    parser.add_argument(
-        "--batch_size",
-        type=int,
-        default=8,
-        help="Training batch size per device"
-    )
-    parser.add_argument(
-        "--eval_batch_size",
-        type=int,
-        default=8,
-        help="Evaluation batch size per device"
-    )
-    parser.add_argument(
-        "--lr",
-        type=float,
-        default=5e-4,
-        help="Learning rate for trainable parameters (LoRA + classification head)"
-    )
-    parser.add_argument(
-        "--lora_r",
-        type=int,
-        default=16,
-        help="LoRA rank dimension"
-    )
-    parser.add_argument(
-        "--lora_alpha",
-        type=int,
-        default=32,
-        help="LoRA alpha scaling parameter"
-    )
-    parser.add_argument(
-        "--lora_dropout",
-        type=float,
-        default=0.1,
-        help="LoRA dropout rate"
-    )
-    parser.add_argument(
-        "--use_bf16",
-        action="store_true",
-        help="Use bfloat16 mixed precision (requires compatible GPU like A100+)"
-    )
-    parser.add_argument(
-        "--no_fp16",
-        action="store_true",
-        help="Disable float16 mixed precision (defaults to True otherwise on CUDA)"
-    )
-    parser.add_argument(
-        "--weight_decay",
-        type=float,
-        default=0.01,
-        help="Weight decay coefficient"
-    )
-    parser.add_argument(
-        "--save_total_limit",
-        type=int,
-        default=2,
-        help="Max number of checkpoints to retain"
-    )
-    parser.add_argument(
-        "--push_to_hub",
-        action="store_true",
-        help="Push final trained model/adapters back to Hugging Face Hub"
-    )
-    parser.add_argument(
-        "--hf_token",
-        type=str,
-        default=None,
-        help="Hugging Face authentication token (or set HF_TOKEN env var)"
-    )
-    parser.add_argument(
-        "--no-lora",
-        action="store_true",
-        help="Disable LoRA and perform full fine-tuning"
-    )
-    parser.add_argument(
-        "--gradient-checkpointing",
-        action="store_true",
-        help="Enable gradient checkpointing to save memory"
-    )
-    parser.add_argument(
-        "--gradient-accumulation-steps",
-        type=int,
-        default=1,
-        help="Number of update steps to accumulate before performing a backward/update pass"
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=42,
-        help="Random seed for training reproducibility"
-    )
-    parser.add_argument(
-        "--lr-scheduler-type",
-        type=str,
-        default="linear",
-        help="Learning rate scheduler type (linear, cosine, cosine_with_restarts, constant, etc.)"
-    )
-    parser.add_argument(
-        "--warmup-ratio",
-        type=float,
-        default=0.0,
-        help="Warmup ratio for learning rate scheduler"
-    )
-    parser.add_argument(
-        "--warmup-steps",
-        type=int,
-        default=0,
-        help="Warmup steps for learning rate scheduler"
-    )
-    parser.add_argument(
-        "--ema-decay",
-        type=float,
-        default=0.0,
-        help="Decay rate for Exponential Moving Average (EMA). Set > 0.0 (e.g. 0.999) to enable."
-    )
-    parser.add_argument(
-        "--no-class-weights",
-        action="store_true",
-        help="Disable class weights for cross-entropy loss penalty"
-    )
-    parser.add_argument(
-        "--real-upsample-factor",
-        type=float,
-        default=1.0,
-        help="Sampling weight multiplier for real exam samples relative to synthetic ones. "
-             "e.g. 5.0 means real samples are drawn 5x more often per epoch. Default: 1.0 (no upsampling)."
-    )
-    return parser.parse_args()
+# Setup local import paths
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
+from src.training.training_pipeline import (
+    parse_args,
+    setup_device,
+    get_compute_metrics_fn,
+    WeightedTrainer,
+    EMACallback
+)
 
 def main():
     args = parse_args()
     run_train(args)
 
 def run_train(args):
-
     # 1. Hugging Face Authentication & Token Setup
     hf_token = args.hf_token or os.getenv("HF_TOKEN")
     if hf_token:
-        # Avoid prompt blocking in Colab
         from huggingface_hub import login
         login(token=hf_token)
         print("Logged into Hugging Face Hub successfully.")
 
     # 2. Check GPU/Device
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Using device: {device}")
+    device = setup_device(args)
 
-    # Set mixed precision defaults
-    # bfloat16 requires hardware support (compute capability >= 8.0, i.e., Ampere or newer) to run fast.
-    # On older architectures like Turing (e.g., T4 with compute capability 7.5), BF16 runs extremely slowly via emulation.
     gpu_supports_bf16 = torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8
 
     # Load model config to check its native precision/dtype
@@ -220,7 +71,6 @@ def run_train(args):
     print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
     try:
         from datasets import load_dataset
-        # Load the custom split jsonl files
         dataset = load_dataset(
             args.repo_id,
             data_files={
@@ -252,33 +102,26 @@ def run_train(args):
     except Exception as e:
         print(f"Warning: Could not download 'label_mapping.json' from the repository: {e}")
         print("Building label mapping dynamically from training dataset tags...")
-        # Fallback dynamic mapping builder
         unique_labels = set()
         for split in ["train", "validation"]:
             for sample in dataset[split]:
                 unique_labels.update(sample["labels"])
-        # Remove ignored index
         unique_labels.discard(-100)
-        # Sort labels to be deterministic
         sorted_labels = sorted(list(unique_labels))
 
-        # Build standard mappings (assuming standard schema tags)
-        # Note: If label_mapping.json is missing, we try to reconstruct labels
         print(f"Found unique label IDs in dataset: {sorted_labels}")
-        # Standard tag labels used for logging validation
         id_to_tag = {l: f"LABEL_{l}" for l in sorted_labels}
-        id_to_tag[0] = "O" # Ensure label 0 is marked "O"
+        id_to_tag[0] = "O"
         tag_to_id = {v: k for k, v in id_to_tag.items()}
 
     num_labels = len(tag_to_id)
     label_list = [id_to_tag[i] for i in sorted(id_to_tag.keys())]
 
-    # 4. Tokenizer Setup (necessary for Data Collator padding)
+    # 4. Tokenizer Setup
     print(f"Loading Tokenizer: '{args.model_name}'...")
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, token=hf_token)
 
-    # Add the exact same special tokens in the exact same order as during dataset preparation
     special_tokens = ["<blank />", "<blank/>", "[BLANK]", "[LATEX]"]
     print(f"Adding additional special tokens to the tokenizer: {special_tokens}")
     tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
@@ -295,13 +138,11 @@ def run_train(args):
         torch_dtype=load_dtype
     )
 
-    # Resize token embeddings to match tokenizer with added special tokens
     model.resize_token_embeddings(len(tokenizer))
 
     # 6. Apply LoRA (PEFT) if enabled
     if not getattr(args, "no_lora", False):
         print("Applying Low-Rank Adaptation (LoRA)...")
-        # Bypass torchao compatibility check bug on older pre-installed versions in Google Colab
         try:
             import peft.import_utils
             peft.import_utils.is_torchao_available = lambda: False
@@ -310,7 +151,6 @@ def run_train(args):
 
         from peft import LoraConfig, get_peft_model, TaskType
 
-        # Select target modules dynamically based on the model architecture
         model_name_lower = args.model_name.lower()
         if "modernbert" in model_name_lower or "mmbert" in model_name_lower:
             target_modules = ["Wqkv", "Wo"]
@@ -325,7 +165,7 @@ def run_train(args):
             lora_alpha=args.lora_alpha,
             lora_dropout=args.lora_dropout,
             target_modules=target_modules,
-            modules_to_save=["classifier"]  # Ensures classifier head is trained fully (not frozen)
+            modules_to_save=["classifier"]
         )
 
         model = get_peft_model(model, peft_config)
@@ -334,37 +174,7 @@ def run_train(args):
         print("LoRA is disabled. Preparing for Full Fine-Tuning...")
 
     # 7. Metrics Definition
-    def compute_metrics(p):
-        predictions, labels = p
-        predictions = np.argmax(predictions, axis=-1)
-
-        # Remove ignored index (-100)
-        true_predictions = [
-            [label_list[p_val] for (p_val, l_val) in zip(prediction, label) if l_val != -100]
-            for prediction, label in zip(predictions, labels)
-        ]
-        true_labels = [
-            [label_list[l_val] for (p_val, l_val) in zip(prediction, label) if l_val != -100]
-            for prediction, label in zip(predictions, labels)
-        ]
-
-        try:
-            from seqeval.metrics import classification_report, f1_score, precision_score, recall_score
-            return {
-                "precision": precision_score(true_labels, true_predictions),
-                "recall": recall_score(true_labels, true_predictions),
-                "f1": f1_score(true_labels, true_predictions),
-                "accuracy": np.mean([p_v == l_v for p_seq, l_seq in zip(true_predictions, true_labels) for p_v, l_v in zip(p_seq, l_seq)])
-            }
-        except ImportError:
-            # Fallback to token-level evaluation if seqeval is not installed
-            from sklearn.metrics import f1_score, accuracy_score
-            flat_preds = [p_v for p_seq in true_predictions for p_v in p_seq]
-            flat_labels = [l_v for l_seq in true_labels for l_v in l_seq]
-            return {
-                "accuracy": accuracy_score(flat_labels, flat_preds),
-                "f1_macro": f1_score(flat_labels, flat_preds, average="macro")
-            }
+    compute_metrics = get_compute_metrics_fn(label_list)
 
     # 8. Data Collator
     from transformers import DataCollatorForTokenClassification
@@ -390,7 +200,7 @@ def run_train(args):
         fp16=fp16_enabled,
         bf16=bf16_enabled,
         save_total_limit=args.save_total_limit,
-        report_to="none",  # Change to "wandb" or "tensorboard" if configured
+        report_to="none",
         push_to_hub=args.push_to_hub,
         hub_token=hf_token,
         gradient_checkpointing=getattr(args, "gradient_checkpointing", False),
@@ -417,104 +227,18 @@ def run_train(args):
             for label_id in range(num_labels):
                 count = label_counts.get(label_id, 0)
                 if count > 0:
-                    # Smoothed inverse frequency weighting
                     weights[label_id] = total_count / (num_labels * np.sqrt(count))
-            # Normalize so mean weight is 1.0
             weights = weights / weights.mean()
             class_weights = torch.tensor(weights, dtype=torch.float32).to(device)
             print(f"Computed class weights: {weights.tolist()}")
-            # Print mapping with weights for debugging
             for label_name, label_id in tag_to_id.items():
                 print(f"  {label_name} (ID: {label_id}): Weight = {weights[label_id]:.4f}")
         else:
             print("Warning: No labels found in training dataset. Skipping class weights.")
 
-    # Define custom Trainer with class weights + real-sample upsampling support
     real_upsample_factor = getattr(args, "real_upsample_factor", 1.0)
 
-    class WeightedTrainer(Trainer):
-        def __init__(self, class_weights=None, real_upsample_factor=1.0, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.class_weights = class_weights
-            self.real_upsample_factor = real_upsample_factor
-
-        def get_train_dataloader(self):
-            """Override to inject WeightedRandomSampler for real vs synthetic upsampling."""
-            if self.real_upsample_factor <= 1.0:
-                # No upsampling requested — use the default dataloader
-                return super().get_train_dataloader()
-
-            train_dataset = self.train_dataset
-            n_real = 0
-            n_synth = 0
-            sample_weights = []
-
-            # Build per-sample weights from raw dataset BEFORE column removal,
-            # since metadata (which holds is_real) is stripped afterwards.
-            for sample in train_dataset:
-                meta = sample.get("metadata", {})
-                # HuggingFace datasets may deserialize nested dicts as plain dicts
-                is_real = meta.get("is_real", False) if isinstance(meta, dict) else False
-                if is_real:
-                    sample_weights.append(self.real_upsample_factor)
-                    n_real += 1
-                else:
-                    sample_weights.append(1.0)
-                    n_synth += 1
-
-            print(
-                f"[WeightedSampler] Synth samples: {n_synth}, Real samples: {n_real} "
-                f"(effective weight: synth=1.0, real={self.real_upsample_factor})"
-            )
-
-            if n_real == 0:
-                print("[WeightedSampler] Warning: no real samples found in train split (is_real=False for all). "
-                      "Falling back to uniform sampling. Re-run prepare-dataset to propagate is_real metadata.")
-                return super().get_train_dataloader()
-
-            from torch.utils.data import WeightedRandomSampler, DataLoader
-
-            sampler = WeightedRandomSampler(
-                weights=sample_weights,
-                num_samples=len(sample_weights),
-                replacement=True,
-                generator=torch.Generator().manual_seed(self.args.seed),
-            )
-
-            # Mirror what Trainer.get_train_dataloader() does internally:
-            # strip non-model columns (tokens, tags, metadata) so the collator
-            # only sees tensor-compatible fields (input_ids, attention_mask, labels).
-            train_dataset = self._remove_unused_columns(train_dataset, description="training")
-
-            return DataLoader(
-                train_dataset,
-                batch_size=self.args.per_device_train_batch_size,
-                sampler=sampler,
-                collate_fn=self.data_collator,
-                drop_last=self.args.dataloader_drop_last,
-                num_workers=self.args.dataloader_num_workers,
-                pin_memory=self.args.dataloader_pin_memory,
-            )
-
-        def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
-            labels = inputs.get("labels")
-            outputs = model(**inputs)
-
-            # Save past state if required (e.g. for evaluation metrics)
-            if getattr(self.args, "past_index", -1) >= 0:
-                self._past = outputs[self.args.past_index]
-
-            if labels is not None and self.class_weights is not None:
-                logits = outputs.get("logits")
-                loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
-                loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
-            else:
-                loss = outputs.loss if isinstance(outputs, dict) else outputs[0]
-
-            return (loss, outputs) if return_outputs else loss
-
-    # 10. Instantiate Trainer (support both processing_class and tokenizer dynamically)
-    import inspect
+    # 10. Instantiate Trainer
     trainer_kwargs = {
         "model": model,
         "args": training_args,
@@ -530,59 +254,14 @@ def run_train(args):
     else:
         trainer_kwargs["tokenizer"] = tokenizer
 
-    trainer = WeightedTrainer(class_weights=class_weights, real_upsample_factor=real_upsample_factor, **trainer_kwargs)
+    trainer = WeightedTrainer(
+        class_weights=class_weights,
+        real_upsample_factor=real_upsample_factor,
+        **trainer_kwargs
+    )
 
     # 10.5 Apply EMA Callback if enabled
     if getattr(args, "ema_decay", 0.0) > 0.0:
-        from transformers import TrainerCallback
-        class EMACallback(TrainerCallback):
-            def __init__(self, decay=0.999):
-                self.decay = decay
-                self.shadow = {}
-                self.backup = {}
-                self.ema_active = False
-
-            def on_step_end(self, args, state, control, model=None, **kwargs):
-                if model is None:
-                    return
-                active_model = model.module if hasattr(model, "module") else model
-                for name, param in active_model.named_parameters():
-                    if param.requires_grad:
-                        if name not in self.shadow:
-                            self.shadow[name] = param.data.clone()
-                        else:
-                            self.shadow[name] -= (1.0 - self.decay) * (self.shadow[name] - param.data)
-
-            def on_epoch_begin(self, args, state, control, model=None, **kwargs):
-                self._restore_regular_weights(model)
-
-            def on_epoch_end(self, args, state, control, model=None, **kwargs):
-                self._apply_ema_weights(model)
-
-            def on_train_end(self, args, state, control, model=None, **kwargs):
-                self._apply_ema_weights(model)
-                print("Final EMA weights permanently applied to the model.")
-
-            def _apply_ema_weights(self, model):
-                if model is None or self.ema_active:
-                    return
-                active_model = model.module if hasattr(model, "module") else model
-                for name, param in active_model.named_parameters():
-                    if param.requires_grad and name in self.shadow:
-                        self.backup[name] = param.data.clone()
-                        param.data.copy_(self.shadow[name])
-                self.ema_active = True
-
-            def _restore_regular_weights(self, model):
-                if model is None or not self.ema_active:
-                    return
-                active_model = model.module if hasattr(model, "module") else model
-                for name, param in active_model.named_parameters():
-                    if param.requires_grad and name in self.backup:
-                        param.data.copy_(self.backup[name])
-                self.backup.clear()
-                self.ema_active = False
-
         trainer.add_callback(EMACallback(decay=args.ema_decay))
         print(f"EMA (Exponential Moving Average) enabled with decay rate: {args.ema_decay}")
 

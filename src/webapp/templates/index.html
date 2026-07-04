@@ -120,6 +120,11 @@
                         </td>
                         <td class="px-5 py-3 font-medium">
                             {{ exam.subject_display }}
+                            {% if exam.is_real %}
+                            <span class="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-700 border border-rose-200">
+                                REAL OCR
+                            </span>
+                            {% endif %}
                         </td>
                         <td class="px-5 py-3">
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-stone-100 text-stone-600 border border-stone-200">

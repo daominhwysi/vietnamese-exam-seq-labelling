@@ -1,6 +1,7 @@
 import unittest
 from src.generation.reconstructor import (
     reconstruct_question,
+    reconstruct_exam,
     ReconstructorConfig,
     generate_ordering_choices
 )
@@ -343,6 +344,8 @@ class TestReconstructor(unittest.TestCase):
                         "is_group": False,
                         "stem": "Câu hỏi vật lý.",
                         "options": ["A1", "B1"],
+                        "answer": "A",
+                        "explanation": "Vì A1 đúng.",
                         "question_type": "multiple_choice",
                         "subject": "physics",
                         "grade": 11
@@ -354,7 +357,8 @@ class TestReconstructor(unittest.TestCase):
             question_prefix_template="Câu {num}: ",
             option_prefix_style="capital_dot",
             separator_questions="\n",
-            randomize_q_num=False
+            randomize_q_num=False,
+            explanation_layout="separated"
         )
         enriched = reconstruct_exam(exam_data, config)
         raw_text = enriched["raw_text"]
@@ -365,8 +369,33 @@ class TestReconstructor(unittest.TestCase):
         self.assertIn("Câu 1: Câu hỏi vật lý.", raw_text)
         self.assertIn("A. A1", raw_text)
         
+        # Verify answer key table is reconstructed
+        self.assertIn("ĐÁP ÁN THAM KHẢO", raw_text)
+        self.assertIn("| Câu | 1 |", raw_text)
+        self.assertIn("| Đáp án | A |", raw_text)
+        
+        # Verify explanation text is reconstructed
+        self.assertIn("LỜI GIẢI THAM KHẢO", raw_text)
+        self.assertIn("Câu 1: A", raw_text)
+        self.assertIn("Vì A1 đúng.", raw_text)
+        
+        # Verify spans align correctly
         for span in spans:
             self.assertEqual(raw_text[span["start"]:span["end"]], span["text"])
+            
+        # Verify section titles and explanation are tagged
+        section_spans = [s for s in spans if s["label"] == "section"]
+        explanation_spans = [s for s in spans if s["label"] == "explanation"]
+        question_label_spans = [s for s in spans if s["label"] == "question_label"]
+        option_label_spans = [s for s in spans if s["label"] == "option_label"]
+        
+        self.assertTrue(any("ĐÁP ÁN THAM KHẢO" in s["text"] for s in section_spans))
+        self.assertTrue(any("LỜI GIẢI THAM KHẢO" in s["text"] for s in section_spans))
+        self.assertTrue(any("Vì A1 đúng." in s["text"] for s in explanation_spans))
+        
+        # Verify the explanation prefix "Câu 1:" and answer "A**" are labeled correctly
+        self.assertTrue(any("Câu 1:" in s["text"] for s in question_label_spans))
+        self.assertTrue(any("A**" in s["text"] for s in explanation_spans))
 
     def test_inject_vietnamese_typos(self):
         from src.generation.reconstructor import inject_vietnamese_typos, get_stable_random
@@ -437,6 +466,257 @@ class TestReconstructor(unittest.TestCase):
                 break
                 
         self.assertTrue(shuffled)
+
+    def test_exam_explanation_layouts(self):
+        exam_data = {
+            "exam_id": "test_layout_exam",
+            "subject": "physics",
+            "grade": 11,
+            "sections": {
+                "PHẦN I": [
+                    {
+                        "is_group": False,
+                        "stem": "Câu hỏi vật lý.",
+                        "options": ["A1", "B1"],
+                        "answer": "A",
+                        "explanation": "Giải thích chi tiết.",
+                        "question_type": "multiple_choice",
+                        "subject": "physics",
+                        "grade": 11
+                    }
+                ]
+            }
+        }
+        
+        # Test table_only
+        config = ReconstructorConfig(explanation_layout="table_only", randomize_q_num=False)
+        enriched = reconstruct_exam(exam_data, config)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        self.assertIn("ĐÁP ÁN THAM KHẢO", raw_text)
+        self.assertNotIn("LỜI GIẢI THAM KHẢO", raw_text)
+        self.assertNotIn("Giải thích chi tiết.", raw_text)
+        self.assertFalse(any(s["label"] == "explanation" for s in spans))
+        
+        # Test interleaved
+        config = ReconstructorConfig(explanation_layout="interleaved", randomize_q_num=False)
+        enriched = reconstruct_exam(exam_data, config)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        self.assertIn("ĐÁP ÁN THAM KHẢO", raw_text)
+        self.assertNotIn("LỜI GIẢI THAM KHẢO", raw_text)
+        self.assertIn("Giải thích chi tiết.", raw_text)
+        self.assertTrue(any(s["label"] == "explanation" for s in spans))
+        # Ensure the explanation is placed near the question, i.e., before the answer table
+        ans_table_idx = raw_text.find("ĐÁP ÁN THAM KHẢO")
+        expl_idx = raw_text.find("Giải thích chi tiết.")
+        self.assertTrue(0 <= expl_idx < ans_table_idx)
+        
+        # Test separated
+        config = ReconstructorConfig(explanation_layout="separated", randomize_q_num=False)
+        enriched = reconstruct_exam(exam_data, config)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        self.assertIn("ĐÁP ÁN THAM KHẢO", raw_text)
+        self.assertIn("LỜI GIẢI THAM KHẢO", raw_text)
+        self.assertIn("Giải thích chi tiết.", raw_text)
+        self.assertTrue(any(s["label"] == "explanation" for s in spans))
+        # Ensure the explanation is placed after LỜI GIẢI THAM KHẢO
+        expl_title_idx = raw_text.find("LỜI GIẢI THAM KHẢO")
+        expl_idx = raw_text.find("Giải thích chi tiết.")
+        self.assertTrue(expl_title_idx < expl_idx)
+
+    def test_answer_table_formats(self):
+        from src.generation.reconstructor import reconstruct_exam
+        exam_data = {
+            "exam_id": "test_table_exam",
+            "subject": "math_algebra",
+            "grade": 12,
+            "sections": {
+                "PHẦN I": [
+                    {
+                        "is_group": False,
+                        "stem": "Câu hỏi 1.",
+                        "options": ["A1", "B1"],
+                        "answer": "A",
+                        "explanation": "",
+                        "question_type": "multiple_choice",
+                        "subject": "math_algebra",
+                        "grade": 12
+                    },
+                    {
+                        "is_group": False,
+                        "stem": "Câu hỏi 2.",
+                        "options": ["A2", "B2"],
+                        "answer": "B",
+                        "explanation": "",
+                        "question_type": "multiple_choice",
+                        "subject": "math_algebra",
+                        "grade": 12
+                    }
+                ]
+            }
+        }
+        
+        # 1. Test markdown vertical
+        config = ReconstructorConfig(
+            answer_table_format="md",
+            answer_table_direction="vertical",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        self.assertIn("| Câu | Đáp án |", enriched["raw_text"])
+        self.assertIn("| 1 | A |", enriched["raw_text"])
+        self.assertIn("| 2 | B |", enriched["raw_text"])
+
+        # 2. Test HTML horizontal
+        config = ReconstructorConfig(
+            answer_table_format="html",
+            answer_table_direction="horizontal",
+            answer_table_chunk_size=10,
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        self.assertIn("<table>", enriched["raw_text"])
+        self.assertIn("<th>1</th>", enriched["raw_text"])
+        self.assertIn("<td>A</td>", enriched["raw_text"])
+
+        # 3. Test HTML vertical
+        config = ReconstructorConfig(
+            answer_table_format="html",
+            answer_table_direction="vertical",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        self.assertIn("<th>Câu</th>", enriched["raw_text"])
+        self.assertIn("<td>1</td>", enriched["raw_text"])
+        self.assertIn("<td>A</td>", enriched["raw_text"])
+
+        # 4. Test CSV horizontal
+        config = ReconstructorConfig(
+            answer_table_format="csv",
+            answer_table_direction="horizontal",
+            answer_table_chunk_size=10,
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        self.assertIn("Câu,1,2", enriched["raw_text"])
+        self.assertIn("Đáp án,A,B", enriched["raw_text"])
+
+        # 5. Test CSV vertical
+        config = ReconstructorConfig(
+            answer_table_format="csv",
+            answer_table_direction="vertical",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        self.assertIn("Câu,Đáp án", enriched["raw_text"])
+        self.assertIn("1,A", enriched["raw_text"])
+        self.assertIn("2,B", enriched["raw_text"])
+
+        # 6. Test Random format and direction does not crash
+        config = ReconstructorConfig(
+            answer_table_format="random",
+            answer_table_direction="random",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        self.assertIn("ĐÁP ÁN THAM KHẢO", enriched["raw_text"])
+
+    def test_section_title_paraphrasing(self):
+        from src.generation.reconstructor import reconstruct_exam
+        exam_data = {
+            "exam_id": "test_section_exam",
+            "subject": "physics",
+            "grade": 11,
+            "sections": {
+                "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn": [
+                    {
+                        "is_group": False,
+                        "stem": "Câu hỏi.",
+                        "options": ["A1", "B1"],
+                        "answer": "A",
+                        "explanation": "",
+                        "question_type": "multiple_choice",
+                        "subject": "physics",
+                        "grade": 11
+                    }
+                ]
+            }
+        }
+        
+        # Test with paraphrase_section_titles = True
+        config = ReconstructorConfig(
+            paraphrase_section_titles=True,
+            randomize_q_num=False,
+            seed="my_stable_seed"
+        )
+        enriched = reconstruct_exam(exam_data, config)
+        raw_text = enriched["raw_text"]
+        
+        # Check that the section title was changed from the original
+        if "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn\n" in raw_text:
+            self.fail(f"Title was not paraphrased: {raw_text}")
+        if not ("PHẦN I" in raw_text or "Phần I" in raw_text or "Phần 1" in raw_text or "Phần thứ nhất" in raw_text):
+            self.fail(f"Expected paraphrased title, got: {raw_text!r}")
+
+    def test_bold_option_label(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Bold option label test question.",
+            "options": ["Option 1", "Option 2"],
+            "question_type": "multiple_choice",
+            "subject": "chemistry",
+            "grade": 10,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="Câu {num}: ",
+            option_prefix_style="bold_capital_dot",
+            separator_stem_options="\n",
+            separator_options="\n",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        
+        # Expect raw text to contain **A.** Option 1
+        self.assertIn("**A.** Option 1", raw_text)
+        
+        # Check that span for option_label includes "**A.**"
+        opt_spans = [s for s in spans if s["label"] == "option_label"]
+        self.assertTrue(len(opt_spans) >= 1)
+        self.assertEqual(opt_spans[0]["text"], "**A.**")
+
+    def test_bold_question_label(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Bold question label test.",
+            "options": ["Option 1", "Option 2"],
+            "question_type": "multiple_choice",
+            "subject": "chemistry",
+            "grade": 10,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="**Câu {num}:** ",
+            option_prefix_style="capital_dot",
+            separator_stem_options="\n",
+            separator_options="\n",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        
+        # Expect raw text to contain **Câu 1:** Bold question label test.
+        self.assertIn("**Câu 1:** Bold question label test.", raw_text)
+        
+        # Check that span for question_label includes "**Câu 1:**"
+        q_spans = [s for s in spans if s["label"] == "question_label"]
+        self.assertTrue(len(q_spans) >= 1)
+        self.assertEqual(q_spans[0]["text"], "**Câu 1:**")
 
 if __name__ == '__main__':
     unittest.main()

@@ -6,7 +6,7 @@
 <div class="flex-grow flex flex-col lg:flex-row max-w-7xl mx-auto w-full px-6 py-6 gap-6">
     
     <!-- Left Area: Exam Paper Sheet -->
-    <div class="flex-grow lg:w-3/4 flex flex-col">
+    <div class="flex-grow {% if exam.is_real %}w-full{% else %}lg:w-3/4{% endif %} flex flex-col">
         
         <!-- View Toggle & Tag Legends (Notion Menu style) -->
         <div class="p-3 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -40,11 +40,12 @@
                 <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border-b-2 border-emerald-500">option_text</span>
                 <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 border-b-2 border-rose-500">context</span>
                 <span class="px-2 py-0.5 rounded bg-stone-100 text-stone-800 border-b-2 border-stone-500">section</span>
+                <span class="px-2 py-0.5 rounded bg-orange-100 text-orange-800 border-b-2 border-orange-500">explanation</span>
             </div>
         </div>
         
         <!-- Document Sheet -->
-        <div id="paper-sheet" class="exam-paper rounded-lg p-8 sm:p-12 md:p-14 flex-grow relative">
+        <div id="paper-sheet" class="{% if not exam.is_real %}exam-paper rounded-lg p-8 sm:p-12 md:p-14{% endif %} flex-grow relative">
             
             <!-- Standard School Header layout (Academic style) -->
             <div id="academic-header" class="border-b border-stone-300 pb-6 mb-8 text-stone-850 text-xs sm:text-sm">
@@ -78,8 +79,17 @@
                         {% for q in questions %}
                             <div id="question-card-{{ q.start_number }}" class="p-3 rounded-lg hover:bg-stone-50 transition-colors duration-100 space-y-3">
                                 
-                                <!-- Context Block -->
-                                {% if q.is_group %}
+                                {% if q.question_type == 'real_exam' %}
+                                    <!-- Real Exam Layout -->
+                                    <div class="p-3.5 rounded border border-[#e9e9e6] bg-[#f7f7f5] text-stone-600 text-xs sm:text-[13px] leading-relaxed mb-4 font-sans">
+                                        <p class="font-semibold text-stone-850 mb-1">📝 Đây là bản dịch chuyển chữ OCR thực tế:</p>
+                                        <p>Để xem cấu trúc từng thành phần văn bản được mô hình gán nhãn chi tiết (như stem, option, context, section), vui lòng chuyển đổi hiển thị sang chế độ <button class="font-bold text-stone-850 underline hover:text-[#37352f]" onclick="switchViewMode('tag')">Sequence Labeling (Nhãn Spans)</button>.</p>
+                                    </div>
+                                    <div class="p-6 rounded-lg border border-stone-200 bg-white font-serif leading-relaxed text-xs sm:text-sm whitespace-pre-wrap text-stone-800 math-content">
+                                        {{ q.stem | safe }}
+                                    </div>
+                                {% elif q.is_group %}
+                                    <!-- Context Block -->
                                     <div class="p-3 rounded bg-stone-50 border border-stone-200 text-stone-700 text-xs sm:text-sm leading-relaxed mb-3">
                                         <div class="font-bold text-stone-500 text-[10px] uppercase mb-1 tracking-wider">Đọc đoạn thông tin sau:</div>
                                         <div class="math-content font-serif leading-relaxed">{{ q.context | safe }}</div>
@@ -252,6 +262,136 @@
 
             <!-- VIEW 2: Developer Sequence Labeling Highlight (Hidden by default) -->
             <div id="view-tag" class="hidden space-y-6">
+                {% if exam.is_real %}
+                <!-- Roboflow-style Sequence Labeling Editor -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Editor Sidebar (1/4 width) -->
+                    <div class="lg:col-span-1 space-y-4">
+                        
+                        <!-- Brush / Label Selector -->
+                        <div class="p-3 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] space-y-2">
+                            <span class="block text-[10px] font-semibold text-stone-400 tracking-wider uppercase font-sans">Nhãn</span>
+                            <div class="space-y-1" id="editor-brush-selector">
+                                <button onclick="selectBrush('question_label')" id="brush-question_label" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-blue-100 border border-blue-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">question_label</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">1</span>
+                                </button>
+                                <button onclick="selectBrush('stem')" id="brush-stem" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-purple-100 border border-purple-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">stem</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">2</span>
+                                </button>
+                                <button onclick="selectBrush('option_label')" id="brush-option_label" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-amber-100 border border-amber-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">option_label</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">3</span>
+                                </button>
+                                <button onclick="selectBrush('option_text')" id="brush-option_text" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-100 border border-emerald-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">option_text</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">4</span>
+                                </button>
+                                <button onclick="selectBrush('context')" id="brush-context" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-rose-100 border border-rose-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">context</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">5</span>
+                                </button>
+                                <button onclick="selectBrush('section')" id="brush-section" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-stone-100 border border-stone-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">section</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">6</span>
+                                </button>
+                                <button onclick="selectBrush('explanation')" id="brush-explanation" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200">
+                                    <span class="flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 rounded-full bg-orange-100 border border-orange-500 inline-block"></span>
+                                        <span class="font-mono text-[10.5px]">explanation</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">7</span>
+                                </button>
+                                
+                                <div class="border-t border-stone-250 my-1.5 pt-1.5"></div>
+                                
+                                <button onclick="selectBrush('clear')" id="brush-clear" class="w-full text-left px-2.5 py-1 rounded text-[11px] font-semibold border transition-all duration-100 flex items-center justify-between border-transparent hover:bg-stone-200 text-stone-500">
+                                    <span class="flex items-center gap-2">
+                                        <span>🧹</span>
+                                        <span>Xóa Nhãn (Clear)</span>
+                                    </span>
+                                    <span class="text-[8px] text-stone-450 font-mono bg-stone-300/40 px-1 py-0.5 rounded">0</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Data Save controls -->
+                        <div class="p-3.5 border border-emerald-250 rounded-lg bg-emerald-50/40 space-y-2">
+                            <span class="block text-[10px] font-semibold text-emerald-800 tracking-wider uppercase font-sans">Dữ Liệu</span>
+                            <button onclick="saveNewAnnotations()" class="w-full py-2 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all duration-100 shadow-sm flex items-center justify-center gap-1.5">
+                                <span>💾</span> Lưu Nhãn (Save)
+                            </button>
+                            <div class="flex gap-1.5">
+                                <button onclick="undo()" class="flex-1 py-1.5 rounded border border-stone-200 bg-white hover:bg-stone-50 text-stone-600 text-[11px] font-semibold transition-colors duration-100 flex items-center justify-center gap-1">
+                                    <span>↩️</span> Undo
+                                </button>
+                                <button onclick="resetAnnotations()" class="flex-1 py-1.5 rounded border border-stone-200 bg-white hover:bg-stone-50 text-stone-600 text-[11px] font-semibold transition-colors duration-100 flex items-center justify-center gap-1">
+                                    <span>🔄</span> Reset
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quick shortcuts and user tips -->
+                        <div class="p-4 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] text-[11px] text-stone-500 leading-relaxed space-y-1.5">
+                            <span class="block text-[10px] font-semibold text-stone-400 tracking-wider uppercase font-sans">Phím tắt nhanh</span>
+                            <p>📝 Bôi đen văn bản để gán nhãn được chọn.</p>
+                            <p>⌨️ Phím số <b>1-7</b>: Chọn nhãn nhanh.</p>
+                            <p>⌨️ Phím số <b>0</b>: Chọn cọ xóa nhãn.</p>
+                            <p>🖱️ Click nhãn trong văn bản để xóa.</p>
+                        </div>
+
+                        <!-- Tag statistics & details -->
+                        <div class="p-4 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] flex flex-col max-h-[350px]">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-semibold text-stone-400 tracking-wider uppercase font-sans">Mục Nhãn (<span id="spans-count">0</span>)</span>
+                                <button onclick="clearAllAnnotations()" class="text-[9px] text-red-500 font-bold hover:underline">Xóa tất cả</button>
+                            </div>
+                            <div id="spans-list-container" class="space-y-1.5 overflow-y-auto pr-1 flex-grow scrollbar-thin text-xs">
+                                <!-- Spans items loaded here -->
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Editor Canvas (3/4 width) -->
+                    <div class="lg:col-span-3 flex flex-col space-y-3">
+                        <div class="flex justify-between items-center bg-white px-4 py-2.5 rounded-lg border border-stone-200 shadow-sm text-xs text-stone-500 font-sans">
+                            <div class="flex items-center gap-2">
+                                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Chế độ biên tập OCR thực tế (Interactive Annotator)</span>
+                            </div>
+                            <div>
+                                <span id="selection-status-badge" class="bg-stone-100 text-stone-500 px-2 py-0.5 rounded font-mono text-[10px]">Chưa bôi đen</span>
+                            </div>
+                        </div>
+                        
+                        <div id="annotator-editor-container" class="p-8 sm:p-12 rounded-lg border border-stone-200 bg-white shadow-inner font-serif leading-relaxed text-xs sm:text-sm md:text-[15px] select-text whitespace-pre-wrap text-stone-800 relative min-h-[600px] max-h-[700px] overflow-y-auto" style="line-height: 2.2;">
+                            <!-- Highlighted annotator canvas -->
+                        </div>
+                    </div>
+                    
+                </div>
+                {% else %}
                 <div class="p-3.5 rounded border border-[#e9e9e6] bg-[#f7f7f5] text-stone-600 text-xs sm:text-[13px] leading-relaxed mb-6 font-sans">
                     <p class="font-semibold text-stone-800 mb-1">Chế độ kiểm tra Spans &amp; Tokens:</p>
                     <p>Văn bản thô được ghép lại bởi reconstructor. Các phần văn bản được tô màu theo nhãn sequence labeling. Rê chuột lên vùng tô màu để xem tên nhãn chi tiết.</p>
@@ -260,11 +400,14 @@
                 <div id="tag-content-renderer" class="space-y-6 tag-highlight-active">
                     <!-- Javascript will populate highlighted cards here -->
                 </div>
+                {% endif %}
             </div>
+
             
         </div>
     </div>
     
+    {% if not exam.is_real %}
     <!-- Right Area: Sidebar Panels (Notion Style) -->
     <div class="lg:w-1/4 flex flex-col space-y-5">
         
@@ -273,12 +416,16 @@
             <div>
                 <span class="text-[10px] font-semibold text-stone-400 tracking-wider uppercase">Chi tiết tài liệu</span>
                 <h2 class="text-sm font-bold text-stone-800 leading-tight mt-1">{{ exam.subject_display }}</h2>
-                <div class="flex items-center space-x-1.5 mt-2">
+                <div class="flex flex-wrap items-center gap-1.5 mt-2">
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-stone-200 text-stone-600 border border-stone-300">Khối {{ exam.grade }}</span>
                     <span class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-stone-200 text-stone-600 border border-stone-300">ID: {{ exam.exam_id }}</span>
+                    {% if exam.is_real %}
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">REAL OCR</span>
+                    {% endif %}
                 </div>
             </div>
             
+            {% if not exam.is_real %}
             <!-- Timer widget -->
             <div class="border-t border-[#e9e9e6] pt-3 flex items-center justify-between">
                 <div>
@@ -295,8 +442,10 @@
                     </svg>
                 </button>
             </div>
+            {% endif %}
         </div>
 
+        {% if not exam.is_real %}
         <!-- Question Navigation Grid (Notion minimal outline grid) -->
         <div class="p-4 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] flex-grow flex flex-col justify-between min-h-[300px] text-xs">
             <div class="space-y-3">
@@ -322,8 +471,40 @@
                 </a>
             </div>
         </div>
+        {% endif %}
+
+        <!-- Developer Tools Panel -->
+        <div class="p-4 border border-[#e9e9e6] rounded-lg bg-[#f7f7f5] space-y-3 text-xs text-[#37352f]">
+            <span class="block text-[10px] font-semibold text-stone-400 tracking-wider uppercase">Công cụ phát triển (Dev Tools)</span>
+            <div class="space-y-2">
+                <a href="/exam/{{ exam.exam_id }}/json" download class="flex items-center justify-between w-full px-3 py-2 rounded border border-[#e9e9e6] bg-white hover:bg-[#efefed] text-stone-700 font-medium transition-colors duration-100 shadow-sm">
+                    <span class="flex items-center gap-1.5">
+                        <span>💾</span> Tải JSON gốc
+                    </span>
+                    <span class="text-[9px] font-semibold text-stone-400">JSON</span>
+                </a>
+                <a href="/exam/{{ exam.exam_id }}/xml" download class="flex items-center justify-between w-full px-3 py-2 rounded border border-[#e9e9e6] bg-white hover:bg-[#efefed] text-stone-700 font-medium transition-colors duration-100 shadow-sm">
+                    <span class="flex items-center gap-1.5">
+                        <span>📝</span> Tải XML gán nhãn
+                    </span>
+                    <span class="text-[9px] font-semibold text-stone-400">XML</span>
+                </a>
+                <button onclick="copyXmlContent()" class="flex items-center justify-between w-full px-3 py-2 rounded border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold transition-colors duration-100 shadow-sm">
+                    <span class="flex items-center gap-1.5">
+                        <span id="copy-status-icon">📋</span> <span id="copy-status-text">Sao chép XML</span>
+                    </span>
+                    <span class="text-[9px] font-bold text-emerald-600">COPY</span>
+                </button>
+            </div>
+            {% if exam.is_real %}
+            <a href="/" class="block w-full py-2 rounded border border-[#e9e9e6] bg-white hover:bg-[#efefed] text-stone-600 text-center font-medium transition-colors duration-100">
+                Quay Lại Dashboard
+            </a>
+            {% endif %}
+        </div>
         
     </div>
+    {% endif %}
 </div>
 
 <!-- Submission Confirmation Modal (Notion-style simple modal) -->
@@ -359,6 +540,22 @@
 {% endblock %}
 
 {% block scripts %}
+<style>
+    #annotator-editor-container {
+        user-select: text !important;
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+    }
+    #annotator-editor-container .tag-token {
+        transition: all 0.15s ease;
+        border-bottom-width: 2px;
+    }
+    #annotator-editor-container .tag-token:hover {
+        filter: brightness(0.93);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+</style>
 <script>
     const examData = {{ exam|tojson|safe }};
     const totalQuestions = examData.total_questions;
@@ -510,16 +707,24 @@
     function updateTimerDisplay() {
         const min = Math.floor(totalSeconds / 60);
         const sec = totalSeconds % 60;
-        document.getElementById('timer-display').textContent = 
-            `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+        const timerDisp = document.getElementById('timer-display');
+        if (timerDisp) {
+            timerDisp.textContent = 
+                `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+        }
     }
     
     function startTimer() {
         if(timerRunning) return;
+        
+        const pauseIcon = document.getElementById('timer-icon-pause');
+        const playIcon = document.getElementById('timer-icon-play');
+        if (!pauseIcon || !playIcon) return; // Safeguard if timer is not rendered
+        
         timerRunning = true;
         
-        document.getElementById('timer-icon-pause').classList.remove('hidden');
-        document.getElementById('timer-icon-play').classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+        playIcon.classList.add('hidden');
         
         timerInterval = setInterval(() => {
             if(totalSeconds > 0) {
@@ -538,8 +743,12 @@
         timerRunning = false;
         clearInterval(timerInterval);
         
-        document.getElementById('timer-icon-pause').classList.add('hidden');
-        document.getElementById('timer-icon-play').classList.remove('hidden');
+        const pauseIcon = document.getElementById('timer-icon-pause');
+        const playIcon = document.getElementById('timer-icon-play');
+        if (pauseIcon && playIcon) {
+            pauseIcon.classList.add('hidden');
+            playIcon.classList.remove('hidden');
+        }
     }
     
     function toggleTimer() {
@@ -672,10 +881,363 @@
         });
     }
     
+    let activeBrush = 'stem';
+    let rawText = "";
+    let currentSpans = [];
+    let originalSpans = [];
+    let historyStack = [];
+
+    function saveStateToHistory() {
+        if (historyStack.length >= 50) {
+            historyStack.shift();
+        }
+        historyStack.push(JSON.parse(JSON.stringify(currentSpans)));
+    }
+
+    function undo() {
+        if (historyStack.length === 0) return;
+        const previousState = historyStack.pop();
+        currentSpans = previousState;
+        renderAnnotator();
+    }
+
+    function initAnnotator() {
+        if (!examData.is_real) return;
+        
+        // Find raw text and spans
+        const dummySection = Object.values(examData.sections)[0];
+        if (!dummySection || dummySection.length === 0) return;
+        const q = dummySection[0];
+        rawText = q.raw_text || "";
+        currentSpans = [...(q.spans || [])].sort((a, b) => a.start - b.start);
+        originalSpans = JSON.parse(JSON.stringify(currentSpans));
+        
+        selectBrush('stem');
+        renderAnnotator();
+        
+        const container = document.getElementById('annotator-editor-container');
+        if (container) {
+            container.addEventListener('mouseup', handleTextSelection);
+        }
+        
+        document.addEventListener('keydown', handleKeyDown);
+    }
+
+    function selectBrush(label) {
+        activeBrush = label;
+        
+        const buttons = document.querySelectorAll('#editor-brush-selector button');
+        buttons.forEach(btn => {
+            btn.classList.remove('bg-[#efefed]', 'border-stone-300', 'text-stone-900', 'shadow-sm');
+            btn.classList.add('border-transparent', 'text-stone-600');
+        });
+        
+        const activeBtn = document.getElementById(`brush-${label}`);
+        if (activeBtn) {
+            activeBtn.classList.remove('border-transparent', 'text-stone-600');
+            activeBtn.classList.add('bg-[#efefed]', 'border-stone-300', 'text-stone-900', 'shadow-sm');
+        }
+    }
+
+    function handleTextSelection() {
+        const container = document.getElementById('annotator-editor-container');
+        const rangeInfo = getSelectionCharacterOffsetsWithin(container);
+        const badge = document.getElementById('selection-status-badge');
+        
+        if (rangeInfo && rangeInfo.start < rangeInfo.end) {
+            badge.textContent = `Đang chọn: [${rangeInfo.start} - ${rangeInfo.end}]`;
+            badge.className = "bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-mono text-[10px]";
+            
+            if (activeBrush === 'clear') {
+                clearSpanRange(rangeInfo.start, rangeInfo.end);
+            } else if (activeBrush) {
+                addSpan(rangeInfo.start, rangeInfo.end, activeBrush);
+            }
+            
+            window.getSelection().removeAllRanges();
+            setTimeout(() => {
+                badge.textContent = "Chưa bôi đen";
+                badge.className = "bg-stone-100 text-stone-600 px-2 py-0.5 rounded font-mono text-[10px]";
+            }, 1000);
+        }
+    }
+
+    function clickSpan(event, idx) {
+        event.stopPropagation();
+        const span = currentSpans[idx];
+        if (!span) return;
+        
+        if (confirm(`Bạn muốn xóa nhãn [${span.label}] cho đoạn text: "${span.text ? span.text.substring(0, 30) : rawText.substring(span.start, span.start + 30)}..."?`)) {
+            saveStateToHistory();
+            currentSpans.splice(idx, 1);
+            renderAnnotator();
+        }
+    }
+
+    function deleteSpan(idx) {
+        saveStateToHistory();
+        currentSpans.splice(idx, 1);
+        renderAnnotator();
+    }
+
+    function addSpan(start, end, label) {
+        if (start >= end) return;
+        saveStateToHistory();
+        
+        const newSpans = [];
+        const newSpan = {
+            start: start,
+            end: end,
+            label: label,
+            text: rawText.substring(start, end)
+        };
+        
+        currentSpans.forEach(span => {
+            if (span.start >= start && span.end <= end) {
+                return;
+            }
+            if (span.start < start && span.end > end) {
+                newSpans.push({
+                    start: span.start,
+                    end: start,
+                    label: span.label,
+                    text: rawText.substring(span.start, start)
+                });
+                newSpans.push({
+                    start: end,
+                    end: span.end,
+                    label: span.label,
+                    text: rawText.substring(end, span.end)
+                });
+                return;
+            }
+            if (span.start < start && span.end > start && span.end <= end) {
+                newSpans.push({
+                    start: span.start,
+                    end: start,
+                    label: span.label,
+                    text: rawText.substring(span.start, start)
+                });
+                return;
+            }
+            if (span.start >= start && span.start < end && span.end > end) {
+                newSpans.push({
+                    start: end,
+                    end: span.end,
+                    label: span.label,
+                    text: rawText.substring(end, span.end)
+                });
+                return;
+            }
+            newSpans.push(span);
+        });
+        
+        newSpans.push(newSpan);
+        currentSpans = newSpans.sort((a, b) => a.start - b.start);
+        renderAnnotator();
+    }
+
+    function clearSpanRange(start, end) {
+        if (start >= end) return;
+        saveStateToHistory();
+        
+        const newSpans = [];
+        currentSpans.forEach(span => {
+            if (span.start >= start && span.end <= end) {
+                return;
+            }
+            if (span.start < start && span.end > end) {
+                newSpans.push({
+                    start: span.start,
+                    end: start,
+                    label: span.label,
+                    text: rawText.substring(span.start, start)
+                });
+                newSpans.push({
+                    start: end,
+                    end: span.end,
+                    label: span.label,
+                    text: rawText.substring(end, span.end)
+                });
+                return;
+            }
+            if (span.start < start && span.end > start && span.end <= end) {
+                newSpans.push({
+                    start: span.start,
+                    end: start,
+                    label: span.label,
+                    text: rawText.substring(span.start, start)
+                });
+                return;
+            }
+            if (span.start >= start && span.start < end && span.end > end) {
+                newSpans.push({
+                    start: end,
+                    end: span.end,
+                    label: span.label,
+                    text: rawText.substring(end, span.end)
+                });
+                return;
+            }
+            newSpans.push(span);
+        });
+        
+        currentSpans = newSpans.sort((a, b) => a.start - b.start);
+        renderAnnotator();
+    }
+
+    function renderAnnotator() {
+        const container = document.getElementById('annotator-editor-container');
+        if (!container) return;
+        
+        container.innerHTML = "";
+        currentSpans.sort((a, b) => a.start - b.start);
+        
+        let htmlStr = "";
+        let lastIdx = 0;
+        
+        currentSpans.forEach((span, idx) => {
+            if (span.start > lastIdx) {
+                htmlStr += escapeHtml(rawText.substring(lastIdx, span.start));
+            }
+            
+            const spanText = rawText.substring(span.start, span.end);
+            const tagLower = span.label.toLowerCase();
+            const baseClass = `tag-${tagLower}`;
+            
+            htmlStr += `<span class="tag-token ${baseClass} cursor-pointer hover:opacity-85 border-b-2 font-serif relative" title="Nhấp để xóa nhãn" onclick="clickSpan(event, ${idx})">${escapeHtml(spanText)}</span>`;
+            lastIdx = span.end;
+        });
+        
+        if (lastIdx < rawText.length) {
+            htmlStr += escapeHtml(rawText.substring(lastIdx));
+        }
+        
+        container.innerHTML = htmlStr;
+        
+        document.getElementById('spans-count').textContent = currentSpans.length;
+        
+        const listContainer = document.getElementById('spans-list-container');
+        if (listContainer) {
+            listContainer.innerHTML = "";
+            currentSpans.forEach((span, idx) => {
+                const item = document.createElement('div');
+                item.className = "p-2 rounded border border-stone-200 bg-white hover:bg-stone-50 transition-colors duration-75 flex flex-col gap-1 cursor-pointer";
+                item.onclick = () => {
+                    const el = container.querySelectorAll('.tag-token')[idx];
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.classList.add('animate-pulse');
+                        setTimeout(() => el.classList.remove('animate-pulse'), 1000);
+                    }
+                };
+                
+                const tagLower = span.label.toLowerCase();
+                const colorClass = `tag-${tagLower}`;
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-bold ${colorClass}">${span.label}</span>
+                        <button onclick="event.stopPropagation(); deleteSpan(${idx})" class="text-stone-450 hover:text-red-500 transition-colors font-bold text-xs" title="Xóa nhãn">✕</button>
+                    </div>
+                    <div class="text-[10px] text-stone-600 truncate font-serif italic">"${span.text || rawText.substring(span.start, span.end)}"</div>
+                    <div class="text-[8px] text-stone-400 font-mono">Offsets: ${span.start} - ${span.end}</div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+    }
+
+    function handleKeyDown(event) {
+        if (!examData.is_real) return;
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+        
+        // Ctrl+Z / Cmd+Z Undo handling
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') {
+            undo();
+            event.preventDefault();
+            return;
+        }
+        
+        const key = event.key;
+        if (key === '1') { selectBrush('question_label'); event.preventDefault(); }
+        else if (key === '2') { selectBrush('stem'); event.preventDefault(); }
+        else if (key === '3') { selectBrush('option_label'); event.preventDefault(); }
+        else if (key === '4') { selectBrush('option_text'); event.preventDefault(); }
+        else if (key === '5') { selectBrush('context'); event.preventDefault(); }
+        else if (key === '6') { selectBrush('section'); event.preventDefault(); }
+        else if (key === '7') { selectBrush('explanation'); event.preventDefault(); }
+        else if (key === '0') { selectBrush('clear'); event.preventDefault(); }
+    }
+
+    function getSelectionCharacterOffsetsWithin(element) {
+        const selection = window.getSelection();
+        if (selection.rangeCount === 0) return null;
+        const range = selection.getRangeAt(0);
+        
+        if (!element.contains(range.startContainer) || !element.contains(range.endContainer)) {
+            return null;
+        }
+        
+        const preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(element);
+        preCaretRange.setEnd(range.startContainer, range.startOffset);
+        const start = preCaretRange.toString().length;
+        
+        const preCaretRangeEnd = range.cloneRange();
+        preCaretRangeEnd.selectNodeContents(element);
+        preCaretRangeEnd.setEnd(range.endContainer, range.endOffset);
+        const end = preCaretRangeEnd.toString().length;
+        
+        return { start, end };
+    }
+
+    async function saveNewAnnotations() {
+        if (!confirm("Bạn có chắc chắn muốn lưu thay đổi nhãn? Điều này sẽ cập nhật trực tiếp tệp JSON và XML trên đĩa.")) return;
+        
+        try {
+            const response = await fetch(`/api/exam/${examData.exam_id}/spans`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ spans: currentSpans })
+            });
+            
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.detail || "Không thể lưu nhãn.");
+            }
+            
+            alert("Lưu thành công! Đề thi và tệp XML đã được cập nhật.");
+            originalSpans = JSON.parse(JSON.stringify(currentSpans));
+        } catch (err) {
+            alert("Lỗi khi lưu nhãn: " + err.message);
+        }
+    }
+
+    function resetAnnotations() {
+        if (!confirm("Khôi phục về trạng thái nhãn ban đầu?")) return;
+        saveStateToHistory();
+        currentSpans = JSON.parse(JSON.stringify(originalSpans));
+        renderAnnotator();
+    }
+
+    function clearAllAnnotations() {
+        if (!confirm("Bạn muốn xóa toàn bộ nhãn?")) return;
+        saveStateToHistory();
+        currentSpans = [];
+        renderAnnotator();
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         startTimer();
         formatMultimodalContent();
-        renderTagHighlightsView();
+        if (examData.is_real) {
+            initAnnotator();
+        } else {
+            renderTagHighlightsView();
+        }
     });
 
     // -------------------------------------------------------------
@@ -710,7 +1272,9 @@
             
             viewStandard.classList.add('hidden');
             viewTag.classList.remove('hidden');
-            tagLegend.classList.remove('hidden');
+            if (!examData.is_real) {
+                tagLegend.classList.remove('hidden');
+            }
         }
         
         if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
@@ -727,8 +1291,11 @@
                   .replace(/'/g, "&#039;");
     }
     
+    const activeTags = new Set(Array.from(document.querySelectorAll('#tag-legend span')).map(span => span.textContent.trim().toLowerCase()));
+
     function renderTagHighlightsView() {
         const container = document.getElementById('tag-content-renderer');
+        if (!container) return;
         container.innerHTML = "";
         
         Object.keys(examData.sections).forEach(sectionTitle => {
@@ -758,9 +1325,14 @@
                     }
                     
                     const spanText = rawText.substring(span.start, span.end);
-                    const baseClass = `tag-${span.label.toLowerCase()}`;
+                    const tagLower = span.label.toLowerCase();
+                    const baseClass = `tag-${tagLower}`;
                     
-                    htmlStr += `<span class="tag-token ${baseClass}" title="Nhãn: ${span.label}">${escapeHtml(spanText)}</span>`;
+                    if (activeTags.has(tagLower)) {
+                        htmlStr += `<span class="tag-token ${baseClass}" title="Nhãn: ${span.label}">${escapeHtml(spanText)}</span>`;
+                    } else {
+                        htmlStr += escapeHtml(spanText);
+                    }
                     lastIdx = span.end;
                 });
                 
@@ -774,6 +1346,48 @@
             
             container.appendChild(sectionDiv);
         });
+    }
+    
+    // Setup Legend filtering listeners
+    document.querySelectorAll('#tag-legend span').forEach(span => {
+        span.style.cursor = 'pointer';
+        span.addEventListener('click', () => {
+            const tag = span.textContent.trim().toLowerCase();
+            if (activeTags.has(tag)) {
+                activeTags.delete(tag);
+                span.style.opacity = '0.35';
+                span.style.textDecoration = 'line-through';
+            } else {
+                activeTags.add(tag);
+                span.style.opacity = '1';
+                span.style.textDecoration = 'none';
+            }
+            renderTagHighlightsView();
+        });
+    });
+
+    // Copy XML to clipboard
+    async function copyXmlContent() {
+        const btnText = document.getElementById('copy-status-text');
+        const btnIcon = document.getElementById('copy-status-icon');
+        
+        try {
+            const response = await fetch(`/exam/${examData.exam_id}/xml`);
+            if (!response.ok) throw new Error('Không thể tải XML');
+            
+            const xmlText = await response.text();
+            await navigator.clipboard.writeText(xmlText);
+            
+            btnText.textContent = "Đã sao chép!";
+            btnIcon.textContent = "✅";
+            
+            setTimeout(() => {
+                btnText.textContent = "Sao chép XML";
+                btnIcon.textContent = "📋";
+            }, 2000);
+        } catch (err) {
+            alert('Lỗi sao chép XML: ' + err.message);
+        }
     }
     
     // -------------------------------------------------------------
