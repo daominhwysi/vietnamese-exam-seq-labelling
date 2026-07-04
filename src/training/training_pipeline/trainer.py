@@ -2,10 +2,12 @@ import torch
 from transformers import Trainer
 
 class WeightedTrainer(Trainer):
-    def __init__(self, class_weights=None, real_upsample_factor=1.0, *args, **kwargs):
+    def __init__(self, class_weights=None, real_upsample_factor=1.0, use_focal_loss=False, focal_gamma=2.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.class_weights = class_weights
         self.real_upsample_factor = real_upsample_factor
+        self.use_focal_loss = use_focal_loss
+        self.focal_gamma = focal_gamma
 
     def get_train_dataloader(self):
         """Override to inject WeightedRandomSampler for real vs synthetic upsampling."""
@@ -58,6 +60,33 @@ class WeightedTrainer(Trainer):
             pin_memory=self.args.dataloader_pin_memory,
         )
 
+    def _compute_focal_loss(self, logits, labels):
+        num_labels = self.model.config.num_labels
+        logits_flat = logits.view(-1, num_labels)
+        labels_flat = labels.view(-1)
+
+        valid_mask = labels_flat != -100
+        logits_valid = logits_flat[valid_mask]
+        labels_valid = labels_flat[valid_mask]
+
+        if logits_valid.numel() == 0:
+            return torch.tensor(0.0, device=logits.device, requires_grad=True)
+
+        log_probs = torch.nn.functional.log_softmax(logits_valid, dim=-1)
+        probs = torch.exp(log_probs)
+
+        target_log_probs = log_probs.gather(dim=-1, index=labels_valid.unsqueeze(1)).squeeze(1)
+        target_probs = probs.gather(dim=-1, index=labels_valid.unsqueeze(1)).squeeze(1)
+
+        focal_weight = (1.0 - target_probs) ** self.focal_gamma
+
+        if self.class_weights is not None:
+            alpha_weight = self.class_weights[labels_valid]
+            focal_weight = focal_weight * alpha_weight
+
+        loss = -focal_weight * target_log_probs
+        return loss.mean()
+
     def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
         labels = inputs.get("labels")
         outputs = model(**inputs)
@@ -65,11 +94,17 @@ class WeightedTrainer(Trainer):
         if getattr(self.args, "past_index", -1) >= 0:
             self._past = outputs[self.args.past_index]
 
-        if labels is not None and self.class_weights is not None:
+        if labels is not None:
             logits = outputs.get("logits")
-            loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
-            loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+            if self.use_focal_loss:
+                loss = self._compute_focal_loss(logits, labels)
+            elif self.class_weights is not None:
+                loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
+                loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+            else:
+                loss = outputs.loss if isinstance(outputs, dict) else outputs[0]
         else:
             loss = outputs.loss if isinstance(outputs, dict) else outputs[0]
 
         return (loss, outputs) if return_outputs else loss
+

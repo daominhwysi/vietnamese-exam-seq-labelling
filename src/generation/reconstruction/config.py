@@ -65,6 +65,7 @@ class ReconstructorConfig:
     casing_noise_prob: float = 0.0
     synonym_swap_prob: float = 0.0
     formatting_noise_prob: float = 0.0
+    ocr_bullet_noise_prob: float = 0.0
     
     # Inline option layout simulation
     inline_option_prob: float = 0.0

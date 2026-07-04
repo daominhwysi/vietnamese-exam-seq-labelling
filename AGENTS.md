@@ -52,8 +52,8 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `parser.py` - Parses standard and group question elements from LLM XML output.
     - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans (wrapper module importing from the `reconstruction` package).
     - `reconstruction/` - Core Text Reconstruction Subpackage.
-      - `config.py` - Constants, configurations (`ReconstructorConfig`), and stable random helpers.
-      - `augment.py` - Typo injection, blank tokens randomization, LaTeX masking, and formatting wrappers.
+      - `config.py` - Constants, configurations (`ReconstructorConfig` with OCR bullet noise parameters), and stable random helpers.
+      - `augment.py` - Typo injection, blank tokens randomization, LaTeX masking, formatting wrappers, and OCR bullet noise injection.
       - `layout.py` - Whitespace layout separators, section title paraphrasing, answer table formatting, and ordering choices.
       - `core.py` - Core reconstruction functions (`reconstruct_question`, `reconstruct_exam`).
       - `__init__.py` - Package entry point.
@@ -66,10 +66,11 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
       - `__init__.py` - Package entry point.
     - `train.py` - Performs token-classification training with LoRA adapters (wrapper module importing from the `training_pipeline` package).
     - `training_pipeline/` - Downstream Training Pipeline Subpackage.
-      - `config.py` - Training configurations, arguments, environment setups, and devices.
+      - `config.py` - Training configurations, CLI arguments (including Focal Loss, Cosine LR Warmup, and LoRA params), environment setups, and devices.
       - `metrics.py` - Token-level evaluation and entity F1 metrics using seqeval.
-      - `trainer.py` - Custom WeightedTrainer with class-weight and real-sample upsampling.
+      - `trainer.py` - Custom WeightedTrainer supporting class-weight, real-sample upsampling, and Focal Loss.
       - `callbacks.py` - Exponential Moving Average (EMA) callback tracker.
+
       - `__init__.py` - Package entry point.
     - `inference.py` - Local inference utility using trained LoRA adapter models.
     - `inference_folder.py` - Batch inference utility for segmenting raw text files.

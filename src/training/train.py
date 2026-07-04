@@ -257,8 +257,11 @@ def run_train(args):
     trainer = WeightedTrainer(
         class_weights=class_weights,
         real_upsample_factor=real_upsample_factor,
+        use_focal_loss=getattr(args, "use_focal_loss", False),
+        focal_gamma=getattr(args, "focal_gamma", 2.0),
         **trainer_kwargs
     )
+
 
     # 10.5 Apply EMA Callback if enabled
     if getattr(args, "ema_decay", 0.0) > 0.0:

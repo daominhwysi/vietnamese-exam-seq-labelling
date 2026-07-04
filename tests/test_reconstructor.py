@@ -718,5 +718,14 @@ class TestReconstructor(unittest.TestCase):
         self.assertTrue(len(q_spans) >= 1)
         self.assertEqual(q_spans[0]["text"], "**Câu 1:**")
 
+    def test_ocr_bullet_noise(self):
+        from src.generation.reconstruction.augment import inject_ocr_bullet_noise
+        import random
+        rng = random.Random(42)
+        noise_lbl = inject_ocr_bullet_noise("A.", prob=1.0, rng=rng)
+        self.assertIn(noise_lbl[0], ["A", "a"])
+        self.assertNotEqual(noise_lbl, "")
+
 if __name__ == '__main__':
     unittest.main()
+

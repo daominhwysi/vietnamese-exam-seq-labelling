@@ -111,8 +111,13 @@ def get_parser() -> argparse.ArgumentParser:
     p_train.add_argument("--warmup-ratio", type=float, default=0.0, help="Warmup ratio for scheduler")
     p_train.add_argument("--warmup-steps", type=int, default=0, help="Warmup steps for scheduler")
     p_train.add_argument("--ema-decay", type=float, default=0.0, help="Decay rate for Exponential Moving Average (EMA)")
+    p_train.add_argument("--no-class-weights", action="store_true", help="Disable class weights for cross-entropy loss penalty")
+    p_train.add_argument("--real-upsample-factor", type=float, default=1.0, help="Sampling weight multiplier for real exam samples relative to synthetic ones")
+    p_train.add_argument("--use-focal-loss", action="store_true", help="Enable Focal Loss to focus training gradients on hard token boundaries")
+    p_train.add_argument("--focal-gamma", type=float, default=2.0, help="Focusing parameter gamma for Focal Loss")
     p_train.add_argument("--push_to_hub", action="store_true", help="Push to Hugging Face Hub")
     p_train.add_argument("--hf_token", type=str, help="Hugging Face authentication token")
+
 
     # 7. inference
     p_inf = subparsers.add_parser("inference", help="Stage 7: Run inference on sample inputs using trained model")

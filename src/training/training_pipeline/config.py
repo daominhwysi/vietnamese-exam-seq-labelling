@@ -154,7 +154,19 @@ def parse_args():
         default=1.0,
         help="Sampling weight multiplier for real exam samples relative to synthetic ones."
     )
+    parser.add_argument(
+        "--use-focal-loss",
+        action="store_true",
+        help="Enable Focal Loss to focus training gradients on hard token boundaries."
+    )
+    parser.add_argument(
+        "--focal-gamma",
+        type=float,
+        default=2.0,
+        help="Focusing parameter gamma for Focal Loss (default: 2.0)."
+    )
     return parser.parse_args()
+
 
 def setup_device(args) -> str:
     device = "cuda" if torch.cuda.is_available() else "cpu"

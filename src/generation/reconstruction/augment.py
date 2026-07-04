@@ -242,9 +242,29 @@ def augment_q_prefix_tpl(q_prefix_tpl: str, config: ReconstructorConfig, rng: ra
             q_prefix_tpl = q_prefix_tpl.replace(full_match_prefix, new_prefix, 1)
     return q_prefix_tpl
 
+def inject_ocr_bullet_noise(lbl: str, prob: float, rng: random.Random) -> str:
+    """
+    Simulates OCR formatting artifacts on option or question label prefixes (e.g. 'A.' -> 'A/', 'A)', 'A:', 'A,', 'A-').
+    """
+    if not lbl or prob <= 0.0 or rng.random() > prob:
+        return lbl
+
+    match = re.match(r'^(\s*\*?\*?\s*|\s*<u>\s*|\s*<b>\s*|\s*<i>\s*)([A-Za-z0-9]+)([\.\):/\-\,\|]?)(.*)$', lbl)
+    if not match:
+        return lbl
+
+    wrapper_open, label_str, sep, tail = match.groups()
+    if not label_str:
+        return lbl
+
+    new_sep = rng.choice([".", "/", ")", ":", ",", "-", "|", ""])
+    return f"{wrapper_open}{label_str}{new_sep}{tail}"
+
 def augment_q_label(q_label: str, config: ReconstructorConfig, rng: random.Random) -> str:
     stripped = q_label.rstrip()
     spaces = q_label[len(stripped):]
+    if getattr(config, "ocr_bullet_noise_prob", 0.0) > 0.0:
+        stripped = inject_ocr_bullet_noise(stripped, config.ocr_bullet_noise_prob, rng)
     if config.formatting_noise_prob > 0.0:
         stripped = apply_formatting_tag_noise(stripped, config.formatting_noise_prob, rng)
     if config.space_noise_rate > 0.0:
@@ -260,6 +280,8 @@ def augment_q_label(q_label: str, config: ReconstructorConfig, rng: random.Rando
 def augment_opt_lbl(opt_lbl: str, config: ReconstructorConfig, rng: random.Random) -> str:
     stripped = opt_lbl.rstrip()
     spaces = opt_lbl[len(stripped):]
+    if getattr(config, "ocr_bullet_noise_prob", 0.0) > 0.0:
+        stripped = inject_ocr_bullet_noise(stripped, config.ocr_bullet_noise_prob, rng)
     if config.casing_noise_prob > 0.0:
         stripped = apply_casing_noise(stripped, config.casing_noise_prob, rng)
     if config.formatting_noise_prob > 0.0:
@@ -273,3 +295,4 @@ def augment_opt_lbl(opt_lbl: str, config: ReconstructorConfig, rng: random.Rando
             elif noise_type == "extra":
                 spaces = "  "
     return stripped + spaces
+

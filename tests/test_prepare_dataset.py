@@ -156,5 +156,31 @@ class TestPrepareDataset(unittest.TestCase):
         self.assertIn("B-stem", sample["tags"])
         self.assertIn("B-option_text", sample["tags"])
 
+    def test_focal_loss_computation(self):
+        try:
+            import torch
+            from src.training.training_pipeline import WeightedTrainer
+        except ImportError:
+            self.skipTest("torch not installed in test environment")
+            return
+
+        class DummyModel:
+            def __init__(self):
+                class Config:
+                    num_labels = 3
+                self.config = Config()
+        
+        trainer = WeightedTrainer(use_focal_loss=True, focal_gamma=2.0)
+        trainer.model = DummyModel()
+        
+        logits = torch.randn(2, 4, 3) # Batch 2, Seq 4, NumLabels 3
+        labels = torch.tensor([[0, 1, 2, -100], [1, -100, 0, 2]])
+        
+        loss = trainer._compute_focal_loss(logits, labels)
+        self.assertTrue(torch.is_tensor(loss))
+        self.assertGreater(loss.item(), 0.0)
+
+
 if __name__ == '__main__':
     unittest.main()
+
