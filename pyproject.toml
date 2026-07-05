@@ -1,5 +1,17 @@
 [project]
-dependencies = ["openai", "pymupdf>=1.27.2.3,<2"]
+dependencies = [
+    "openai",
+    "pymupdf>=1.27.2.3,<2",
+    "torch>=2.0.0",
+    "peft>=0.8.0",
+    "datasets>=2.16.0",
+    "accelerate>=0.26.0",
+    "seqeval",
+    "scikit-learn",
+    "huggingface-hub",
+    "transformers"
+]
+
 name = "sequence-labelling-data-generator"
 requires-python = ">= 3.11"
 version = "0.1.0"
@@ -12,7 +24,7 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [tool.pixi.workspace]
-channels = ["conda-forge"]
+channels = ["pytorch", "nvidia", "conda-forge"]
 platforms = ["linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
@@ -32,17 +44,28 @@ view-inference = "uvicorn src.webapp.inference_app:app --host 127.0.0.1 --port 8
 dev = "uvicorn src.webapp.main:app --host 127.0.0.1 --port 8000 --reload & (cd src/webapp/frontend && npm run dev)"
 
 [tool.pixi.dependencies]
-python = ">=3.14.5,<3.15"
+python = ">=3.11"
 openai = "*"
 python-dotenv = ">=1.2.2,<2"
 tqdm = ">=4.67.3,<5"
-transformers = ">=5.9.0,<6"
+transformers = "*"
 sentencepiece = ">=0.2.1,<0.3"
 fastapi = ">=0.115.0,<1"
 jinja2 = ">=3.1.0,<4"
 uvicorn = ">=0.30.0,<1"
 onnx = "*"
 onnxruntime = ">=1.26.0,<2"
+datasets = "*"
+peft = "*"
+seqeval = "*"
+scikit-learn = "*"
+accelerate = "*"
+huggingface_hub = "*"
+pytorch = "*"
+pytorch-cuda = "12.1"
+
+
+
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]

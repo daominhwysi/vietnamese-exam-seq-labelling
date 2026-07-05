@@ -459,10 +459,6 @@ def main():
             
     print("\nBatch inference completed successfully!")
 
-if __name__ == "__main__":
-    main()
-
-
 class OffsetMapper:
     def __init__(self, latex_spans: list[tuple[int, int]]):
         self.shifts = []
@@ -510,4 +506,9 @@ def resolve_bio_violations(predictions: list[int], id_to_tag: dict[int, str], ta
                     tag = "O"
         prev_tag = tag
     return corrected_predictions
+
+
+if __name__ == "__main__":
+    main()
+
 

@@ -164,14 +164,18 @@ class TestPrepareDataset(unittest.TestCase):
             self.skipTest("torch not installed in test environment")
             return
 
-        class DummyModel:
+        class DummyModel(torch.nn.Module):
             def __init__(self):
+                super().__init__()
                 class Config:
                     num_labels = 3
                 self.config = Config()
+                self.linear = torch.nn.Linear(1, 1)
+
         
-        trainer = WeightedTrainer(use_focal_loss=True, focal_gamma=2.0)
-        trainer.model = DummyModel()
+        dummy_model = DummyModel()
+        trainer = WeightedTrainer(model=dummy_model, use_focal_loss=True, focal_gamma=2.0)
+
         
         logits = torch.randn(2, 4, 3) # Batch 2, Seq 4, NumLabels 3
         labels = torch.tensor([[0, 1, 2, -100], [1, -100, 0, 2]])
