@@ -15,6 +15,7 @@ from src.generation.reconstructor import (
     reconstruct_exam, 
     ReconstructorConfig
 )
+from src.webapp.inference_helper import get_latex_spans
 
 # Define base tags and generate tag mapping
 BASE_TAGS = [
@@ -180,26 +181,24 @@ def mask_latex_in_real_data(
     rng: random.Random
 ) -> Tuple[str, List[Dict[str, Any]]]:
     """
-    Finds LaTeX formulas ($...$ and $$...$$) in raw_text, masks them with placeholder with probability mask_prob,
-    and shifts span offsets accordingly.
+    Finds LaTeX formulas ($...$ and $$...$$) in raw_text using validated spans,
+    masks them with placeholder with probability mask_prob, and shifts span offsets accordingly.
     """
     if mask_prob <= 0.0 or not raw_text:
         return raw_text, spans
 
-    pattern = re.compile(r"\$\$.*?\$\$|\$.*?\$", re.DOTALL)
-    matches = list(pattern.finditer(raw_text))
-    if not matches:
+    latex_spans = get_latex_spans(raw_text)
+    if not latex_spans:
         return raw_text, spans
         
     current_text = raw_text
     new_spans = [dict(s) for s in spans]
     
     # Process from back to front to avoid shifting indices of earlier matches
-    for match in reversed(matches):
+    for m_start, m_end in reversed(latex_spans):
         if rng.random() > mask_prob:
             continue
             
-        m_start, m_end = match.span()
         diff = len(placeholder) - (m_end - m_start)
         
         # Replace in text

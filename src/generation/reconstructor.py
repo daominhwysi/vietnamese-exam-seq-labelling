@@ -3,6 +3,7 @@ import re
 import itertools
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Any, Tuple
+from src.webapp.inference_helper import is_valid_latex
 
 # Available prefix templates for Question labels
 DEFAULT_QUESTION_PREFIXES = [
@@ -208,6 +209,15 @@ def process_latex_variations(text: str, placeholder: str, mask_prob: float, rng:
     
     def repl(match):
         formula = match.group(1)
+        # Enforce same checks as get_latex_spans:
+        # - No leading or trailing spaces
+        # - No newlines inside single $ delimiters
+        # - Must pass is_valid_latex check
+        if formula.startswith(" ") or formula.endswith(" ") or "\n" in formula:
+            return match.group(0)
+        if not is_valid_latex(formula):
+            return match.group(0)
+            
         if rng.random() < mask_prob:
             return placeholder
         else:

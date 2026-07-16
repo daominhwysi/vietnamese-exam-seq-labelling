@@ -403,7 +403,7 @@ def run_train(args):
 
     # 9.5 Calculate class weights if enabled
     class_weights = None
-    if not getattr(args, "no_class_weights", False):
+    if getattr(args, "use_class_weights", False):
         print("Calculating class weights from training dataset...")
         from collections import Counter
         label_counts = Counter()
