@@ -195,7 +195,7 @@ def upload_dataset(token=None, repo_id=None, dataset_dir=None):
         Path(tmp_readme_path).unlink(missing_ok=True)
 
     # 2. Upload dataset splits + label_mapping + xml/ subfolder ---------------
-    print(f"\nUploading dataset from '{dataset_dir}' → '{repo_id}' ...")
+    print(f"\nUploading dataset from '{dataset_dir}' -> '{repo_id}' ...")
     xml_count = len(list((dataset_path / "xml").glob("*_annotated.xml"))) if (dataset_path / "xml").exists() else 0
     if xml_count:
         print(f"  (includes {xml_count} XML annotation file(s) in xml/)")

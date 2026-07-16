@@ -301,7 +301,7 @@ def upload_model(
                 f"Upload {checkpoint_type} for Vietnamese exam sequence labelling"
             )
 
-        print(f"\nUploading '{model_dir}' → '{repo_id}' ...")
+        print(f"\nUploading '{model_dir}' -> '{repo_id}' ...")
         print(f"  Commit message: {commit_message}")
 
         try:
@@ -326,7 +326,7 @@ def upload_model(
         onnx_path = Path(onnx_dir)
         if onnx_path.exists() and onnx_path.is_dir():
             print(f"\nDetected ONNX model directory at '{onnx_dir}'.")
-            print(f"Uploading ONNX model files → '{repo_id}/onnx'...")
+            print(f"Uploading ONNX model files -> '{repo_id}/onnx'...")
             try:
                 api.upload_folder(
                     folder_path=str(onnx_path),

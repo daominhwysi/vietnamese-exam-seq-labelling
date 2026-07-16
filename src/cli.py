@@ -161,6 +161,7 @@ def main():
     p_train.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay")
     p_train.add_argument("--save_total_limit", type=int, default=2, help="Max checkpoints to keep")
     p_train.add_argument("--no-lora", action="store_true", help="Disable LoRA and perform full fine-tuning")
+    p_train.add_argument("--use_class_weights", action="store_true", help="Enable class weighting to penalize rare labels (off by default to prevent boundary leaks)")
     p_train.add_argument("--gradient-checkpointing", action="store_true", help="Enable gradient checkpointing to save memory")
     p_train.add_argument("--gradient-accumulation-steps", type=int, default=1, help="Number of update steps to accumulate before performing a backward pass")
     p_train.add_argument("--seed", type=int, default=42, help="Seed for training reproducibility")
