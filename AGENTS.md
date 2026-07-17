@@ -43,34 +43,38 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
   - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`).
-- `real_data_annotator/` - Directory for real OCR data processing and annotation.
-  - `pdf_converter.py` - Runs OCR on raw PDF files and extracts raw markdown text.
-  - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
-  - `out/` - Generated OCR markdown outputs and intermediate annotated files used for cleanup and review.
+  - `ocr_input/` - Raw input PDFs for real OCR data processing (gitignored).
+  - `ocr_out/` - Extracted OCR markdown files (gitignored).
+  - `real_exams/` - Generated real OCR exam structures in JSON format.
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
-  - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
+  - `data/` - Data Preparation & Real OCR Pipeline.
+    - `prepare.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
+    - `upload.py` - Uploads processed dataset splits and inline-tagged XML files to Hugging Face Hub.
+    - `pdf_converter.py` - Runs OCR on raw PDF files using LLM vision models and extracts raw markdown.
+    - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
   - `generation/` - Core Data Generation Subpackage.
     - `curriculum.py` - Handles subject & grade curriculum loading and generation.
-    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models. Automatically calls `token_tracker.log_response()` after every API call.
-    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams (supports both old and new English formats).
+    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models.
+    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams.
     - `generator.py` - Orchestrates question generation with AI prompting.
     - `parser.py` - Parses standard and group question elements from LLM XML output.
-    - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans.
-  - `training/` - Downstream Training & Evaluation Subpackage.
-    - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
-    - `train.py` - Performs token-classification training with LoRA adapters (supports dynamic T4/BF16/FP16 precision fallback).
-    - `inference.py` - Local inference utility using trained LoRA adapter models.
-    - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments, human-readable token-class text mappings, and inline-tagged XML annotation files (`*_annotated.xml`).
-    - `export_onnx.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX using HF Optimum with dynamic dimensions.
-    - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub, auto-generates a dataset card (README.md), and optionally uploads XML annotation files under `xml/` in the dataset repo.
-    - `upload_model.py` - Uploads a trained LoRA adapter or full fine-tuned model checkpoint to the Hugging Face hub, auto-generates a model card (README.md) from `adapter_config.json` and `label_mapping.json`.
-    - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
+    - `reconstructor.py` - Rebuilds raw text from structured questions and maps span offsets.
+  - `model/` - Downstream Training & Export Subpackage.
+    - `train.py` - Performs token-classification training (with optional LoRA adapters and FP16/BF16 falling back).
+    - `export.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX.
+    - `upload.py` - Uploads trained LoRA adapters or full fine-tuned model checkpoints to HF Hub.
+  - `inference/` - Downstream Inference & Batch Predictions.
+    - `predict.py` - Local sequence labeling inference utility.
+    - `predict_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments.
+  - `utils/` - Utility & Helper Subpackage.
+    - `token_tracker.py` - Thread-safe token-usage logger; writes daily logs to `logs/token_usage_*.jsonl`.
+    - `visualize.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.
     - `main.py` - FastAPI application entry point, routing, exam/dataset stats computation.
     - `inference_helper.py` - Helper utilities for sequence labeling predictions (sliding window aggregation, LaTeX masking, offset mapping).
     - `inference_app.py` - Standalone FastAPI web application running the model inference interface on port 8001.
-    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting, dataset dashboard, dataset viewer, and inference website).
+    - `templates/` - Jinja2 HTML templates for dashboards, exam viewer, and inference website.
 
 ---
 

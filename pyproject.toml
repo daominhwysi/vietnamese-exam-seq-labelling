@@ -26,7 +26,7 @@ train = "sequence-labelling-generator train --model_name aisingapore/SEA-LION-Mo
 upload-model = "sequence-labelling-generator upload-model"
 visualize = "sequence-labelling-generator visualize"
 test = "python -m unittest discover -s tests"
-batch-inference = "python src/training/inference_folder.py"
+batch-inference = "python src/inference/predict_folder.py"
 view-exams = "uvicorn src.webapp.main:app --host 127.0.0.1 --port 8000 --reload"
 view-inference = "uvicorn src.webapp.inference_app:app --host 127.0.0.1 --port 8001 --reload"
 
