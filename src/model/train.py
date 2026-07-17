@@ -324,13 +324,17 @@ def run_train(args):
             target_modules = ["query", "value"]
             print(f"Targeting standard attention modules: {target_modules}")
 
+        # Ensure the embedding layer is unfrozen and trained so that custom special tokens
+        # like [LATEX] are properly learned, instead of remaining random noise under LoRA.
+        modules_to_save = ["classifier", "embeddings"]
+
         peft_config = LoraConfig(
             task_type=TaskType.TOKEN_CLS,
             r=args.lora_r,
             lora_alpha=args.lora_alpha,
             lora_dropout=args.lora_dropout,
             target_modules=target_modules,
-            modules_to_save=["classifier"]  # Ensures classifier head is trained fully (not frozen)
+            modules_to_save=modules_to_save
         )
 
         model = get_peft_model(model, peft_config)
