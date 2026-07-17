@@ -349,14 +349,15 @@ def run_train(args):
             target_modules = ["query", "value"]
             print(f"Targeting standard attention modules: {target_modules}")
 
-        # Target the specific leaf embedding layers to avoid PEFT double-matching parent/child modules.
+        # Target the specific leaf layers to avoid PEFT double-matching parent/child modules.
+        # Note: We do NOT add the resized embedding layers ("tok_embeddings" / "word_embeddings") to
+        # modules_to_save because:
+        # 1. PEFT automatically handles saving resized embeddings when save_embedding_layers=True.
+        # 2. Including them in modules_to_save wraps them in ModulesToSaveWrapper, causing a key mismatch
+        #    (KeyError: '...modules_to_save.default.weight') when the trainer loads the best checkpoint.
+        # 3. Freezing the base embeddings during LoRA prevents training parameter dilution (ModernBERT's
+        #    vocab has 262k tokens, making the embedding layer 200M+ parameters) and reduces overfitting.
         modules_to_save = ["classifier"]
-        if "modernbert" in model_name_lower or "mmbert" in model_name_lower:
-            modules_to_save.append("tok_embeddings")
-            print("ModernBERT detected: targeting 'tok_embeddings' for training.")
-        else:
-            modules_to_save.append("word_embeddings")
-            print("Targeting 'word_embeddings' for training.")
 
         peft_config = LoraConfig(
             task_type=TaskType.TOKEN_CLS,
