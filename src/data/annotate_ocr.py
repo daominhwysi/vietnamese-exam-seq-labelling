@@ -10,13 +10,13 @@ from typing import Dict, Any, List, Tuple
 
 # Set up path to import src modules (like token_tracker)
 script_dir = Path(__file__).resolve().parent
-workspace_dir = script_dir.parent
+workspace_dir = script_dir.parent.parent
 sys.path.append(str(workspace_dir))
 
 from dotenv import load_dotenv
 from openai import OpenAI
 from tqdm import tqdm
-from src.token_tracker import log_response
+from src.utils.token_tracker import log_response
 
 # Reconfigure stdout for UTF-8 to handle Vietnamese terminal logging
 if hasattr(sys.stdout, "reconfigure"):
@@ -379,8 +379,8 @@ def main():
     parser.add_argument(
         "--input",
         "-i",
-        default=str(script_dir / "out"),
-        help="Directory containing output markdown files from OCR (default: real_data_annotator/out)",
+        default=str(workspace_dir / "output" / "ocr_out"),
+        help="Directory containing output markdown files from OCR (default: output/ocr_out)",
     )
     parser.add_argument(
         "--output",

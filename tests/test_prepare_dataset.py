@@ -1,5 +1,5 @@
 import unittest
-from src.training.prepare_dataset import (
+from src.data.prepare import (
     align_tokens_to_spans,
     get_tag_mappings,
     process_single_question,

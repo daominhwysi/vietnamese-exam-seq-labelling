@@ -14,7 +14,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 # Load environment variables from .env file
-workspace_dir = Path(__file__).resolve().parent.parent
+workspace_dir = Path(__file__).resolve().parent.parent.parent
 load_dotenv(dotenv_path=workspace_dir / ".env")
 
 # Access the API key from environment variables
@@ -33,14 +33,14 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "--input",
     "-i",
-    default="input",
-    help="Directory containing input PDF files (default: input)",
+    default=str(workspace_dir / "output" / "ocr_input"),
+    help="Directory containing input PDF files (default: output/ocr_input)",
 )
 parser.add_argument(
     "--output",
     "-o",
-    default="out",
-    help="Directory to save output markdown files (default: out)",
+    default=str(workspace_dir / "output" / "ocr_out"),
+    help="Directory to save output markdown files (default: output/ocr_out)",
 )
 parser.add_argument(
     "--limit",

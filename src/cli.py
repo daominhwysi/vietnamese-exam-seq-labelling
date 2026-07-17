@@ -291,19 +291,19 @@ def main():
         )
 
     elif args.command == "prepare":
-        from src.training.prepare_dataset import run_prepare_dataset
+        from src.data.prepare import run_prepare_dataset
         run_prepare_dataset(args)
 
     elif args.command == "train":
-        from src.training.train import run_train
+        from src.model.train import run_train
         run_train(args)
 
     elif args.command == "inference":
-        from src.training.inference import run_inference
+        from src.inference.predict import run_inference
         run_inference(model_dir=args.model_dir, base_model_name=args.base_model_name)
 
     elif args.command == "upload":
-        from src.training.upload_dataset import upload_dataset
+        from src.data.upload import upload_dataset
         upload_dataset(
             token=args.token,
             repo_id=args.repo_id,
@@ -311,7 +311,7 @@ def main():
         )
 
     elif args.command == "upload-model":
-        from src.training.upload_model import upload_model
+        from src.model.upload import upload_model
         upload_model(
             model_dir=args.model_dir,
             repo_id=args.repo_id,
@@ -322,7 +322,7 @@ def main():
         )
 
     elif args.command == "visualize":
-        from src.training.visualize_samples import generate_visualization
+        from src.utils.visualize import generate_visualization
         generate_visualization(
             jsonl_path=args.input_file,
             output_html_path=args.output_html,

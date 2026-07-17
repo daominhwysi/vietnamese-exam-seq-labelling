@@ -5,7 +5,7 @@ Automatically generates and uploads a model card (README.md).
 
 Usage:
     pixi run upload-model
-    python -m src.training.upload_model --model-dir ./results --repo-id <username>/<repo-name>
+    python -m src.model.upload --model-dir ./results --repo-id <username>/<repo-name>
 """
 
 import os
