@@ -349,9 +349,14 @@ def run_train(args):
             target_modules = ["query", "value"]
             print(f"Targeting standard attention modules: {target_modules}")
 
-        # Ensure the embedding layer is unfrozen and trained so that custom special tokens
-        # like [LATEX] are properly learned, instead of remaining random noise under LoRA.
-        modules_to_save = ["classifier", "embeddings"]
+        # Target the specific leaf embedding layers to avoid PEFT double-matching parent/child modules.
+        modules_to_save = ["classifier"]
+        if "modernbert" in model_name_lower or "mmbert" in model_name_lower:
+            modules_to_save.append("tok_embeddings")
+            print("ModernBERT detected: targeting 'tok_embeddings' for training.")
+        else:
+            modules_to_save.append("word_embeddings")
+            print("Targeting 'word_embeddings' for training.")
 
         peft_config = LoraConfig(
             task_type=TaskType.TOKEN_CLS,
