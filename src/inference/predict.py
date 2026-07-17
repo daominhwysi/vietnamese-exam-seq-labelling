@@ -38,7 +38,7 @@ def load_label_mapping(model_dir):
             return mapping["tag_to_id"], {int(k): v for k, v in mapping["id_to_tag"].items()}
             
     # Fallback to standard base tags mapping
-    base_tags = ["question_label", "stem", "option_label", "option_text", "context"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)

@@ -15,6 +15,7 @@ from src.generation.reconstructor import (
     reconstruct_exam, 
     ReconstructorConfig
 )
+from src.webapp.inference_helper import get_latex_spans
 
 # Define base tags and generate tag mapping
 BASE_TAGS = [
@@ -22,7 +23,8 @@ BASE_TAGS = [
     "stem",
     "option_label",
     "option_text",
-    "context"
+    "context",
+    "section"
 ]
 
 def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
@@ -32,6 +34,49 @@ def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
         tag_to_id[f"I-{tag}"] = len(tag_to_id)
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
+
+def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
+    """
+    Converts raw_text + ground-truth character-level spans into an inline-tagged
+    XML string that matches the format produced by annotate_ocr.py:
+
+        <question_label>Câu 1.</question_label> <stem>Nội dung...</stem>
+
+    Spans are sorted by start offset. Untagged gaps between spans (page headers,
+    separators, etc.) are preserved verbatim outside any tag.
+    """
+    if not spans:
+        return raw_text
+
+    # Sort spans by start position; resolve overlaps by taking first occurrence
+    sorted_spans = sorted(spans, key=lambda s: s["start"])
+
+    result = []
+    cursor = 0
+
+    for span in sorted_spans:
+        start = span["start"]
+        end = span["end"]
+        label = span["label"]
+
+        # Skip malformed or already-passed spans
+        if end <= start or start < cursor:
+            continue
+
+        # Untagged gap before this span
+        if start > cursor:
+            result.append(raw_text[cursor:start])
+
+        # Tagged span content
+        span_text = raw_text[start:end]
+        result.append(f"<{label}>{span_text}</{label}>")
+        cursor = end
+
+    # Trailing untagged text
+    if cursor < len(raw_text):
+        result.append(raw_text[cursor:])
+
+    return "".join(result)
 
 def align_tokens_to_spans(
     offset_mapping: List[Tuple[int, int]], 
@@ -128,6 +173,65 @@ def align_tokens_to_spans(
             
     return labels
 
+def mask_latex_in_real_data(
+    raw_text: str,
+    spans: List[Dict[str, Any]],
+    placeholder: str,
+    mask_prob: float,
+    rng: random.Random
+) -> Tuple[str, List[Dict[str, Any]]]:
+    """
+    Finds LaTeX formulas ($...$ and $$...$$) in raw_text using validated spans,
+    masks them with placeholder with probability mask_prob, and shifts span offsets accordingly.
+    """
+    if mask_prob <= 0.0 or not raw_text:
+        return raw_text, spans
+
+    latex_spans = get_latex_spans(raw_text)
+    if not latex_spans:
+        return raw_text, spans
+        
+    current_text = raw_text
+    new_spans = [dict(s) for s in spans]
+    
+    # Process from back to front to avoid shifting indices of earlier matches
+    for m_start, m_end in reversed(latex_spans):
+        if rng.random() > mask_prob:
+            continue
+            
+        diff = len(placeholder) - (m_end - m_start)
+        
+        # Replace in text
+        current_text = current_text[:m_start] + placeholder + current_text[m_end:]
+        
+        # Adjust spans
+        updated_spans = []
+        for span in new_spans:
+            s_start = span["start"]
+            s_end = span["end"]
+            
+            # If the span starts after the replaced segment, shift it
+            if s_start >= m_end:
+                span["start"] += diff
+                span["end"] += diff
+            # If the span starts before but ends after/during
+            elif s_start < m_start and s_end > m_end:
+                span["end"] += diff
+            # If the span is entirely within the masked LaTeX
+            elif s_start >= m_start and s_end <= m_end:
+                span["start"] = m_start
+                span["end"] = m_start + len(placeholder)
+            # If the span overlaps the beginning but not the end
+            elif s_start < m_start and s_end > m_start:
+                span["end"] = m_start + len(placeholder)
+            
+            if "text" in span:
+                span["text"] = current_text[span["start"]:span["end"]]
+            updated_spans.append(span)
+        new_spans = updated_spans
+        
+    return current_text, new_spans
+
 def process_exam_level(
     exam_data: Dict[str, Any],
     tokenizer: Any,
@@ -140,9 +244,20 @@ def process_exam_level(
     Reconstructs the full exam document, tokenizes it across multiple sliding window configs,
     aligns labels, and returns a list of prepared samples.
     """
-    exam_reconstructed = reconstruct_exam(exam_data, reconstructor_config)
-    raw_text = exam_reconstructed["raw_text"]
-    spans = exam_reconstructed["spans"]
+    if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
+        raw_text = exam_data["raw_text"]
+        spans = exam_data["spans"]
+        if reconstructor_config.latex_mask_prob > 0.0:
+            import hashlib
+            h = hashlib.md5((exam_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
+            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
+            raw_text, spans = mask_latex_in_real_data(
+                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
+            )
+    else:
+        exam_reconstructed = reconstruct_exam(exam_data, reconstructor_config)
+        raw_text = exam_reconstructed["raw_text"]
+        spans = exam_reconstructed["spans"]
     
     samples = []
     
@@ -177,6 +292,7 @@ def process_exam_level(
                     "subject": exam_data.get("subject"),
                     "grade": exam_data.get("grade"),
                     "exam_id": exam_data.get("exam_id"),
+                    "is_real": exam_data.get("is_real", False),
                     "max_len": max_len,
                     "stride": stride,
                     "chunk_idx": chunk_idx,
@@ -197,9 +313,20 @@ def process_question_as_exam_level(
     """
     Treats an individual question as a mini-exam and tokenizes it using sliding window configs.
     """
-    q_reconstructed = reconstruct_question(q_data, reconstructor_config)
-    raw_text = q_reconstructed["raw_text"]
-    spans = q_reconstructed["spans"]
+    if q_data.get("is_real", False) and "raw_text" in q_data and "spans" in q_data:
+        raw_text = q_data["raw_text"]
+        spans = q_data["spans"]
+        if reconstructor_config.latex_mask_prob > 0.0:
+            import hashlib
+            h = hashlib.md5((q_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
+            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
+            raw_text, spans = mask_latex_in_real_data(
+                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
+            )
+    else:
+        q_reconstructed = reconstruct_question(q_data, reconstructor_config)
+        raw_text = q_reconstructed["raw_text"]
+        spans = q_reconstructed["spans"]
     
     samples = []
     
@@ -235,6 +362,7 @@ def process_question_as_exam_level(
                     "grade": q_data.get("grade"),
                     "question_type": q_data.get("question_type"),
                     "difficulty": q_data.get("difficulty"),
+                    "is_real": q_data.get("is_real", False),
                     "max_len": max_len,
                     "stride": stride,
                     "chunk_idx": chunk_idx,
@@ -254,9 +382,20 @@ def process_single_question_legacy(
     """
     Legacy method for single question parsing (keeps original question-level split layout).
     """
-    q_reconstructed = reconstruct_question(q_data, reconstructor_config)
-    raw_text = q_reconstructed["raw_text"]
-    spans = q_reconstructed["spans"]
+    if q_data.get("is_real", False) and "raw_text" in q_data and "spans" in q_data:
+        raw_text = q_data["raw_text"]
+        spans = q_data["spans"]
+        if reconstructor_config.latex_mask_prob > 0.0:
+            import hashlib
+            h = hashlib.md5((q_data.get("exam_id", "") or raw_text).encode("utf-8")).hexdigest()
+            rng = random.Random(int(h, 16) & 0xFFFFFFFF)
+            raw_text, spans = mask_latex_in_real_data(
+                raw_text, spans, reconstructor_config.latex_placeholder, reconstructor_config.latex_mask_prob, rng
+            )
+    else:
+        q_reconstructed = reconstruct_question(q_data, reconstructor_config)
+        raw_text = q_reconstructed["raw_text"]
+        spans = q_reconstructed["spans"]
     
     tokenized = tokenizer(
         raw_text,
@@ -285,6 +424,7 @@ def process_single_question_legacy(
             "question_type": q_data.get("question_type"),
             "difficulty": q_data.get("difficulty"),
             "is_group": q_data.get("is_group", False),
+            "is_real": q_data.get("is_real", False),
             "chapter": q_data.get("chapter"),
             "unit": q_data.get("unit"),
             "problem_type_id": q_data.get("problem_type_id"),
@@ -351,8 +491,8 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="FacebookAI/xlm-roberta-base",
-        help="Hugging Face model / tokenizer name (default: 'FacebookAI/xlm-roberta-base')"
+        default="aisingapore/SEA-LION-ModernBERT-300M",
+        help="Hugging Face model / tokenizer name (default: 'aisingapore/SEA-LION-ModernBERT-300M')"
     )
     parser.add_argument(
         "--latex-placeholder",
@@ -498,9 +638,12 @@ def run_prepare_dataset(args):
         
     json_files = list(input_path.glob("question_*.json"))
     exam_files = list(input_path.glob("**/exam_*.json"))
-    if not json_files and not exam_files:
-        print(f"No question JSON files or exam JSON files found in '{args.input_dir}'. Please generate data first.")
+    real_exam_files = list(input_path.glob("**/real_exam_*.json"))
+    if not json_files and not exam_files and not real_exam_files:
+        print(f"No question JSON files, exam JSON files, or real exam JSON files found in '{args.input_dir}'. Please generate data first.")
         sys.exit(1)
+    # Combine real exams into exam_files list
+    exam_files.extend(real_exam_files)
         
     try:
         from transformers import AutoTokenizer
@@ -560,14 +703,28 @@ def run_prepare_dataset(args):
         
     print(f"Processing data: found {len(json_files)} question file(s) and {len(exam_files)} exam file(s)...")
     processed_samples = []
-    
+
+    # Prepare xml output directory for annotated XML files
+    xml_output_path = output_path / "xml"
+    xml_output_path.mkdir(parents=True, exist_ok=True)
+
+    def _save_xml(stem: str, raw_text: str, spans: List[Dict[str, Any]]) -> None:
+        """Write ground-truth inline-tagged XML for a source file."""
+        try:
+            xml_content = spans_to_xml(raw_text, spans)
+            xml_file = xml_output_path / f"{stem}_annotated.xml"
+            with open(xml_file, "w", encoding="utf-8") as xf:
+                xf.write(xml_content)
+        except Exception as xe:
+            print(f"Warning: Could not write XML for '{stem}': {xe}")
+
     # 1. Process individual question files
     num_q_files = len(json_files)
     for q_idx, file_path in enumerate(json_files):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 q_data = json.load(f)
-                
+
             if args.exam_level:
                 samples = process_question_as_exam_level(q_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
                 for s in samples:
@@ -578,9 +735,17 @@ def run_prepare_dataset(args):
                 if sample:
                     sample["metadata"]["source_file"] = file_path.name
                     processed_samples.append(sample)
+
+            # Generate XML from ground-truth spans
+            try:
+                q_rec = reconstruct_question(q_data, ReconstructorConfig())
+                _save_xml(file_path.stem, q_rec["raw_text"], q_rec["spans"])
+            except Exception:
+                pass
+
         except Exception as e:
             print(f"Warning: Failed to process question {file_path.name}: {e}")
-            
+
         if (q_idx + 1) % 50 == 0 or (q_idx + 1) == num_q_files:
             print(f"[Progress] Processed {q_idx + 1}/{num_q_files} individual questions...")
             
@@ -591,16 +756,14 @@ def run_prepare_dataset(args):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 exam_data = json.load(f)
-            
+
             if args.exam_level:
-                # Compile exam level
                 samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
                 for s in samples:
                     s["metadata"]["source_file"] = file_path.name
                     processed_samples.append(s)
                     exam_q_count += 1
             else:
-                # Process exam at question level (legacy fallback)
                 sections = exam_data.get("sections", {})
                 for section_title, questions in sections.items():
                     for idx, q_data in enumerate(questions):
@@ -609,17 +772,29 @@ def run_prepare_dataset(args):
                             q_copy["subject"] = exam_data["subject"]
                         if "grade" not in q_copy and "grade" in exam_data:
                             q_copy["grade"] = exam_data["grade"]
-                            
+
                         sample = process_single_question_legacy(q_copy, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
                         if sample:
                             sample["metadata"]["source_file"] = f"{file_path.name}::{section_title}::q_{idx}"
                             processed_samples.append(sample)
                             exam_q_count += 1
+
+            # Generate XML from ground-truth spans (one XML per source exam)
+            try:
+                if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
+                    _save_xml(file_path.stem, exam_data["raw_text"], exam_data["spans"])
+                else:
+                    exam_rec = reconstruct_exam(exam_data, ReconstructorConfig())
+                    _save_xml(file_path.stem, exam_rec["raw_text"], exam_rec["spans"])
+            except Exception:
+                pass
+
         except Exception as e:
             print(f"Warning: Failed to process exam {file_path.name}: {e}")
-            
+
         if (exam_idx + 1) % 10 == 0 or (exam_idx + 1) == num_exam_files:
             print(f"[Progress] Processed {exam_idx + 1}/{num_exam_files} exams...")
+
             
     print(f"Successfully prepared {len(processed_samples)} training samples (sources include individual question files and compiled exam files).")
     

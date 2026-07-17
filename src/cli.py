@@ -76,6 +76,7 @@ def main():
     p_curr.add_argument("--subject", type=str, help="Subject slug (e.g. 'physics')")
     p_curr.add_argument("--grade", type=int, help="Grade level (e.g. 11)")
     p_curr.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
+    p_curr.add_argument("--provider", type=str, choices=["deepseek", "nvidia", "vilao"], default=None, help="LLM provider to use")
     p_curr.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_curr.add_argument("-c", "--concurrency", type=int, default=4, help="Number of parallel workers for concurrent generation")
 
@@ -111,6 +112,7 @@ def main():
     p_exam.add_argument("-n", "--num-exams", type=int, default=300, help="Number of exams to generate")
     p_exam.add_argument("-o", "--output-dir", type=str, default="output/exams", help="Output directory path")
     p_exam.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
+    p_exam.add_argument("--provider", type=str, choices=["deepseek", "nvidia", "vilao"], default=None, help="LLM provider to use")
     p_exam.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
     p_exam.add_argument("-c", "--concurrency", type=int, default=8, help="Number of concurrent threads per exam")
     p_exam.add_argument("--subject", type=str, help="Filter generation for a specific subject")
@@ -159,6 +161,7 @@ def main():
     p_train.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay")
     p_train.add_argument("--save_total_limit", type=int, default=2, help="Max checkpoints to keep")
     p_train.add_argument("--no-lora", action="store_true", help="Disable LoRA and perform full fine-tuning")
+    p_train.add_argument("--use_class_weights", action="store_true", help="Enable class weighting to penalize rare labels (off by default to prevent boundary leaks)")
     p_train.add_argument("--gradient-checkpointing", action="store_true", help="Enable gradient checkpointing to save memory")
     p_train.add_argument("--gradient-accumulation-steps", type=int, default=1, help="Number of update steps to accumulate before performing a backward pass")
     p_train.add_argument("--seed", type=int, default=42, help="Seed for training reproducibility")
@@ -174,10 +177,54 @@ def main():
     p_inf.add_argument("--model_dir", type=str, default="./results", help="Model adapter directory")
     p_inf.add_argument("--base_model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
 
-    # 8. upload
+    # 8. upload (dataset)
     p_upl = subparsers.add_parser("upload", help="Upload dataset splits to Hugging Face Hub")
     p_upl.add_argument("--token", type=str, help="HF Token")
-    p_upl.add_argument("--repo-id", type=str, help="HF repository target path")
+    p_upl.add_argument("--repo-id", type=str, help="HF dataset repository target path")
+    p_upl.add_argument(
+        "--dataset-dir",
+        type=str,
+        default="output/dataset",
+        help="Local folder with train/val/test JSONL splits and xml/ subfolder (default: 'output/dataset')",
+    )
+
+    # 8b. upload-model
+    p_upl_m = subparsers.add_parser("upload-model", help="Upload trained model/adapter checkpoint to Hugging Face Hub")
+    p_upl_m.add_argument(
+        "--model-dir",
+        type=str,
+        default="./results",
+        help="Path to the trained model/adapter directory (default: './results')",
+    )
+    p_upl_m.add_argument(
+        "--repo-id",
+        type=str,
+        default=None,
+        help="HF model repository ID, e.g. 'username/repo-name' (default: 'daominhwysi/vi-exam-seq-labeller')",
+    )
+    p_upl_m.add_argument(
+        "--token",
+        type=str,
+        default=None,
+        help="Hugging Face write token (falls back to HF_TOKEN env var)",
+    )
+    p_upl_m.add_argument(
+        "--private",
+        action="store_true",
+        help="Create the repository as private (default: public)",
+    )
+    p_upl_m.add_argument(
+        "--commit-message",
+        type=str,
+        default=None,
+        help="Custom commit message for the upload",
+    )
+    p_upl_m.add_argument(
+        "--dataset-repo",
+        type=str,
+        default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
+        help="HF dataset repo to reference in the model card (default: 'daominhwysi/synthetic-seq-labelling-vi-exam-v2')",
+    )
 
     # 9. visualize
     p_vis = subparsers.add_parser("visualize", help="Generate an HTML interactive visualizer for token span labels")
@@ -192,12 +239,12 @@ def main():
         from src.generation.curriculum import generate_all_curricula
         thinking_val = None if args.thinking == "none" else args.thinking
         if args.all:
-            generate_all_curricula(model=args.model, thinking=thinking_val, concurrency=args.concurrency)
+            generate_all_curricula(model=args.model, thinking=thinking_val, concurrency=args.concurrency, provider=args.provider)
         else:
             if not args.subject or not args.grade:
                 print("Error: Single curriculum generation requires both --subject and --grade parameters, or pass --all.")
                 sys.exit(1)
-            generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking_val)
+            generate_curriculum(args.subject, args.grade, model=args.model, thinking=thinking_val, provider=args.provider)
             print("Curriculum generation completed successfully.")
 
     elif args.command == "reconstruct":
@@ -239,27 +286,43 @@ def main():
             thinking=thinking_val,
             concurrency=args.concurrency,
             subject=args.subject,
-            grade=args.grade
+            grade=args.grade,
+            provider=args.provider
         )
 
     elif args.command == "prepare":
-        from src.training.prepare_dataset import run_prepare_dataset
+        from src.data.prepare import run_prepare_dataset
         run_prepare_dataset(args)
 
     elif args.command == "train":
-        from src.training.train import run_train
+        from src.model.train import run_train
         run_train(args)
 
     elif args.command == "inference":
-        from src.training.inference import run_inference
+        from src.inference.predict import run_inference
         run_inference(model_dir=args.model_dir, base_model_name=args.base_model_name)
 
     elif args.command == "upload":
-        from src.training.upload_dataset import upload_dataset
-        upload_dataset(token=args.token, repo_id=args.repo_id)
+        from src.data.upload import upload_dataset
+        upload_dataset(
+            token=args.token,
+            repo_id=args.repo_id,
+            dataset_dir=args.dataset_dir,
+        )
+
+    elif args.command == "upload-model":
+        from src.model.upload import upload_model
+        upload_model(
+            model_dir=args.model_dir,
+            repo_id=args.repo_id,
+            token=args.token,
+            private=args.private,
+            commit_message=args.commit_message,
+            dataset_repo=args.dataset_repo,
+        )
 
     elif args.command == "visualize":
-        from src.training.visualize_samples import generate_visualization
+        from src.utils.visualize import generate_visualization
         generate_visualization(
             jsonl_path=args.input_file,
             output_html_path=args.output_html,

@@ -1,236 +1,447 @@
-# Vietnamese Exam Sequence Labeling Data Generator & Model Training Pipeline
+# Vietnamese Exam Sequence Labelling — Data Generation & Model Training Pipeline
 
-An end-to-end framework for curriculum-guided synthetic data generation, mock exam compilation, sequence labeling dataset alignment, downstream Hugging Face token-classification training with LoRA adapters, and interactive web-based visualization.
-
-This project is tailored for processing Vietnamese high school educational exam papers (Grades 8–12) across multiple subjects, automatically segmenting structures such as stems, option labels, option texts, context passages, and question prefixes.
+An end-to-end pipeline for generating curriculum-aligned synthetic Vietnamese exam data, annotating real OCR exam papers, building token-classification datasets, and fine-tuning LoRA-adapted sequence labelling models (XLM-RoBERTa, SEA-LION ModernBERT) on the Hugging Face ecosystem.
 
 ---
 
 ## 🌟 Key Features
 
-1. **Curriculum-Guided Data Generation**: Orchestrates DeepSeek LLMs (Reasoning & Flash models) to generate detailed subjects/grade curricula, which are then used to feed specific topic contexts and problem types (Nhận biết, Thông hiểu, Vận dụng, Vận dụng cao) directly into the question generation prompt.
-2. **Support for Diverse Question Formats**:
-   - **Standard Questions**: Multiple Choice, True/False, Short Answer, and Ordering (with custom-generated distractors based on step permutations).
-   - **Group Questions**: Passage-based/context-shared question clusters with multiple sub-questions.
-3. **Deterministic Text Reconstruction & Offset-Span Tracking**: Reconstructs standard, formatted exam-style texts from structured JSON elements while calculating exact character-level offsets (`start` and `end` indices) for each semantic entity.
-4. **Sequence Labeling Dataset Builder**:
-   - Tokenizes raw exam text with models like `FacebookAI/xlm-roberta-base`.
-   - Optionally masks LaTeX formulas (`$...$`) with a special `[LATEX]` token.
-   - Automatically aligns tokens to character spans to produce token-level labels (BIO schema).
-   - Splits the generated corpus into Train, Validation, and Test sets in `.jsonl` format.
-5. **Parameter-Efficient Finetuning (LoRA)**: Train token classification models using the Hugging Face `Trainer` API, applying PEFT/LoRA adapters, automatic mixed precision (AMP with `float16`/`bfloat16`), and integration with Hugging Face Hub.
-6. **Premium FastAPI Dashboard & Visualizers**:
-   - Standalone HTML interactive sample alignment page (`pixi run visualize`).
-   - Premium Tailwind CSS styled FastAPI web dashboard with search, stats, and a mock exam layout viewer highlighting annotated token spans (`pixi run view-exams`).
+| Feature | Details |
+|---|---|
+| **LLM-driven data generation** | DeepSeek reasoning & flash models generate curriculum-aligned exam questions across 9 subjects and grades 8–12 |
+| **Real OCR annotation** | Semi-automated OCR pipeline annotates real exam PDFs with ground-truth XML entity tags |
+| **Rich data augmentation** | Typo injection, spacing noise, LaTeX masking, casing noise, prefix synonym swaps, inline option formatting, option drop simulation |
+| **Multi-scale sliding window** | Tokenizes long documents at 512 / 768 / 1024 / 2048 token windows with configurable stride overlap |
+| **Real sample upsampling** | `WeightedRandomSampler` at training time balances scarce real exam samples vs. abundant synthetic ones |
+| **LoRA / full fine-tuning** | PEFT LoRA adapters or full fine-tune via Hugging Face `Trainer` with BF16/FP16/FP32 auto-detection |
+| **HF Hub integration** | Auto-generated dataset cards & model cards; uploads splits + XML annotation files to HF datasets and models |
+| **Batch inference + XML output** | `inference_folder.py` segments raw `.txt` files and produces structured JSON, token prediction tables, and inline-tagged XML |
+| **Interactive web dashboard** | FastAPI + Jinja2 exam viewer with color-coded span highlighting |
 
 ---
 
 ## 📁 Project Structure
 
 ```text
-├── pyproject.toml         # Project config, metadata, dependency definitions, and Pixi tasks
-├── pixi.lock              # Lockfile tracking exact conda-forge & PyPI dependencies
-├── AGENTS.md              # Instructions, schemas, and structure reference for agent developers
-├── tests/                 # Unit testing suite
-│   ├── test_curriculum.py     # Tests for curriculum loaders, parsing, and mappings
-│   ├── test_exam_compiler.py  # Tests for mock exam compilation and section grouping
-│   ├── test_prepare_dataset.py# Tests for tokenizers and BIO sequence labeling span alignments
-│   └── test_reconstructor.py  # Tests for text reconstruction and offset index mapping
-└── src/                   # Core pipeline codebase
-    ├── cli.py             # Global command-line entrypoint managing all workflow stages
-    ├── generation/        # Core Data Generation Modules
-    │   ├── curriculum.py      # Generates, caches, and filters subject-level learning paths
-    │   ├── deepseek_client.py # Client wrapper around DeepSeek's chat API
-    │   ├── exam_compiler.py   # Assembles independent questions into structured mock exams
-    │   ├── generator.py       # Manages prompt engineering, LLM queries, and XML parsing
-    │   ├── parser.py          # Extractor logic for structured XML tags returned by the LLM
-    │   └── reconstructor.py   # Renders structured inputs into raw text with character-span tokens
-    ├── training/          # Model Training and Fine-Tuning Modules
-    │   ├── prepare_dataset.py # Formats, tokenizes, and aligns character-spans to model tokens
-    │   ├── train.py           # Training loop leveraging Hugging Face Trainer and LoRA adapters
-    │   ├── inference.py       # Inference script for running sequence prediction locally
-    │   ├── upload_dataset.py  # Script for pushing local dataset splits to HF Hub
-    │   └── visualize_samples.py # Generates standalone interactive tag visualization HTML pages
-    └── webapp/            # FastAPI Web Interface
-        ├── main.py            # FastAPI router, statistics aggregator, and endpoint handlers
-        └── templates/         # Jinja2 template definitions (dashboard, base frame, and exam viewer)
+.
+├── pyproject.toml                  # Project config, Pixi task definitions, and dependencies
+├── pixi.lock                       # Exact cross-platform lockfile (conda-forge + PyPI)
+├── AGENTS.md                       # Agent instructions, schemas, and project structure reference
+├── README.md                       # This file
+│
+├── tests/                          # Unit test suite
+│   ├── test_curriculum.py
+│   ├── test_exam_compiler.py
+│   ├── test_prepare_dataset.py
+│   ├── test_parser.py
+│   └── test_reconstructor.py
+│
+├── scratch/                        # Debug & utility scripts (not part of main pipeline)
+│   ├── check_alignment.py
+│   ├── debug_alignment.py
+│   ├── debug_model.py
+│   ├── count_tokens.py
+│   ├── incremental_train.py
+│   ├── inspect_exam_spans.py
+│   └── ...
+│
+├── logs/                           # API token-usage logs (gitignored JSONL)
+│   └── token_usage_<YYYY-MM-DD>.jsonl
+│
+├── output/                         # Generated artifacts (gitignored)
+│   ├── curriculum/                 # Cached curriculum JSON files
+│   ├── exams/                      # Generated mock exam JSON files
+│   │   ├── exam_*.json             # Synthetic compiled exams
+│   │   └── real_exam_*.json        # Real OCR-annotated exams
+│   └── dataset/                    # Prepared tokenized dataset
+│       ├── train.jsonl
+│       ├── val.jsonl
+│       ├── test.jsonl
+│       ├── label_mapping.json
+│       └── xml/                    # Ground-truth inline-tagged XML per source exam
+│           └── *_annotated.xml
+│
+├── real_data_annotator/            # Real exam OCR + annotation tools
+│   ├── pdf_converter.py            # OCR PDF → markdown text
+│   ├── annotate_ocr.py             # LLM-annotates OCR text → real_exam_*.json + XML
+│   └── out/                        # Intermediate annotation outputs
+│
+└── src/                            # Main source package
+    ├── cli.py                      # Unified CLI entry point (all pipeline subcommands)
+    ├── token_tracker.py            # Thread-safe DeepSeek token usage logger
+    │
+    ├── generation/                 # Stage 1–3: Data Generation
+    │   ├── curriculum.py           # Subject/grade curriculum generation & caching
+    │   ├── deepseek_client.py      # DeepSeek API client wrapper
+    │   ├── exam_compiler.py        # Compiles questions into section-grouped mock exams
+    │   ├── generator.py            # Orchestrates LLM prompting & question generation
+    │   ├── parser.py               # Parses LLM XML output into structured question dicts
+    │   └── reconstructor.py        # Rebuilds raw text from JSON + computes character-level spans
+    │
+    ├── training/                   # Stage 4–8: Dataset + Training + Inference + Upload
+    │   ├── prepare_dataset.py      # Tokenizes exams, aligns BIO labels, splits dataset, generates XML
+    │   ├── train.py                # LoRA/full fine-tune training with WeightedRandomSampler & EMA
+    │   ├── inference.py            # Single-input inference with trained adapter
+    │   ├── inference_folder.py     # Batch inference → JSON + TXT + annotated XML per file
+    │   ├── upload_dataset.py       # Uploads dataset + auto-generated dataset card to HF Hub
+    │   ├── upload_model.py         # Uploads model + auto-generated model card to HF Hub
+    │   └── visualize_samples.py    # Generates standalone HTML token-span visualizer
+    │
+    └── webapp/                     # FastAPI exam viewer
+        ├── main.py
+        └── templates/              # Jinja2 templates (dashboard, exam viewer, dataset browser)
 ```
 
 ---
 
-## ⚙️ Setup and Configuration
+## ⚙️ Setup
 
-This project uses **Pixi** for cross-platform environment and dependency management.
+This project uses **[Pixi](https://pixi.sh)** for hermetic, cross-platform environment management.
 
-### Prerequisites
+### 1. Install Pixi
 
-Ensure you have Pixi installed:
 ```bash
 curl -fsSL https://pixi.sh/install.sh | bash
 ```
 
-### Environment Variables
+### 2. Install dependencies
 
-Configure authentication credentials by copying `.env.example` into a `.env` file in the root directory:
 ```bash
-cp .env.example .env
+pixi install
 ```
 
-Define the following environment variables:
-- `DEEPSEEK_API_KEY`: API key for calling the DeepSeek reasoning and flash models.
-- `HF_TOKEN`: Hugging Face write token for pulling/pushing datasets and LoRA adapter weights.
+### 3. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```bash
+DEEPSEEK_API_KEY=sk-...      # DeepSeek API key for question generation
+HF_TOKEN=hf_...              # Hugging Face write token for upload/download
+```
 
 > [!WARNING]
-> Never check `.env` or any files containing sensitive credentials into version control.
+> Never commit `.env` or any file containing API keys to version control.
 
 ---
 
-## 🚀 Execution Workflow (Step-by-Step)
+## 🚀 Pipeline Workflow
 
-The entire pipeline is mapped into Pixi tasks, making execution direct and reproducible:
+The full pipeline runs in 8 stages. Each stage is a `pixi run` task.
 
-### 1. Run Unit Tests
-Verify the environment and code integrity before running the generation steps:
-```bash
-pixi run test
+```
+┌─────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│  1. curriculum  │───▶│  2. exam/generate │───▶│  3. (reconstruct)│
+└─────────────────┘    └──────────────────┘    └──────────────────┘
+                                                         │
+                        ┌────────────────────────────────┘
+                        ▼
+               ┌─────────────────┐    ┌──────────────┐    ┌──────────────┐
+               │  4. prepare     │───▶│  5. train    │───▶│  6. inference│
+               └─────────────────┘    └──────────────┘    └──────────────┘
+                        │                    │
+                        ▼                    ▼
+               ┌──────────────────┐  ┌────────────────┐
+               │ upload-dataset   │  │  upload-model  │
+               └──────────────────┘  └────────────────┘
 ```
 
-### 2. Stage 1: Curriculum Generation
-Compile the educational curriculum outline (Chapters, Units, and specific Dạng bài tập/Problem Types) for a target subject and grade:
+### Stage 1 — Curriculum Generation
+
+Generate subject/grade curricula (chapters, units, problem types) used to steer question generation:
+
 ```bash
-# Generate a specific curriculum
+# Single subject/grade
 pixi run curriculum --subject physics --grade 11
 
-# Generate curricula for all subjects and grades (10-12) concurrently
-pixi run curriculum --all
-```
-Generated curricula are cached as JSON files under `output/curriculum/`.
-
-### 3. Stage 2: Mock Exam Compilation (Question Generation)
-Synthesize structured, section-grouped mock exams which automatically generate individual questions under the hood using curricula in the cache or through random generation:
-```bash
-# Compile/generate mock exams
-pixi run generate --num-exams 10 --concurrency 8
-```
-Mock exams are saved as JSON files in `output/exams/`.
-
-### 4. Stage 3: Text Reconstruction & Span Alignment
-(Optional) Reconstruct plain text from legacy question files and map character offsets:
-```bash
-pixi run reconstruct -i output --reconstruct-dest output_reconstructed
+# All subjects & grades concurrently
+pixi run curriculum --all --concurrency 8
 ```
 
-### 5. Stage 4: Dataset Preparation
-Preprocess the generated data, recursively finding compiled exams in `output/exams/` (and falling back to legacy individual questions), then tokenize, assign BIO sequence labels, and split the dataset into `train.jsonl`, `val.jsonl`, and `test.jsonl`:
-```bash
-pixi run prepare-dataset -i output -o output/dataset --latex-placeholder "[LATEX]"
-```
-
-### 6. Stage 5: Train Token Classifier
-Fine-tune the `FacebookAI/xlm-roberta-base` model using LoRA adapters on the prepared dataset:
-```bash
-pixi run train --repo_id your_hf_username/repo_name --epochs 3 --batch_size 8
-```
-
-### 7. Stage 6: Local Inference
-Load the trained LoRA adapter weights and run a sequence labeling model against sample input text:
-```bash
-pixi run inference --model_dir ./results --base_model_name FacebookAI/xlm-roberta-base
-```
-
-### 8. Stage 7: HTML Visualization
-Generate an offline HTML visualizer that highlights the sequence tag alignments for verification:
-```bash
-pixi run visualize -i output/dataset/train.jsonl -o output/dataset/sample_visualization.html
-```
-
-### 9. Stage 8: Web Interface: Interactive Exam Viewer
-Start the FastAPI server to search, view statistics, and display generated exams with highlighted, color-coded token spans:
-```bash
-pixi run view-exams
-```
-Open your browser at `http://127.0.0.1:8000` to interact with the dashboard.
+Output: `output/curriculum/{subject}_g{grade}.json`
 
 ---
 
-## 📊 Data Contracts & Labeling Schemas
+### Stage 2 — Mock Exam Generation
 
-### Sequence Labeling Tag Set
+Synthesize section-grouped mock exams. Each exam contains multiple questions across question types (multiple choice, true/false, short answer, ordering, group questions):
 
-During token alignment, the tokens are mapped into BIO sequence tags matching these categories:
+```bash
+pixi run generate -n 300 --concurrency 8
 
-| Entity Tag | Description | Example Text |
+# Filter to a specific subject/grade
+pixi run generate -n 50 --subject history --grade 12
+```
+
+Output: `output/exams/exam_*.json`
+
+---
+
+### Stage 3 — (Optional) Text Reconstruction
+
+Re-reconstruct raw text and offset spans from existing question JSON files (useful after schema changes):
+
+```bash
+pixi run reconstruct -i output --reconstruct-dest output/reconstructed
+```
+
+---
+
+### Stage 4 — Dataset Preparation
+
+Tokenizes all exams (synthetic + real), aligns BIO sequence labels to token offsets using multi-scale sliding windows, applies data augmentation, and splits into train/val/test. Also generates ground-truth annotated XML files per source exam.
+
+```bash
+pixi run prepare-dataset -i output/exams -o output/dataset
+```
+
+**Key options:**
+
+| Flag | Default | Description |
 |---|---|---|
-| `question_label` | Prefix markers for question numbering | `"Câu 1:"`, `"Câu 12."`, `"C1."` |
-| `stem` | Core content body of the question or sub-question | `"Cho hàm số $y=f(x)$ liên tục trên $\mathbb{R}$..."` |
-| `option_label` | Choice indices/prefixes for options | `"A."`, `"B."`, `"a)"`, `"b."` |
-| `option_text` | Textual content of a question choice | `"Hàm số đồng biến trên khoảng $(0; +\infty)$"` |
-| `context` | Shared passage/passage blocks in group questions | `"Đọc đoạn thông tin sau đây và trả lời các câu hỏi..."` |
+| `--model` | `aisingapore/SEA-LION-ModernBERT-300M` | Tokenizer to use |
+| `--exam-level` | off | Process at exam level (vs. question level) |
+| `--max-len` | `512,768,1024,2048` | Sliding window sizes |
+| `--stride` | `128,192,256,512` | Overlap strides |
+| `--typo-rate` | `0.02` | Typo injection rate |
+| `--space-noise-rate` | `0.15` | Whitespace noise rate |
+| `--latex-mask-prob` | `0.5` | LaTeX `$...$` masking probability |
+| `--casing-noise-prob` | `0.10` | Random casing noise |
+| `--synonym-swap-prob` | `0.10` | Prefix synonym swap |
+| `--inline-option-prob` | `0.0` | Inline option formatting probability |
+| `--option-drop-prob` | `0.05` | Simulate truncated options (OCR cuts) |
 
-### Output Question JSON Format
+Output:
 
-Each generated question fits either a **Standard** or a **Group** structure.
+```
+output/dataset/
+├── train.jsonl
+├── val.jsonl
+├── test.jsonl
+├── label_mapping.json
+└── xml/
+    ├── exam_abc123_annotated.xml
+    ├── real_exam_xyz_annotated.xml
+    └── ...
+```
 
-#### Standard Question (`is_group: false`)
+---
+
+### Stage 5 — Train Token Classifier
+
+Fine-tune with LoRA adapters (or full fine-tuning) using HF `Trainer`. Supports weighted sampling to upsample real exam data:
+
+```bash
+pixi run train \
+  --repo_id daominhwysi/synthetic-seq-labelling-vi-exam-v2 \
+  --epochs 5 \
+  --batch_size 8 \
+  --real-upsample-factor 5.0
+```
+
+**Key options:**
+
+| Flag | Default | Description |
+|---|---|---|
+| `--repo_id` | `daominhwysi/synthetic-seq-labelling-vi-exam-v2` | HF dataset repo to load |
+| `--model_name` | `aisingapore/SEA-LION-ModernBERT-300M` | Base model |
+| `--lora_r` | `16` | LoRA rank |
+| `--lora_alpha` | `32` | LoRA alpha |
+| `--real-upsample-factor` | `1.0` | Weight multiplier for real samples (e.g. `5.0` = 5× more frequent) |
+| `--no-lora` | off | Full fine-tune instead of LoRA |
+| `--ema-decay` | `0.0` | Enable EMA (e.g. `0.999`) |
+| `--warmup-ratio` | `0.0` | LR warmup ratio |
+| `--gradient-checkpointing` | off | Save GPU memory |
+| `--no-class-weights` | off | Disable inverse-frequency class weighting |
+
+Output: `./results/` (LoRA adapter weights + `label_mapping.json`)
+
+---
+
+### Stage 6 — Batch Inference
+
+Run the trained model over a folder of raw `.txt` files. Produces three output files per input:
+
+```bash
+pixi run batch-inference \
+  -i path/to/txt_files/ \
+  -o inference_output/ \
+  --model-dir ./results \
+  --max-length 1024 \
+  --stride 256
+```
+
+Per input file `exam.txt`, outputs:
+
+| File | Content |
+|---|---|
+| `exam_structured.json` | Structured segment list with labels and text |
+| `exam_predictions.txt` | Token-level tabular prediction table |
+| `exam_annotated.xml` | Inline-tagged XML matching `annotate_ocr.py` format |
+
+**XML example:**
+```xml
+<question_label>Câu 1.</question_label> <stem>Cho phương trình $x^2 - 5x + 6 = 0$.</stem>
+<option_label>A.</option_label> <option_text>x = 2 hoặc x = 3</option_text>
+<option_label>B.</option_label> <option_text>x = 1 hoặc x = 6</option_text>
+```
+
+---
+
+### Stage 7 — Upload Dataset to HF Hub
+
+Uploads `output/dataset/` (splits + `label_mapping.json` + `xml/` subfolder) and auto-generates a dataset card:
+
+```bash
+pixi run upload-dataset
+
+# Custom target repo
+sequence-labelling-generator upload \
+  --repo-id myuser/my-dataset \
+  --dataset-dir output/dataset
+```
+
+---
+
+### Stage 8 — Upload Model to HF Hub
+
+Uploads `./results/` and auto-generates a model card from `adapter_config.json` + `label_mapping.json`:
+
+```bash
+pixi run upload-model
+
+# Custom options
+sequence-labelling-generator upload-model \
+  --model-dir ./results \
+  --repo-id myuser/vi-exam-seq-labeller \
+  --private
+```
+
+---
+
+### Visualization & Web Dashboard
+
+```bash
+# Standalone HTML token-span alignment visualizer
+pixi run visualize -i output/dataset/train.jsonl -o output/dataset/viz.html
+
+# FastAPI interactive exam viewer (http://127.0.0.1:8000)
+pixi run view-exams
+```
+
+---
+
+## 📊 Data Contracts
+
+### Tag Set (BIO Schema)
+
+| Tag | Description | Example |
+|---|---|---|
+| `question_label` | Question/sub-question number prefix | `"Câu 1:"`, `"Question 2."` |
+| `stem` | Main question body text | `"Cho hàm số $y = f(x)$..."` |
+| `option_label` | Option letter prefix | `"A."`, `"B."`, `"a)"` |
+| `option_text` | Option content text | `"Hàm số đồng biến trên $(0; +∞)"` |
+| `context` | Shared passage for group questions | `"Đọc đoạn văn sau..."` |
+| `section` | Section headers and exam directions | `"PHẦN I. Trắc nghiệm"` |
+
+All tags use the BIO prefix scheme: `B-<tag>` for the first token, `I-<tag>` for continuation, `O` for outside.
+
+### Dataset Sample Schema
+
+Each line in `train.jsonl`, `val.jsonl`, `test.jsonl`:
+
+```json
+{
+  "tokens":         ["▁Câu", "▁1", ".", "▁Cho", "..."],
+  "input_ids":      [0, 12, 34, 56, ...],
+  "attention_mask": [1, 1, 1, 1, ...],
+  "labels":         [1, 2, 0, 3, ...],
+  "tags":           ["B-question_label", "I-question_label", "O", "B-stem", "..."],
+  "metadata": {
+    "subject":       "physics",
+    "grade":         11,
+    "is_real":       false,
+    "exam_id":       "exam_abc123",
+    "question_type": "multiple_choice",
+    "difficulty":    "comprehend",
+    "max_len":       512,
+    "stride":        128,
+    "chunk_idx":     0,
+    "total_chunks":  1
+  }
+}
+```
+
+### Subjects & Grades
+
+**Subjects:** `economics_law` · `geography` · `history` · `math_algebra` · `math_geometry` · `physics` · `chemistry` · `english` · `literature`
+
+**Grades:** 8 · 9 · 10 · 11 · 12
+
+**Question types:** `multiple_choice` · `true_false` · `short_answer` · `ordering` · `group_multiple_choice` · `group_short_answer`
+
+**Difficulty levels:** `recognize` · `comprehend` · `low_application` · `application` · `high_application`
+
+### Question JSON Schema
+
+#### Standard Question
+
 ```json
 {
   "is_group": false,
-  "subject": "physics",
-  "grade": 11,
+  "stem": "Nguyên tố nào có tính kim loại mạnh nhất?",
+  "options": ["Na", "K", "Li", "Cs"],
+  "answer": "B",
+  "explanation": "Kali (K) có năng lượng ion hoá thứ nhất thấp nhất...",
+  "subject": "chemistry",
+  "grade": 10,
   "question_type": "multiple_choice",
-  "difficulty": "comprehend",
-  "stem": "Câu hỏi của bạn...",
-  "options": [
-    "Phương án A",
-    "Phương án B",
-    "Phương án C",
-    "Phương án D"
-  ],
-  "chapter": "Sóng",
-  "unit": "Giao thoa ánh sáng",
-  "problem_type_id": "physics_11_optics_dang1",
-  "problem_type_name": "Tên dạng bài",
-  "problem_type_level": "NB_TH",
-  "raw_text": "Câu 1: Câu hỏi của bạn...\nA. Phương án A\nB. Phương án B...",
-  "spans": [
-    { "start": 0, "end": 7, "label": "question_label", "text": "Câu 1: " },
-    { "start": 7, "end": 26, "label": "stem", "text": "Câu hỏi của bạn..." }
-    // ... option_labels and option_texts spans
-  ]
+  "difficulty": "comprehend"
 }
 ```
 
-#### Group Question (`is_group: true`)
+#### Group Question
+
 ```json
 {
   "is_group": true,
-  "subject": "history",
-  "grade": 12,
-  "question_type": "group_multiple_choice",
-  "difficulty": "application",
-  "context": "Đoạn thông tin ngữ cảnh chung cho các câu hỏi...",
+  "context": "Đọc đoạn văn sau và trả lời các câu hỏi...",
   "questions": [
     {
-      "stem": "Câu hỏi phụ 1...",
-      "options": ["A...", "B...", "C...", "D..."]
-    },
-    {
-      "stem": "Câu hỏi phụ 2...",
-      "options": ["A...", "B...", "C...", "D..."]
+      "stem": "Ý chính của đoạn văn là gì?",
+      "options": ["A...", "B...", "C...", "D..."],
+      "answer": "A",
+      "explanation": "..."
     }
   ],
-  "raw_text": "Đoạn thông tin ngữ cảnh chung...\nCâu 1: Câu hỏi phụ 1...\nA. A...\n...",
-  "spans": [
-    { "start": 0, "end": 33, "label": "context", "text": "Đoạn thông tin ngữ cảnh chung..." }
-    // ... sub-question labels, stems, option_labels and option_texts spans
-  ]
+  "subject": "english",
+  "grade": 12,
+  "question_type": "group_multiple_choice",
+  "difficulty": "application"
 }
 ```
 
 ---
 
-## 🛠️ Verification & Development
+## 🛠️ Development
 
-To run unit tests or contribute to the repository:
-- Run test suites: `pixi run test`
-- Make sure code modifications preserve schema definitions (as described in `AGENTS.md` and `README.md`).
+```bash
+# Run all unit tests
+pixi run test
+
+# Check API token balance
+python scratch/get_balance.py
+
+# Inspect generated dataset splits
+python scratch/inspect_local_data.py
+
+# Verify span alignment accuracy
+python scratch/check_xml_accuracy.py
+```
+
+---
+
+## 🔗 Related Resources
+
+- **Dataset:** [daominhwysi/synthetic-seq-labelling-vi-exam-v2](https://huggingface.co/datasets/daominhwysi/synthetic-seq-labelling-vi-exam-v2)
+- **Model:** [daominhwysi/vi-exam-seq-labeller](https://huggingface.co/daominhwysi/vi-exam-seq-labeller)
+- **Base model:** [aisingapore/SEA-LION-ModernBERT-300M](https://huggingface.co/aisingapore/SEA-LION-ModernBERT-300M)

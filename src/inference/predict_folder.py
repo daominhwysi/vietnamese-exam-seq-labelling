@@ -23,7 +23,7 @@ def load_label_mapping(model_dir):
             return mapping["tag_to_id"], {int(k): v for k, v in mapping["id_to_tag"].items()}
             
     # Fallback to standard base tags mapping
-    base_tags = ["question_label", "stem", "option_label", "option_text", "context"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)
@@ -31,11 +31,67 @@ def load_label_mapping(model_dir):
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
 
+def is_valid_latex(content):
+    content_stripped = content.strip()
+    if not content_stripped:
+        return False
+    
+    # Case 1: Single variable or number (e.g. $x$, $a$, $1$)
+    if len(content_stripped) == 1:
+        return content_stripped.isalnum()
+        
+    # Case 2: Balanced braces, brackets, and parentheses
+    brackets = {'{': '}', '(': ')', '[': ']'}
+    stack = []
+    for char in content_stripped:
+        if char in brackets:
+            stack.append(char)
+        elif char in brackets.values():
+            if not stack:
+                return False
+            last = stack.pop()
+            if brackets[last] != char:
+                return False
+    if stack:
+        return False
+        
+    # Case 3: Contains standard math/latex character indicators
+    math_indicators = ['\\', '^', '_', '+', '-', '*', '/', '=', '<', '>', '{', '}', '[', ']']
+    if any(ind in content_stripped for ind in math_indicators):
+        return True
+        
+    # Case 4: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
+    if len(content_stripped) < 10 and re.match(r'^[a-zA-Z0-9]+$', content_stripped):
+        return True
+        
+    return False
+
 def get_latex_spans(text):
     spans = []
-    # Matches $$...$$ and $...$
-    for match in re.finditer(r"\$\$.*?\$\$|\$.*?\$", text, re.DOTALL):
-        spans.append(match.span())
+    # 1. Matches $$...$$ (display math)
+    for match in re.finditer(r"\$\$.*?\$\$", text, re.DOTALL):
+        # Verify content inside $$
+        content = match.group(0)[2:-2]
+        if is_valid_latex(content):
+            spans.append(match.span())
+        
+    # 2. Matches $...$ (inline math)
+    for match in re.finditer(r"\$(?!\s)[^\$\n]+?(?<!\s)\$", text):
+        span = match.span()
+        content = match.group(0)[1:-1]
+        if not is_valid_latex(content):
+            continue
+            
+        # Avoid overlapping with display math
+        overlap = False
+        for d_start, d_end in spans:
+            if not (span[1] <= d_start or span[0] >= d_end):
+                overlap = True
+                break
+        if not overlap:
+            spans.append(span)
+            
+    spans.sort(key=lambda x: x[0])
     return spans
 
 def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
@@ -90,6 +146,48 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
         
     return segments
 
+def segments_to_xml(raw_text: str, segments: list) -> str:
+    """
+    Reconstructs the full raw text with inline XML tags around each labeled segment,
+    matching the format produced by annotate_ocr.py:
+        <question_label>Câu 1.</question_label> <stem>Nội dung câu hỏi...</stem>
+
+    Untagged text between segments (e.g. page headers, separators) is preserved
+    verbatim outside any tag. Character offsets on the segments are used to find
+    the exact gap text from raw_text.
+    """
+    # Re-derive character offsets by searching for each segment's text in order.
+    # The segments list from extract_segments() only carries stripped text,
+    # so we locate each one forward from the previous match end.
+    result = []
+    cursor = 0
+
+    for seg in segments:
+        label = seg["label"]
+        text = seg["text"]
+        if not text:
+            continue
+
+        # Find next occurrence of this text starting from cursor
+        idx = raw_text.find(text, cursor)
+        if idx == -1:
+            # Fallback: skip this segment gracefully
+            continue
+
+        # Append any untagged gap text before this segment
+        if idx > cursor:
+            result.append(raw_text[cursor:idx])
+
+        # Append the tagged segment
+        result.append(f"<{label}>{text}</{label}>")
+        cursor = idx + len(text)
+
+    # Append any trailing untagged text after the last segment
+    if cursor < len(raw_text):
+        result.append(raw_text[cursor:])
+
+    return "".join(result)
+
 def main():
     parser = argparse.ArgumentParser(description="Batch inference for exam document segmentation from a folder of text files")
     parser.add_argument(
@@ -113,8 +211,8 @@ def main():
     parser.add_argument(
         "--base-model-name",
         type=str,
-        default="jhu-clsp/mmbert-base",
-        help="Base model/tokenizer name used (default: 'jhu-clsp/mmbert-base')"
+        default="aisingapore/SEA-LION-ModernBERT-300M",
+        help="Base model/tokenizer name used (default: 'aisingapore/SEA-LION-ModernBERT-300M')"
     )
     parser.add_argument(
         "--max-length",
@@ -342,6 +440,13 @@ def main():
                 
             print(f"  [Success] Saved structured JSON to '{output_json_file.name}'")
             print(f"  [Success] Saved readable predictions to '{output_txt_file.name}'")
+
+            # 3. Inline-tagged XML (matches annotate_ocr.py format)
+            xml_content = segments_to_xml(raw_text, segments)
+            output_xml_file = output_path / f"{file_path.stem}_annotated.xml"
+            with open(output_xml_file, "w", encoding="utf-8") as f:
+                f.write(xml_content)
+            print(f"  [Success] Saved annotated XML to '{output_xml_file.name}'")
             
         except Exception as e:
             print(f"  [Error] Failed to process '{file_path.name}': {e}")

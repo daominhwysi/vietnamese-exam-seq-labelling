@@ -1,5 +1,5 @@
 import unittest
-from src.training.prepare_dataset import (
+from src.data.prepare import (
     align_tokens_to_spans,
     get_tag_mappings,
     process_single_question,
@@ -49,8 +49,9 @@ class TestPrepareDataset(unittest.TestCase):
         self.assertIn("B-option_text", self.tag_to_id)
         self.assertEqual(self.tag_to_id["O"], 0)
         self.assertEqual(self.id_to_tag[0], "O")
-        # Ensure B- and I- tags are mapped to unique values
-        self.assertEqual(len(self.tag_to_id), 1 + 2 * 5)  # O + B/I for 5 tags
+        self.assertIn("B-section", self.tag_to_id)
+        self.assertIn("I-section", self.tag_to_id)
+        self.assertEqual(len(self.tag_to_id), 1 + 2 * 6)  # O + B/I for 6 tags
 
     def test_align_tokens_to_spans_basic(self):
         # Spans:

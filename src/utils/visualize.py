@@ -54,6 +54,10 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             --color-context: rgba(244, 63, 94, 0.25);
             --border-context: #f43f5e;
             --text-context: #fda4af;
+            
+            --color-section: rgba(108, 117, 125, 0.25);
+            --border-section: #6c757d;
+            --text-section: #ced4da;
         }}
         
         body {{
@@ -166,6 +170,11 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             background-color: var(--color-context);
             border: 1px solid var(--border-context);
             color: var(--text-context);
+        }}
+        .tag-section {{
+            background-color: var(--color-section);
+            border: 1px solid var(--border-section);
+            color: var(--text-section);
         }}
         
         .tag-o {{
@@ -287,6 +296,7 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             <div class="legend-item tag-option_label">Option Label</div>
             <div class="legend-item tag-option_text">Option Text</div>
             <div class="legend-item tag-context">Context Passage</div>
+            <div class="legend-item tag-section">Section Header</div>
         </div>
 
         <div id="samples-container"></div>

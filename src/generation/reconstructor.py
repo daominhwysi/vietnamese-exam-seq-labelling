@@ -3,6 +3,7 @@ import re
 import itertools
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Any, Tuple
+from src.webapp.inference_helper import is_valid_latex
 
 # Available prefix templates for Question labels
 DEFAULT_QUESTION_PREFIXES = [
@@ -13,7 +14,10 @@ DEFAULT_QUESTION_PREFIXES = [
     "C{num}: ",
     "C{num}. ",
     "Q{num}: ",
-    "Q{num}. "
+    "Q{num}. ",
+    "{num}. ",
+    "{num}: ",
+    "{num}) "
 ]
 
 # Available styles for option prefixes
@@ -205,6 +209,15 @@ def process_latex_variations(text: str, placeholder: str, mask_prob: float, rng:
     
     def repl(match):
         formula = match.group(1)
+        # Enforce same checks as get_latex_spans:
+        # - No leading or trailing spaces
+        # - No newlines inside single $ delimiters
+        # - Must pass is_valid_latex check
+        if formula.startswith(" ") or formula.endswith(" ") or "\n" in formula:
+            return match.group(0)
+        if not is_valid_latex(formula):
+            return match.group(0)
+            
         if rng.random() < mask_prob:
             return placeholder
         else:
@@ -608,7 +621,7 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
         if config.formatting_noise_prob > 0.0 and rng.random() < config.formatting_noise_prob:
             sec_title_text = apply_formatting_tag_noise(sec_title_text.strip(), 1.0, rng) + "\n"
             
-        append_document_segment(sec_title_text, "separator")
+        append_document_segment(sec_title_text, "section")
         append_document_segment(config.separator_stem_options, "separator")
         
         questions_list = list(questions)

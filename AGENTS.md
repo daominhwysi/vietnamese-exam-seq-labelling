@@ -29,34 +29,52 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_train_sample.py` - Sanity check script to run token prediction on a real training sample.
   - `count_tokens.py` - Counts input and output tokens for cost estimation.
   - `detect_and_clean_options.py` - Utility to test option prefix cleaning regex.
+  - `replace_html_entity.py` - General recursive text replacement utility for generated outputs, including `&nbsp;` normalization in `real_data_annotator/out`.
   - `test_generation.py` - Simple end-to-end question generation test script.
   - `inspect_local_data.py` - Inspects local generated exams and dataset splits.
   - `count_ordering_in_dataset.py` - Counts and analyzes ordering questions in dataset splits.
   - `inspect_inline.py` - Checks for inline formatted option sequences in dataset splits.
+  - `incremental_train.py` - Performs incremental/continual training on an existing adapter model.
+  - `get_balance.py` - Fetches DeepSeek API balance from the environment.
+  - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
+  - `inspect_exam_spans.py` - Inspects annotated exam tag distributions and span content previews.
+  - `inference_onnx.py` - Runs sequence labeling inference using ONNX Runtime without PyTorch.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
   - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`).
+  - `ocr_input/` - Raw input PDFs for real OCR data processing (gitignored).
+  - `ocr_out/` - Extracted OCR markdown files (gitignored).
+  - `real_exams/` - Generated real OCR exam structures in JSON format.
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
-  - `token_tracker.py` - Thread-safe token-usage logger; appends per-call records (`input_tokens`, `output_tokens`) to `logs/token_usage_<date>.jsonl`. Exposes `log_response()`, `load_logs()`, `summarize()`, and `print_summary()`.
+  - `data/` - Data Preparation & Real OCR Pipeline.
+    - `prepare.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
+    - `upload.py` - Uploads processed dataset splits and inline-tagged XML files to Hugging Face Hub.
+    - `pdf_converter.py` - Runs OCR on raw PDF files using LLM vision models and extracts raw markdown.
+    - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
   - `generation/` - Core Data Generation Subpackage.
     - `curriculum.py` - Handles subject & grade curriculum loading and generation.
-    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models. Automatically calls `token_tracker.log_response()` after every API call.
-    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams (supports both old and new English formats).
+    - `deepseek_client.py` - Client wrapping DeepSeek completions API reasoning models.
+    - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams.
     - `generator.py` - Orchestrates question generation with AI prompting.
     - `parser.py` - Parses standard and group question elements from LLM XML output.
-    - `reconstructor.py` - Rebuilds raw text from structured objects and maps offset character spans.
-  - `training/` - Downstream Training & Evaluation Subpackage.
-    - `prepare_dataset.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
-    - `train.py` - Performs token-classification training with LoRA adapters (supports dynamic T4/BF16/FP16 precision fallback).
-    - `inference.py` - Local inference utility using trained LoRA adapter models.
-    - `inference_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments and outputting human-readable token-class text mappings.
-    - `upload_dataset.py` - Uploads processed dataset splits to the Hugging Face hub.
-    - `visualize_samples.py` - Generates HTML page for token-span alignment visualization.
+    - `reconstructor.py` - Rebuilds raw text from structured questions and maps span offsets.
+  - `model/` - Downstream Training & Export Subpackage.
+    - `train.py` - Performs token-classification training (with optional LoRA adapters and FP16/BF16 falling back).
+    - `export.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX.
+    - `upload.py` - Uploads trained LoRA adapters or full fine-tuned model checkpoints to HF Hub.
+  - `inference/` - Downstream Inference & Batch Predictions.
+    - `predict.py` - Local sequence labeling inference utility.
+    - `predict_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments.
+  - `utils/` - Utility & Helper Subpackage.
+    - `token_tracker.py` - Thread-safe token-usage logger; writes daily logs to `logs/token_usage_*.jsonl`.
+    - `visualize.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.
     - `main.py` - FastAPI application entry point, routing, exam/dataset stats computation.
-    - `templates/` - Jinja2 HTML templates (base, dashboard index, exam viewer with tag highlighting, dataset dashboard, dataset viewer).
+    - `inference_helper.py` - Helper utilities for sequence labeling predictions (sliding window aggregation, LaTeX masking, offset mapping).
+    - `inference_app.py` - Standalone FastAPI web application running the model inference interface on port 8001.
+    - `templates/` - Jinja2 HTML templates for dashboards, exam viewer, and inference website.
 
 ---
 
@@ -73,6 +91,7 @@ This project uses **Pixi** for environment and dependency management.
 - To visualize token spans: `pixi run visualize`
 - To upload the dataset to HF Hub: `pixi run upload-dataset`
 - To run the web exam viewer: `pixi run view-exams`
+- To run the standalone web inference app: `pixi run view-inference`
 
 ## Environment Configuration
 

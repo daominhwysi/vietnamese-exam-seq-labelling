@@ -1,0 +1,680 @@
+{% extends "base.html" %}
+
+{% block title %}⚡ Phân tích Đề thi (Inference) - Antigravity Viewer{% endblock %}
+
+{% block head %}
+<style>
+    /* Premium style enhancements */
+    .tab-btn.active {
+        border-bottom-color: #37352f;
+        color: #37352f;
+        font-weight: 600;
+    }
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .status-idle { background-color: #d1d5db; }
+    .status-loading { background-color: #f59e0b; animation: pulse 1.5s infinite; }
+    .status-loaded { background-color: #10b981; }
+    .status-error { background-color: #ef4444; }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: .5; transform: scale(1.1); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full space-y-8">
+    
+    <!-- Header -->
+    <div class="space-y-2 pb-6 border-b border-[#e9e9e6]">
+        <div class="flex items-center space-x-2 text-stone-500 text-xs font-semibold uppercase tracking-wider">
+            <span>Workspace</span>
+            <span>/</span>
+            <span>Inference Segmenter</span>
+        </div>
+        <h1 class="text-3xl font-bold tracking-tight text-[#37352f] flex items-center">
+            ⚡ Phân tích & Phân đoạn Đề thi tự động
+        </h1>
+        <p class="text-stone-500 text-sm leading-relaxed max-w-3xl">
+            Tải mô hình Sequence Labeling (XLMR / ModernBERT + LoRA adapter) để tự động nhận dạng cấu trúc câu hỏi. Hệ thống sẽ phân đoạn đề thi thành các thành phần: tiêu đề câu, thân câu hỏi, các lựa chọn đáp án, và văn bản ngữ cảnh.
+        </p>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Column: Controls (4 cols) -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Model Settings Panel -->
+            <div class="p-5 border border-[#e9e9e6] rounded-xl bg-[#f7f7f5] space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-[#e9e9e6]">
+                    <span class="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center">
+                        ⚙️ Cấu hình mô hình
+                    </span>
+                    <div class="flex items-center space-x-1.5">
+                        <span id="model-status-dot" class="status-dot status-idle"></span>
+                        <span id="model-status-text" class="text-[10px] font-bold text-stone-500 uppercase tracking-wider">Chưa nạp</span>
+                    </div>
+                </div>
+
+                <!-- Model Path / Repo -->
+                <div class="space-y-1.5">
+                    <label class="block text-[11px] font-bold text-stone-500 uppercase tracking-wider" for="model-path">Checkoint / HF Repo</label>
+                    <input type="text" id="model-path" 
+                           value="daominhwysi/vi-exam-seq-labeller" 
+                           placeholder="Nhập đường dẫn cục bộ hoặc Repo ID trên Hugging Face" 
+                           class="w-full px-3 py-2 text-xs border border-[#e9e9e6] rounded bg-white text-[#37352f] focus:outline-none focus:border-stone-400 font-mono">
+                </div>
+
+                <!-- Base Model -->
+                <div class="space-y-1.5">
+                    <label class="block text-[11px] font-bold text-stone-500 uppercase tracking-wider" for="base-model-name">Base Model Tokenizer</label>
+                    <input type="text" id="base-model-name" 
+                           value="aisingapore/SEA-LION-ModernBERT-300M" 
+                           class="w-full px-3 py-2 text-xs border border-[#e9e9e6] rounded bg-white text-[#37352f] focus:outline-none focus:border-stone-400 font-mono">
+                </div>
+
+                <!-- Advanced settings grid -->
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-bold text-stone-400 uppercase tracking-wider" for="max-length">Max Length</label>
+                        <input type="number" id="max-length" value="1024" step="256" min="256" max="2048"
+                               class="w-full px-2.5 py-1.5 text-xs border border-[#e9e9e6] rounded bg-white text-stone-700">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[10px] font-bold text-stone-400 uppercase tracking-wider" for="stride">Stride Window</label>
+                        <input type="number" id="stride" value="256" step="64" min="64" max="512"
+                               class="w-full px-2.5 py-1.5 text-xs border border-[#e9e9e6] rounded bg-white text-stone-700">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-bold text-stone-400 uppercase tracking-wider" for="device-choice">Thiết bị chạy (Device)</label>
+                    <select id="device-choice" class="w-full px-2.5 py-1.5 text-xs border border-[#e9e9e6] rounded bg-white text-stone-700">
+                        <option value="auto">Auto (Chọn CUDA nếu có)</option>
+                        <option value="cuda">GPU (CUDA)</option>
+                        <option value="cpu">CPU</option>
+                    </select>
+                </div>
+
+                <!-- Load button -->
+                <button id="btn-load-model" onclick="loadModel()" 
+                        class="w-full py-2.5 px-4 rounded bg-[#37352f] hover:bg-[#2c2a25] text-white text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-2">
+                    <span>⚡ Nạp Mô Hình (Load Model)</span>
+                </button>
+            </div>
+
+            <!-- Presets Panel -->
+            <div class="p-5 border border-[#e9e9e6] rounded-xl bg-white space-y-4">
+                <div class="pb-2 border-b border-[#e9e9e6]">
+                    <span class="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center">
+                        📂 Đề thi mẫu (Presets)
+                    </span>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[11px] font-bold text-stone-500 uppercase tracking-wider" for="preset-select">Chọn tệp đề thi từ `sample/`</label>
+                    <select id="preset-select" onchange="onPresetSelected()" 
+                            class="w-full px-3 py-2 text-xs border border-[#e9e9e6] rounded bg-white text-stone-700 focus:outline-none">
+                        <option value="">-- Chọn đề thi mẫu --</option>
+                    </select>
+                </div>
+
+                <button id="btn-load-preset" onclick="loadPresetContent()" disabled
+                        class="w-full py-2 px-3 rounded border border-[#e9e9e6] hover:bg-[#efefed] text-stone-600 text-xs font-semibold transition-all duration-150 flex items-center justify-center space-x-1.5 disabled:opacity-50 disabled:pointer-events-none">
+                    <span>📥 Đưa văn bản vào khung soạn thảo</span>
+                </button>
+            </div>
+            
+        </div>
+
+        <!-- Right Column: Editor & Result (8 cols) -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Textarea Editor -->
+            <div class="border border-[#e9e9e6] rounded-xl bg-white overflow-hidden shadow-sm">
+                <div class="px-5 py-3 border-b border-[#e9e9e6] bg-[#f7f7f5] flex items-center justify-between">
+                    <span class="text-xs font-bold text-stone-600 uppercase tracking-wider flex items-center">
+                        ✍️ Khung nhập đề thi thô (Raw text)
+                    </span>
+                    <span id="text-length-indicator" class="text-[10px] text-stone-400 font-mono">0 ký tự</span>
+                </div>
+                
+                <textarea id="raw-text-input" 
+                          oninput="updateCharCount()"
+                          placeholder="Hãy dán văn bản đề thi thô tại đây (hoặc chọn đề thi mẫu bên trái). LaTeX có công thức $...$ hoặc $$...$$ sẽ được bảo toàn..." 
+                          class="w-full h-80 px-5 py-4 text-xs font-serif leading-relaxed border-none focus:outline-none resize-y text-stone-850 select-all"></textarea>
+                
+                <div class="px-5 py-3 border-t border-[#e9e9e6] bg-[#f7f7f5] flex justify-end">
+                    <button id="btn-run-inference" onclick="runInference()" disabled
+                            class="py-2.5 px-6 rounded bg-[#37352f] hover:bg-[#2c2a25] text-white text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:pointer-events-none">
+                        <span class="spinner hidden mr-2 h-3.5 w-3.5 animate-spin rounded-full border-2 border-stone-300 border-t-white"></span>
+                        <span>🔍 Phân Tích Đề Thi (Run Inference)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loader / Status indicator during inference -->
+            <div id="inference-loader" class="hidden p-10 border border-[#e9e9e6] rounded-xl bg-white text-center space-y-3">
+                <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-stone-300 border-t-stone-800"></div>
+                <p class="text-xs text-stone-500 font-medium">Đang chạy suy luận trên GPU/CPU, vui lòng đợi...</p>
+            </div>
+
+            <!-- Results Panel (Visible only after success) -->
+            <div id="results-panel" class="hidden border border-[#e9e9e6] rounded-xl bg-white overflow-hidden shadow-sm space-y-0">
+                
+                <!-- Custom Notion tabs -->
+                <div class="px-5 border-b border-[#e9e9e6] bg-[#f7f7f5] flex items-center overflow-x-auto">
+                    <button onclick="switchTab('tab-visual')" id="btn-tab-visual" class="tab-btn active px-4 py-3 border-b-2 border-transparent text-xs font-medium text-stone-500 hover:text-[#37352f] transition-all duration-100 mr-2 flex items-center space-x-1.5">
+                        🎨 <span>Trực quan Spans</span>
+                    </button>
+                    <button onclick="switchTab('tab-structure')" id="btn-tab-structure" class="tab-btn px-4 py-3 border-b-2 border-transparent text-xs font-medium text-stone-500 hover:text-[#37352f] transition-all duration-100 mr-2 flex items-center space-x-1.5">
+                        🗂️ <span>Cấu trúc Câu hỏi</span>
+                    </button>
+                    <button onclick="switchTab('tab-xml')" id="btn-tab-xml" class="tab-btn px-4 py-3 border-b-2 border-transparent text-xs font-medium text-stone-500 hover:text-[#37352f] transition-all duration-100 mr-2 flex items-center space-x-1.5">
+                        📄 <span>Nhãn XML</span>
+                    </button>
+                    <button onclick="switchTab('tab-tokens')" id="btn-tab-tokens" class="tab-btn px-4 py-3 border-b-2 border-transparent text-xs font-medium text-stone-500 hover:text-[#37352f] transition-all duration-100 mr-2 flex items-center space-x-1.5">
+                        🔢 <span>Chi tiết Tokens</span>
+                    </button>
+                    <button onclick="switchTab('tab-json')" id="btn-tab-json" class="tab-btn px-4 py-3 border-b-2 border-transparent text-xs font-medium text-stone-500 hover:text-[#37352f] transition-all duration-100 flex items-center space-x-1.5">
+                        ⚙️ <span>Dữ liệu JSON</span>
+                    </button>
+                </div>
+
+                <!-- Tab Contents Container -->
+                <div class="p-6">
+                    
+                    <!-- TAB 1: Visual Highlights -->
+                    <div id="tab-visual" class="tab-content space-y-6">
+                        <!-- Legend -->
+                        <div class="flex flex-wrap gap-2 text-[10px] font-bold pb-4 border-b border-[#e9e9e6]">
+                            <span class="px-2 py-0.5 rounded bg-blue-150 text-blue-800 border-b-2 border-blue-500">question_label</span>
+                            <span class="px-2 py-0.5 rounded bg-purple-150 text-purple-800 border-b-2 border-purple-500">stem</span>
+                            <span class="px-2 py-0.5 rounded bg-amber-150 text-amber-800 border-b-2 border-amber-500">option_label</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-150 text-emerald-800 border-b-2 border-emerald-500">option_text</span>
+                            <span class="px-2 py-0.5 rounded bg-rose-150 text-rose-800 border-b-2 border-rose-500">context</span>
+                            <span class="px-2 py-0.5 rounded bg-stone-150 text-stone-800 border-b-2 border-stone-500">section</span>
+                        </div>
+                        
+                        <!-- Document Display Sheet -->
+                        <div class="exam-paper p-8 sm:p-10 font-serif leading-relaxed text-xs sm:text-sm text-stone-800 whitespace-pre-wrap select-all relative" id="highlighted-viewer-content">
+                            <!-- Visual highlighted text will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: Extracted Structure (Card Lists) -->
+                    <div id="tab-structure" class="tab-content hidden space-y-5" id="extracted-structure-content">
+                        <!-- Javascript will dynamically build cards here -->
+                    </div>
+
+                    <!-- TAB 3: XML tagged output -->
+                    <div id="tab-xml" class="tab-content hidden space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider">Mã nguồn văn bản được gán nhãn XML</span>
+                            <button onclick="copyToClipboard('xml-content-code')" class="px-3 py-1 rounded border border-[#e9e9e6] hover:bg-[#efefed] text-stone-600 text-xs font-semibold transition-all duration-100 flex items-center space-x-1">
+                                📋 <span>Sao chép XML</span>
+                            </button>
+                        </div>
+                        <pre class="p-4 rounded-lg bg-stone-50 border border-stone-200 text-[11px] font-mono text-stone-750 overflow-x-auto select-all max-h-[500px]" id="xml-content-code"></pre>
+                    </div>
+
+                    <!-- TAB 4: Token Classifier Table -->
+                    <div id="tab-tokens" class="tab-content hidden space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <span class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider">Danh sách nhãn dự đoán cho từng Token</span>
+                            <!-- Search token table -->
+                            <input type="text" id="token-search" oninput="filterTokens()" placeholder="🔍 Tìm kiếm token hoặc nhãn..." 
+                                   class="px-2.5 py-1.5 border border-stone-200 rounded text-xs focus:outline-none focus:border-stone-400 max-w-xs">
+                        </div>
+                        
+                        <div class="overflow-x-auto rounded border border-stone-200 max-h-[500px] overflow-y-auto">
+                            <table class="min-w-full divide-y divide-stone-200 text-xs text-left">
+                                <thead class="bg-stone-50 text-stone-500 font-semibold sticky top-0">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b border-stone-200">Index</th>
+                                        <th class="px-4 py-2 border-b border-stone-200">Token</th>
+                                        <th class="px-4 py-2 border-b border-stone-200">Dự đoán (Tag)</th>
+                                        <th class="px-4 py-2 border-b border-stone-200">Char Offsets</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-150 text-[#37352f] font-mono" id="token-table-body">
+                                    <!-- Dynamic rows loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: Raw JSON Output -->
+                    <div id="tab-json" class="tab-content hidden space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-semibold text-stone-400 uppercase tracking-wider">Dữ liệu thô kết quả API</span>
+                            <button onclick="copyToClipboard('json-content-code')" class="px-3 py-1 rounded border border-[#e9e9e6] hover:bg-[#efefed] text-stone-600 text-xs font-semibold transition-all duration-100 flex items-center space-x-1">
+                                📋 <span>Sao chép JSON</span>
+                            </button>
+                        </div>
+                        <pre class="p-4 rounded-lg bg-stone-50 border border-stone-200 text-[11px] font-mono text-stone-750 overflow-x-auto select-all max-h-[500px]" id="json-content-code"></pre>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let activeTab = 'tab-visual';
+    let inferenceResult = null;
+
+    // Run on document load
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchPresets();
+        checkModelStatus();
+        // Poll status every 2 seconds
+        setInterval(checkModelStatus, 2000);
+    });
+
+    function updateCharCount() {
+        const txt = document.getElementById('raw-text-input').value;
+        document.getElementById('text-length-indicator').textContent = `${txt.length} ký tự`;
+    }
+
+    // -------------------------------------------------------------
+    // PRESETS LOADING
+    // -------------------------------------------------------------
+    async function fetchPresets() {
+        try {
+            const res = await fetch('/api/presets');
+            const files = await res.json();
+            const select = document.getElementById('preset-select');
+            
+            // Clear but keep first
+            select.innerHTML = '<option value="">-- Chọn đề thi mẫu --</option>';
+            files.forEach(file => {
+                const opt = document.createElement('option');
+                opt.value = file;
+                opt.textContent = file;
+                select.appendChild(opt);
+            });
+        } catch (e) {
+            console.error('Failed to fetch presets:', e);
+        }
+    }
+
+    function onPresetSelected() {
+        const val = document.getElementById('preset-select').value;
+        const btn = document.getElementById('btn-load-preset');
+        btn.disabled = !val;
+    }
+
+    async function loadPresetContent() {
+        const filename = document.getElementById('preset-select').value;
+        if (!filename) return;
+
+        const btn = document.getElementById('btn-load-preset');
+        const oldText = btn.textContent;
+        btn.textContent = '⏳ Đang tải...';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch(`/api/presets/${filename}`);
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            
+            document.getElementById('raw-text-input').value = data.content;
+            updateCharCount();
+        } catch (e) {
+            alert('Lỗi tải tệp: ' + e.message);
+        } finally {
+            btn.textContent = oldText;
+            btn.disabled = false;
+        }
+    }
+
+    // -------------------------------------------------------------
+    // MODEL MANAGER FLOWS
+    // -------------------------------------------------------------
+    async function checkModelStatus() {
+        try {
+            const res = await fetch('/api/model-status');
+            const data = await res.json();
+            
+            const dot = document.getElementById('model-status-dot');
+            const text = document.getElementById('model-status-text');
+            const runBtn = document.getElementById('btn-run-inference');
+            
+            // Reset classes
+            dot.className = 'status-dot';
+            
+            if (data.status === 'idle') {
+                dot.classList.add('status-idle');
+                text.textContent = 'Chưa nạp';
+                runBtn.disabled = true;
+            } else if (data.status === 'loading') {
+                dot.classList.add('status-loading');
+                text.textContent = 'Đang nạp...';
+                runBtn.disabled = true;
+            } else if (data.status === 'loaded') {
+                dot.classList.add('status-loaded');
+                text.textContent = 'Đã nạp';
+                runBtn.disabled = false;
+                
+                // Prefill if loaded model is different than input to keep synchronized
+                if (data.model_path) {
+                    document.getElementById('model-path').value = data.model_path;
+                }
+            } else if (data.status === 'error') {
+                dot.classList.add('status-error');
+                text.textContent = 'Lỗi nạp';
+                runBtn.disabled = true;
+                
+                // Show title mapping for error
+                text.title = data.error_message || 'Unknown error';
+            }
+        } catch (e) {
+            console.error('Failed to poll model status:', e);
+        }
+    }
+
+    async function loadModel() {
+        const modelPath = document.getElementById('model-path').value.trim();
+        const baseModel = document.getElementById('base-model-name').value.trim();
+        const device = document.getElementById('device-choice').value;
+
+        if (!modelPath) {
+            alert('Vui lòng điền Repo ID / Đường dẫn checkpoint.');
+            return;
+        }
+
+        const btn = document.getElementById('btn-load-model');
+        btn.disabled = true;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span>⏳ Đang khởi tạo...</span>';
+
+        try {
+            const res = await fetch('/api/load-model', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model_path: modelPath,
+                    base_model_name: baseModel,
+                    device_choice: device
+                })
+            });
+
+            if (!res.ok) throw new Error(await res.text());
+            
+            // Immediately poll
+            checkModelStatus();
+        } catch (e) {
+            alert('Lỗi nạp mô hình: ' + e.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    // -------------------------------------------------------------
+    // RUN INFERENCE WORKER
+    // -------------------------------------------------------------
+    async function runInference() {
+        const textVal = document.getElementById('raw-text-input').value.trim();
+        const maxLen = parseInt(document.getElementById('max-length').value) || 1024;
+        const strideVal = parseInt(document.getElementById('stride').value) || 256;
+
+        if (!textVal) {
+            alert('Vui lòng nhập văn bản đề thi thô.');
+            return;
+        }
+
+        const btn = document.getElementById('btn-run-inference');
+        const spinner = btn.querySelector('.spinner');
+        const resultsPanel = document.getElementById('results-panel');
+        const loader = document.getElementById('inference-loader');
+
+        // Reset display
+        resultsPanel.classList.add('hidden');
+        loader.classList.remove('hidden');
+        btn.disabled = true;
+        spinner.classList.remove('hidden');
+
+        try {
+            const res = await fetch('/api/run-inference', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    raw_text: textVal,
+                    max_length: maxLen,
+                    stride: strideVal
+                })
+            });
+
+            if (!res.ok) {
+                const errObj = await res.json();
+                throw new Error(errObj.detail || 'Inference failed.');
+            }
+
+            inferenceResult = await res.json();
+            renderResults();
+            resultsPanel.classList.remove('hidden');
+        } catch (e) {
+            alert('Lỗi suy luận mô hình: ' + e.message);
+        } finally {
+            loader.classList.add('hidden');
+            btn.disabled = false;
+            spinner.classList.add('hidden');
+        }
+    }
+
+    // -------------------------------------------------------------
+    // RENDER OUTPUT TABS
+    // -------------------------------------------------------------
+    function renderResults() {
+        if (!inferenceResult) return;
+
+        // 1. Render Visual Highlights
+        const visualContainer = document.getElementById('highlighted-viewer-content');
+        visualContainer.innerHTML = '';
+        
+        const rawText = inferenceResult.raw_text;
+        const spans = inferenceResult.spans;
+        
+        // Sort spans by start asc
+        const sortedSpans = [...spans].sort((a, b) => a.start - b.start);
+        
+        let htmlStr = "";
+        let lastIdx = 0;
+        
+        sortedSpans.forEach(span => {
+            if (span.start > lastIdx) {
+                htmlStr += escapeHtml(rawText.substring(lastIdx, span.start));
+            }
+            
+            const spanText = rawText.substring(span.start, span.end);
+            const labelClass = `tag-${span.label.toLowerCase()}`;
+            htmlStr += `<span class="tag-token ${labelClass}" title="Nhãn: ${span.label}">${escapeHtml(spanText)}</span>`;
+            lastIdx = span.end;
+        });
+        
+        if (lastIdx < rawText.length) {
+            htmlStr += escapeHtml(rawText.substring(lastIdx));
+        }
+        visualContainer.innerHTML = htmlStr;
+
+        // 2. Render Structured Exam Cards
+        const structContainer = document.getElementById('tab-structure');
+        structContainer.innerHTML = '';
+        
+        const questions = inferenceResult.structured_exam;
+        
+        if (!questions || questions.length === 0) {
+            structContainer.innerHTML = `
+                <div class="p-6 text-center text-stone-400 bg-stone-50 rounded-lg border border-dashed border-stone-200 text-xs">
+                    📭 Không thể trích xuất cấu trúc câu hỏi. Hãy đảm bảo đề thi có nhãn câu (Ví dụ: "Câu 1:")
+                </div>
+            `;
+        } else {
+            questions.forEach((q, idx) => {
+                const qCard = document.createElement('div');
+                qCard.className = "p-5 border border-stone-200 rounded-lg bg-[#f9f9f7]/50 space-y-3 text-xs sm:text-sm font-sans";
+                
+                let contextHtml = "";
+                if (q.context) {
+                    contextHtml = `
+                        <div class="p-3 bg-stone-50 border border-stone-200 rounded font-serif text-stone-600 mb-2 leading-relaxed">
+                            <span class="block text-[9px] font-bold text-stone-400 uppercase tracking-wider mb-1">Ngữ cảnh đoạn văn</span>
+                            ${q.context}
+                        </div>
+                    `;
+                }
+                
+                let stemHtml = "";
+                if (q.stem) {
+                    stemHtml = `
+                        <div class="font-bold text-stone-850 leading-relaxed font-serif">
+                            <span class="text-stone-500 font-semibold font-sans">${q.label || ('Câu ' + (idx + 1))}</span>
+                            <span class="ml-1">${q.stem}</span>
+                        </div>
+                    `;
+                } else {
+                    stemHtml = `
+                        <div class="font-bold text-stone-450 leading-relaxed italic">
+                            [Chưa gán nội dung câu hỏi]
+                        </div>
+                    `;
+                }
+
+                let optionsHtml = "";
+                if (q.options && q.options.length > 0) {
+                    optionsHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-2 pl-2">`;
+                    q.options.forEach((opt, oIdx) => {
+                        optionsHtml += `
+                            <div class="flex items-start space-x-2 py-1 px-2 rounded border border-stone-150 bg-white">
+                                <span class="flex-shrink-0 h-4.5 w-4.5 rounded-full border border-stone-300 flex items-center justify-center text-[9px] font-bold text-stone-500 bg-stone-50">
+                                    ${String.fromCharCode(65 + oIdx)}
+                                </span>
+                                <span class="text-stone-700 text-xs font-serif pt-0.5">${opt}</span>
+                            </div>
+                        `;
+                    });
+                    optionsHtml += `</div>`;
+                }
+                
+                qCard.innerHTML = `
+                    ${contextHtml}
+                    ${stemHtml}
+                    ${optionsHtml}
+                `;
+                structContainer.appendChild(qCard);
+            });
+        }
+
+        // 3. XML tagged content
+        document.getElementById('xml-content-code').textContent = inferenceResult.xml_content;
+
+        // 4. Token classification table rows
+        const tableBody = document.getElementById('token-table-body');
+        tableBody.innerHTML = '';
+        
+        inferenceResult.token_details.forEach((tok, index) => {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-stone-50 border-b border-stone-100 transition-colors duration-75';
+            
+            let badgeClass = 'text-stone-500 bg-stone-100';
+            if (tok.tag.includes('question_label')) badgeClass = 'text-blue-700 bg-blue-50';
+            else if (tok.tag.includes('stem')) badgeClass = 'text-purple-700 bg-purple-50';
+            else if (tok.tag.includes('option_label')) badgeClass = 'text-amber-700 bg-amber-50';
+            else if (tok.tag.includes('option_text')) badgeClass = 'text-emerald-700 bg-emerald-50';
+            else if (tok.tag.includes('context')) badgeClass = 'text-rose-700 bg-rose-50';
+            else if (tok.tag.includes('section')) badgeClass = 'text-stone-700 bg-stone-100 font-bold';
+            
+            row.innerHTML = `
+                <td class="px-4 py-2 text-stone-400 text-[10px]">${index}</td>
+                <td class="px-4 py-2 font-medium text-stone-850">${escapeHtml(tok.token)}</td>
+                <td class="px-4 py-2">
+                    <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-semibold ${badgeClass}">
+                        ${tok.tag}
+                    </span>
+                </td>
+                <td class="px-4 py-2 text-stone-400 text-[10px]">[${tok.start}, ${tok.end}]</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // 5. Raw JSON format
+        document.getElementById('json-content-code').textContent = JSON.stringify(inferenceResult, null, 2);
+
+        // Switch to current active tab to ensure refresh
+        switchTab(activeTab);
+    }
+
+    function filterTokens() {
+        const query = document.getElementById('token-search').value.toLowerCase();
+        const rows = document.querySelectorAll('#token-table-body tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(query) ? '' : 'none';
+        });
+    }
+
+    // -------------------------------------------------------------
+    // UTILITIES
+    // -------------------------------------------------------------
+    function switchTab(tabId) {
+        activeTab = tabId;
+        
+        // Hide all contents
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        // Deactivate all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+        // Show selected content
+        document.getElementById(tabId).classList.remove('hidden');
+        // Activate button
+        const activeBtnMap = {
+            'tab-visual': 'btn-tab-visual',
+            'tab-structure': 'btn-tab-structure',
+            'tab-xml': 'btn-tab-xml',
+            'tab-tokens': 'btn-tab-tokens',
+            'tab-json': 'btn-tab-json'
+        };
+        document.getElementById(activeBtnMap[tabId]).classList.add('active');
+
+        // Compile MathJax equations if any tab contains them
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            window.MathJax.typesetPromise([
+                document.getElementById('highlighted-viewer-content'),
+                document.getElementById('tab-structure')
+            ]).catch((err) => console.log('MathJax typeset error:', err));
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/"/g, "&quot;")
+                  .replace(/'/g, "&#039;");
+    }
+
+    function copyToClipboard(elementId) {
+        const text = document.getElementById(elementId).textContent;
+        navigator.clipboard.writeText(text)
+            .then(() => alert('Đã sao chép thành công vào Clipboard!'))
+            .catch(err => alert('Không thể sao chép: ' + err));
+    }
+</script>
+{% endblock %}

@@ -1,5 +1,5 @@
 [project]
-dependencies = []
+dependencies = ["openai", "pymupdf>=1.27.2.3,<2"]
 name = "sequence-labelling-data-generator"
 requires-python = ">= 3.11"
 version = "0.1.0"
@@ -20,17 +20,19 @@ sequence_labelling_data_generator = { path = ".", editable = true }
 
 [tool.pixi.tasks]
 generate = "sequence-labelling-generator exam"
-prepare-dataset = "sequence-labelling-generator prepare --model jhu-clsp/mmbert-base --exam-level"
+prepare-dataset = "sequence-labelling-generator prepare --model aisingapore/SEA-LION-ModernBERT-300M --exam-level"
 upload-dataset = "sequence-labelling-generator upload"
-train = "sequence-labelling-generator train --model_name jhu-clsp/mmbert-base"
+train = "sequence-labelling-generator train --model_name aisingapore/SEA-LION-ModernBERT-300M"
+upload-model = "sequence-labelling-generator upload-model"
 visualize = "sequence-labelling-generator visualize"
 test = "python -m unittest discover -s tests"
-batch-inference = "python src/training/inference_folder.py"
+batch-inference = "python src/inference/predict_folder.py"
 view-exams = "uvicorn src.webapp.main:app --host 127.0.0.1 --port 8000 --reload"
+view-inference = "uvicorn src.webapp.inference_app:app --host 127.0.0.1 --port 8001 --reload"
 
 [tool.pixi.dependencies]
 python = ">=3.14.5,<3.15"
-openai = ">=2.38.0,<3"
+openai = "*"
 python-dotenv = ">=1.2.2,<2"
 tqdm = ">=4.67.3,<5"
 transformers = ">=5.9.0,<6"
@@ -38,6 +40,8 @@ sentencepiece = ">=0.2.1,<0.3"
 fastapi = ">=0.115.0,<1"
 jinja2 = ">=3.1.0,<4"
 uvicorn = ">=0.30.0,<1"
+onnx = "*"
+onnxruntime = ">=1.26.0,<2"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]

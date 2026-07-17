@@ -83,6 +83,7 @@ def generate_single_question(
     chapter_filter: Optional[str] = None,
     unit_filter: Optional[str] = None,
     problem_type_filter: Optional[str] = None,
+    provider: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
     """
     Tạo một câu hỏi đơn lẻ hoặc nhóm câu hỏi dựa trên cấu trúc chương trình học (Curriculum).
@@ -220,6 +221,7 @@ Yêu cầu kỹ thuật:
             system=system_prompt,
             model=model or "deepseek-v4-flash",
             thinking=thinking,
+            provider=provider,
         )
         parsed = parse_question_xml(raw_response)
 
@@ -231,6 +233,7 @@ Yêu cầu kỹ thuật:
                 system=system_prompt,
                 model=model or "deepseek-v4-flash",
                 thinking=thinking,
+                provider=provider,
             )
             parsed = parse_question_xml(raw_response)
 
