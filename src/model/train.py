@@ -172,6 +172,31 @@ def run_train(args):
         print(f"  {key:<30}: {value}")
     print("=" * 60)
 
+    # ── PEFT MONKEYPATCH FOR EMBEDDINGS ──────────────────────────────────────
+    # Some PEFT versions define AuxiliaryTrainingWrapper.forward(self, x, ...)
+    # which crashes with a TypeError when the embedding layer is called with
+    # keyword-only arguments like self.embeddings(input_ids=input_ids).
+    try:
+        import peft.utils.other
+        import torch
+        original_forward = peft.utils.other.AuxiliaryTrainingWrapper.forward
+
+        def patched_forward(self, x=None, *args, **kwargs):
+            if x is None:
+                for possible_key in ["input_ids", "inputs_embeds", "input", "hidden_states"]:
+                    if possible_key in kwargs:
+                        x = kwargs.pop(possible_key)
+                        break
+            if x is None and len(args) > 0:
+                x = args[0]
+                args = args[1:]
+            return original_forward(self, x, *args, **kwargs)
+
+        peft.utils.other.AuxiliaryTrainingWrapper.forward = patched_forward
+        print("PEFT AuxiliaryTrainingWrapper monkeypatch applied successfully.")
+    except Exception as e:
+        print(f"Warning: Could not patch PEFT AuxiliaryTrainingWrapper: {e}")
+
     # 1. Hugging Face Authentication & Token Setup
     hf_token = args.hf_token or os.getenv("HF_TOKEN")
     if hf_token:
