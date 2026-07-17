@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument(
         "--model_name",
         type=str,
-        default="FacebookAI/xlm-roberta-base",
+        default="aisingapore/SEA-LION-ModernBERT-300M",
         help="Hugging Face base model name"
     )
     parser.add_argument(
