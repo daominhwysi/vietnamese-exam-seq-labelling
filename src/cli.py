@@ -122,7 +122,7 @@ def main():
     p_prep = subparsers.add_parser("prepare", help="Stage 5: Prepare tokenized datasets for training")
     p_prep.add_argument("-i", "--input-dir", type=str, default="output", help="Input folder of question files")
     p_prep.add_argument("-o", "--output-dir", type=str, default="output/dataset", help="Output folder for training dataset split")
-    p_prep.add_argument("--model", type=str, default="FacebookAI/xlm-roberta-base", help="Base model/tokenizer name")
+    p_prep.add_argument("--model", type=str, default="aisingapore/SEA-LION-ModernBERT-300M", help="Base model/tokenizer name")
     p_prep.add_argument("--latex-placeholder", type=str, default="[LATEX]", help="Placeholder for LaTeX equations")
     p_prep.add_argument("--train-ratio", type=float, default=0.8, help="Ratio of training set")
     p_prep.add_argument("--val-ratio", type=float, default=0.1, help="Ratio of validation set")
@@ -147,7 +147,7 @@ def main():
     # 6. train
     p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
     p_train.add_argument("--repo_id", type=str, default="daominhwysi/synthetic-seq-labelling-vi-exam-v2", help="HF Dataset repository ID")
-    p_train.add_argument("--model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
+    p_train.add_argument("--model_name", type=str, default="aisingapore/SEA-LION-ModernBERT-300M", help="HF base model name")
     p_train.add_argument("--output_dir", type=str, default="./results", help="Directory to save checkpoints")
     p_train.add_argument("--epochs", type=int, default=3, help="Number of training epochs")
     p_train.add_argument("--batch_size", type=int, default=8, help="Training batch size")
@@ -175,7 +175,7 @@ def main():
     # 7. inference
     p_inf = subparsers.add_parser("inference", help="Stage 7: Run inference on sample inputs using trained model")
     p_inf.add_argument("--model_dir", type=str, default="./results", help="Model adapter directory")
-    p_inf.add_argument("--base_model_name", type=str, default="FacebookAI/xlm-roberta-base", help="HF base model name")
+    p_inf.add_argument("--base_model_name", type=str, default=None, help="HF base model name")
 
     # 8. upload (dataset)
     p_upl = subparsers.add_parser("upload", help="Upload dataset splits to Hugging Face Hub")
