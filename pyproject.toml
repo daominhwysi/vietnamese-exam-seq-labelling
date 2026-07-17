@@ -17,6 +17,9 @@ platforms = ["linux-64", "win-64"]
 
 [tool.pixi.pypi-dependencies]
 sequence_labelling_data_generator = { path = ".", editable = true }
+torch = "*"
+peft = "*"
+accelerate = "*"
 
 [tool.pixi.tasks]
 generate = "sequence-labelling-generator exam"
