@@ -166,6 +166,11 @@ def main():
     run_train(args)
 
 def run_train(args):
+    print("=" * 60)
+    print("Starting training with the following arguments:")
+    for key, value in sorted(vars(args).items()):
+        print(f"  {key:<30}: {value}")
+    print("=" * 60)
 
     # 1. Hugging Face Authentication & Token Setup
     hf_token = args.hf_token or os.getenv("HF_TOKEN")
