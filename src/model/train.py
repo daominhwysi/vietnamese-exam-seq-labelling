@@ -141,12 +141,7 @@ def parse_args():
         default=0,
         help="Warmup steps for learning rate scheduler"
     )
-    parser.add_argument(
-        "--ema-decay",
-        type=float,
-        default=0.0,
-        help="Decay rate for Exponential Moving Average (EMA). Set > 0.0 (e.g. 0.999) to enable."
-    )
+
     parser.add_argument(
         "--no-class-weights",
         action="store_true",
@@ -158,6 +153,18 @@ def parse_args():
         default=1.0,
         help="Sampling weight multiplier for real exam samples relative to synthetic ones. "
              "e.g. 5.0 means real samples are drawn 5x more often per epoch. Default: 1.0 (no upsampling)."
+    )
+    parser.add_argument(
+        "--report_to",
+        type=str,
+        default="none",
+        help="Integration to report logs to ('wandb', 'tensorboard', 'none')"
+    )
+    parser.add_argument(
+        "--wandb_project",
+        type=str,
+        default="vietnamese-exam-seq-labelling",
+        help="Weights & Biases project name"
     )
     return parser.parse_args()
 
@@ -171,6 +178,10 @@ def run_train(args):
     for key, value in sorted(vars(args).items()):
         print(f"  {key:<30}: {value}")
     print("=" * 60)
+
+    # Set up Weights & Biases project environment variable if configured
+    if getattr(args, "report_to", "none") == "wandb":
+        os.environ["WANDB_PROJECT"] = getattr(args, "wandb_project", "vietnamese-exam-seq-labelling")
 
     # ── PEFT MONKEYPATCH FOR EMBEDDINGS ──────────────────────────────────────
     # Some PEFT versions define AuxiliaryTrainingWrapper.forward(self, x, ...)
@@ -430,7 +441,7 @@ def run_train(args):
         fp16=fp16_enabled,
         bf16=bf16_enabled,
         save_total_limit=args.save_total_limit,
-        report_to="none",  # Change to "wandb" or "tensorboard" if configured
+        report_to=args.report_to,
         push_to_hub=args.push_to_hub,
         hub_token=hf_token,
         gradient_checkpointing=getattr(args, "gradient_checkpointing", False),
@@ -572,59 +583,58 @@ def run_train(args):
 
     trainer = WeightedTrainer(class_weights=class_weights, real_upsample_factor=real_upsample_factor, **trainer_kwargs)
 
-    # 10.5 Apply EMA Callback if enabled
-    if getattr(args, "ema_decay", 0.0) > 0.0:
-        from transformers import TrainerCallback
-        class EMACallback(TrainerCallback):
-            def __init__(self, decay=0.999):
-                self.decay = decay
-                self.shadow = {}
-                self.backup = {}
-                self.ema_active = False
+    # 10.8 Replace default progress/printer callbacks with clean real-time tqdm loss updates
+    from transformers.trainer_callback import PrinterCallback, ProgressCallback
+    trainer.remove_callback(ProgressCallback)
+    trainer.remove_callback(PrinterCallback)
 
-            def on_step_end(self, args, state, control, model=None, **kwargs):
-                if model is None:
-                    return
-                active_model = model.module if hasattr(model, "module") else model
-                for name, param in active_model.named_parameters():
-                    if param.requires_grad:
-                        if name not in self.shadow:
-                            self.shadow[name] = param.data.clone()
-                        else:
-                            self.shadow[name] -= (1.0 - self.decay) * (self.shadow[name] - param.data)
+    from transformers import TrainerCallback
+    from tqdm import tqdm
 
-            def on_epoch_begin(self, args, state, control, model=None, **kwargs):
-                self._restore_regular_weights(model)
+    class LossProgressCallback(TrainerCallback):
+        def __init__(self):
+            self.training_bar = None
+            self.loss = None
 
-            def on_epoch_end(self, args, state, control, model=None, **kwargs):
-                self._apply_ema_weights(model)
+        def on_train_begin(self, args, state, control, **kwargs):
+            if state.is_world_process_zero:
+                self.training_bar = tqdm(total=state.max_steps, desc="Training", dynamic_ncols=True)
 
-            def on_train_end(self, args, state, control, model=None, **kwargs):
-                self._apply_ema_weights(model)
-                print("Final EMA weights permanently applied to the model.")
+        def on_step_end(self, args, state, control, **kwargs):
+            if state.is_world_process_zero and self.training_bar is not None:
+                self.training_bar.update(1)
 
-            def _apply_ema_weights(self, model):
-                if model is None or self.ema_active:
-                    return
-                active_model = model.module if hasattr(model, "module") else model
-                for name, param in active_model.named_parameters():
-                    if param.requires_grad and name in self.shadow:
-                        self.backup[name] = param.data.clone()
-                        param.data.copy_(self.shadow[name])
-                self.ema_active = True
+        def on_log(self, args, state, control, logs=None, **kwargs):
+            if state.is_world_process_zero and logs is not None:
+                # Capture running training loss
+                if "loss" in logs:
+                    self.loss = logs["loss"]
+                lr = logs.get("learning_rate", None)
+                
+                # Update progress bar postfix for training logs
+                if self.training_bar is not None and ("loss" in logs or "learning_rate" in logs):
+                    postfix = {}
+                    if self.loss is not None:
+                        postfix["loss"] = f"{self.loss:.4f}" if isinstance(self.loss, (int, float)) else str(self.loss)
+                    if lr is not None:
+                        postfix["lr"] = f"{lr:.2e}"
+                    self.training_bar.set_postfix(postfix)
+                
+                # Check for evaluation or final metrics (which don't have learning_rate)
+                # and write them cleanly using tqdm.write so the bar isn't corrupted
+                is_eval = any(k.startswith("eval_") for k in logs)
+                if is_eval or "train_loss" in logs:
+                    import json
+                    # Format log cleanly
+                    formatted_log = {k: f"{v:.4f}" if isinstance(v, float) else v for k, v in logs.items() if k != "epoch"}
+                    formatted_log["epoch"] = f"{logs.get('epoch', 0.0):.2f}"
+                    tqdm.write(json.dumps(formatted_log))
 
-            def _restore_regular_weights(self, model):
-                if model is None or not self.ema_active:
-                    return
-                active_model = model.module if hasattr(model, "module") else model
-                for name, param in active_model.named_parameters():
-                    if param.requires_grad and name in self.backup:
-                        param.data.copy_(self.backup[name])
-                self.backup.clear()
-                self.ema_active = False
+        def on_train_end(self, args, state, control, **kwargs):
+            if self.training_bar is not None:
+                self.training_bar.close()
 
-        trainer.add_callback(EMACallback(decay=args.ema_decay))
-        print(f"EMA (Exponential Moving Average) enabled with decay rate: {args.ema_decay}")
+    trainer.add_callback(LossProgressCallback())
 
     # 11. Run Training
     print("Starting training...")
