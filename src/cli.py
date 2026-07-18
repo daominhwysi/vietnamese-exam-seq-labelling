@@ -168,7 +168,8 @@ def main():
     p_train.add_argument("--lr-scheduler-type", type=str, default="linear", help="Learning rate scheduler type (linear, cosine, constant, etc.)")
     p_train.add_argument("--warmup-ratio", type=float, default=0.0, help="Warmup ratio for scheduler")
     p_train.add_argument("--warmup-steps", type=int, default=0, help="Warmup steps for scheduler")
-    p_train.add_argument("--ema-decay", type=float, default=0.0, help="Decay rate for Exponential Moving Average (EMA). Set > 0.0 (e.g. 0.999) to enable.")
+    p_train.add_argument("--report_to", type=str, default="none", help="Log to 'wandb', 'tensorboard', or 'none'")
+    p_train.add_argument("--wandb_project", type=str, default="vietnamese-exam-seq-labelling", help="Weights & Biases project name")
     p_train.add_argument("--push_to_hub", action="store_true", help="Push to Hugging Face Hub")
     p_train.add_argument("--hf_token", type=str, help="Hugging Face authentication token")
 

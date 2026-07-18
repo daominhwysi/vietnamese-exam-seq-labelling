@@ -80,7 +80,7 @@ An end-to-end pipeline for generating curriculum-aligned synthetic Vietnamese ex
     │
     ├── training/                   # Stage 4–8: Dataset + Training + Inference + Upload
     │   ├── prepare_dataset.py      # Tokenizes exams, aligns BIO labels, splits dataset, generates XML
-    │   ├── train.py                # LoRA/full fine-tune training with WeightedRandomSampler & EMA
+    │   ├── train.py                # LoRA/full fine-tune training with WeightedRandomSampler
     │   ├── inference.py            # Single-input inference with trained adapter
     │   ├── inference_folder.py     # Batch inference → JSON + TXT + annotated XML per file
     │   ├── upload_dataset.py       # Uploads dataset + auto-generated dataset card to HF Hub
@@ -248,7 +248,8 @@ pixi run train \
 | `--lora_alpha` | `32` | LoRA alpha |
 | `--real-upsample-factor` | `1.0` | Weight multiplier for real samples (e.g. `5.0` = 5× more frequent) |
 | `--no-lora` | off | Full fine-tune instead of LoRA |
-| `--ema-decay` | `0.0` | Enable EMA (e.g. `0.999`) |
+| `--report_to` | `none` | Log integration to report metrics to (`wandb`, `tensorboard`, `none`) |
+| `--wandb_project` | `vietnamese-exam-seq-labelling` | Weights & Biases project name |
 | `--warmup-ratio` | `0.0` | LR warmup ratio |
 | `--gradient-checkpointing` | off | Save GPU memory |
 | `--no-class-weights` | off | Disable inverse-frequency class weighting |
