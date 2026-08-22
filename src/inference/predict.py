@@ -62,7 +62,7 @@ def run_inference(model_dir="./results", base_model_name=None):
             except Exception:
                 pass
         if not base_model_name:
-            base_model_name = "aisingapore/SEA-LION-ModernBERT-300M"
+            base_model_name = "jhu-clsp/mmBERT-small"
             print(f"Defaulting base model name to: {base_model_name}")
             
     # 1. Load tokenizer

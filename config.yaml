@@ -1,0 +1,191 @@
+# ==============================================================================
+# Vietnamese Exam Sequence Labeling Pipeline Configuration
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Base Model & Tokenizer Configuration
+# ------------------------------------------------------------------------------
+model:
+  # Default base model / tokenizer for sequence labeling (mmBERT-small: 140M params, 42M non-embedding)
+  name: "jhu-clsp/mmBERT-small"
+  tokenizer_name: "jhu-clsp/mmBERT-small"
+  max_sequence_length: 8192
+  
+  # LaTeX placeholder used to mask complex math equations during tokenization/labeling
+  latex_placeholder: "[LATEX]"
+  mask_latex_during_inference: true
+
+# ------------------------------------------------------------------------------
+# 2. Data Augmentation Configuration (Online & Static Reconstructor)
+# ------------------------------------------------------------------------------
+augmentation:
+  enabled: true
+  
+  # Spelling & keyboard noise (realistic Vietnamese tone mark stripping, Telex residue, character swaps)
+  typo_rate: 0.02
+
+  # Whitespace & line-break noise (random spaces and newline perturbations)
+  space_noise_rate: 0.15
+
+  # Math formula LaTeX masking probability ($...$ -> [LATEX])
+  latex_mask_prob: 0.50
+
+  # Option dropping simulation (simulates missing options due to OCR truncation)
+  option_drop_prob: 0.05
+
+  # Prefix & token casing perturbation (random uppercase/lowercase jitter)
+  casing_noise_prob: 0.10
+
+  # Question prefix synonym swaps (e.g., "Câu" -> "C.", "Question", "Q.", "{num}.")
+  synonym_swap_prob: 0.10
+
+  # Markdown/HTML formatting noise (randomly wrapping spans with **, *, <u>, <b>, <i>)
+  formatting_noise_prob: 0.10
+
+  # Randomize blank fill-in representations (<blank/> -> "____", ".....", "[BLANK]")
+  randomize_blanks: true
+
+  # Inline option layout simulation (horizontal multi-column options on a single line)
+  inline_options:
+    probability: 0.25
+    min_spaces: 5
+    max_spaces: 30
+    min_tabs: 1
+    max_tabs: 3
+
+  # Available styles for option prefixes and ordering items
+  option_prefix_styles:
+    - "capital_dot"           # A. B. C. D.
+    - "lowercase_paren"       # a) b) c) d)
+    - "capital_paren"         # A) B) C) D)
+    - "lowercase_dot"         # a. b. c. d.
+    - "bold_capital_dot"      # **A.** **B.** **C.** **D.**
+    - "bold_lowercase_paren"  # **a)** **b)** **c)** **d)**
+
+  ordering_item_styles:
+    - "char"                  # a. b. c. d.
+    - "index"                 # 1. 2. 3. 4.
+
+# ------------------------------------------------------------------------------
+# 3. Stage 5: Dataset Preparation & Tokenization
+# ------------------------------------------------------------------------------
+data_preparation:
+  input_dir: "output"
+  output_dir: "output/dataset"
+  train_ratio: 0.80
+  val_ratio: 0.10
+  test_ratio: 0.10
+  seed: 42
+  exam_level: true
+  
+  # Multi-scale sliding window configurations for long-document context modeling
+  sliding_windows:
+    max_lengths: [512, 768, 1024, 2048]
+    strides: [128, 192, 256, 512]
+
+# ------------------------------------------------------------------------------
+# 4. Stage 6: Downstream Model Training & LoRA Hyperparameters
+# ------------------------------------------------------------------------------
+training:
+  # Hugging Face dataset repository for remote loading / fallback
+  repo_id: "daominhwysi/synthetic-seq-labelling-vi-exam-v2"
+  output_dir: "./results"
+  epochs: 3
+  batch_size: 8
+  eval_batch_size: 8
+  learning_rate: 5.0e-4
+  weight_decay: 0.01
+  
+  # Learning rate scheduler ("cosine", "linear", "cosine_with_restarts", "constant")
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.10
+  warmup_steps: 0
+  
+  gradient_accumulation_steps: 1
+  gradient_checkpointing: false
+  
+  # Mixed precision settings
+  use_bf16: true
+  no_fp16: false
+  
+  seed: 42
+  save_total_limit: 2
+  
+  # Class weighting & real data upsampling
+  use_class_weights: false
+  real_upsample_factor: 1.0
+
+  # LoRA (Parameter-Efficient Fine-Tuning) configuration
+  lora:
+    enabled: true
+    r: 16
+    alpha: 32
+    dropout: 0.10
+    target_modules:
+      - "q_proj"
+      - "k_proj"
+      - "v_proj"
+      - "o_proj"
+      - "Wqkv"
+      - "out_proj"
+
+  # Tracking and experiment logging
+  logging:
+    report_to: "none" # "wandb", "tensorboard", or "none"
+    wandb_project: "vietnamese-exam-seq-labelling"
+
+# ------------------------------------------------------------------------------
+# 5. Stages 1-4: Synthetic Data Generation (LLM Reasoning)
+# ------------------------------------------------------------------------------
+generation:
+  model: "deepseek-v4-pro"
+  provider: "deepseek" # "deepseek", "nvidia", "vilao"
+  thinking: "high"     # "high", "max", "medium", "low", "none"
+  concurrency: 8
+  num_exams: 300
+  output_dir: "output/exams"
+  
+  subjects:
+    - "math_algebra"
+    - "math_geometry"
+    - "physics"
+    - "chemistry"
+    - "biology"
+    - "history"
+    - "geography"
+    - "english"
+    - "economics_law"
+    - "literature"
+    
+  grades:
+    - 10
+    - 11
+    - 12
+
+# ------------------------------------------------------------------------------
+# 6. Stage 7 & Batch Inference / ONNX Export
+# ------------------------------------------------------------------------------
+inference:
+  model_dir: "./results"
+  window_size: 2048
+  stride: 512
+  batch_size: 4
+  device: "cuda" # "cuda", "cpu", or "auto"
+  export_onnx: true
+
+# ------------------------------------------------------------------------------
+# 7. Web Applications (Dashboard & Inference UI)
+# ------------------------------------------------------------------------------
+webapp:
+  host: "127.0.0.1"
+  viewer_port: 8000
+  inference_port: 8001
+  reload: true
+
+# ------------------------------------------------------------------------------
+# 8. Hugging Face Hub Upload & Sync
+# ------------------------------------------------------------------------------
+huggingface:
+  dataset_repo_id: "daominhwysi/synthetic-seq-labelling-vi-exam-v2"
+  model_repo_id: "daominhwysi/mmbert-small-vi-exam-seq-labeling"
+  private: false

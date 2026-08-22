@@ -14,8 +14,10 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 
 - `pyproject.toml` - Project configuration, dependencies, and Pixi task script registration.
 - `pixi.lock` - Lockfile tracking platform dependencies.
+- `config.yaml` - Centralized pipeline configuration (model selection, augmentation params, train/inference settings).
 - `AGENTS.md` - Rules, project structure, schemas, and developer workflows for assistant agents (this file).
 - `README.md` - Comprehensive developer guide, pipeline workflow description, execution tasks, and data contract specifications.
+- `augmentation_report.html` - Interactive Tailwind CSS report detailing online data augmentation methods, feasibility, and empirical latency benchmarks.
 - `tests/` - Directory housing all unittest suites.
   - `test_curriculum.py` - Tests for curriculum loader, parser, and level mapping.
   - `test_exam_compiler.py` - Tests for exam generator and section compilation.
@@ -39,17 +41,18 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
   - `inspect_exam_spans.py` - Inspects annotated exam tag distributions and span content previews.
   - `inference_onnx.py` - Runs sequence labeling inference using ONNX Runtime without PyTorch.
+  - `benchmark_augmentation.py` - Benchmarks online data augmentation latency and CPU vs GPU throughput.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
-  - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`).
+  - `dataset/` - Prepared tokenized sequence labeling dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`, `label_mapping.json`, and `xml/`).
   - `ocr_input/` - Raw input PDFs for real OCR data processing (gitignored).
   - `ocr_out/` - Extracted OCR markdown files (gitignored).
   - `real_exams/` - Generated real OCR exam structures in JSON format.
 - `src/` - Main source package directory.
   - `cli.py` - Main CLI console entry point handling the pipeline subcommands (curriculum, reconstruct, exam, prepare, train, inference, upload, visualize).
   - `data/` - Data Preparation & Real OCR Pipeline.
-    - `prepare.py` - Formats, tokenizes, and splits synthetic questions into train/val/test splits.
+    - `prepare.py` - Formats, tokenizes, and splits synthetic questions and audited real XML exams into train/val/test splits with multi-scale sliding windows.
     - `upload.py` - Uploads processed dataset splits and inline-tagged XML files to Hugging Face Hub.
     - `pdf_converter.py` - Runs OCR on raw PDF files using LLM vision models and extracts raw markdown.
     - `annotate_ocr.py` - Annotates raw OCR markdown files with entity tags and generates JSON exam structures.
@@ -68,6 +71,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `predict.py` - Local sequence labeling inference utility.
     - `predict_folder.py` - Batch inference utility for segmenting raw text files into structured JSON segments.
   - `utils/` - Utility & Helper Subpackage.
+    - `config.py` - Loads and parses `config.yaml` with schema fallbacks across the pipeline.
     - `token_tracker.py` - Thread-safe token-usage logger; writes daily logs to `logs/token_usage_*.jsonl`.
     - `visualize.py` - Generates HTML page for token-span alignment visualization.
   - `webapp/` - Web Application Subpackage.

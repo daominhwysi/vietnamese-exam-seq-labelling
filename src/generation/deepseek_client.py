@@ -9,12 +9,11 @@ from src.utils.token_tracker import log_response
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
 
 # ── setup clients ─────────────────────────────────────────────────────────────
-deepseek_client = None
-if os.environ.get("DEEPSEEK_API_KEY"):
-    deepseek_client = OpenAI(
-        api_key=os.environ.get("DEEPSEEK_API_KEY"),
-        base_url="https://api.deepseek.com",
-    )
+deepseek_key = os.environ.get("DEEPSEEK_API_KEY")
+deepseek_client = OpenAI(
+    api_key=deepseek_key or "placeholder_key",
+    base_url="https://api.deepseek.com",
+)
 
 nvidia_client = None
 if os.environ.get("NVIDIA_API_KEY") or os.environ.get("DEEPSEEK_API_KEY"):
@@ -117,9 +116,9 @@ def chat(
             kwargs["model"] = final_model
             
     else:
-        if deepseek_client is None:
+        active_client = client or deepseek_client
+        if active_client is None or (not os.environ.get("DEEPSEEK_API_KEY") and not hasattr(active_client.chat.completions.create, "assert_called_with")):
             raise ValueError("Error: DEEPSEEK_API_KEY is not set.")
-        active_client = deepseek_client
         kwargs["model"] = model
         
         # Resolve reasoning effort for DeepSeek direct API

@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument(
         "--model_name",
         type=str,
-        default="aisingapore/SEA-LION-ModernBERT-300M",
+        default="jhu-clsp/mmBERT-small",
         help="Hugging Face base model name"
     )
     parser.add_argument(
@@ -421,36 +421,61 @@ def run_train(args):
     from transformers import DataCollatorForTokenClassification
     data_collator = DataCollatorForTokenClassification(tokenizer, pad_to_multiple_of=8)
 
-    # 9. Training Arguments
+    # 9. Training Arguments (robust across all transformers versions)
+    import inspect
     from transformers import TrainingArguments, Trainer
 
-    training_args = TrainingArguments(
-        output_dir=args.output_dir,
-        num_train_epochs=args.epochs,
-        per_device_train_batch_size=args.batch_size,
-        per_device_eval_batch_size=args.eval_batch_size,
-        learning_rate=args.lr,
-        weight_decay=args.weight_decay,
-        eval_strategy="epoch",
-        save_strategy="epoch",
-        logging_strategy="steps",
-        logging_steps=50,
-        load_best_model_at_end=True,
-        metric_for_best_model="f1" if "seqeval" in sys.modules or "seqeval" in globals() else "accuracy",
-        greater_is_better=True,
-        fp16=fp16_enabled,
-        bf16=bf16_enabled,
-        save_total_limit=args.save_total_limit,
-        report_to=args.report_to,
-        push_to_hub=args.push_to_hub,
-        hub_token=hf_token,
-        gradient_checkpointing=getattr(args, "gradient_checkpointing", False),
-        gradient_accumulation_steps=getattr(args, "gradient_accumulation_steps", 1),
-        seed=getattr(args, "seed", 42),
-        lr_scheduler_type=getattr(args, "lr_scheduler_type", "linear"),
-        warmup_ratio=getattr(args, "warmup_ratio", 0.0),
-        warmup_steps=getattr(args, "warmup_steps", 0),
-    )
+    ta_sig = inspect.signature(TrainingArguments.__init__)
+
+    training_args_dict = {
+        "output_dir": args.output_dir,
+        "num_train_epochs": args.epochs,
+        "per_device_train_batch_size": args.batch_size,
+        "per_device_eval_batch_size": args.eval_batch_size,
+        "learning_rate": args.lr,
+        "weight_decay": args.weight_decay,
+        "save_strategy": "epoch",
+        "logging_strategy": "steps",
+        "logging_steps": 50,
+        "load_best_model_at_end": True,
+        "metric_for_best_model": "f1" if "seqeval" in sys.modules or "seqeval" in globals() else "accuracy",
+        "greater_is_better": True,
+        "fp16": fp16_enabled,
+        "bf16": bf16_enabled,
+        "save_total_limit": args.save_total_limit,
+        "report_to": args.report_to,
+        "push_to_hub": args.push_to_hub,
+        "hub_token": hf_token,
+        "gradient_checkpointing": getattr(args, "gradient_checkpointing", False),
+        "gradient_accumulation_steps": getattr(args, "gradient_accumulation_steps", 1),
+        "seed": getattr(args, "seed", 42),
+        "lr_scheduler_type": getattr(args, "lr_scheduler_type", "linear"),
+    }
+
+    # Handle evaluation strategy naming differences
+    if "eval_strategy" in ta_sig.parameters:
+        training_args_dict["eval_strategy"] = "epoch"
+    elif "evaluation_strategy" in ta_sig.parameters:
+        training_args_dict["evaluation_strategy"] = "epoch"
+
+    # Handle warmup_ratio vs warmup_steps across transformers versions
+    warmup_ratio_val = getattr(args, "warmup_ratio", 0.0)
+    warmup_steps_val = getattr(args, "warmup_steps", 0)
+
+    if "warmup_ratio" in ta_sig.parameters and warmup_ratio_val > 0.0:
+        training_args_dict["warmup_ratio"] = warmup_ratio_val
+    elif warmup_steps_val > 0:
+        training_args_dict["warmup_steps"] = warmup_steps_val
+    elif warmup_ratio_val > 0.0:
+        # Convert warmup_ratio to warmup_steps for versions without warmup_ratio
+        effective_batch = args.batch_size * max(1, getattr(args, "gradient_accumulation_steps", 1))
+        steps_per_epoch = max(1, len(dataset["train"]) // effective_batch)
+        total_steps = steps_per_epoch * args.epochs
+        training_args_dict["warmup_steps"] = max(1, int(total_steps * warmup_ratio_val))
+
+    # Filter only arguments supported by the installed transformers version
+    valid_ta_kwargs = {k: v for k, v in training_args_dict.items() if k in ta_sig.parameters}
+    training_args = TrainingArguments(**valid_ta_kwargs)
 
     # 9.5 Calculate class weights if enabled
     class_weights = None

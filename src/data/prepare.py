@@ -78,6 +78,122 @@ def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
 
     return "".join(result)
 
+def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
+    """
+    Parses an inline XML-tagged string into raw untagged text and character span dictionaries.
+    Only recognized entity tags are stripped and recorded as spans; other tags are preserved verbatim.
+    """
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "section"}
+    raw_chars = []
+    spans = []
+
+    tag_pattern = re.compile(r"<(/)?([a-zA-Z_0-9]+)>")
+
+    pos = 0
+    current_open_tag = None
+    tag_start_idx = -1
+
+    for match in tag_pattern.finditer(tagged_text):
+        start, end = match.span()
+        text_before = tagged_text[pos:start]
+        raw_chars.append(text_before)
+
+        is_closing = bool(match.group(1))
+        tag_name = match.group(2)
+
+        if tag_name in allowed_tags:
+            if not is_closing:
+                current_open_tag = tag_name
+                tag_start_idx = len("".join(raw_chars))
+            else:
+                if current_open_tag == tag_name and tag_start_idx != -1:
+                    tag_end_idx = len("".join(raw_chars))
+                    span_text = "".join(raw_chars)[tag_start_idx:tag_end_idx]
+                    spans.append(
+                        {
+                            "start": tag_start_idx,
+                            "end": tag_end_idx,
+                            "label": tag_name,
+                            "text": span_text,
+                        }
+                    )
+                current_open_tag = None
+                tag_start_idx = -1
+        else:
+            raw_chars.append(match.group(0))
+
+        pos = end
+
+    raw_chars.append(tagged_text[pos:])
+    raw_text = "".join(raw_chars)
+
+    return raw_text, spans
+
+SUBJECT_KEYWORD_MAP = {
+    "toan": "math_algebra",
+    "số phức": "math_algebra",
+    "so phuc": "math_algebra",
+    "bất đẳng thức": "math_algebra",
+    "bat dang thuc": "math_algebra",
+    "hàm số": "math_algebra",
+    "ham so": "math_algebra",
+    "hình học": "math_geometry",
+    "hinh hoc": "math_geometry",
+    "vat_ly": "physics",
+    "vat_li": "physics",
+    "vật lý": "physics",
+    "vật lí": "physics",
+    "hoa_hoc": "chemistry",
+    "hóa học": "chemistry",
+    "sinh_hoc": "biology",
+    "sinh học": "biology",
+    "lich_su": "history",
+    "lịch sử": "history",
+    "dia_ly": "geography",
+    "dia_li": "geography",
+    "địa lý": "geography",
+    "địa lí": "geography",
+    "tieng_anh": "english",
+    "tiếng anh": "english",
+    "ngu_van": "literature",
+    "ngữ văn": "literature"
+}
+
+def infer_metadata_from_path(file_path: Path, input_root: Path) -> Dict[str, Any]:
+    """
+    Infers subject, grade, category, and exam_id from relative directory and file name.
+    """
+    try:
+        rel = file_path.relative_to(input_root)
+    except ValueError:
+        rel = file_path
+    rel_str = str(rel).lower()
+
+    subject = "general"
+    for k, v in SUBJECT_KEYWORD_MAP.items():
+        if k in rel_str:
+            subject = v
+            break
+
+    grade = 12
+    if "g10" in rel_str or "grade_10" in rel_str or "lop_10" in rel_str or "lop10" in rel_str:
+        grade = 10
+    elif "g11" in rel_str or "grade_11" in rel_str or "lop_11" in rel_str or "lop11" in rel_str:
+        grade = 11
+    elif any(kw in rel_str for kw in ["g12", "grade_12", "lop_12", "lop12", "thpt", "dgnl", "tsa"]):
+        grade = 12
+
+    exam_id = "_".join(rel.parts[:-1]) if len(rel.parts) > 1 else rel.stem
+    category = rel.parts[0] if len(rel.parts) > 1 else "root"
+
+    return {
+        "exam_id": exam_id,
+        "subject": subject,
+        "grade": grade,
+        "category": category,
+        "is_real": True
+    }
+
 def align_tokens_to_spans(
     offset_mapping: List[Tuple[int, int]], 
     spans: List[Dict[str, Any]], 
@@ -123,9 +239,11 @@ def align_tokens_to_spans(
             "label": span["label"]
         })
         
+    span_starts = [s["start"] for s in clean_spans]
     labels = []
     
-    # 2. Map tokens based on first non-whitespace character offset lookup
+    # 2. Map tokens based on first non-whitespace character offset lookup (O(log S) binary search)
+    import bisect
     for start, end in offset_mapping:
         if start == 0 and end == 0:
             labels.append(-100)
@@ -142,13 +260,13 @@ def align_tokens_to_spans(
             non_space_char_idx = start
             
         if non_space_char_idx == -1:
-            # It's a whitespace-only token. Check if it falls entirely within some span.
-            # If so, label it as part of that span (using "I-label" so that the entity is contiguous).
+            # Whitespace-only token. Check if it falls entirely within some span.
             matched_span = None
-            for span in clean_spans:
-                if span["start"] <= start and end <= span["end"]:
-                    matched_span = span
-                    break
+            span_idx = bisect.bisect_right(span_starts, start) - 1
+            if span_idx >= 0:
+                s = clean_spans[span_idx]
+                if s["start"] <= start and end <= s["end"]:
+                    matched_span = s
             if matched_span is not None:
                 labels.append(tag_to_id.get(f"I-{matched_span['label']}", tag_to_id["O"]))
             else:
@@ -156,10 +274,11 @@ def align_tokens_to_spans(
             continue
             
         matched_span = None
-        for span in clean_spans:
-            if span["start"] <= non_space_char_idx < span["end"]:
-                matched_span = span
-                break
+        span_idx = bisect.bisect_right(span_starts, non_space_char_idx) - 1
+        if span_idx >= 0:
+            s = clean_spans[span_idx]
+            if s["start"] <= non_space_char_idx < s["end"]:
+                matched_span = s
                 
         if matched_span is None:
             labels.append(tag_to_id["O"])
@@ -616,6 +735,17 @@ def main():
         default=3,
         help="Maximum random tabs to inject between inline options (default: 3)"
     )
+    parser.add_argument(
+        "--only-passed",
+        action="store_true",
+        default=True,
+        help="Only include documents that passed quality audit if audit_report.json exists (default: True)"
+    )
+    parser.add_argument(
+        "--include-all",
+        action="store_true",
+        help="Include all documents regardless of audit status"
+    )
 
     args = parser.parse_args()
     run_prepare_dataset(args)
@@ -639,8 +769,16 @@ def run_prepare_dataset(args):
     json_files = list(input_path.glob("question_*.json"))
     exam_files = list(input_path.glob("**/exam_*.json"))
     real_exam_files = list(input_path.glob("**/real_exam_*.json"))
-    if not json_files and not exam_files and not real_exam_files:
-        print(f"No question JSON files, exam JSON files, or real exam JSON files found in '{args.input_dir}'. Please generate data first.")
+    
+    # Also find XML annotations (e.g. merged.xml, *_annotated.xml, or any XML files in source directories)
+    xml_files = list(input_path.glob("**/merged.xml"))
+    if not xml_files:
+        xml_files = list(input_path.glob("**/*_annotated.xml"))
+    if not xml_files:
+        xml_files = [f for f in input_path.glob("**/*.xml") if not f.name.startswith("chunk_") and "output/dataset/xml" not in str(f)]
+
+    if not json_files and not exam_files and not real_exam_files and not xml_files:
+        print(f"No question JSON files, exam JSON files, real exam JSON files, or annotated XML files found in '{args.input_dir}'. Please generate data first.")
         sys.exit(1)
     # Combine real exams into exam_files list
     exam_files.extend(real_exam_files)
@@ -701,7 +839,7 @@ def run_prepare_dataset(args):
         max_inline_tabs=getattr(args, "max_inline_tabs", 3)
     )
         
-    print(f"Processing data: found {len(json_files)} question file(s) and {len(exam_files)} exam file(s)...")
+    print(f"Processing data: found {len(json_files)} question file(s), {len(exam_files)} exam file(s), and {len(xml_files)} XML exam file(s)...")
     processed_samples = []
 
     # Prepare xml output directory for annotated XML files
@@ -795,8 +933,68 @@ def run_prepare_dataset(args):
         if (exam_idx + 1) % 10 == 0 or (exam_idx + 1) == num_exam_files:
             print(f"[Progress] Processed {exam_idx + 1}/{num_exam_files} exams...")
 
+    # 3. Process annotated XML exam documents
+    num_xml_files = len(xml_files)
+    if num_xml_files > 0:
+        filter_passed = not getattr(args, "include_all", False)
+        print(f"Processing {num_xml_files} annotated XML file(s) (Audit Filter: {'Enabled (only PASS)' if filter_passed else 'Disabled'})...")
+        skipped_non_pass = 0
+        for x_idx, file_path in enumerate(xml_files):
+            try:
+                # Audit check
+                if filter_passed:
+                    audit_file = file_path.parent / "audit_report.json"
+                    if audit_file.exists():
+                        try:
+                            audit = json.loads(audit_file.read_text(encoding="utf-8"))
+                            decision = str(audit.get("decision", "")).strip().upper()
+                            is_malfunctioned = audit.get("is_malfunctioned", False)
+                            if decision != "PASS" or is_malfunctioned:
+                                skipped_non_pass += 1
+                                continue
+                        except Exception as ae:
+                            print(f"Warning: Could not check audit for {file_path.name}: {ae}")
+
+                content = file_path.read_text(encoding="utf-8")
+                raw_text, spans = parse_xml_annotations(content)
+                if not spans:
+                    print(f"Warning: No valid spans found in XML '{file_path.name}'. Skipping.")
+                    continue
+
+                meta = infer_metadata_from_path(file_path, input_path)
+                rel_source = str(file_path.relative_to(input_path)) if file_path.is_relative_to(input_path) else file_path.name
+                exam_data = {
+                    "exam_id": meta["exam_id"],
+                    "is_real": True,
+                    "raw_text": raw_text,
+                    "spans": spans,
+                    "subject": meta["subject"],
+                    "grade": meta["grade"],
+                    "category": meta["category"],
+                    "source_file": rel_source
+                }
+
+                if args.exam_level:
+                    samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
+                    for s in samples:
+                        s["metadata"]["source_file"] = rel_source
+                        processed_samples.append(s)
+                else:
+                    sample = process_single_question_legacy(exam_data, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
+                    if sample:
+                        sample["metadata"]["source_file"] = rel_source
+                        processed_samples.append(sample)
+
+                # Save ground-truth XML to output/dataset/xml/
+                _save_xml(meta["exam_id"], raw_text, spans)
+
+            except Exception as e:
+                print(f"Warning: Failed to process XML file {file_path.name}: {e}")
+
+            if (x_idx + 1) % 20 == 0 or (x_idx + 1) == num_xml_files:
+                print(f"[Progress] Processed {x_idx + 1}/{num_xml_files} XML exam documents...")
             
-    print(f"Successfully prepared {len(processed_samples)} training samples (sources include individual question files and compiled exam files).")
+    print(f"Successfully prepared {len(processed_samples)} training samples (sources include individual question files, compiled exam files, and annotated XML exams).")
     
     # Shuffle and split
     random.seed(args.seed)

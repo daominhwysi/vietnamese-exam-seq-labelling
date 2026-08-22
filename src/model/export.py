@@ -48,7 +48,7 @@ def main():
                 print(f"Error reading adapter config: {e}")
         
     if not base_model_name:
-        base_model_name = "aisingapore/SEA-LION-ModernBERT-300M"
+        base_model_name = "jhu-clsp/mmBERT-small"
         print(f"Fallback to default base model: {base_model_name}")
 
     # 2. Load tokenizer correctly (bypassing TokenizersBackend error)
