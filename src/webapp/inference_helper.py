@@ -508,7 +508,17 @@ def build_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
     Reconstructs the full raw text with inline XML tags around each labeled span.
     Uses sorting to avoid overlapping issues and insert XML tags correctly.
     """
-    sorted_spans = sorted(spans, key=lambda x: (x["start"], -x["end"]))
+    valid_spans = []
+    for span in spans:
+        label = span["label"]
+        text = span["text"].strip()
+        if not text:
+            continue
+        if label in ["option_label", "question_label"] and not any(c.isalnum() for c in text):
+            continue
+        valid_spans.append(span)
+
+    sorted_spans = sorted(valid_spans, key=lambda x: (x["start"], -x["end"]))
     
     result = []
     cursor = 0
@@ -546,6 +556,8 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
         label = span["label"]
         text = span["text"].strip()
         if not text:
+            continue
+        if label in ["option_label", "question_label"] and not any(c.isalnum() for c in text):
             continue
             
         if label in ["stimulus", "context"]:

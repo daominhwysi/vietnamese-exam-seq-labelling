@@ -285,8 +285,17 @@ def predict_text(
             "text": text[current_start:current_end].strip()
         })
 
-    # Filter out empty segments
-    segments = [s for s in segments if s["text"]]
+    # Filter out empty and spurious non-alphanumeric label segments (e.g. '*' or '-' tagged as option_label)
+    cleaned_segments = []
+    for s in segments:
+        txt = s["text"].strip()
+        label = s["label"]
+        if not txt:
+            continue
+        if label in ["option_label", "question_label"] and not any(c.isalnum() for c in txt):
+            continue
+        cleaned_segments.append(s)
+    segments = cleaned_segments
     xml_content = build_tagged_xml(text, segments)
 
     return {

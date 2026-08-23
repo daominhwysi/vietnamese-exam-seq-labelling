@@ -464,6 +464,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 if options:
                     append_segment(config.separator_stem_options, "separator")
                     for opt_idx, opt_text in enumerate(options):
+                        if config.formatting_noise_prob > 0.0 and not is_inline:
+                            if rng.random() < (config.formatting_noise_prob * 0.5):
+                                bullet = rng.choice(["* ", "- ", "+ "])
+                                append_segment(bullet, "separator")
                         opt_lbl = opt_prefixes[opt_idx % len(opt_prefixes)]
                         opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                         append_segment(opt_lbl, "option_label")
@@ -549,6 +553,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     current_prefixes = OPTION_PREFIX_STYLES[tf_style]
                     
                 for opt_idx, opt_text in enumerate(options):
+                    if config.formatting_noise_prob > 0.0 and not is_inline:
+                        if rng.random() < (config.formatting_noise_prob * 0.5):
+                            bullet = rng.choice(["* ", "- ", "+ "])
+                            append_segment(bullet, "separator")
                     opt_lbl = current_prefixes[opt_idx % len(current_prefixes)]
                     opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                     append_segment(opt_lbl, "option_label")
