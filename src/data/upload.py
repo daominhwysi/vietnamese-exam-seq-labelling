@@ -142,7 +142,13 @@ def upload_dataset(token=None, repo_id=None, dataset_dir=None):
     if not token:
         token = os.getenv("HF_TOKEN")
     if not token:
-        print("Error: HF_TOKEN not found in environment.")
+        try:
+            from huggingface_hub import get_token
+            token = get_token()
+        except ImportError:
+            pass
+    if not token:
+        print("Error: HF_TOKEN not found in environment or huggingface-cli cache. Please log in with `hf auth login` or set HF_TOKEN.")
         sys.exit(1)
 
     if not repo_id:
