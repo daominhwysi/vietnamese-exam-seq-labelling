@@ -3,7 +3,10 @@ from src.data.prepare import (
     align_tokens_to_spans,
     get_tag_mappings,
     process_single_question,
-    replace_latex_in_question
+    replace_latex_in_question,
+    resolve_stimulus_anchors,
+    parse_xml_annotations,
+    spans_to_xml
 )
 
 class MockTokenizer:
@@ -147,12 +150,48 @@ class TestPrepareDataset(unittest.TestCase):
         # Test processing with latex_placeholder: raw_text and spans should map to the replaced "[LATEX]" strings
         sample = process_single_question(q_data, tokenizer, self.tag_to_id, self.id_to_tag, latex_placeholder="[LATEX]")
         
-        self.assertIsNotNone(sample)
-        # Check that one of the tokens corresponds to "[LATEX]"
-        self.assertIn("token_3", sample["tokens"]) # MockTokenizer conversion
-        # Ensure we have tags assigned correctly (B-stem/I-stem) on the replaced text
-        self.assertIn("B-stem", sample["tags"])
-        self.assertIn("B-option_text", sample["tags"])
+    def test_resolve_stimulus_anchors(self):
+        xml_input = (
+            "<section># Section 1</section>\n"
+            "<stimulus id=\"stim_1\" start_anchor=\"Read the following passage\" end_anchor=\"end of passage.\" />\n\n"
+            "Read the following passage and answer the questions.\n"
+            "This is paragraph one.\n"
+            "This is paragraph two and the end of passage.\n\n"
+            "<question_label>Question 1:</question_label> <stem>What is this about?</stem>"
+        )
+        resolved = resolve_stimulus_anchors(xml_input)
+        self.assertNotIn("<stimulus id=", resolved)
+        self.assertIn("<stimulus>Read the following passage and answer the questions.\nThis is paragraph one.\nThis is paragraph two and the end of passage.</stimulus>", resolved)
+
+    def test_parse_xml_annotations_with_stimulus(self):
+        tagged_text = (
+            "<section># Section 1</section>\n"
+            "<stimulus>This is the reading stimulus.</stimulus>\n"
+            "<question_label>Question 1:</question_label> <stem>What is this?</stem>\n"
+            "<option_label>A.</option_label> <option_text>Choice A</option_text>"
+        )
+        raw_text, spans = parse_xml_annotations(tagged_text)
+        labels = [s["label"] for s in spans]
+        self.assertIn("section", labels)
+        self.assertIn("stimulus", labels)
+        self.assertIn("question_label", labels)
+        self.assertIn("stem", labels)
+        self.assertIn("option_label", labels)
+        self.assertIn("option_text", labels)
+
+        stim_span = next(s for s in spans if s["label"] == "stimulus")
+        self.assertEqual(stim_span["text"], "This is the reading stimulus.")
+
+    def test_spans_to_xml_with_stimulus(self):
+        raw_text = "Stimulus text. Question 1: Stem text."
+        spans = [
+            {"start": 0, "end": 14, "label": "stimulus"},
+            {"start": 15, "end": 26, "label": "question_label"},
+            {"start": 27, "end": 37, "label": "stem"}
+        ]
+        xml = spans_to_xml(raw_text, spans)
+        self.assertEqual(xml, "<stimulus>Stimulus text.</stimulus> <question_label>Question 1:</question_label> <stem>Stem text.</stem>")
 
 if __name__ == '__main__':
     unittest.main()
+

@@ -1,0 +1,13 @@
+# ĐỀ KHẢO SÁT CHẤT LƯỢNG MÔN TOÁN 12
+
+Câu 1. Cho hàm số y = f(x) có đạo hàm f'(x) = x(x - 1)^2(x + 2). Số điểm cực trị của hàm số đã cho là:
+A. 1
+B. 2
+C. 3
+D. 4
+
+Câu 2. Cho tứ diện ABCD có các cạnh AB, AC, AD đôi một vuông góc với nhau và AB = 6, AC = 7, AD = 8. Thể tích khối tứ diện ABCD là:
+A. 112
+B. 56
+C. 336
+D. 28

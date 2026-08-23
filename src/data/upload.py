@@ -53,7 +53,7 @@ Given raw exam text (possibly from OCR), label each token with one of the entity
 | `B-stem` / `I-stem` | Main question body text |
 | `B-option_label` / `I-option_label` | Option letter prefixes (`A.`, `B.`, `a)`) |
 | `B-option_text` / `I-option_text` | Option content text |
-| `B-context` / `I-context` | Shared passage / context block for group questions |
+| `B-stimulus` / `I-stimulus` | Shared reading passage / stimulus block for group questions |
 | `B-section` / `I-section` | Section headers and exam directions |
 
 ## Data Fields

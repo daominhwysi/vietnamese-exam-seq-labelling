@@ -23,7 +23,7 @@ BASE_TAGS = [
     "stem",
     "option_label",
     "option_text",
-    "context",
+    "stimulus",
     "section"
 ]
 
@@ -34,6 +34,82 @@ def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
         tag_to_id[f"I-{tag}"] = len(tag_to_id)
     id_to_tag = {v: k for k, v in tag_to_id.items()}
     return tag_to_id, id_to_tag
+
+def resolve_stimulus_anchors(xml_content: str) -> str:
+    """
+    Resolves self-closing <stimulus id="..." start_anchor="..." end_anchor="..." /> tags
+    by locating start_anchor and end_anchor in the surrounding text and wrapping the target
+    span with explicit <stimulus>...</stimulus> tags. Also converts legacy <context> tags to <stimulus>.
+    """
+    if not xml_content:
+        return xml_content
+
+    # 1. Convert legacy <context> tags to <stimulus>
+    xml_content = re.sub(r"<\s*context\s*>", "<stimulus>", xml_content, flags=re.IGNORECASE)
+    xml_content = re.sub(r"<\s*/\s*context\s*>", "</stimulus>", xml_content, flags=re.IGNORECASE)
+
+    # 2. Match self-closing stimulus anchor tag
+    pattern = re.compile(
+        r"<stimulus\s+[^>]*?start_anchor=([\"\x27])(.*?)\1[^>]*?end_anchor=([\"\x27])(.*?)\3[^>]*?/?>",
+        re.DOTALL | re.IGNORECASE
+    )
+
+    matches = list(pattern.finditer(xml_content))
+    if not matches:
+        return xml_content
+
+    # Extract anchors in order
+    anchors = []
+    for m in matches:
+        start_a = m.group(2)
+        end_a = m.group(4)
+        anchors.append((start_a, end_a))
+
+    # Remove all self-closing stimulus tags
+    modified = pattern.sub("", xml_content)
+
+    # Wrap each start_anchor ... end_anchor with <stimulus>...</stimulus>
+    cursor = 0
+    for start_a, end_a in anchors:
+        if not start_a or not end_a:
+            continue
+
+        # Clean HTML entities if present
+        import html
+        start_clean = html.unescape(start_a).strip()
+        end_clean = html.unescape(end_a).strip()
+
+        # Find start_anchor starting from cursor
+        s_idx = modified.find(start_a, cursor)
+        if s_idx == -1 and start_clean != start_a:
+            s_idx = modified.find(start_clean, cursor)
+            if s_idx != -1:
+                start_a = start_clean
+
+        if s_idx != -1:
+            # Find end_anchor starting after start_anchor
+            e_search_start = s_idx + len(start_a)
+            e_idx = modified.find(end_a, e_search_start)
+            if e_idx == -1 and end_clean != end_a:
+                e_idx = modified.find(end_clean, e_search_start)
+                if e_idx != -1:
+                    end_a = end_clean
+
+            if e_idx != -1:
+                e_end = e_idx + len(end_a)
+                before = modified[:s_idx]
+                stim_text = modified[s_idx:e_end]
+                after = modified[e_end:]
+
+                # Only wrap if not already wrapped
+                if not (stim_text.startswith("<stimulus>") and stim_text.endswith("</stimulus>")):
+                    wrapped = f"<stimulus>{stim_text}</stimulus>"
+                    modified = before + wrapped + after
+                    cursor = len(before) + len(wrapped)
+                else:
+                    cursor = e_end
+
+    return modified
 
 def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
     """
@@ -58,6 +134,8 @@ def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
         start = span["start"]
         end = span["end"]
         label = span["label"]
+        if label == "context":
+            label = "stimulus"
 
         # Skip malformed or already-passed spans
         if end <= start or start < cursor:
@@ -81,9 +159,12 @@ def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
 def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
     """
     Parses an inline XML-tagged string into raw untagged text and character span dictionaries.
+    Resolves self-closing stimulus anchors into <stimulus> tags before span computation.
     Only recognized entity tags are stripped and recorded as spans; other tags are preserved verbatim.
     """
-    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "section"}
+    tagged_text = resolve_stimulus_anchors(tagged_text)
+
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "stimulus", "section"}
     raw_chars = []
     spans = []
 
@@ -99,7 +180,8 @@ def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
         raw_chars.append(text_before)
 
         is_closing = bool(match.group(1))
-        tag_name = match.group(2)
+        raw_tag_name = match.group(2)
+        tag_name = "stimulus" if raw_tag_name == "context" else raw_tag_name
 
         if tag_name in allowed_tags:
             if not is_closing:
@@ -564,6 +646,8 @@ def replace_latex_in_question(q_data: Dict[str, Any], placeholder: str) -> Dict[
         return val
 
     if q_copy.get("is_group", False):
+        if "stimulus" in q_copy:
+            q_copy["stimulus"] = process_field(q_copy["stimulus"])
         if "context" in q_copy:
             q_copy["context"] = process_field(q_copy["context"])
         if "questions" in q_copy and isinstance(q_copy["questions"], list):

@@ -221,7 +221,7 @@ class ModelManager:
             pass
 
         # Default fallback standard tag mapping
-        base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
+        base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section"]
         tag_to_id = {"O": 0}
         for tag in base_tags:
             tag_to_id[f"B-{tag}"] = len(tag_to_id)
@@ -548,7 +548,7 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
         if not text:
             continue
             
-        if label == "context":
+        if label in ["stimulus", "context"]:
             current_context = text
             
         elif label == "question_label":
@@ -556,6 +556,7 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
                 questions.append(current_question)
             current_question = {
                 "question_label": text,
+                "stimulus": current_context,
                 "context": current_context,
                 "stem": "",
                 "options": [],

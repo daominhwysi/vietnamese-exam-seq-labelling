@@ -133,14 +133,14 @@ def generate_single_question(
 
     # Chỉ thị ngăn chặn lặp lại hướng dẫn chung
     strict_no_instructions_guideline = """
-YÊU CẦU QUAN TRỌNG - KHÔNG ĐƯỢC CHÈN HƯỚNG DẪN CHUNG CỦA ĐỀ THI VÀO STEM HOẶC CONTEXT:
+YÊU CẦU QUAN TRỌNG - KHÔNG ĐƯỢC CHÈN HƯỚNG DẪN CHUNG CỦA ĐỀ THI VÀO STEM HOẶC STIMULUS:
 Tuyệt đối không viết các câu chỉ dẫn đề thi như:
 - "Mark the letter A, B, C, or D on your answer sheet to indicate..."
 - "Read the following passage and mark..."
 - "Mark the letter A, B, C, or D to indicate the word that differs..."
 - "Read the following piece of news..."
 Các câu chỉ dẫn này đã được xử lý ở cấp độ phân mục (section level) của đề thi.
-Thẻ <stem> của bạn CHỈ ĐƯỢC chứa nội dung câu hỏi/câu văn cụ thể. Thẻ <context> chỉ chứa văn bản đọc hiểu/ngữ cảnh gốc.
+Thẻ <stem> của bạn CHỈ ĐƯỢC chứa nội dung câu hỏi/câu văn cụ thể. Thẻ <stimulus> chỉ chứa văn bản đọc hiểu/ngữ cảnh gốc.
 """
 
     english_guidelines = ""
@@ -151,7 +151,7 @@ Yêu cầu định dạng riêng cho bài thi tiếng Anh dạng '{pt_id}':
 - Nếu là dạng trọng âm (stress): Thẻ <stem> nên để trống hoàn toàn hoặc chứa khoảng trắng " ". Các thẻ <option> chứa 4 từ tiếng Anh để tìm từ có trọng âm khác biệt.
 - Nếu là dạng tìm từ đồng nghĩa/trái nghĩa (closest_meaning, opposite_meaning): Thẻ <stem> chứa câu văn hoàn chỉnh có phần cần tìm từ đồng nghĩa/trái nghĩa được bao bởi thẻ <u>...</u>.
 - Nếu là dạng sửa lỗi sai (error_correction): Thẻ <stem> chứa một câu văn tiếng Anh có lỗi sai. Các phương án lựa chọn là các phần trong câu đó.
-- Nếu là dạng điền từ/điền câu (cloze_word, cloze_sentence, cloze_word_news, cloze_word_leaflet): Ngữ cảnh văn bản (context) phải chứa các chỗ trống được đánh số cụ thể dạng '(26) <blank />', '(27) <blank />'.
+- Nếu là dạng điền từ/điền câu (cloze_word, cloze_sentence, cloze_word_news, cloze_word_leaflet): Ngữ cảnh văn bản (stimulus) phải chứa các chỗ trống được đánh số cụ thể dạng '(26) <blank />', '(27) <blank />'.
 - Nếu là dạng ngữ pháp/từ vựng (grammar_vocabulary): Thẻ <stem> chứa câu văn tiếng Anh có một chỗ trống cần điền từ/cụm từ. Chỗ trống PHẢI được biểu diễn bằng thẻ XML <blank /> (TUYỆT ĐỐI KHÔNG dùng dấu gạch dưới ______ hay dấu chấm ...). Ví dụ: "She wishes she <blank /> harder for the final exam."
 - Nếu là dạng hội thoại/giao tiếp (exchange): Thẻ <stem> chứa lượt nói của người A. Lượt trả lời của người B có chỗ trống PHẢI dùng thẻ <blank /> (TUYỆT ĐỐI KHÔNG dùng ______). Ví dụ: 'John: "I am thinking of taking a gap year." - Mary: "<blank />"'
 - Nếu là dạng sắp xếp hội thoại (reordering_dialogue): Thẻ <stem> chứa lượt nói của cuộc đối thoại, mỗi dòng bắt đầu bằng ký tự thường kèm dấu chấm và tên người nói (ví dụ: "a. Tom: ...\nb. Mary: ..."). Các phương án <option> là các tổ hợp thứ tự các câu thoại (ví dụ: "a-b-c", "b-c-a").
@@ -168,7 +168,7 @@ Yêu cầu định dạng riêng cho bài thi tiếng Anh dạng '{pt_id}':
     if is_group:
         xml_format = """
 <group_question>
-  <context>Văn bản đọc hiểu hoặc đoạn thông tin chung...</context>
+  <stimulus>Văn bản đọc hiểu hoặc đoạn thông tin chung...</stimulus>
   <question>
     <stem>Nội dung câu hỏi phụ thứ nhất...</stem>
     <option>Phương án A</option>
@@ -211,7 +211,7 @@ Cấu trúc định dạng XML yêu cầu:
 
 Yêu cầu kỹ thuật:
 1. Chỉ xuất ra cấu trúc XML hợp lệ nằm trong một khối mã duy nhất (như ```xml ... ```). Không viết thêm lời giới thiệu hoặc kết luận.
-2. Không chèn các câu chỉ thị làm bài chung ở mức đề thi vào trường dữ liệu <stem> hoặc <context>.
+2. Không chèn các câu chỉ thị làm bài chung ở mức đề thi vào trường dữ liệu <stem> hoặc <stimulus>.
 3. Đáp án trong thẻ <answer> của câu trắc nghiệm nhiều phương án lựa chọn (multiple_choice) chỉ chứa duy nhất một ký tự chữ cái viết hoa (A, B, C, hoặc D).
 """
 

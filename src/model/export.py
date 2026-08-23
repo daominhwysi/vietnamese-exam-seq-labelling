@@ -16,7 +16,7 @@ def load_label_mapping(model_dir):
             mapping = json.load(f)
             return mapping["tag_to_id"], {int(k): v for k, v in mapping["id_to_tag"].items()}
             
-    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)

@@ -1,0 +1,16 @@
+# ĐỀ THI ĐÁNH GIÁ TƯ DUY 2025 - PHẦN TƯ DUY KHOA HỌC
+
+Dựa vào thông tin sau để trả lời câu hỏi 1 và 2:
+Trong tự nhiên, quá trình cố định đạm sinh học được thực hiện bởi các nhóm vi sinh vật tự do (như vi khuẩn lam Anabaena) hoặc vi sinh vật cộng sinh (như vi khuẩn Rhizobium trong nốt sần rễ cây họ Đậu). Chúng sử dụng enzyme nitrogenase để bẻ gãy liên kết ba bền vững trong phân tử N2 để tạo thành NH3.
+
+Câu 1: Vi khuẩn nào sau đây sống cộng sinh trong nốt sần cây họ Đậu để cố định nitơ?
+A. Rhizobium
+B. Clostridium
+C. Azotobacter
+D. Anabaena
+
+Câu 2: Enzyme chịu trách nhiệm bẻ gãy liên kết trong phân tử nitơ là:
+A. Amylase
+B. Nitrogenase
+C. DNA polymerase
+D. Protease

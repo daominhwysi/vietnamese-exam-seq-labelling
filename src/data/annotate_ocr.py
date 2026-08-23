@@ -32,7 +32,7 @@ You MUST wrap the following entities:
 2. <stem>...</stem>: Wrap the main text body of a question or main sub-question (including any ordering items or list of items to order). Note: If a question has sub-parts a), b), c) that are annotated as options, the introductory text (e.g. "Cho tam giác ABC...") should be the <stem> of that question, NOT <context>.
 3. <option_label>...</option_label>: Wrap options letters/prefixes or sub-question letters/prefixes (e.g. "A.", "B.", "C.", "D.", "a)", "b)", "c)", "d)", "a.", "b.", "c.", "d.").
 4. <option_text>...</option_text>: Wrap the textual content of options or sub-questions (e.g., the requirement/proof statement of part a, b, etc.).
-5. <context>...</context>: Wrap the shared passage/context block in group questions (passages, reading texts, shared diagrams description). Do NOT use context for standard question introductions that have parts a), b), c) treated as options.
+5. <stimulus>...</stimulus>: Wrap the shared passage/stimulus block in group questions (passages, reading texts, shared diagrams description). Do NOT use stimulus for standard question introductions that have parts a), b), c) treated as options.
 6. <section>...</section>: Wrap section headers, subheaders, and directions (e.g., "PHẦN I. Câu trắc nghiệm...", "Mark the letter A, B, C, or D...", "Phần II: Đúng sai", "Đọc đoạn văn sau và trả lời...").
 
 CRITICAL RULES:
@@ -101,7 +101,7 @@ In today's digital age, Vietnamese young people are depending on the virtual wor
 - "Choose the word whose underlined part is pronounced differently:" -> Tag as <stem>.
 - Inline prefixes "A." and "B." -> Tag as <option_label>.
 - Inline option text "finished" / "explained" containing <u> markup -> Tag as <option_text>, keeping <u> tags exactly intact.
-- Passage text "In today's digital age..." -> Tag as <context> since it is a reading block.
+- Passage text "In today's digital age..." -> Tag as <stimulus> since it is a reading block.
 - "**Question 2.**" -> Tag as <question_label>.
 - "What is the main topic..." -> Tag as <stem>.
 - Option prefixes and texts -> Tag as <option_label> and <option_text>.
@@ -112,7 +112,7 @@ In today's digital age, Vietnamese young people are depending on the virtual wor
     <option_label>A.</option_label> <option_text>fini<u>sh</u>ed</option_text>    <option_label>B.</option_label> <option_text>expla<u>i</u>ned</option_text>
 
 <section>*Read the passage and choose the correct answer:*</section>
-<context>In today's digital age, Vietnamese young people are depending on the virtual world.</context>
+<stimulus>In today's digital age, Vietnamese young people are depending on the virtual world.</stimulus>
 <question_label>**Question 2.**</question_label> <stem>What is the main topic of the passage?</stem>
     <option_label>A.</option_label> <option_text>Tech trends.</option_text>    <option_label>B.</option_label> <option_text>Virtual reality.</option_text>
 
@@ -242,7 +242,7 @@ def clean_llm_response(text: str) -> str:
 
 
 def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
-    allowed_tags = {"question_label", "stem", "option_label", "option_text", "context", "section"}
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "stimulus", "section"}
     raw_chars = []
     spans = []
 
@@ -259,7 +259,8 @@ def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
         raw_chars.append(text_before)
 
         is_closing = bool(match.group(1))
-        tag_name = match.group(2)
+        raw_tag_name = match.group(2)
+        tag_name = "stimulus" if raw_tag_name == "context" else raw_tag_name
 
         if tag_name in allowed_tags:
             if not is_closing:

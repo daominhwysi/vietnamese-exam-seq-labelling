@@ -193,6 +193,26 @@ def run_train(args):
         print(f"  {key:<30}: {value}")
     print("=" * 60)
 
+    # Suppress all third-party and download tqdm progress bars to avoid terminal clutter
+    os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+    try:
+        from huggingface_hub.utils import disable_progress_bars as hf_hub_disable_progress_bars
+        hf_hub_disable_progress_bars()
+    except Exception:
+        pass
+
+    try:
+        from datasets.utils.logging import disable_progress_bar as datasets_disable_progress_bar
+        datasets_disable_progress_bar()
+    except Exception:
+        pass
+
+    try:
+        from transformers.utils.logging import disable_progress_bar as transformers_disable_progress_bar
+        transformers_disable_progress_bar()
+    except Exception:
+        pass
+
     # Set up Weights & Biases project environment variable if configured
     if getattr(args, "report_to", "none") == "wandb":
         os.environ["WANDB_PROJECT"] = getattr(args, "wandb_project", "vietnamese-exam-seq-labelling")
@@ -508,7 +528,7 @@ def run_train(args):
 
     # 9.5 Calculate class weights if enabled
     class_weights = None
-    if getattr(args, "use_class_weights", False):
+    if not getattr(args, "no_class_weights", False):
         print("Calculating class weights from training dataset...")
         from collections import Counter
         label_counts = Counter()
@@ -674,7 +694,8 @@ def run_train(args):
                 return
 
             now = time.time()
-            is_eval = any(k.startswith("eval_") for k in logs) or "train_loss" in logs
+            is_eval = any(k.startswith("eval_") for k in logs)
+            is_final_train = ("train_loss" in logs or "train_runtime" in logs) and not is_eval
 
             if is_eval:
                 epoch_val = logs.get("epoch", state.epoch if state.epoch is not None else 0.0)
@@ -687,7 +708,15 @@ def run_train(args):
                 if "eval_runtime" in logs:
                     eval_metrics.append(f"time: {logs['eval_runtime']:.2f}s")
                 
-                print(f">>> [Evaluation @ Step {state.global_step:>5} | Epoch {epoch_val:5.2f}] " + " | ".join(eval_metrics), flush=True)
+                if eval_metrics:
+                    print(f">>> [Evaluation @ Step {state.global_step:>5} | Epoch {epoch_val:5.2f}] " + " | ".join(eval_metrics), flush=True)
+                self.last_log_time = time.time()
+            elif is_final_train:
+                train_loss_val = logs.get("train_loss", "N/A")
+                loss_str = f"{train_loss_val:.4f}" if isinstance(train_loss_val, (int, float)) else str(train_loss_val)
+                runtime = logs.get("train_runtime", 0.0)
+                steps_per_sec = logs.get("train_steps_per_second", 0.0)
+                print(f">>> [Training Summary] Train Loss: {loss_str} | Runtime: {runtime:.2f}s | Speed: {steps_per_sec:.2f} steps/s", flush=True)
             elif "loss" in logs or "learning_rate" in logs:
                 step = state.global_step
                 max_steps = max(1, state.max_steps)
@@ -721,11 +750,15 @@ def run_train(args):
                     flush=True
                 )
 
+        def on_evaluate(self, args, state, control, **kwargs):
+            self.last_log_time = time.time()
+
         def on_epoch_end(self, args, state, control, **kwargs):
             if state.is_world_process_zero:
                 current_epoch = int(round(state.epoch)) if state.epoch is not None else 1
                 total_epochs = int(args.num_train_epochs)
                 print(f"--- Epoch {current_epoch}/{total_epochs} completed ---", flush=True)
+            self.last_log_time = time.time()
 
         def on_train_end(self, args, state, control, **kwargs):
             if state.is_world_process_zero and self.train_start_time:
@@ -744,7 +777,14 @@ def run_train(args):
     # 12. Run final test split evaluation
     print("Evaluating on test split...")
     test_results = trainer.evaluate(eval_dataset=dataset["test"])
-    print(f"\nFinal Test Set Results:\n{json.dumps(test_results, indent=2)}")
+    print("\n" + "=" * 60)
+    print("FINAL TEST SET RESULTS:")
+    for k, v in test_results.items():
+        if isinstance(v, float):
+            print(f"  {k:<28}: {v:.4f}")
+        else:
+            print(f"  {k:<28}: {v}")
+    print("=" * 60)
 
     # Save the final adapter model
     print(f"Saving final model adapter to '{args.output_dir}'...")

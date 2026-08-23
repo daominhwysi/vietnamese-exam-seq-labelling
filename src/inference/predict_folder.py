@@ -23,7 +23,7 @@ def load_label_mapping(model_dir):
             return mapping["tag_to_id"], {int(k): v for k, v in mapping["id_to_tag"].items()}
             
     # Fallback to standard base tags mapping
-    base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)
@@ -206,13 +206,13 @@ def main():
         "--model-dir",
         type=str,
         default="./results",
-        help="Directory of the trained model (default: './results')"
+        help="Directory of the trained model or HF repo (default: './results' with fallback to HF)"
     )
     parser.add_argument(
         "--base-model-name",
         type=str,
-        default="aisingapore/SEA-LION-ModernBERT-300M",
-        help="Base model/tokenizer name used (default: 'aisingapore/SEA-LION-ModernBERT-300M')"
+        default="jhu-clsp/mmBERT-small",
+        help="Base model/tokenizer name used (default: 'jhu-clsp/mmBERT-small')"
     )
     parser.add_argument(
         "--max-length",
@@ -241,11 +241,19 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using device: {device}")
     
+    # Auto-detect default model path if default "./results" doesn't exist
+    model_dir = args.model_dir
+    if model_dir == "./results" and not os.path.exists("./results"):
+        if os.path.exists("./results_full"):
+            model_dir = "./results_full"
+        else:
+            model_dir = "daominhwysi/results_full"
+    
     # 1. Load Tokenizer (prefer local checkpoint, fallback to base model with correct special tokens)
-    print(f"Loading tokenizer...")
+    print(f"Loading tokenizer from: {model_dir}...")
     try:
-        tokenizer = AutoTokenizer.from_pretrained(args.model_dir, use_fast=True)
-        print(f"  Successfully loaded tokenizer from local checkpoint: {args.model_dir}")
+        tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=True)
+        print(f"  Successfully loaded tokenizer from checkpoint: {model_dir}")
     except Exception:
         print(f"  Local tokenizer files not found. Loading base tokenizer: {args.base_model_name}...")
         tokenizer = AutoTokenizer.from_pretrained(args.base_model_name, use_fast=True)
@@ -255,19 +263,19 @@ def main():
         print(f"  Added special tokens: {special_tokens}")
     
     # 2. Load Label Mappings
-    tag_to_id, id_to_tag = load_label_mapping(args.model_dir)
+    tag_to_id, id_to_tag = load_label_mapping(model_dir)
     print(f"Loaded {len(tag_to_id)} labels.")
     
     # 3. Load Model (Supports both full fine-tuned and PEFT/LoRA adapters)
-    print(f"Loading model weights from: {args.model_dir}...")
-    is_lora = os.path.exists(os.path.join(args.model_dir, "adapter_config.json"))
+    print(f"Loading model weights from: {model_dir}...")
+    is_lora = os.path.exists(os.path.join(model_dir, "adapter_config.json"))
     
     if is_lora:
         print("Detected LoRA adapter checkpoint. Loading base model first...")
         # Auto-detect base model name from adapter config
         base_model_name = args.base_model_name
         try:
-            with open(os.path.join(args.model_dir, "adapter_config.json"), "r", encoding="utf-8") as f:
+            with open(os.path.join(model_dir, "adapter_config.json"), "r", encoding="utf-8") as f:
                 config = json.load(f)
                 base_model_name = config.get("base_model_name_or_path", base_model_name)
                 print(f"  Auto-detected base model name from adapter config: {base_model_name}")
@@ -282,17 +290,20 @@ def main():
             label2id=tag_to_id
         )
         base_model.resize_token_embeddings(len(tokenizer))
-        model = PeftModel.from_pretrained(base_model, args.model_dir)
+        model = PeftModel.from_pretrained(base_model, model_dir)
     else:
         print("Loading full fine-tuned model checkpoint...")
         # Load directly (it already contains the correctly saved, resized embeddings config)
-        model = AutoModelForTokenClassification.from_pretrained(args.model_dir)
+        model = AutoModelForTokenClassification.from_pretrained(model_dir)
+        if hasattr(model.config, "id2label") and model.config.id2label:
+            id_to_tag = {int(k): v for k, v in model.config.id2label.items()}
+            tag_to_id = {v: k for k, v in id_to_tag.items()}
         
     model.to(device)
     model.eval()
     
-    # 4. Process all text files in the input folder
-    txt_files = list(input_path.glob("*.txt"))
+    # 4. Process all text/md files in the input folder
+    txt_files = sorted(list(input_path.glob("*.txt")) + list(input_path.glob("*.md")))
     if not txt_files:
         print(f"No .txt files found in '{args.input_dir}'.")
         sys.exit(0)
