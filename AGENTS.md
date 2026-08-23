@@ -24,6 +24,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_prepare_dataset.py` - Tests for XLM-RoBERTa dataset tokenizer alignments.
   - `test_parser.py` - Tests for question XML parsing and option prefix cleaning.
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
+  - `test_iter_logger.py` - Tests for iteration-based training logger and epoch-proportional step calculation.
 - `scratch/` - Directory housing temporary and utility debug scripts.
   - `check_alignment.py` - Minimal check script verifying token-label alignments for sample questions.
   - `debug_alignment.py` - Checks character-level offset mismatch and alignments for reconstructed exams.
