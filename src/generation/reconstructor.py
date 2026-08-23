@@ -9,12 +9,21 @@ from src.webapp.inference_helper import is_valid_latex
 DEFAULT_QUESTION_PREFIXES = [
     "Câu {num}: ",
     "Câu {num}. ",
-    "Question {num}: ",
-    "Question {num}. ",
     "C{num}: ",
     "C{num}. ",
+    "{num}. ",
+    "{num}: ",
+    "{num}) "
+]
+
+ENGLISH_QUESTION_PREFIXES = [
+    "Question {num}: ",
+    "Question {num}. ",
+    "**Question {num}:** ",
+    "**Question {num}.** ",
     "Q{num}: ",
     "Q{num}. ",
+    "Q.{num}: ",
     "{num}. ",
     "{num}: ",
     "{num}) "
@@ -50,7 +59,8 @@ class ReconstructorConfig:
     ordering_item_prefix_template: Optional[str] = None
     separator_stem_options: str = "\n"
     separator_options: str = "\n"
-    separator_context_questions: str = "\n\n"
+    separator_stimulus_questions: str = "\n\n"
+    separator_context_questions: Optional[str] = None
     separator_questions: str = "\n\n"
     ordering_choice_separator: str = " – "
     track_separators: bool = False
@@ -341,7 +351,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
     
     stable_seed = config.seed
     if stable_seed is None:
-        stable_seed = q_data.get("context", "") or q_data.get("stem", "") or str(q_data)
+        stable_seed = q_data.get("stimulus", "") or q_data.get("context", "") or q_data.get("stem", "") or str(q_data)
         
     rng = get_stable_random(stable_seed)
     is_inline = rng.random() < config.inline_option_prob
@@ -352,7 +362,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
     
     q_prefix_tpl = config.question_prefix_template
     if q_prefix_tpl is None:
-        q_prefix_tpl = rng.choice(DEFAULT_QUESTION_PREFIXES)
+        if q_data.get("subject") == "english":
+            q_prefix_tpl = rng.choice(ENGLISH_QUESTION_PREFIXES)
+        else:
+            q_prefix_tpl = rng.choice(DEFAULT_QUESTION_PREFIXES)
     q_prefix_tpl = augment_q_prefix_tpl(q_prefix_tpl, config, rng, q_data.get("subject", ""))
         
     opt_style_name = config.option_prefix_style
@@ -379,7 +392,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
             return
             
         # Apply data augmentations before stitching to keep spans 100% correct
-        if label in ["stem", "option_text", "context"]:
+        if label in ["stem", "option_text", "stimulus", "context"]:
             if config.space_noise_rate > 0.0:
                 text = randomize_blank_tokens(text, rng)
             if config.latex_mask_prob > 0.0:
@@ -405,7 +418,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
             span_entry = {
                 "start": start,
                 "end": end,
-                "label": label
+                "label": "stimulus" if label == "context" else label
             }
             if config.include_span_text:
                 span_entry["text"] = text
@@ -415,15 +428,16 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
     q_type = q_data.get("question_type", "")
     
     if is_group:
-        context = q_data.get("context", "")
+        stimulus = q_data.get("stimulus", "") or q_data.get("context", "")
         if q_data.get("subject") == "english":
             for i in range(1, 40):
-                context = re.sub(rf'\({i}\)\s*(?:_{{2,}}|\.{{2,}}|\[\s*BLANK\s*\]|<\s*blank\s*/?>)', f'({i}) <blank />', context)
-        append_segment(context, "context")
+                stimulus = re.sub(rf'\({i}\)\s*(?:_{{2,}}|\.{{2,}}|\[\s*BLANK\s*\]|<\s*blank\s*/?>)', f'({i}) <blank />', stimulus)
+        append_segment(stimulus, "stimulus")
         
         sub_questions = q_data.get("questions", [])
         if sub_questions:
-            append_segment(config.separator_context_questions, "separator")
+            sep_stim = config.separator_context_questions if config.separator_context_questions is not None else config.separator_stimulus_questions
+            append_segment(sep_stim, "separator")
             
             for idx, sub_q in enumerate(sub_questions):
                 q_num = actual_start_q_num + idx
@@ -450,6 +464,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 if options:
                     append_segment(config.separator_stem_options, "separator")
                     for opt_idx, opt_text in enumerate(options):
+                        if config.formatting_noise_prob > 0.0 and not is_inline:
+                            if rng.random() < (config.formatting_noise_prob * 0.5):
+                                bullet = rng.choice(["* ", "- ", "+ "])
+                                append_segment(bullet, "separator")
                         opt_lbl = opt_prefixes[opt_idx % len(opt_prefixes)]
                         opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                         append_segment(opt_lbl, "option_label")
@@ -535,6 +553,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     current_prefixes = OPTION_PREFIX_STYLES[tf_style]
                     
                 for opt_idx, opt_text in enumerate(options):
+                    if config.formatting_noise_prob > 0.0 and not is_inline:
+                        if rng.random() < (config.formatting_noise_prob * 0.5):
+                            bullet = rng.choice(["* ", "- ", "+ "])
+                            append_segment(bullet, "separator")
                     opt_lbl = current_prefixes[opt_idx % len(current_prefixes)]
                     opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                     append_segment(opt_lbl, "option_label")
@@ -629,7 +651,7 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
             rng.shuffle(questions_list)
             
         for q_idx, q in enumerate(questions_list):
-            q_seed = q.get("context", "") or q.get("stem", "") or str(q)
+            q_seed = q.get("stimulus", "") or q.get("context", "") or q.get("stem", "") or str(q)
             q_config = ReconstructorConfig(
                 question_prefix_template=config.question_prefix_template,
                 option_prefix_style=config.option_prefix_style,
@@ -637,6 +659,7 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
                 ordering_item_prefix_template=config.ordering_item_prefix_template,
                 separator_stem_options=config.separator_stem_options,
                 separator_options=config.separator_options,
+                separator_stimulus_questions=config.separator_stimulus_questions,
                 separator_context_questions=config.separator_context_questions,
                 separator_questions=config.separator_questions,
                 ordering_choice_separator=config.ordering_choice_separator,

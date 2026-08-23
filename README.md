@@ -341,7 +341,7 @@ pixi run view-exams
 | `stem` | Main question body text | `"Cho hàm số $y = f(x)$..."` |
 | `option_label` | Option letter prefix | `"A."`, `"B."`, `"a)"` |
 | `option_text` | Option content text | `"Hàm số đồng biến trên $(0; +∞)"` |
-| `context` | Shared passage for group questions | `"Đọc đoạn văn sau..."` |
+| `stimulus` | Shared reading passage / stimulus for group questions | `"Đọc đoạn văn sau..."` |
 | `section` | Section headers and exam directions | `"PHẦN I. Trắc nghiệm"` |
 
 All tags use the BIO prefix scheme: `B-<tag>` for the first token, `I-<tag>` for continuation, `O` for outside.
@@ -405,7 +405,7 @@ Each line in `train.jsonl`, `val.jsonl`, `test.jsonl`:
 ```json
 {
   "is_group": true,
-  "context": "Đọc đoạn văn sau và trả lời các câu hỏi...",
+  "stimulus": "Đọc đoạn văn sau và trả lời các câu hỏi...",
   "questions": [
     {
       "stem": "Ý chính của đoạn văn là gì?",

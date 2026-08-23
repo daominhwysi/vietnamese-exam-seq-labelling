@@ -53,7 +53,7 @@ Given raw exam text (possibly from OCR), label each token with one of the entity
 | `B-stem` / `I-stem` | Main question body text |
 | `B-option_label` / `I-option_label` | Option letter prefixes (`A.`, `B.`, `a)`) |
 | `B-option_text` / `I-option_text` | Option content text |
-| `B-context` / `I-context` | Shared passage / context block for group questions |
+| `B-stimulus` / `I-stimulus` | Shared reading passage / stimulus block for group questions |
 | `B-section` / `I-section` | Section headers and exam directions |
 
 ## Data Fields
@@ -142,7 +142,13 @@ def upload_dataset(token=None, repo_id=None, dataset_dir=None):
     if not token:
         token = os.getenv("HF_TOKEN")
     if not token:
-        print("Error: HF_TOKEN not found in environment.")
+        try:
+            from huggingface_hub import get_token
+            token = get_token()
+        except ImportError:
+            pass
+    if not token:
+        print("Error: HF_TOKEN not found in environment or huggingface-cli cache. Please log in with `hf auth login` or set HF_TOKEN.")
         sys.exit(1)
 
     if not repo_id:

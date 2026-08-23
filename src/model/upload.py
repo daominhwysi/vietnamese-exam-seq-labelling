@@ -86,7 +86,7 @@ datasets:
 
 # Vietnamese Exam Sequence Labeller
 
-A **token classification** model for automatically segmenting Vietnamese educational exam papers into structured components (question labels, stems, option labels, option texts, contexts, and section headers).
+A **token classification** model for automatically segmenting Vietnamese educational exam papers into structured components (question labels, stems, option labels, option texts, stimuli, and section headers).
 
 {lora_note}
 
@@ -186,7 +186,14 @@ def upload_model(
         token = os.getenv("HF_TOKEN")
 
     if not token:
-        print("Error: HF_TOKEN not found. Set it in your environment or pass --token.")
+        try:
+            from huggingface_hub import get_token
+            token = get_token()
+        except ImportError:
+            pass
+
+    if not token:
+        print("Error: HF_TOKEN not found in environment or huggingface-cli cache. Please log in with `hf auth login` or set HF_TOKEN.")
         sys.exit(1)
 
     # -- Validate model directory ------------------------------------------
@@ -231,7 +238,7 @@ def upload_model(
             "stem",
             "option_label",
             "option_text",
-            "context",
+            "stimulus",
             "section",
         ]
         label_list = ["O"] + [

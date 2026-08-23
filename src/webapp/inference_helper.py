@@ -221,7 +221,7 @@ class ModelManager:
             pass
 
         # Default fallback standard tag mapping
-        base_tags = ["question_label", "stem", "option_label", "option_text", "context", "section"]
+        base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section"]
         tag_to_id = {"O": 0}
         for tag in base_tags:
             tag_to_id[f"B-{tag}"] = len(tag_to_id)
@@ -508,7 +508,17 @@ def build_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
     Reconstructs the full raw text with inline XML tags around each labeled span.
     Uses sorting to avoid overlapping issues and insert XML tags correctly.
     """
-    sorted_spans = sorted(spans, key=lambda x: (x["start"], -x["end"]))
+    valid_spans = []
+    for span in spans:
+        label = span["label"]
+        text = span["text"].strip()
+        if not text:
+            continue
+        if label in ["option_label", "question_label"] and not any(c.isalnum() for c in text):
+            continue
+        valid_spans.append(span)
+
+    sorted_spans = sorted(valid_spans, key=lambda x: (x["start"], -x["end"]))
     
     result = []
     cursor = 0
@@ -547,8 +557,10 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
         text = span["text"].strip()
         if not text:
             continue
+        if label in ["option_label", "question_label"] and not any(c.isalnum() for c in text):
+            continue
             
-        if label == "context":
+        if label in ["stimulus", "context"]:
             current_context = text
             
         elif label == "question_label":
@@ -556,6 +568,7 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
                 questions.append(current_question)
             current_question = {
                 "question_label": text,
+                "stimulus": current_context,
                 "context": current_context,
                 "stem": "",
                 "options": [],
@@ -600,11 +613,23 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
         
     cleaned_questions = []
     for q in questions:
+        q_label = q["question_label"]
+        stem = q["stem"]
+        stimulus = q.get("stimulus") or q.get("context", "")
+
+        # Fallback: Recover question label if it leaked into stem or was unclassified
+        if not q_label and stem:
+            prefix_match = re.match(r'^(?:\*\*)?(?:Question|Câu|Bài|Q)\s*\d+[\s:.)-]*(?:\*\*)?\s*', stem, re.IGNORECASE)
+            if prefix_match:
+                q_label = prefix_match.group(0).strip()
+                stem = stem[prefix_match.end():].strip()
+
         cleaned_options = [opt["full"] for opt in q["options"]]
         cleaned_questions.append({
-            "label": q["question_label"],
-            "context": q["context"],
-            "stem": q["stem"],
+            "label": q_label,
+            "stimulus": stimulus,
+            "context": stimulus,
+            "stem": stem,
             "options": cleaned_options,
             "raw_options": q["options"]
         })

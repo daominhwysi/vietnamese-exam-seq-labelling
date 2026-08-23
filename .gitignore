@@ -7,3 +7,4 @@ output_reconstructed/
 v1_data/
 logs/*.jsonl
 /src/logs
+inference_output/

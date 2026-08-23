@@ -51,9 +51,9 @@ def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
     if group_match:
         group_content = group_match.group(1)
         
-        # Extract context
-        context_match = re.search(r"<context\s*>(.*?)</context\s*>", group_content, re.DOTALL | re.IGNORECASE)
-        context = clean_text(context_match.group(1)) if context_match else ""
+        # Extract stimulus (or legacy context)
+        stimulus_match = re.search(r"<(?:stimulus|context)\s*>(.*?)</(?:stimulus|context)\s*>", group_content, re.DOTALL | re.IGNORECASE)
+        stimulus = clean_text(stimulus_match.group(1)) if stimulus_match else ""
         
         # Extract all sub-questions
         question_matches = re.findall(r"<question\s*>(.*?)</question\s*>", group_content, re.DOTALL | re.IGNORECASE)
@@ -84,7 +84,8 @@ def parse_question_xml(xml_content: str) -> Optional[Dict[str, Any]]:
             
         return {
             "is_group": True,
-            "context": context,
+            "stimulus": stimulus,
+            "context": stimulus,
             "questions": questions
         }
 

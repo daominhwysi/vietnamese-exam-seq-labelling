@@ -230,8 +230,34 @@ class TestReconstructor(unittest.TestCase):
         # Check slice matches
         for span in spans:
             self.assertEqual(raw_text[span["start"]:span["end"]], span["text"])
+        self.assertEqual(spans[0]["label"], "stimulus")
+        self.assertEqual(spans[0]["text"], "Đây là ngữ cảnh chung.")
 
-    def test_deterministic_seeding(self):
+    def test_group_question_with_stimulus_field(self):
+        q_data = {
+            "is_group": True,
+            "stimulus": "Đoạn văn đọc hiểu chung.",
+            "questions": [
+                {
+                    "stem": "Câu hỏi 1",
+                    "options": ["A", "B"]
+                }
+            ],
+            "question_type": "group_multiple_choice",
+            "subject": "literature",
+            "grade": 11,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            question_prefix_template="Câu {num}: ",
+            option_prefix_style="capital_dot",
+            separator_stimulus_questions="\n",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        spans = enriched["spans"]
+        self.assertEqual(spans[0]["label"], "stimulus")
+        self.assertEqual(spans[0]["text"], "Đoạn văn đọc hiểu chung.")
         q_data = {
             "is_group": False,
             "stem": "Hỏi han gì đó...",

@@ -51,6 +51,10 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             --border-option_text: #10b981;
             --text-option_text: #6ee7b7;
             
+            --color-stimulus: rgba(244, 63, 94, 0.25);
+            --border-stimulus: #f43f5e;
+            --text-stimulus: #fda4af;
+
             --color-context: rgba(244, 63, 94, 0.25);
             --border-context: #f43f5e;
             --text-context: #fda4af;
@@ -166,10 +170,10 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             border: 1px solid var(--border-option_text);
             color: var(--text-option_text);
         }}
-        .tag-context {{
-            background-color: var(--color-context);
-            border: 1px solid var(--border-context);
-            color: var(--text-context);
+        .tag-stimulus, .tag-context {{
+            background-color: var(--color-stimulus);
+            border: 1px solid var(--border-stimulus);
+            color: var(--text-stimulus);
         }}
         .tag-section {{
             background-color: var(--color-section);
@@ -295,7 +299,7 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             <div class="legend-item tag-stem">Stem (Question Text)</div>
             <div class="legend-item tag-option_label">Option Label</div>
             <div class="legend-item tag-option_text">Option Text</div>
-            <div class="legend-item tag-context">Context Passage</div>
+            <div class="legend-item tag-stimulus">Stimulus Passage</div>
             <div class="legend-item tag-section">Section Header</div>
         </div>
 

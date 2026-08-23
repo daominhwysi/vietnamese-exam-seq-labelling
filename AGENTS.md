@@ -40,9 +40,9 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `incremental_train.py` - Performs incremental/continual training on an existing adapter model.
   - `get_balance.py` - Fetches DeepSeek API balance from the environment.
   - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
-  - `inspect_exam_spans.py` - Inspects annotated exam tag distributions and span content previews.
-  - `inference_onnx.py` - Runs sequence labeling inference using ONNX Runtime without PyTorch.
   - `benchmark_augmentation.py` - Benchmarks online data augmentation latency and CPU vs GPU throughput.
+  - `test_raw_exams/` - Sample raw exam text documents for batch inference testing.
+  - `inference_output/` - Output directory containing segmented JSON, predictions TXT, and tagged XML outputs from batch inference.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
@@ -141,7 +141,7 @@ Synthetic question outputs are saved under `output/` as: `question_{subject}_g{g
 ```json
 {
   "is_group": true,
-  "context": "string — shared passage/context text (LaTeX formulas in $...$)",
+  "stimulus": "string — shared reading passage/stimulus text (LaTeX formulas in $...$)",
   "questions": [
     {
       "stem": "string — sub-question stem",
@@ -165,7 +165,8 @@ During dataset preparation (Stage 5), text tokens are aligned to character spans
 - `stem`: Labels the main text body of a question/sub-question (including ordering items if present).
 - `option_label`: Labels options letters/prefixes (e.g. "A.", "B.", "a)")
 - `option_text`: Labels the textual content of options.
-- `context`: Labels the shared passage/context block in group questions.
+- `stimulus`: Labels the shared reading passage / stimulus block in group questions.
+- `section`: Labels section headers and test instructions.
 
 # Privacy and Security Rules
 

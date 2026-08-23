@@ -179,8 +179,13 @@ def main():
 
     # 7. inference
     p_inf = subparsers.add_parser("inference", help="Stage 7: Run inference on sample inputs using trained model")
-    p_inf.add_argument("--model_dir", type=str, default="./results", help="Model adapter directory")
+    p_inf.add_argument("--model_dir", "-m", type=str, default="./results", help="Model adapter/checkpoint directory or HF repo")
     p_inf.add_argument("--base_model_name", type=str, default=None, help="HF base model name")
+    p_inf.add_argument("--text", "-t", type=str, default=None, help="Direct text input string to segment")
+    p_inf.add_argument("--file", "-f", type=str, default=None, help="Input text file path to segment")
+    p_inf.add_argument("--output", "-o", type=str, default=None, help="Output file path (.json, .xml, or .txt)")
+    p_inf.add_argument("--max-length", type=int, default=1024, help="Sliding window token length (default: 1024)")
+    p_inf.add_argument("--stride", type=int, default=256, help="Sliding window stride (default: 256)")
 
     # 8. upload (dataset)
     p_upl = subparsers.add_parser("upload", help="Upload dataset splits to Hugging Face Hub")
@@ -305,7 +310,15 @@ def main():
 
     elif args.command == "inference":
         from src.inference.predict import run_inference
-        run_inference(model_dir=args.model_dir, base_model_name=args.base_model_name)
+        run_inference(
+            model_dir=args.model_dir,
+            base_model_name=args.base_model_name,
+            text=args.text,
+            file_path=args.file,
+            output_path=args.output,
+            max_length=args.max_length,
+            stride=args.stride
+        )
 
     elif args.command == "upload":
         from src.data.upload import upload_dataset
