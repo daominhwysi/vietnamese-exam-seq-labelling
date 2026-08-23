@@ -2,6 +2,8 @@
 import os
 import sys
 import json
+import time
+import datetime
 import argparse
 import numpy as np
 import torch
@@ -165,6 +167,18 @@ def parse_args():
         type=str,
         default="vietnamese-exam-seq-labelling",
         help="Weights & Biases project name"
+    )
+    parser.add_argument(
+        "--logs_per_epoch",
+        type=int,
+        default=10,
+        help="Number of log outputs per epoch (default: 10). Dynamically calculates logging_steps."
+    )
+    parser.add_argument(
+        "--logging_steps",
+        type=int,
+        default=None,
+        help="Explicit number of update steps between logging metrics (overrides logs_per_epoch if specified)"
     )
     return parser.parse_args()
 
@@ -427,6 +441,22 @@ def run_train(args):
 
     ta_sig = inspect.signature(TrainingArguments.__init__)
 
+    # Dynamically compute logging_steps from logs_per_epoch unless explicitly overridden
+    effective_batch = args.batch_size * max(1, getattr(args, "gradient_accumulation_steps", 1))
+    steps_per_epoch = max(1, len(dataset["train"]) // effective_batch)
+
+    if getattr(args, "logging_steps", None) is not None and args.logging_steps > 0:
+        dynamic_logging_steps = args.logging_steps
+    else:
+        logs_per_epoch = max(1, getattr(args, "logs_per_epoch", 10))
+        dynamic_logging_steps = max(1, steps_per_epoch // logs_per_epoch)
+
+    print(
+        f"[Logger Config] Steps per epoch: {steps_per_epoch}, "
+        f"Logs per epoch: {getattr(args, 'logs_per_epoch', 10)}, "
+        f"Effective logging_steps: {dynamic_logging_steps}"
+    )
+
     training_args_dict = {
         "output_dir": args.output_dir,
         "num_train_epochs": args.epochs,
@@ -436,7 +466,8 @@ def run_train(args):
         "weight_decay": args.weight_decay,
         "save_strategy": "epoch",
         "logging_strategy": "steps",
-        "logging_steps": 50,
+        "logging_steps": dynamic_logging_steps,
+        "disable_tqdm": True,
         "load_best_model_at_end": True,
         "metric_for_best_model": "f1" if "seqeval" in sys.modules or "seqeval" in globals() else "accuracy",
         "greater_is_better": True,
@@ -468,8 +499,6 @@ def run_train(args):
         training_args_dict["warmup_steps"] = warmup_steps_val
     elif warmup_ratio_val > 0.0:
         # Convert warmup_ratio to warmup_steps for versions without warmup_ratio
-        effective_batch = args.batch_size * max(1, getattr(args, "gradient_accumulation_steps", 1))
-        steps_per_epoch = max(1, len(dataset["train"]) // effective_batch)
         total_steps = steps_per_epoch * args.epochs
         training_args_dict["warmup_steps"] = max(1, int(total_steps * warmup_ratio_val))
 
@@ -608,58 +637,105 @@ def run_train(args):
 
     trainer = WeightedTrainer(class_weights=class_weights, real_upsample_factor=real_upsample_factor, **trainer_kwargs)
 
-    # 10.8 Replace default progress/printer callbacks with clean real-time tqdm loss updates
+    # 10.8 Replace default progress/printer callbacks with clean discrete iteration logger
     from transformers.trainer_callback import PrinterCallback, ProgressCallback
     trainer.remove_callback(ProgressCallback)
     trainer.remove_callback(PrinterCallback)
 
     from transformers import TrainerCallback
-    from tqdm import tqdm
 
-    class LossProgressCallback(TrainerCallback):
-        def __init__(self):
-            self.training_bar = None
-            self.loss = None
+    class IterLoggerCallback(TrainerCallback):
+        """
+        Discrete iteration-based logger replacing tqdm to eliminate browser lag
+        from frequent ANSI carriage returns (\r) and terminal repaints.
+        """
+        def __init__(self, logs_per_epoch: int = 10):
+            self.logs_per_epoch = max(1, logs_per_epoch)
+            self.train_start_time = None
+            self.last_log_time = None
+            self.last_log_step = 0
 
         def on_train_begin(self, args, state, control, **kwargs):
             if state.is_world_process_zero:
-                self.training_bar = tqdm(total=state.max_steps, desc="Training", dynamic_ncols=True)
-
-        def on_step_end(self, args, state, control, **kwargs):
-            if state.is_world_process_zero and self.training_bar is not None:
-                self.training_bar.update(1)
+                self.train_start_time = time.time()
+                self.last_log_time = self.train_start_time
+                self.last_log_step = 0
+                print("=" * 80)
+                print(
+                    f"Starting Training: Total Steps = {state.max_steps} | "
+                    f"Epochs = {args.num_train_epochs} | "
+                    f"Batch Size = {args.per_device_train_batch_size} | "
+                    f"Logging Steps = {args.logging_steps}"
+                )
+                print("=" * 80, flush=True)
 
         def on_log(self, args, state, control, logs=None, **kwargs):
-            if state.is_world_process_zero and logs is not None:
-                # Capture running training loss
-                if "loss" in logs:
-                    self.loss = logs["loss"]
-                lr = logs.get("learning_rate", None)
+            if not state.is_world_process_zero or logs is None:
+                return
+
+            now = time.time()
+            is_eval = any(k.startswith("eval_") for k in logs) or "train_loss" in logs
+
+            if is_eval:
+                epoch_val = logs.get("epoch", state.epoch if state.epoch is not None else 0.0)
+                eval_metrics = []
+                if "eval_loss" in logs:
+                    eval_metrics.append(f"loss: {logs['eval_loss']:.4f}")
+                for metric in ["eval_f1", "eval_accuracy", "eval_precision", "eval_recall"]:
+                    if metric in logs:
+                        eval_metrics.append(f"{metric.replace('eval_', '')}: {logs[metric]:.4f}")
+                if "eval_runtime" in logs:
+                    eval_metrics.append(f"time: {logs['eval_runtime']:.2f}s")
                 
-                # Update progress bar postfix for training logs
-                if self.training_bar is not None and ("loss" in logs or "learning_rate" in logs):
-                    postfix = {}
-                    if self.loss is not None:
-                        postfix["loss"] = f"{self.loss:.4f}" if isinstance(self.loss, (int, float)) else str(self.loss)
-                    if lr is not None:
-                        postfix["lr"] = f"{lr:.2e}"
-                    self.training_bar.set_postfix(postfix)
-                
-                # Check for evaluation or final metrics (which don't have learning_rate)
-                # and write them cleanly using tqdm.write so the bar isn't corrupted
-                is_eval = any(k.startswith("eval_") for k in logs)
-                if is_eval or "train_loss" in logs:
-                    import json
-                    # Format log cleanly
-                    formatted_log = {k: f"{v:.4f}" if isinstance(v, float) else v for k, v in logs.items() if k != "epoch"}
-                    formatted_log["epoch"] = f"{logs.get('epoch', 0.0):.2f}"
-                    tqdm.write(json.dumps(formatted_log))
+                print(f">>> [Evaluation @ Step {state.global_step:>5} | Epoch {epoch_val:5.2f}] " + " | ".join(eval_metrics), flush=True)
+            elif "loss" in logs or "learning_rate" in logs:
+                step = state.global_step
+                max_steps = max(1, state.max_steps)
+                pct = (step / max_steps) * 100.0
+                epoch_val = logs.get("epoch", state.epoch if state.epoch is not None else 0.0)
+
+                elapsed_sec = int(now - self.train_start_time) if self.train_start_time else 0
+                step_delta = step - self.last_log_step
+                time_delta = now - self.last_log_time if self.last_log_time else 0.0
+
+                it_speed = (step_delta / time_delta) if time_delta > 0 else ((step / elapsed_sec) if elapsed_sec > 0 else 0.0)
+                overall_speed = (step / elapsed_sec) if elapsed_sec > 0 else 0.0
+                remaining_steps = max(0, max_steps - step)
+                eta_sec = int(remaining_steps / overall_speed) if overall_speed > 0 else 0
+
+                elapsed_fmt = str(datetime.timedelta(seconds=elapsed_sec))
+                eta_fmt = str(datetime.timedelta(seconds=eta_sec))
+
+                loss_val = logs.get("loss", "N/A")
+                loss_str = f"{loss_val:.4f}" if isinstance(loss_val, (int, float)) else str(loss_val)
+                lr_val = logs.get("learning_rate", None)
+                lr_str = f"{lr_val:.2e}" if isinstance(lr_val, (int, float)) else "N/A"
+
+                self.last_log_step = step
+                self.last_log_time = now
+
+                print(
+                    f"[Step {step:>5}/{max_steps} | Epoch {epoch_val:5.2f}/{args.num_train_epochs:.2f} ({pct:5.1f}%)] "
+                    f"Loss: {loss_str} | LR: {lr_str} | Speed: {it_speed:5.2f} it/s | "
+                    f"Elapsed: {elapsed_fmt} | ETA: {eta_fmt}",
+                    flush=True
+                )
+
+        def on_epoch_end(self, args, state, control, **kwargs):
+            if state.is_world_process_zero:
+                current_epoch = int(round(state.epoch)) if state.epoch is not None else 1
+                total_epochs = int(args.num_train_epochs)
+                print(f"--- Epoch {current_epoch}/{total_epochs} completed ---", flush=True)
 
         def on_train_end(self, args, state, control, **kwargs):
-            if self.training_bar is not None:
-                self.training_bar.close()
+            if state.is_world_process_zero and self.train_start_time:
+                total_sec = int(time.time() - self.train_start_time)
+                total_fmt = str(datetime.timedelta(seconds=total_sec))
+                print("=" * 80)
+                print(f"Training Completed: Total Steps = {state.global_step} | Total Time = {total_fmt}")
+                print("=" * 80, flush=True)
 
-    trainer.add_callback(LossProgressCallback())
+    trainer.add_callback(IterLoggerCallback(logs_per_epoch=getattr(args, "logs_per_epoch", 10)))
 
     # 11. Run Training
     print("Starting training...")

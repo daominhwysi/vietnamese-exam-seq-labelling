@@ -76,6 +76,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "logging": {
             "report_to": "none",
             "wandb_project": "vietnamese-exam-seq-labelling",
+            "logs_per_epoch": 10,
         },
     },
     "generation": {
