@@ -601,11 +601,23 @@ def parse_segments_to_questions(spans: List[Dict[str, Any]]) -> List[Dict[str, A
         
     cleaned_questions = []
     for q in questions:
+        q_label = q["question_label"]
+        stem = q["stem"]
+        stimulus = q.get("stimulus") or q.get("context", "")
+
+        # Fallback: Recover question label if it leaked into stem or was unclassified
+        if not q_label and stem:
+            prefix_match = re.match(r'^(?:\*\*)?(?:Question|Câu|Bài|Q)\s*\d+[\s:.)-]*(?:\*\*)?\s*', stem, re.IGNORECASE)
+            if prefix_match:
+                q_label = prefix_match.group(0).strip()
+                stem = stem[prefix_match.end():].strip()
+
         cleaned_options = [opt["full"] for opt in q["options"]]
         cleaned_questions.append({
-            "label": q["question_label"],
-            "context": q["context"],
-            "stem": q["stem"],
+            "label": q_label,
+            "stimulus": stimulus,
+            "context": stimulus,
+            "stem": stem,
             "options": cleaned_options,
             "raw_options": q["options"]
         })

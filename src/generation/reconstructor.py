@@ -9,12 +9,21 @@ from src.webapp.inference_helper import is_valid_latex
 DEFAULT_QUESTION_PREFIXES = [
     "Câu {num}: ",
     "Câu {num}. ",
-    "Question {num}: ",
-    "Question {num}. ",
     "C{num}: ",
     "C{num}. ",
+    "{num}. ",
+    "{num}: ",
+    "{num}) "
+]
+
+ENGLISH_QUESTION_PREFIXES = [
+    "Question {num}: ",
+    "Question {num}. ",
+    "**Question {num}:** ",
+    "**Question {num}.** ",
     "Q{num}: ",
     "Q{num}. ",
+    "Q.{num}: ",
     "{num}. ",
     "{num}: ",
     "{num}) "
@@ -353,7 +362,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
     
     q_prefix_tpl = config.question_prefix_template
     if q_prefix_tpl is None:
-        q_prefix_tpl = rng.choice(DEFAULT_QUESTION_PREFIXES)
+        if q_data.get("subject") == "english":
+            q_prefix_tpl = rng.choice(ENGLISH_QUESTION_PREFIXES)
+        else:
+            q_prefix_tpl = rng.choice(DEFAULT_QUESTION_PREFIXES)
     q_prefix_tpl = augment_q_prefix_tpl(q_prefix_tpl, config, rng, q_data.get("subject", ""))
         
     opt_style_name = config.option_prefix_style
