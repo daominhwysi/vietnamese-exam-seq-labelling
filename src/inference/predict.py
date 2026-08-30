@@ -261,10 +261,22 @@ def predict_text(
             current_label = label[2:]
             current_start = start
             current_end = end
-        elif label.startswith("I-") and current_label == label[2:]:
-            if current_start == -1:
+        elif label.startswith("I-"):
+            tag_name = label[2:]
+            if current_label == tag_name:
+                current_end = end
+            else:
+                if current_label and current_start < current_end:
+                    segments.append({
+                        "label": current_label,
+                        "start": current_start,
+                        "end": current_end,
+                        "text": text[current_start:current_end].strip()
+                    })
+                # Auto-promote orphaned I-tag to start a new segment
+                current_label = tag_name
                 current_start = start
-            current_end = end
+                current_end = end
         else:
             if current_label and current_start < current_end:
                 segments.append({
@@ -340,7 +352,7 @@ def load_inference_model(model_dir: str, base_model_name: str = None, device: st
         tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=True)
         print(f"Loaded tokenizer from: {model_dir}")
     except Exception:
-        fallback_base = base_model_name or "jhu-clsp/mmBERT-small"
+        fallback_base = base_model_name or "jhu-clsp/mmBERT-base"
         print(f"Local tokenizer not found, loading base: {fallback_base}...")
         tokenizer = AutoTokenizer.from_pretrained(fallback_base, use_fast=True)
         special_tokens = ["<blank />", "<blank/>", "[BLANK]", "[LATEX]"]
@@ -349,21 +361,40 @@ def load_inference_model(model_dir: str, base_model_name: str = None, device: st
     # 2. Load Label Mappings
     tag_to_id, id_to_tag = load_label_mapping(model_dir)
 
-    # 3. Detect and Load Model (LoRA adapter vs. Full Fine-Tuned Checkpoint)
+    # 3. Detect and Load Model (Enhanced Head vs. LoRA adapter vs. Full Fine-Tuned Checkpoint)
     is_lora = False
-    if os.path.exists(os.path.join(model_dir, "adapter_config.json")):
+    has_enhanced_head = False
+
+    if os.path.exists(os.path.join(model_dir, "enhanced_head_config.json")):
+        has_enhanced_head = True
+    elif os.path.exists(os.path.join(model_dir, "adapter_config.json")):
         is_lora = True
     else:
         try:
             from huggingface_hub import file_exists
-            is_lora = file_exists(repo_id=model_dir, filename="adapter_config.json")
+            if file_exists(repo_id=model_dir, filename="enhanced_head_config.json"):
+                has_enhanced_head = True
+            elif file_exists(repo_id=model_dir, filename="adapter_config.json"):
+                is_lora = True
         except Exception:
-            is_lora = False
+            pass
 
-    if is_lora:
+    if has_enhanced_head:
+        print("Detected Enhanced Head model checkpoint. Loading with EnhancedTokenClassifierModel...")
+        from src.model.head import EnhancedTokenClassifierModel
+        model = EnhancedTokenClassifierModel.from_pretrained(
+            model_dir,
+            num_labels=len(tag_to_id),
+            id2label=id_to_tag,
+            label2id=tag_to_id
+        )
+        if hasattr(model.config, "id2label") and model.config.id2label:
+            id_to_tag = {int(k): v for k, v in model.config.id2label.items()}
+            tag_to_id = {v: k for k, v in id_to_tag.items()}
+    elif is_lora:
         print("Detected PEFT/LoRA adapter model.")
         from peft import PeftModel
-        detected_base = base_model_name or "jhu-clsp/mmBERT-small"
+        detected_base = base_model_name or "jhu-clsp/mmBERT-base"
         if os.path.exists(os.path.join(model_dir, "adapter_config.json")):
             try:
                 with open(os.path.join(model_dir, "adapter_config.json"), "r", encoding="utf-8") as f:
@@ -458,7 +489,7 @@ def run_inference(
 def main():
     parser = argparse.ArgumentParser(description="Exam Document Sequence Labeling Inference")
     parser.add_argument("-m", "--model-dir", type=str, default="./results", help="Path to model checkpoint or HF repo ID (default: './results' with fallback to HF)")
-    parser.add_argument("--base-model-name", type=str, default="jhu-clsp/mmBERT-small", help="Base model identifier")
+    parser.add_argument("--base-model-name", type=str, default="jhu-clsp/mmBERT-base", help="Base model identifier")
     parser.add_argument("-t", "--text", type=str, default=None, help="Direct text input string to segment")
     parser.add_argument("-f", "--file", type=str, default=None, help="Input text file path to segment")
     parser.add_argument("-o", "--output", type=str, default=None, help="Output file path (.json, .xml, or .txt)")

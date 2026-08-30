@@ -119,12 +119,12 @@ def run_benchmark(num_iterations: int = 1000):
     print("=" * 60)
 
     # 1. Load Tokenizer
-    tokenizer_name = "aisingapore/SEA-LION-ModernBERT-300M"
+    tokenizer_name = "jhu-clsp/mmBERT-base"
     print(f"Loading tokenizer '{tokenizer_name}'...")
     try:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, use_fast=True)
     except Exception:
-        tokenizer_name = "xlm-roberta-base"
+        tokenizer_name = "jhu-clsp/mmBERT-base"
         print(f"Falling back to '{tokenizer_name}'...")
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, use_fast=True)
 

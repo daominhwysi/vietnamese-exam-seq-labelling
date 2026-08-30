@@ -98,6 +98,7 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
     """
     Groups contiguous token classifications using the offset mapping to extract
     exact text segments from the original raw string. Skips masked/ignored tokens.
+    Implements a robust BIO state machine with automatic orphaned I-tag promotion.
     """
     segments = []
     current_label = None
@@ -122,12 +123,23 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
             current_label = label[2:]
             current_start = start
             current_end = end
-        elif label.startswith("I-") and current_label == label[2:]:
-            # Extend the current segment
-            if current_start == -1:
+        elif label.startswith("I-"):
+            tag_name = label[2:]
+            if current_label == tag_name:
+                # Extend the current segment
+                current_end = end
+            else:
+                # Save the previous segment if tracking
+                if current_label and current_start < current_end:
+                    segments.append({
+                        "label": current_label,
+                        "text": raw_text[current_start:current_end].strip()
+                    })
+                # Auto-promote orphaned I-tag to start a new segment
+                current_label = tag_name
                 current_start = start
-            current_end = end
-        else:  # Outside tag "O" or mismatching tag
+                current_end = end
+        else:  # Outside tag "O" or non-entity tag
             if current_label and current_start < current_end:
                 segments.append({
                     "label": current_label,
@@ -222,8 +234,8 @@ def main():
     parser.add_argument(
         "--base-model-name",
         type=str,
-        default="jhu-clsp/mmBERT-small",
-        help="Base model/tokenizer name used (default: 'jhu-clsp/mmBERT-small')"
+        default="jhu-clsp/mmBERT-base",
+        help="Base model/tokenizer name used (default: 'jhu-clsp/mmBERT-base')"
     )
     parser.add_argument(
         "--max-length",
@@ -277,11 +289,24 @@ def main():
     tag_to_id, id_to_tag = load_label_mapping(model_dir)
     print(f"Loaded {len(tag_to_id)} labels.")
     
-    # 3. Load Model (Supports both full fine-tuned and PEFT/LoRA adapters)
+    # 3. Load Model (Supports Enhanced Head, full fine-tuned, and PEFT/LoRA adapters)
     print(f"Loading model weights from: {model_dir}...")
     is_lora = os.path.exists(os.path.join(model_dir, "adapter_config.json"))
+    has_enhanced_head = os.path.exists(os.path.join(model_dir, "enhanced_head_config.json"))
     
-    if is_lora:
+    if has_enhanced_head:
+        print("Detected Enhanced Head model checkpoint. Loading with EnhancedTokenClassifierModel...")
+        from src.model.head import EnhancedTokenClassifierModel
+        model = EnhancedTokenClassifierModel.from_pretrained(
+            model_dir,
+            num_labels=len(tag_to_id),
+            id2label=id_to_tag,
+            label2id=tag_to_id
+        )
+        if hasattr(model.config, "id2label") and model.config.id2label:
+            id_to_tag = {int(k): v for k, v in model.config.id2label.items()}
+            tag_to_id = {v: k for k, v in id_to_tag.items()}
+    elif is_lora:
         print("Detected LoRA adapter checkpoint. Loading base model first...")
         # Auto-detect base model name from adapter config
         base_model_name = args.base_model_name

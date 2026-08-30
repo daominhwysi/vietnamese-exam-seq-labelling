@@ -6,9 +6,9 @@
 # 1. Base Model & Tokenizer Configuration
 # ------------------------------------------------------------------------------
 model:
-  # Default base model / tokenizer for sequence labeling (mmBERT-small: 140M params, 42M non-embedding)
-  name: "jhu-clsp/mmBERT-small"
-  tokenizer_name: "jhu-clsp/mmBERT-small"
+  # Default base model / tokenizer for sequence labeling (mmBERT-base: 280M params, 86M non-embedding)
+  name: "jhu-clsp/mmBERT-base"
+  tokenizer_name: "jhu-clsp/mmBERT-base"
   max_sequence_length: 8192
   
   # LaTeX placeholder used to mask complex math equations during tokenization/labeling
@@ -188,5 +188,5 @@ webapp:
 # ------------------------------------------------------------------------------
 huggingface:
   dataset_repo_id: "daominhwysi/synthetic-seq-labelling-vi-exam-v2"
-  model_repo_id: "daominhwysi/mmbert-small-vi-exam-seq-labeling"
+  model_repo_id: "daominhwysi/mmbert-base-vi-exam-seq-labeling"
   private: false

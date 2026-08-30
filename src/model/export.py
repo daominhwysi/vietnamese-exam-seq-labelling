@@ -48,7 +48,7 @@ def main():
                 print(f"Error reading adapter config: {e}")
         
     if not base_model_name:
-        base_model_name = "jhu-clsp/mmBERT-small"
+        base_model_name = "jhu-clsp/mmBERT-base"
         print(f"Fallback to default base model: {base_model_name}")
 
     # 2. Load tokenizer correctly (bypassing TokenizersBackend error)
@@ -81,6 +81,16 @@ def main():
         model = PeftModel.from_pretrained(base_model, model_dir)
         print("Merging LoRA weights into base model...")
         merged_model = model.merge_and_unload()
+    elif os.path.exists(os.path.join(model_dir, "enhanced_head_config.json")):
+        print(f"Loading full fine-tuned Enhanced Head model directly from: {model_dir}...")
+        from src.model.head import EnhancedTokenClassifierModel
+        merged_model = EnhancedTokenClassifierModel.from_pretrained(
+            model_dir,
+            num_labels=len(tag_to_id),
+            id2label=id_to_tag,
+            label2id=tag_to_id
+        )
+        merged_model.resize_token_embeddings(len(tokenizer))
     else:
         print(f"No LoRA adapter config found at {adapter_config_path}.")
         print(f"Loading full fine-tuned model directly from: {model_dir}...")

@@ -148,8 +148,27 @@ class ModelManager:
                         except Exception:
                             is_lora = (model_path != base_model_name)
 
-                    # 5. Load PyTorch model
-                    if is_lora:
+                    # 5. Load PyTorch model (Check for Enhanced Head vs. LoRA vs. full fine-tune)
+                    has_enhanced = False
+                    if os.path.exists(os.path.join(model_path, "enhanced_head_config.json")):
+                        has_enhanced = True
+                    else:
+                        try:
+                            from huggingface_hub import file_exists
+                            has_enhanced = file_exists(repo_id=model_path, filename="enhanced_head_config.json")
+                        except Exception:
+                            pass
+
+                    if has_enhanced:
+                        print(f"Loading Enhanced Head PyTorch model from: {model_path}...")
+                        from src.model.head import EnhancedTokenClassifierModel
+                        model = EnhancedTokenClassifierModel.from_pretrained(
+                            model_path,
+                            num_labels=len(tag_to_id),
+                            id2label=id_to_tag,
+                            label2id=tag_to_id
+                        )
+                    elif is_lora:
                         detected_base = base_model_name
                         # Read base model from config if possible
                         if os.path.exists(os.path.join(model_path, "adapter_config.json")):
@@ -441,10 +460,22 @@ def run_model_inference(
             current_label = label[2:]
             current_start = start
             current_end = end
-        elif label.startswith("I-") and current_label == label[2:]:
-            if current_start == -1:
+        elif label.startswith("I-"):
+            tag_name = label[2:]
+            if current_label == tag_name:
+                current_end = end
+            else:
+                if current_label and current_start < current_end:
+                    segments.append({
+                        "label": current_label,
+                        "start": current_start,
+                        "end": current_end,
+                        "text": raw_text[current_start:current_end]
+                    })
+                # Auto-promote orphaned I-tag to start a new segment
+                current_label = tag_name
                 current_start = start
-            current_end = end
+                current_end = end
         else:  # O tag
             if current_label and current_start < current_end:
                 segments.append({

@@ -694,8 +694,8 @@ def main():
     parser.add_argument(
         "--model",
         type=str,
-        default="aisingapore/SEA-LION-ModernBERT-300M",
-        help="Hugging Face model / tokenizer name (default: 'aisingapore/SEA-LION-ModernBERT-300M')"
+        default="jhu-clsp/mmBERT-base",
+        help="Hugging Face model / tokenizer name (default: 'jhu-clsp/mmBERT-base')"
     )
     parser.add_argument(
         "--latex-placeholder",

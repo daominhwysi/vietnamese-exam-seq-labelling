@@ -1,0 +1,42 @@
+{
+  "file_name": "random_math_exam.txt",
+  "original_text_length": 6163,
+  "segments": [
+    {
+      "label": "option_label",
+      "text": "a)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một hộp đựng"
+    },
+    {
+      "label": "option_label",
+      "text": "b)"
+    },
+    {
+      "label": "option_text",
+      "text": "Trong một hộp"
+    },
+    {
+      "label": "option_label",
+      "text": "c)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một bình"
+    },
+    {
+      "label": "option_label",
+      "text": "d)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một nhóm học sinh gồm"
+    },
+    {
+      "label": "section",
+      "text": "PHẦ"
+    }
+  ]
+}
