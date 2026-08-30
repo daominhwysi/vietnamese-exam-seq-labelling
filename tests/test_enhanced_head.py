@@ -101,5 +101,23 @@ class TestEnhancedHead(unittest.TestCase):
         self.assertEqual(output.logits.shape, (2, 8, 13))
         self.assertGreater(output.loss.item(), 0.0)
 
+    def test_gradient_checkpointing(self):
+        config = BertConfig(
+            vocab_size=100,
+            hidden_size=64,
+            num_hidden_layers=2,
+            num_attention_heads=2,
+            intermediate_size=128,
+            num_labels=13
+        )
+        base_model = BertModel(config)
+        model = EnhancedTokenClassifierModel(config=config, base_model=base_model)
+        
+        self.assertTrue(model.supports_gradient_checkpointing)
+        model.gradient_checkpointing_enable()
+        self.assertTrue(model.is_gradient_checkpointing)
+        model.gradient_checkpointing_disable()
+        self.assertFalse(model.is_gradient_checkpointing)
+
 if __name__ == "__main__":
     unittest.main()
