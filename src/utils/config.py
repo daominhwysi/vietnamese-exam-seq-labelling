@@ -10,8 +10,8 @@ DEFAULT_CONFIG_PATH = PROJECT_ROOT / "config.yaml"
 # Default configuration fallback
 DEFAULT_CONFIG: Dict[str, Any] = {
     "model": {
-        "name": "jhu-clsp/mmBERT-small",
-        "tokenizer_name": "jhu-clsp/mmBERT-small",
+        "name": "jhu-clsp/mmBERT-base",
+        "tokenizer_name": "jhu-clsp/mmBERT-base",
         "max_sequence_length": 8192,
         "latex_placeholder": "[LATEX]",
         "mask_latex_during_inference": True,
@@ -103,7 +103,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     },
     "huggingface": {
         "dataset_repo_id": "daominhwysi/synthetic-seq-labelling-vi-exam-v2",
-        "model_repo_id": "daominhwysi/mmbert-small-vi-exam-seq-labeling",
+        "model_repo_id": "daominhwysi/mmbert-base-vi-exam-seq-labeling",
         "private": False,
     },
 }

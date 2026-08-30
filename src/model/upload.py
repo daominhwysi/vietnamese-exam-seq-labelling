@@ -208,7 +208,7 @@ def upload_model(
     checkpoint_type = "LoRA adapter" if is_lora else "full fine-tuned model"
     print(f"Detected checkpoint type: {checkpoint_type}")
 
-    base_model = "aisingapore/SEA-LION-ModernBERT-300M"  # sensible default
+    base_model = "jhu-clsp/mmBERT-base"  # sensible default
     if is_lora:
         try:
             with open(adapter_cfg_path, "r", encoding="utf-8") as f:

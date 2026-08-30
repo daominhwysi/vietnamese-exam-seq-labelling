@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 class LoadModelRequest(BaseModel):
     model_path: str
-    base_model_name: str = "aisingapore/SEA-LION-ModernBERT-300M"
+    base_model_name: str = "jhu-clsp/mmBERT-base"
     device_choice: str = "auto"
 
 class InferenceRequest(BaseModel):

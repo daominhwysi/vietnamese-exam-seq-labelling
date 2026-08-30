@@ -1,6 +1,6 @@
 # Vietnamese Exam Sequence Labelling — Data Generation & Model Training Pipeline
 
-An end-to-end pipeline for generating curriculum-aligned synthetic Vietnamese exam data, annotating real OCR exam papers, building token-classification datasets, and fine-tuning LoRA-adapted sequence labelling models (XLM-RoBERTa, SEA-LION ModernBERT) on the Hugging Face ecosystem.
+An end-to-end pipeline for generating curriculum-aligned synthetic Vietnamese exam data, annotating real OCR exam papers, building token-classification datasets, and fine-tuning LoRA-adapted sequence labelling models (mmBERT-base, ModernBERT) on the Hugging Face ecosystem.
 
 ---
 
@@ -198,7 +198,7 @@ pixi run prepare-dataset -i output/exams -o output/dataset
 
 | Flag | Default | Description |
 |---|---|---|
-| `--model` | `aisingapore/SEA-LION-ModernBERT-300M` | Tokenizer to use |
+| `--model` | `jhu-clsp/mmBERT-base` | Tokenizer to use |
 | `--exam-level` | off | Process at exam level (vs. question level) |
 | `--max-len` | `512,768,1024,2048` | Sliding window sizes |
 | `--stride` | `128,192,256,512` | Overlap strides |
@@ -243,7 +243,7 @@ pixi run train \
 | Flag | Default | Description |
 |---|---|---|
 | `--repo_id` | `daominhwysi/synthetic-seq-labelling-vi-exam-v2` | HF dataset repo to load |
-| `--model_name` | `aisingapore/SEA-LION-ModernBERT-300M` | Base model |
+| `--model_name` | `jhu-clsp/mmBERT-base` | Base model |
 | `--lora_r` | `16` | LoRA rank |
 | `--lora_alpha` | `32` | LoRA alpha |
 | `--real-upsample-factor` | `1.0` | Weight multiplier for real samples (e.g. `5.0` = 5× more frequent) |
@@ -444,5 +444,5 @@ python scratch/check_xml_accuracy.py
 ## 🔗 Related Resources
 
 - **Dataset:** [daominhwysi/synthetic-seq-labelling-vi-exam-v2](https://huggingface.co/datasets/daominhwysi/synthetic-seq-labelling-vi-exam-v2)
-- **Model:** [daominhwysi/vi-exam-seq-labeller](https://huggingface.co/daominhwysi/vi-exam-seq-labeller)
-- **Base model:** [aisingapore/SEA-LION-ModernBERT-300M](https://huggingface.co/aisingapore/SEA-LION-ModernBERT-300M)
+- **Model:** [daominhwysi/mmbert-base-vi-exam-seq-labeling](https://huggingface.co/daominhwysi/mmbert-base-vi-exam-seq-labeling)
+- **Base model:** [jhu-clsp/mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base)

@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument(
         "--model_name",
         type=str,
-        default="jhu-clsp/mmBERT-small",
+        default="jhu-clsp/mmBERT-base",
         help="Hugging Face base model name"
     )
     parser.add_argument(
@@ -144,6 +144,30 @@ def parse_args():
         help="Warmup steps for learning rate scheduler"
     )
 
+    parser.add_argument(
+        "--enhanced-head",
+        action="store_true",
+        default=True,
+        help="Enable Enhanced Token Classification Head (Layer Pooling + Dense MLP + MSD + Focal Loss, default: True)"
+    )
+    parser.add_argument(
+        "--no-enhanced-head",
+        action="store_false",
+        dest="enhanced_head",
+        help="Disable Enhanced Head and use standard default linear head"
+    )
+    parser.add_argument(
+        "--focal-gamma",
+        type=float,
+        default=2.0,
+        help="Gamma focusing parameter for Focal Loss (default: 2.0)"
+    )
+    parser.add_argument(
+        "--label-smoothing",
+        type=float,
+        default=0.05,
+        help="Label smoothing factor for loss computation (default: 0.05)"
+    )
     parser.add_argument(
         "--no-class-weights",
         action="store_true",
@@ -359,16 +383,44 @@ def run_train(args):
     tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
 
     # 5. Initialize Model
-    print(f"Loading Model: '{args.model_name}' with dtype: {load_dtype}...")
-    from transformers import AutoModelForTokenClassification
-    model = AutoModelForTokenClassification.from_pretrained(
-        args.model_name,
-        num_labels=num_labels,
-        id2label={i: id_to_tag[i] for i in id_to_tag},
-        label2id=tag_to_id,
-        token=hf_token,
-        torch_dtype=load_dtype
-    )
+    use_enhanced = getattr(args, "enhanced_head", True)
+    if use_enhanced:
+        print(f"Loading Model with Enhanced Head: '{args.model_name}' (Layer Pooling + Dense MLP + MSD + Focal Loss)...")
+        from src.model.head import EnhancedTokenClassifierModel
+        from transformers import AutoModel, AutoConfig
+
+        config = AutoConfig.from_pretrained(
+            args.model_name,
+            num_labels=num_labels,
+            id2label={i: id_to_tag[i] for i in id_to_tag},
+            label2id=tag_to_id,
+            token=hf_token,
+        )
+        config.output_hidden_states = True
+        base_backbone = AutoModel.from_pretrained(
+            args.model_name,
+            config=config,
+            token=hf_token,
+            torch_dtype=load_dtype
+        )
+        model = EnhancedTokenClassifierModel(
+            config=config,
+            base_model=base_backbone,
+            num_layers_to_fuse=4,
+            focal_gamma=getattr(args, "focal_gamma", 2.0),
+            label_smoothing=getattr(args, "label_smoothing", 0.05)
+        )
+    else:
+        print(f"Loading Model: '{args.model_name}' with standard Linear head and dtype: {load_dtype}...")
+        from transformers import AutoModelForTokenClassification
+        model = AutoModelForTokenClassification.from_pretrained(
+            args.model_name,
+            num_labels=num_labels,
+            id2label={i: id_to_tag[i] for i in id_to_tag},
+            label2id=tag_to_id,
+            token=hf_token,
+            torch_dtype=load_dtype
+        )
 
     # Resize token embeddings to match tokenizer with added special tokens
     model.resize_token_embeddings(len(tokenizer))
@@ -394,29 +446,30 @@ def run_train(args):
             target_modules = ["query", "value"]
             print(f"Targeting standard attention modules: {target_modules}")
 
-        # Target the specific leaf layers to avoid PEFT double-matching parent/child modules.
-        # Note: We do NOT add the resized embedding layers ("tok_embeddings" / "word_embeddings") to
-        # modules_to_save because:
-        # 1. PEFT automatically handles saving resized embeddings when save_embedding_layers=True.
-        # 2. Including them in modules_to_save wraps them in ModulesToSaveWrapper, causing a key mismatch
-        #    (KeyError: '...modules_to_save.default.weight') when the trainer loads the best checkpoint.
-        # 3. Freezing the base embeddings during LoRA prevents training parameter dilution (ModernBERT's
-        #    vocab has 262k tokens, making the embedding layer 200M+ parameters) and reduces overfitting.
-        modules_to_save = ["classifier"]
-
-        peft_config = LoraConfig(
-            task_type=TaskType.TOKEN_CLS,
-            r=args.lora_r,
-            lora_alpha=args.lora_alpha,
-            lora_dropout=args.lora_dropout,
-            target_modules=target_modules,
-            modules_to_save=modules_to_save
-        )
-
-        model = get_peft_model(model, peft_config)
-        model.print_trainable_parameters()
+        if use_enhanced:
+            peft_config = LoraConfig(
+                task_type=TaskType.FEATURE_EXTRACTION,
+                r=args.lora_r,
+                lora_alpha=args.lora_alpha,
+                lora_dropout=args.lora_dropout,
+                target_modules=target_modules,
+            )
+            model.base_model = get_peft_model(model.base_model, peft_config)
+            model.base_model.print_trainable_parameters()
+        else:
+            modules_to_save = ["classifier"]
+            peft_config = LoraConfig(
+                task_type=TaskType.TOKEN_CLS,
+                r=args.lora_r,
+                lora_alpha=args.lora_alpha,
+                lora_dropout=args.lora_dropout,
+                target_modules=target_modules,
+                modules_to_save=modules_to_save
+            )
+            model = get_peft_model(model, peft_config)
+            model.print_trainable_parameters()
     else:
-        print("LoRA is disabled. Preparing for Full Fine-Tuning...")
+        print(f"{'Enhanced Head' if use_enhanced else 'Standard'} Full Fine-Tuning enabled...")
 
     # 7. Metrics Definition
     def compute_metrics(p):
@@ -526,31 +579,53 @@ def run_train(args):
     valid_ta_kwargs = {k: v for k, v in training_args_dict.items() if k in ta_sig.parameters}
     training_args = TrainingArguments(**valid_ta_kwargs)
 
-    # 9.5 Calculate class weights if enabled
+    # 9.5 Calculate class weights if enabled (Tying B- and I- tags together per entity)
     class_weights = None
     if not getattr(args, "no_class_weights", False):
-        print("Calculating class weights from training dataset...")
+        print("Calculating entity-tied class weights from training dataset...")
         from collections import Counter
         label_counts = Counter()
         for sample in dataset["train"]:
             label_counts.update([l for l in sample["labels"] if l != -100])
         
-        weights = np.ones(num_labels, dtype=np.float32)
+        # 1. Aggregate token counts by base entity name (e.g., 'stimulus', 'stem', 'question_label')
+        # This prevents 1-token boundary B-tags from receiving an artificially high weight compared to multi-token I-tags.
+        entity_counts = Counter()
+        for label_id, count in label_counts.items():
+            tag_str = id_to_tag.get(label_id, "O")
+            entity_name = tag_str[2:] if (tag_str.startswith("B-") or tag_str.startswith("I-")) else tag_str
+            entity_counts[entity_name] += count
+            
         total_count = sum(label_counts.values())
+        num_entities = len(entity_counts)
         
         if total_count > 0:
-            for label_id in range(num_labels):
-                count = label_counts.get(label_id, 0)
+            # 2. Compute base entity weights using smoothed inverse frequency
+            entity_weights = {}
+            for entity_name, count in entity_counts.items():
                 if count > 0:
-                    # Smoothed inverse frequency weighting
-                    weights[label_id] = total_count / (num_labels * np.sqrt(count))
-            # Normalize so mean weight is 1.0
+                    entity_weights[entity_name] = total_count / (num_entities * np.sqrt(count))
+                else:
+                    entity_weights[entity_name] = 1.0
+
+            # 3. Assign the tied entity weight to both B- and I- tags
+            weights = np.ones(num_labels, dtype=np.float32)
+            for label_id in range(num_labels):
+                tag_str = id_to_tag.get(label_id, "O")
+                entity_name = tag_str[2:] if (tag_str.startswith("B-") or tag_str.startswith("I-")) else tag_str
+                weights[label_id] = entity_weights.get(entity_name, 1.0)
+
+            # Normalize so mean weight across all classes is 1.0
             weights = weights / weights.mean()
             class_weights = torch.tensor(weights, dtype=torch.float32).to(device)
-            print(f"Computed class weights: {weights.tolist()}")
-            # Print mapping with weights for debugging
+
+            # Update model's loss function with tied class weights if available
+            if hasattr(model, "loss_fct") and hasattr(model.loss_fct, "weight"):
+                model.loss_fct.weight = class_weights
+
+            print("Computed Entity-Tied Class Weights:")
             for label_name, label_id in tag_to_id.items():
-                print(f"  {label_name} (ID: {label_id}): Weight = {weights[label_id]:.4f}")
+                print(f"  {label_name:<20} (ID: {label_id:>2}): Weight = {weights[label_id]:.4f}")
         else:
             print("Warning: No labels found in training dataset. Skipping class weights.")
 
@@ -786,13 +861,20 @@ def run_train(args):
             print(f"  {k:<28}: {v}")
     print("=" * 60)
 
-    # Save the final adapter model
-    print(f"Saving final model adapter to '{args.output_dir}'...")
+    # Save the final model & label mapping
+    print(f"Saving final model to '{args.output_dir}'...")
     trainer.save_model(args.output_dir)
+    try:
+        mapping_file = os.path.join(args.output_dir, "label_mapping.json")
+        with open(mapping_file, "w", encoding="utf-8") as f:
+            json.dump({"tag_to_id": tag_to_id, "id_to_tag": id_to_tag}, f, indent=2, ensure_ascii=False)
+        print(f"Saved label mapping to '{mapping_file}'.")
+    except Exception as e:
+        print(f"Notice saving label mapping: {e}")
 
     if args.push_to_hub:
         print(f"Pushing model adapters to HF Hub...")
-        trainer.push_to_hub(commit_message="Add trained XLM-RoBERTa LoRA sequence labeler adapters")
+        trainer.push_to_hub(commit_message="Add trained sequence labeler model")
 
 if __name__ == "__main__":
     main()

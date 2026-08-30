@@ -2,7 +2,7 @@ Say hallo to user everytime they say hello
 
 # Project Purpose
 
-This project is a complete synthetic data generation and downstream model training pipeline designed to produce and train **Sequence Labeling** models (like XLM-RoBERTa) on Vietnamese educational exam papers.
+This project is a complete synthetic data generation and downstream model training pipeline designed to produce and train **Sequence Labeling** models (like mmBERT-base / ModernBERT) on Vietnamese educational exam papers.
 
 The pipeline generates high-quality curriculum-aligned synthetic exam questions using LLMs (DeepSeek), compiles them into mock exams, reconstructs raw exam texts with character offset span mappings, tokenizes and labels them, and trains/evaluates LoRA token classification adapter models to automatically segment and extract exam question structures (such as question stems, option text, option labels, and contexts).
 
@@ -17,32 +17,20 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 - `config.yaml` - Centralized pipeline configuration (model selection, augmentation params, train/inference settings).
 - `AGENTS.md` - Rules, project structure, schemas, and developer workflows for assistant agents (this file).
 - `README.md` - Comprehensive developer guide, pipeline workflow description, execution tasks, and data contract specifications.
-- `augmentation_report.html` - Interactive Tailwind CSS report detailing online data augmentation methods, feasibility, and empirical latency benchmarks.
+- `samples/` - Sample raw image and OCR visualization files.
 - `tests/` - Directory housing all unittest suites.
   - `test_curriculum.py` - Tests for curriculum loader, parser, and level mapping.
   - `test_exam_compiler.py` - Tests for exam generator and section compilation.
-  - `test_prepare_dataset.py` - Tests for XLM-RoBERTa dataset tokenizer alignments.
+  - `test_prepare_dataset.py` - Tests for mmBERT / ModernBERT dataset tokenizer alignments.
   - `test_parser.py` - Tests for question XML parsing and option prefix cleaning.
   - `test_reconstructor.py` - Tests for question and span reconstruction logic.
   - `test_iter_logger.py` - Tests for iteration-based training logger and epoch-proportional step calculation.
+  - `test_enhanced_head.py` - Tests for Enhanced Token Classification Head, Multi-Sample Dropout, Layer Pooling, and Focal Loss.
 - `scratch/` - Directory housing temporary and utility debug scripts.
-  - `check_alignment.py` - Minimal check script verifying token-label alignments for sample questions.
-  - `debug_alignment.py` - Checks character-level offset mismatch and alignments for reconstructed exams.
-  - `debug_model.py` - Checks token-level predictions and LaTeX replacements on test inputs.
-  - `test_train_sample.py` - Sanity check script to run token prediction on a real training sample.
-  - `count_tokens.py` - Counts input and output tokens for cost estimation.
-  - `detect_and_clean_options.py` - Utility to test option prefix cleaning regex.
-  - `replace_html_entity.py` - General recursive text replacement utility for generated outputs, including `&nbsp;` normalization in `real_data_annotator/out`.
-  - `test_generation.py` - Simple end-to-end question generation test script.
-  - `inspect_local_data.py` - Inspects local generated exams and dataset splits.
-  - `count_ordering_in_dataset.py` - Counts and analyzes ordering questions in dataset splits.
-  - `inspect_inline.py` - Checks for inline formatted option sequences in dataset splits.
-  - `incremental_train.py` - Performs incremental/continual training on an existing adapter model.
-  - `get_balance.py` - Fetches DeepSeek API balance from the environment.
-  - `check_xml_accuracy.py` - Utility to verify XML character-level reconstruction and span boundaries.
   - `benchmark_augmentation.py` - Benchmarks online data augmentation latency and CPU vs GPU throughput.
   - `test_raw_exams/` - Sample raw exam text documents for batch inference testing.
   - `inference_output/` - Output directory containing segmented JSON, predictions TXT, and tagged XML outputs from batch inference.
+  - `inference_results/` - Model predictions, XML tagged files, and segmented JSONs from exam audits.
 - `logs/` - Runtime API usage logs directory (gitignored JSONL files; `.gitkeep` keeps the folder tracked).
   - `token_usage_<YYYY-MM-DD>.jsonl` - Daily append-only log; one JSON record per DeepSeek API call containing token counts and response text.
 - `output/` - Output directory containing generated exams, curricula, and datasets (gitignored).
@@ -65,6 +53,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `parser.py` - Parses standard and group question elements from LLM XML output.
     - `reconstructor.py` - Rebuilds raw text from structured questions and maps span offsets.
   - `model/` - Downstream Training & Export Subpackage.
+    - `head.py` - Enhanced Token Classification Head (Weighted Layer Pooling, Dense MLP, Multi-Sample Dropout) and Focal Loss module.
     - `train.py` - Performs token-classification training (with optional LoRA adapters and FP16/BF16 falling back).
     - `export.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX.
     - `upload.py` - Uploads trained LoRA adapters or full fine-tuned model checkpoints to HF Hub.

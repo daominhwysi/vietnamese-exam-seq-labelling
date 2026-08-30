@@ -122,7 +122,7 @@ def main():
     p_prep = subparsers.add_parser("prepare", help="Stage 5: Prepare tokenized datasets for training")
     p_prep.add_argument("-i", "--input-dir", type=str, default="output", help="Input folder of question files")
     p_prep.add_argument("-o", "--output-dir", type=str, default="output/dataset", help="Output folder for training dataset split")
-    p_prep.add_argument("--model", type=str, default="jhu-clsp/mmBERT-small", help="Base model/tokenizer name")
+    p_prep.add_argument("--model", type=str, default="jhu-clsp/mmBERT-base", help="Base model/tokenizer name")
     p_prep.add_argument("--latex-placeholder", type=str, default="[LATEX]", help="Placeholder for LaTeX equations")
     p_prep.add_argument("--train-ratio", type=float, default=0.8, help="Ratio of training set")
     p_prep.add_argument("--val-ratio", type=float, default=0.1, help="Ratio of validation set")
@@ -149,7 +149,7 @@ def main():
     # 6. train
     p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
     p_train.add_argument("--repo_id", type=str, default="daominhwysi/synthetic-seq-labelling-vi-exam-v2", help="HF Dataset repository ID")
-    p_train.add_argument("--model_name", type=str, default="jhu-clsp/mmBERT-small", help="HF base model name")
+    p_train.add_argument("--model_name", type=str, default="jhu-clsp/mmBERT-base", help="HF base model name")
     p_train.add_argument("--output_dir", type=str, default="./results", help="Directory to save checkpoints")
     p_train.add_argument("--epochs", type=int, default=3, help="Number of training epochs")
     p_train.add_argument("--batch_size", type=int, default=8, help="Training batch size")
