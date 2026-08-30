@@ -163,6 +163,9 @@ class EnhancedTokenClassifierModel(nn.Module):
     
     Fully compatible with Hugging Face Trainer, PEFT/LoRA, save_pretrained, and ONNX export.
     """
+    supports_gradient_checkpointing = True
+    _supports_gradient_checkpointing = True
+
     def __init__(
         self,
         config: Any,
@@ -192,6 +195,32 @@ class EnhancedTokenClassifierModel(nn.Module):
             weight=class_weights,
             label_smoothing=label_smoothing
         )
+
+    def gradient_checkpointing_enable(self, gradient_checkpointing_kwargs=None):
+        if hasattr(self.base_model, "gradient_checkpointing_enable"):
+            try:
+                self.base_model.gradient_checkpointing_enable(gradient_checkpointing_kwargs=gradient_checkpointing_kwargs)
+            except TypeError:
+                self.base_model.gradient_checkpointing_enable()
+        elif hasattr(self.base_model, "encoder") and hasattr(self.base_model.encoder, "gradient_checkpointing"):
+            self.base_model.encoder.gradient_checkpointing = True
+
+    def gradient_checkpointing_disable(self):
+        if hasattr(self.base_model, "gradient_checkpointing_disable"):
+            self.base_model.gradient_checkpointing_disable()
+        elif hasattr(self.base_model, "encoder") and hasattr(self.base_model.encoder, "gradient_checkpointing"):
+            self.base_model.encoder.gradient_checkpointing = False
+
+    @property
+    def is_gradient_checkpointing(self) -> bool:
+        return getattr(self.base_model, "is_gradient_checkpointing", False)
+
+    def _set_gradient_checkpointing(self, module, value=False):
+        if hasattr(self.base_model, "_set_gradient_checkpointing"):
+            self.base_model._set_gradient_checkpointing(module, value=value)
+
+    def can_generate(self) -> bool:
+        return False
 
     def resize_token_embeddings(self, new_num_tokens: Optional[int] = None) -> nn.Embedding:
         if hasattr(self.base_model, "resize_token_embeddings"):
