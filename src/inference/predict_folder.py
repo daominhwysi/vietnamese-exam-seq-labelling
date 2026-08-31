@@ -266,11 +266,24 @@ def main():
     
     # Auto-detect default model path if default "./results" doesn't exist
     model_dir = args.model_dir
+    if model_dir.startswith("./content/"):
+        alt_path = model_dir[1:]  # /content/...
+        if os.path.exists(alt_path):
+            model_dir = alt_path
+        elif os.path.exists(model_dir[10:]):  # stripped ./content/
+            model_dir = model_dir[10:]
+            
     if model_dir == "./results" and not os.path.exists("./results"):
-        if os.path.exists("./results_full"):
+        if os.path.exists("./results_enhanced_v3"):
+            model_dir = "./results_enhanced_v3"
+        elif os.path.exists("./results_full"):
             model_dir = "./results_full"
         else:
             model_dir = "daominhwysi/results_full"
+            
+    if not os.path.exists(model_dir) and (model_dir.startswith((".", "/", "\\")) or "/" in model_dir and os.path.exists(os.path.abspath(model_dir))):
+        if os.path.exists(os.path.abspath(model_dir)):
+            model_dir = os.path.abspath(model_dir)
     
     # 1. Load Tokenizer (prefer local checkpoint, fallback to base model with correct special tokens)
     print(f"Loading tokenizer from: {model_dir}...")
