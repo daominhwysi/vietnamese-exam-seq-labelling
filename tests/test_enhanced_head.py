@@ -101,6 +101,31 @@ class TestEnhancedHead(unittest.TestCase):
         self.assertEqual(output.logits.shape, (2, 8, 13))
         self.assertGreater(output.loss.item(), 0.0)
 
+    def test_hidden_states_not_returned_by_default(self):
+        """Verify that forward does NOT return hidden_states unless explicitly requested, preventing evaluation OOM."""
+        config = BertConfig(
+            vocab_size=100,
+            hidden_size=64,
+            num_hidden_layers=2,
+            num_attention_heads=2,
+            intermediate_size=128,
+            num_labels=13
+        )
+        base_model = BertModel(config)
+        model = EnhancedTokenClassifierModel(config=config, base_model=base_model)
+        
+        input_ids = torch.randint(0, 100, (2, 8))
+        attention_mask = torch.ones_like(input_ids)
+        
+        # Default: hidden_states and attentions must be None
+        output = model(input_ids=input_ids, attention_mask=attention_mask)
+        self.assertIsNone(output.hidden_states)
+        self.assertIsNone(output.attentions)
+        
+        # Explicitly requested: returns hidden_states
+        output_hs = model(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True)
+        self.assertIsNotNone(output_hs.hidden_states)
+
     def test_gradient_checkpointing(self):
         config = BertConfig(
             vocab_size=100,
