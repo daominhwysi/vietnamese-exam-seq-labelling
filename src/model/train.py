@@ -904,21 +904,21 @@ def run_train(args):
     # 11. Run Training
     resume_ckpt = getattr(args, "resume_from_checkpoint", None)
     if resume_ckpt in ["auto", "True", "true"]:
-        from transformers.trainer_utils import get_last_checkpoint
-        last_ckpt = get_last_checkpoint(args.output_dir) if os.path.exists(args.output_dir) else None
-        if last_ckpt is not None:
-            resume_ckpt = last_ckpt
-            print(f"Auto-detected valid checkpoint: '{resume_ckpt}'. Resuming training...")
+        # Check if output_dir directly holds checkpoint state (optimizer.pt or trainer_state.json)
+        if os.path.exists(os.path.join(args.output_dir, "trainer_state.json")) or os.path.exists(os.path.join(args.output_dir, "optimizer.pt")):
+            resume_ckpt = args.output_dir
         else:
-            resume_ckpt = None
-            print(f"No checkpoint found in output directory '{args.output_dir}'. Starting fresh training from scratch...")
+            try:
+                from transformers.trainer_utils import get_last_checkpoint
+                last_ckpt = get_last_checkpoint(args.output_dir)
+                resume_ckpt = last_ckpt if last_ckpt is not None else None
+            except Exception:
+                resume_ckpt = None
     elif resume_ckpt and not os.path.exists(resume_ckpt):
-        print(f"Warning: Specified checkpoint '{resume_ckpt}' not found on disk. Starting training from scratch...")
+        print(f"Notice: Specified resume checkpoint '{resume_ckpt}' not found. Starting from scratch.")
         resume_ckpt = None
-    else:
-        if resume_ckpt:
-            print(f"Resuming training from specified checkpoint: '{resume_ckpt}'...")
 
+    print(f"Starting training (resume_from_checkpoint={resume_ckpt})...")
     trainer.train(resume_from_checkpoint=resume_ckpt)
 
     # 12. Run final test split evaluation
