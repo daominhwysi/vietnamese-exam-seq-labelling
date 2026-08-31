@@ -104,6 +104,13 @@ def parse_args():
         help="Push final trained model/adapters back to Hugging Face Hub"
     )
     parser.add_argument(
+        "--hub_model_id",
+        "--hub-model-id",
+        type=str,
+        default=None,
+        help="Target model repository ID on Hugging Face Hub (e.g. 'username/model-name')"
+    )
+    parser.add_argument(
         "--hf_token",
         type=str,
         default=None,
@@ -738,6 +745,7 @@ def run_train(args):
         "save_total_limit": args.save_total_limit,
         "report_to": args.report_to,
         "push_to_hub": args.push_to_hub,
+        "hub_model_id": getattr(args, "hub_model_id", None),
         "hub_token": hf_token,
         "gradient_checkpointing": getattr(args, "gradient_checkpointing", False),
         "gradient_accumulation_steps": getattr(args, "gradient_accumulation_steps", 1),
@@ -1108,8 +1116,27 @@ def run_train(args):
         print(f"Notice saving label mapping: {e}")
 
     if args.push_to_hub:
-        print(f"Pushing model adapters to HF Hub...")
+        target_repo = args.hub_model_id or getattr(trainer.args, "hub_model_id", None) or args.output_dir
+        print(f"Pushing model adapters to HF Hub ({target_repo})...")
         trainer.push_to_hub(commit_message="Add trained sequence labeler model")
+        try:
+            from huggingface_hub import HfApi
+            api = HfApi(token=hf_token)
+            api.upload_file(
+                path_or_fileobj=mapping_file,
+                path_in_repo="label_mapping.json",
+                repo_id=target_repo,
+            )
+            head_cfg = os.path.join(args.output_dir, "enhanced_head_config.json")
+            if os.path.exists(head_cfg):
+                api.upload_file(
+                    path_or_fileobj=head_cfg,
+                    path_in_repo="enhanced_head_config.json",
+                    repo_id=target_repo,
+                )
+            print(f"Successfully uploaded label mapping and head config to HF Hub.")
+        except Exception as e:
+            print(f"Notice uploading auxiliary files to hub: {e}")
 
 if __name__ == "__main__":
     main()
