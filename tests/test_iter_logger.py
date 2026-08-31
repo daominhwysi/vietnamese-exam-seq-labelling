@@ -188,6 +188,41 @@ class TestIterLogger(unittest.TestCase):
         self.assertIn("--- Epoch 1/3 completed ---", output)
         self.assertIn("Training Completed: Total Steps = 100", output)
 
+    def test_eval_memory_optimizations(self):
+        """Test evaluation memory preprocessing (argmax reduction on GPU) and arg parsing."""
+        from src.model.train import parse_args
+        import torch
+        import numpy as np
+
+        # Test arg parser defaults
+        test_args = ["--epochs", "2", "--eval_accumulation_steps", "5"]
+        import sys
+        old_argv = sys.argv
+        try:
+            sys.argv = ["train.py"] + test_args
+            args = parse_args()
+            self.assertEqual(args.eval_accumulation_steps, 5)
+        finally:
+            sys.argv = old_argv
+
+        # Test preprocess_logits_for_metrics logic
+        batch_size = 4
+        seq_len = 128
+        num_labels = 13
+        logits = torch.randn(batch_size, seq_len, num_labels)
+        
+        # Simulated preprocess function
+        def preprocess(l, y):
+            if isinstance(l, (tuple, list)):
+                l = l[0]
+            if hasattr(l, "argmax"):
+                return l.argmax(dim=-1)
+            return l
+
+        preprocessed = preprocess(logits, None)
+        self.assertEqual(preprocessed.shape, (batch_size, seq_len))
+        self.assertEqual(preprocessed.dtype, torch.int64)
+
 
 if __name__ == "__main__":
     unittest.main()

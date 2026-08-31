@@ -274,8 +274,8 @@ class EnhancedTokenClassifierModel(nn.Module):
         return TokenClassifierOutput(
             loss=loss,
             logits=logits,
-            hidden_states=outputs.hidden_states if hasattr(outputs, "hidden_states") else None,
-            attentions=outputs.attentions if hasattr(outputs, "attentions") else None,
+            hidden_states=outputs.hidden_states if output_hidden_states else None,
+            attentions=outputs.attentions if output_attentions else None,
         )
 
     def save_pretrained(self, save_directory: Union[str, os.PathLike], **kwargs):
