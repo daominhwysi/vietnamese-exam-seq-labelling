@@ -181,6 +181,7 @@ def main():
     p_train.add_argument("--logs_per_epoch", type=int, default=10, help="Number of log outputs per epoch (default: 10). Dynamically calculates logging_steps.")
     p_train.add_argument("--logging_steps", type=int, default=None, help="Explicit number of update steps between logging metrics (overrides logs_per_epoch if specified)")
     p_train.add_argument("--push_to_hub", action="store_true", help="Push to Hugging Face Hub")
+    p_train.add_argument("--hub_model_id", "--hub-model-id", type=str, default=None, help="Target Hugging Face Model Repo ID (e.g. 'username/vi-exam-seq-labeller')")
     p_train.add_argument("--hf_token", type=str, help="Hugging Face authentication token")
 
     # 7. inference
