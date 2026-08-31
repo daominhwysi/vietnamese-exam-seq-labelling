@@ -1,21 +1,20 @@
-# Main dependencies
-openai
-pymupdf>=1.27.2.3,<2
-python-dotenv>=1.2.2,<2
-tqdm>=4.67.3,<5
-
 # NLP, Tokenizer, and Deep Learning
-transformers>=5.9.0,<6
-sentencepiece>=0.2.1,<0.3
+transformers>=4.40.0
+sentencepiece
 torch
 peft
 accelerate
+datasets
+seqeval
+pyyaml
+huggingface_hub
+tqdm
+python-dotenv
+openai
+pymupdf
 
 # Web App and Visualization
-fastapi>=0.115.0,<1
-jinja2>=3.1.0,<4
-uvicorn>=0.30.0,<1
+fastapi>=0.110.0
+jinja2
+uvicorn
 
-# ONNX Runtime (CPU/GPU acceleration)
-onnx
-onnxruntime>=1.26.0,<2
