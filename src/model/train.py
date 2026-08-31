@@ -180,6 +180,12 @@ def parse_args():
         help="Disable class weights for cross-entropy loss penalty"
     )
     parser.add_argument(
+        "--resume-from-checkpoint",
+        type=str,
+        default=None,
+        help="Path to checkpoint folder (e.g. './results_enhanced_v3/checkpoint-3564' or 'auto' or 'True') to resume training from."
+    )
+    parser.add_argument(
         "--real-upsample-factor",
         type=float,
         default=1.0,
@@ -896,8 +902,11 @@ def run_train(args):
     trainer.add_callback(IterLoggerCallback(logs_per_epoch=getattr(args, "logs_per_epoch", 10)))
 
     # 11. Run Training
-    print("Starting training...")
-    trainer.train()
+    resume_ckpt = getattr(args, "resume_from_checkpoint", None)
+    if resume_ckpt in ["auto", "True", "true"]:
+        resume_ckpt = True
+    print(f"Starting training (resume_from_checkpoint={resume_ckpt})...")
+    trainer.train(resume_from_checkpoint=resume_ckpt)
 
     # 12. Run final test split evaluation
     print("Evaluating on test split...")
