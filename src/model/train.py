@@ -753,8 +753,13 @@ def run_train(args):
             if getattr(self.args, "past_index", -1) >= 0:
                 self._past = outputs[self.args.past_index]
 
-            if labels is not None and self.class_weights is not None:
-                logits = outputs.get("logits")
+            # 1. Prefer model's built-in loss if computed (e.g. EnhancedTokenClassifierModel's FocalLoss)
+            if hasattr(outputs, "loss") and outputs.loss is not None:
+                loss = outputs.loss
+            elif isinstance(outputs, dict) and "loss" in outputs and outputs["loss"] is not None:
+                loss = outputs["loss"]
+            elif labels is not None and self.class_weights is not None:
+                logits = outputs.get("logits") if isinstance(outputs, dict) else outputs[0]
                 loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
                 loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
             else:
