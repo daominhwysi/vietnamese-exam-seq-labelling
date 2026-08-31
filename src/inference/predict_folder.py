@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 import os
 import sys
+from pathlib import Path
+
+_project_root = Path(__file__).resolve().parent.parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
 import json
 import re
 import torch
 import argparse
-from pathlib import Path
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 
 # Bypass torchao compatibility check bug on older pre-installed versions in Google Colab
