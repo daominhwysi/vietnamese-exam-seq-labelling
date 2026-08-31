@@ -462,7 +462,119 @@ class TestReconstructor(unittest.TestCase):
                     self.assertEqual(options_in_spans[new_idx], "Đáp án A (Đúng)")
                 break
                 
-        self.assertTrue(shuffled)
+    def test_collapse_consecutive_whitespaces(self):
+        from src.generation.reconstructor import collapse_consecutive_whitespaces
+        raw_text = "Câu 1:    Cho hàm số $y=f(x)$.\t\tA. 1   B. 2\t\t\tC. 3  D. 4"
+        spans = [
+            {"start": 0, "end": 7, "label": "question_label", "text": "Câu 1: "},
+            {"start": 10, "end": 30, "label": "stem", "text": "Cho hàm số $y=f(x)$."},
+            {"start": 32, "end": 35, "label": "option_label", "text": "A. "},
+            {"start": 35, "end": 36, "label": "option_text", "text": "1"},
+            {"start": 39, "end": 42, "label": "option_label", "text": "B. "},
+            {"start": 42, "end": 43, "label": "option_text", "text": "2"},
+            {"start": 46, "end": 49, "label": "option_label", "text": "C. "},
+            {"start": 49, "end": 50, "label": "option_text", "text": "3"},
+            {"start": 52, "end": 55, "label": "option_label", "text": "D. "},
+            {"start": 55, "end": 56, "label": "option_text", "text": "4"}
+        ]
+        collapsed_text, updated_spans = collapse_consecutive_whitespaces(raw_text, spans)
+        
+        # Verify no consecutive spaces or tabs exist
+        self.assertNotIn("  ", collapsed_text)
+        self.assertNotIn("\t", collapsed_text)
+        
+        # Verify span offsets exactly index the correct text
+        for s in updated_spans:
+            sub = collapsed_text[s["start"]:s["end"]].strip()
+            self.assertEqual(sub, s["text"].strip())
+
+    def test_reconstruct_with_collapse_whitespace(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Câu hỏi với khoảng trắng rộng.",
+            "options": ["Đáp án 1", "Đáp án 2", "Đáp án 3", "Đáp án 4"],
+            "question_type": "multiple_choice",
+            "subject": "chemistry",
+            "grade": 10,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            collapse_whitespace_prob=1.0,
+            inline_option_prob=1.0,
+            seed="collapse_seed"
+        )
+        enriched = reconstruct_question(q_data, config)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        
+        self.assertNotIn("  ", raw_text)
+        self.assertNotIn("\t", raw_text)
+        for s in spans:
+            self.assertEqual(raw_text[s["start"]:s["end"]].strip(), s["text"].strip())
+
+    def test_grid_2x2_layout(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Cho hình lập phương ABCD.A'B'C'D'.",
+            "options": ["10 cm", "20 cm", "30 cm", "40 cm"],
+            "question_type": "multiple_choice",
+            "subject": "math_geometry",
+            "grade": 12,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            grid_2x2_prob=1.0,
+            option_prefix_style="capital_dot",
+            seed="grid_seed",
+            randomize_q_num=False
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        
+        # In 2x2 grid, there should be a newline between B and C
+        lines = [line.strip() for line in raw_text.split("\n") if line.strip()]
+        self.assertEqual(len(lines), 3) # Line 1: stem, Line 2: A & B, Line 3: C & D
+        self.assertIn("A.", lines[1])
+        self.assertIn("B.", lines[1])
+        self.assertIn("C.", lines[2])
+        self.assertIn("D.", lines[2])
+        
+        for s in spans:
+            self.assertEqual(raw_text[s["start"]:s["end"]].strip(), s["text"].strip())
+
+    def test_flatten_newlines(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Dòng 1 stem\nDòng 2 stem",
+            "options": ["A1\nA2", "B1", "C1", "D1"],
+            "question_type": "multiple_choice",
+            "subject": "physics",
+            "grade": 11,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            flatten_newlines_prob=1.0,
+            seed="flatten_seed"
+        )
+        enriched = reconstruct_question(q_data, config)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        
+        self.assertNotIn("\n", raw_text)
+        for s in spans:
+            self.assertEqual(raw_text[s["start"]:s["end"]].strip(), s["text"].strip())
+
+    def test_math_intervals_latex_validation(self):
+        from src.webapp.inference_helper import is_valid_latex
+        # Half-open intervals
+        self.assertTrue(is_valid_latex("(-\\infty; 0]"))
+        self.assertTrue(is_valid_latex("[8; +\\infty)"))
+        self.assertTrue(is_valid_latex("(1; 2]"))
+        self.assertTrue(is_valid_latex("[0; 1)"))
+        self.assertTrue(is_valid_latex("(-\\infty, 5]"))
+        # Invalid / plain words
+        self.assertFalse(is_valid_latex("(đây là khoảng)"))
 
 if __name__ == '__main__':
     unittest.main()

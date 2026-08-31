@@ -40,7 +40,11 @@ def is_valid_latex(content):
     if len(content_stripped) == 1:
         return content_stripped.isalnum()
         
-    # Case 2: Balanced braces, brackets, and parentheses
+    # Case 2: Mathematical interval notation like (-\infty; 0] or [8; +\infty) or (1; 2]
+    if re.match(r'^[\[\(][^\[\]\(\)]+[\]\)]$', content_stripped) and (';' in content_stripped or ',' in content_stripped):
+        return True
+
+    # Case 3: Balanced braces, brackets, and parentheses
     brackets = {'{': '}', '(': ')', '[': ']'}
     stack = []
     for char in content_stripped:
@@ -55,12 +59,12 @@ def is_valid_latex(content):
     if stack:
         return False
         
-    # Case 3: Contains standard math/latex character indicators
+    # Case 4: Contains standard math/latex character indicators
     math_indicators = ['\\', '^', '_', '+', '-', '*', '/', '=', '<', '>', '{', '}', '[', ']']
     if any(ind in content_stripped for ind in math_indicators):
         return True
         
-    # Case 4: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
+    # Case 5: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
     if len(content_stripped) < 10 and re.match(r'^[a-zA-Z0-9]+$', content_stripped):
         return True
         
@@ -118,7 +122,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
             if current_label and current_start < current_end:
                 segments.append({
                     "label": current_label,
-                    "text": raw_text[current_start:current_end].strip()
+                    "start": current_start,
+                    "end": current_end,
+                    "text": raw_text[current_start:current_end]
                 })
             current_label = label[2:]
             current_start = start
@@ -133,7 +139,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
                 if current_label and current_start < current_end:
                     segments.append({
                         "label": current_label,
-                        "text": raw_text[current_start:current_end].strip()
+                        "start": current_start,
+                        "end": current_end,
+                        "text": raw_text[current_start:current_end]
                     })
                 # Auto-promote orphaned I-tag to start a new segment
                 current_label = tag_name
@@ -143,7 +151,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
             if current_label and current_start < current_end:
                 segments.append({
                     "label": current_label,
-                    "text": raw_text[current_start:current_end].strip()
+                    "start": current_start,
+                    "end": current_end,
+                    "text": raw_text[current_start:current_end]
                 })
                 current_label = None
                 current_start = -1
@@ -153,7 +163,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
     if current_label and current_start < current_end:
         segments.append({
             "label": current_label,
-            "text": raw_text[current_start:current_end].strip()
+            "start": current_start,
+            "end": current_end,
+            "text": raw_text[current_start:current_end]
         })
 
     # Filter out empty and spurious non-alphanumeric label segments (e.g. '*' or '-' tagged as option_label)
@@ -172,38 +184,34 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
 def segments_to_xml(raw_text: str, segments: list) -> str:
     """
     Reconstructs the full raw text with inline XML tags around each labeled segment,
-    matching the format produced by annotate_ocr.py:
+    matching the ground-truth format using character offsets directly to avoid runaway offset drift:
         <question_label>Câu 1.</question_label> <stem>Nội dung câu hỏi...</stem>
 
     Untagged text between segments (e.g. page headers, separators) is preserved
-    verbatim outside any tag. Character offsets on the segments are used to find
-    the exact gap text from raw_text.
+    verbatim outside any tag.
     """
-    # Re-derive character offsets by searching for each segment's text in order.
-    # The segments list from extract_segments() only carries stripped text,
-    # so we locate each one forward from the previous match end.
+    sorted_segs = sorted(segments, key=lambda x: (x.get("start", 0), -x.get("end", 0)))
     result = []
     cursor = 0
 
-    for seg in segments:
+    for seg in sorted_segs:
         label = seg["label"]
-        text = seg["text"]
-        if not text:
-            continue
+        start = seg.get("start", -1)
+        end = seg.get("end", -1)
+        text = seg.get("text", "")
 
-        # Find next occurrence of this text starting from cursor
-        idx = raw_text.find(text, cursor)
-        if idx == -1:
-            # Fallback: skip this segment gracefully
-            continue
-
-        # Append any untagged gap text before this segment
-        if idx > cursor:
-            result.append(raw_text[cursor:idx])
-
-        # Append the tagged segment
-        result.append(f"<{label}>{text}</{label}>")
-        cursor = idx + len(text)
+        if start >= 0 and end >= 0 and start >= cursor:
+            if start > cursor:
+                result.append(raw_text[cursor:start])
+            result.append(f"<{label}>{raw_text[start:end]}</{label}>")
+            cursor = end
+        elif start == -1 or end == -1:
+            idx = raw_text.find(text, cursor)
+            if idx != -1:
+                if idx > cursor:
+                    result.append(raw_text[cursor:idx])
+                result.append(f"<{label}>{text}</{label}>")
+                cursor = idx + len(text)
 
     # Append any trailing untagged text after the last segment
     if cursor < len(raw_text):

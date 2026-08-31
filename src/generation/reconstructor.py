@@ -9,11 +9,21 @@ from src.webapp.inference_helper import is_valid_latex
 DEFAULT_QUESTION_PREFIXES = [
     "Câu {num}: ",
     "Câu {num}. ",
+    "Câu {num} - ",
+    "Câu {num} ({points} điểm): ",
+    "Câu {num} ({points} điểm). ",
+    "Câu {num} ({points}đ): ",
+    "Bài {num}: ",
+    "Bài {num}. ",
+    "Bài {num} ({points} điểm): ",
     "C{num}: ",
     "C{num}. ",
+    "C.{num}: ",
+    "C.{num}. ",
     "{num}. ",
     "{num}: ",
-    "{num}) "
+    "{num}) ",
+    "{num}/ "
 ]
 
 ENGLISH_QUESTION_PREFIXES = [
@@ -79,27 +89,85 @@ class ReconstructorConfig:
     synonym_swap_prob: float = 0.0
     formatting_noise_prob: float = 0.0
     
-    # Inline option layout simulation
+    # Inline and Layout Augmentations
     inline_option_prob: float = 0.0
-    min_inline_spaces: int = 5
+    min_inline_spaces: int = 1
     max_inline_spaces: int = 30
     min_inline_tabs: int = 1
     max_inline_tabs: int = 3
+    grid_2x2_prob: float = 0.0
+    same_line_stem_options_prob: float = 0.0
+    flatten_newlines_prob: float = 0.0
+    collapse_whitespace_prob: float = 0.0
+
+def collapse_consecutive_whitespaces(raw_text: str, spans: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]]]:
+    """
+    Collapses any sequence of 2+ spaces or tabs into a single space ' ',
+    dynamically recalculating and shifting character span offsets.
+    """
+    new_chars = []
+    old_to_new = {}
+    
+    i = 0
+    new_pos = 0
+    while i < len(raw_text):
+        old_to_new[i] = new_pos
+        if raw_text[i] in ' \t':
+            j = i
+            while j < len(raw_text) and raw_text[j] in ' \t':
+                j += 1
+            new_chars.append(' ')
+            new_pos += 1
+            for k in range(i + 1, j + 1):
+                old_to_new[k] = new_pos
+            i = j
+        else:
+            new_chars.append(raw_text[i])
+            new_pos += 1
+            old_to_new[i + 1] = new_pos
+            i += 1
+            
+    old_to_new[len(raw_text)] = new_pos
+    final_text = ''.join(new_chars)
+    
+    updated_spans = []
+    for s in spans:
+        start = s['start']
+        end = s['end']
+        new_start = old_to_new.get(start, start)
+        new_end = old_to_new.get(end, end)
+        sub_text = final_text[new_start:new_end].strip()
+        span_entry = {
+            'start': new_start,
+            'end': new_end,
+            'label': s['label']
+        }
+        if 'text' in s:
+            span_entry['text'] = sub_text
+        updated_spans.append(span_entry)
+        
+    return final_text, updated_spans
 
 def generate_random_inline_separator(config: ReconstructorConfig, rng: random.Random) -> str:
-    """Generates a highly randomized whitespace/tab separator to simulate raw paper-saving layouts."""
-    sep_type = rng.choice(["tabs", "spaces", "mixed"])
-    
-    if sep_type == "tabs":
-        num_tabs = rng.randint(config.min_inline_tabs, config.max_inline_tabs)
-        return "\t" * num_tabs
-    elif sep_type == "spaces":
-        num_spaces = rng.randint(config.min_inline_spaces, config.max_inline_spaces)
-        return " " * num_spaces
-    else:  # mixed
-        num_tabs = rng.randint(1, max(1, config.min_inline_tabs))
-        num_spaces = rng.randint(5, max(5, config.min_inline_spaces))
-        return ("\t" * num_tabs) + (" " * num_spaces)
+    """
+    Generates a realistic long-tail whitespace/tab separator:
+    - 70% 1 single space (most common standard in compressed OCR exams)
+    - 20% 2-6 spaces or Tabs (multi-column alignment)
+    - 5% wide spaces (7-20 spaces)
+    - 5% 0 space (OCR character-merging error robustness)
+    """
+    r = rng.random()
+    if r < 0.70:
+        return " "
+    elif r < 0.90:
+        if rng.random() < 0.50:
+            return " " * rng.randint(2, 6)
+        else:
+            return "\t" * rng.randint(config.min_inline_tabs, max(config.min_inline_tabs, config.max_inline_tabs))
+    elif r < 0.95:
+        return " " * rng.randint(max(7, config.min_inline_spaces), max(7, config.max_inline_spaces))
+    else:
+        return ""
 
 def get_stable_random(seed_obj: Any) -> random.Random:
     """Generates a stable random number generator from any seed object."""
@@ -354,11 +422,35 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
         stable_seed = q_data.get("stimulus", "") or q_data.get("context", "") or q_data.get("stem", "") or str(q_data)
         
     rng = get_stable_random(stable_seed)
-    is_inline = rng.random() < config.inline_option_prob
+    
+    is_flatten = config.flatten_newlines_prob > 0.0 and rng.random() < config.flatten_newlines_prob
+    is_same_line_stem = config.same_line_stem_options_prob > 0.0 and rng.random() < config.same_line_stem_options_prob
+    is_grid_2x2 = config.grid_2x2_prob > 0.0 and rng.random() < config.grid_2x2_prob
+    is_inline = (not is_grid_2x2) and (rng.random() < config.inline_option_prob)
+    
+    sep_stem_opt = config.separator_stem_options
+    if is_same_line_stem or is_flatten:
+        sep_stem_opt = "   " if is_same_line_stem else " "
+    
+    sep_options = config.separator_options
+    if is_flatten:
+        sep_options = " "
+        
+    sep_questions = config.separator_questions
+    if is_flatten:
+        sep_questions = " "
     
     actual_start_q_num = start_q_num
     if config.randomize_q_num:
         actual_start_q_num = rng.randint(1, 40)
+    
+    points_val = rng.choice(["0,5", "1,0", "1,5", "2,0", "2,5", "3,0", "4,0", "0.5", "1.0", "1.5", "2.0", "3.0"])
+    
+    def format_prefix(tpl: str, num_val: int) -> str:
+        try:
+            return tpl.format(num=num_val, points=points_val)
+        except (KeyError, IndexError):
+            return tpl.format(num=num_val)
     
     q_prefix_tpl = config.question_prefix_template
     if q_prefix_tpl is None:
@@ -391,6 +483,9 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
         if not text:
             return
             
+        if is_flatten and "\n" in text:
+            text = text.replace("\r\n", "\n").replace("\n", " ")
+            
         # Apply data augmentations before stitching to keep spans 100% correct
         if label in ["stem", "option_text", "stimulus", "context"]:
             if config.space_noise_rate > 0.0:
@@ -401,7 +496,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 text = inject_vietnamese_typos(text, config.typo_rate, rng)
                 
         elif label == "separator":
-            if config.space_noise_rate > 0.0:
+            if config.space_noise_rate > 0.0 and not is_flatten:
                 if "\n" in text and not any(c.isalnum() for c in text):
                     val = rng.random()
                     if val < 0.10:
@@ -424,6 +519,24 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 span_entry["text"] = text
             spans.append(span_entry)
 
+    def get_opt_separator(opt_idx: int, total_opts: int) -> str:
+        if opt_idx >= total_opts - 1:
+            return ""
+        if is_flatten:
+            return " "
+        if is_grid_2x2 and total_opts == 4:
+            if opt_idx == 0:  # A -> B
+                return generate_random_inline_separator(config, rng)
+            elif opt_idx == 1:  # B -> C
+                return "\n"
+            elif opt_idx == 2:  # C -> D
+                return generate_random_inline_separator(config, rng)
+            else:
+                return "\n"
+        if is_inline:
+            return generate_random_inline_separator(config, rng)
+        return sep_options
+
     is_group = q_data.get("is_group", False)
     q_type = q_data.get("question_type", "")
     
@@ -437,11 +550,13 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
         sub_questions = q_data.get("questions", [])
         if sub_questions:
             sep_stim = config.separator_context_questions if config.separator_context_questions is not None else config.separator_stimulus_questions
+            if is_flatten:
+                sep_stim = " "
             append_segment(sep_stim, "separator")
             
             for idx, sub_q in enumerate(sub_questions):
                 q_num = actual_start_q_num + idx
-                q_label = q_prefix_tpl.format(num=q_num)
+                q_label = format_prefix(q_prefix_tpl, q_num)
                 q_label = augment_q_label(q_label, config, rng)
                 append_segment(q_label, "question_label")
                 
@@ -462,9 +577,9 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     rng.shuffle(options)
                 
                 if options:
-                    append_segment(config.separator_stem_options, "separator")
+                    append_segment(sep_stem_opt, "separator")
                     for opt_idx, opt_text in enumerate(options):
-                        if config.formatting_noise_prob > 0.0 and not is_inline:
+                        if config.formatting_noise_prob > 0.0 and not is_inline and not is_grid_2x2:
                             if rng.random() < (config.formatting_noise_prob * 0.5):
                                 bullet = rng.choice(["* ", "- ", "+ "])
                                 append_segment(bullet, "separator")
@@ -472,17 +587,14 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                         opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                         append_segment(opt_lbl, "option_label")
                         append_segment(opt_text, "option_text")
-                        if opt_idx < len(options) - 1:
-                            if is_inline:
-                                sep = generate_random_inline_separator(config, rng)
-                                append_segment(sep, "separator")
-                            else:
-                                append_segment(config.separator_options, "separator")
+                        sep = get_opt_separator(opt_idx, len(options))
+                        if sep:
+                            append_segment(sep, "separator")
                             
                 if idx < len(sub_questions) - 1:
-                    append_segment(config.separator_questions, "separator")
+                    append_segment(sep_questions, "separator")
     else:
-        q_label = q_prefix_tpl.format(num=actual_start_q_num)
+        q_label = format_prefix(q_prefix_tpl, actual_start_q_num)
         q_label = augment_q_label(q_label, config, rng)
         append_segment(q_label, "question_label")
         
@@ -514,7 +626,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     result["answer"] = opt_letters[new_idx % len(opt_letters)]
         
         if options:
-            append_segment(config.separator_stem_options, "separator")
+            append_segment(sep_stem_opt, "separator")
             
             if q_type == "ordering":
                 item_labels = ord_labels[:len(options)]
@@ -523,10 +635,10 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     append_segment(lbl, "stem")
                     append_segment(opt_text, "stem")
                     if opt_idx < len(options) - 1:
-                        append_segment(config.separator_options, "separator")
+                        append_segment(sep_options, "separator")
                         
                 choices = generate_ordering_choices(item_labels, config.ordering_choice_separator, rng)
-                append_segment(config.separator_stem_options, "separator")
+                append_segment(sep_stem_opt, "separator")
                 
                 correct_seq = config.ordering_choice_separator.join(item_labels)
                 correct_idx = 0
@@ -540,12 +652,9 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                     append_segment(opt_lbl, "option_label")
                     append_segment(choice_text, "option_text")
-                    if choice_idx < len(choices) - 1:
-                        if is_inline:
-                            sep = generate_random_inline_separator(config, rng)
-                            append_segment(sep, "separator")
-                        else:
-                            append_segment(config.separator_options, "separator")
+                    sep = get_opt_separator(choice_idx, len(choices))
+                    if sep:
+                        append_segment(sep, "separator")
             else:
                 current_prefixes = opt_prefixes
                 if q_type == "true_false" and config.option_prefix_style is None:
@@ -553,7 +662,7 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     current_prefixes = OPTION_PREFIX_STYLES[tf_style]
                     
                 for opt_idx, opt_text in enumerate(options):
-                    if config.formatting_noise_prob > 0.0 and not is_inline:
+                    if config.formatting_noise_prob > 0.0 and not is_inline and not is_grid_2x2:
                         if rng.random() < (config.formatting_noise_prob * 0.5):
                             bullet = rng.choice(["* ", "- ", "+ "])
                             append_segment(bullet, "separator")
@@ -561,13 +670,13 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     opt_lbl = augment_opt_lbl(opt_lbl, config, rng)
                     append_segment(opt_lbl, "option_label")
                     append_segment(opt_text, "option_text")
-                    if opt_idx < len(options) - 1:
-                        if is_inline:
-                            sep = generate_random_inline_separator(config, rng)
-                            append_segment(sep, "separator")
-                        else:
-                            append_segment(config.separator_options, "separator")
+                    sep = get_opt_separator(opt_idx, len(options))
+                    if sep:
+                        append_segment(sep, "separator")
                         
+    if config.collapse_whitespace_prob > 0.0 and rng.random() < config.collapse_whitespace_prob:
+        raw_text, spans = collapse_consecutive_whitespaces(raw_text, spans)
+        
     result["raw_text"] = raw_text
     result["spans"] = spans
     return result
@@ -675,7 +784,16 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
                 option_drop_prob=config.option_drop_prob,
                 casing_noise_prob=config.casing_noise_prob,
                 synonym_swap_prob=config.synonym_swap_prob,
-                formatting_noise_prob=config.formatting_noise_prob
+                formatting_noise_prob=config.formatting_noise_prob,
+                inline_option_prob=config.inline_option_prob,
+                min_inline_spaces=config.min_inline_spaces,
+                max_inline_spaces=config.max_inline_spaces,
+                min_inline_tabs=config.min_inline_tabs,
+                max_inline_tabs=config.max_inline_tabs,
+                grid_2x2_prob=config.grid_2x2_prob,
+                same_line_stem_options_prob=config.same_line_stem_options_prob,
+                flatten_newlines_prob=config.flatten_newlines_prob,
+                collapse_whitespace_prob=0.0
             )
             
             q_reconstructed = reconstruct_question(q, q_config, start_q_num=q_num)
@@ -709,7 +827,23 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
         for span in global_spans:
             span["start"] -= leading_stripped
             span["end"] -= leading_stripped
+
+    # Filter and clamp spans to within [0, len(raw_text)]
+    valid_spans = []
+    for span in global_spans:
+        s = max(0, span["start"])
+        e = min(len(raw_text), span["end"])
+        if s < e:
+            span["start"] = s
+            span["end"] = e
+            if "text" in span:
+                span["text"] = raw_text[s:e]
+            valid_spans.append(span)
+    global_spans = valid_spans
             
+    if config.collapse_whitespace_prob > 0.0 and rng.random() < config.collapse_whitespace_prob:
+        raw_text, global_spans = collapse_consecutive_whitespaces(raw_text, global_spans)
+        
     result["raw_text"] = raw_text
     result["spans"] = global_spans
     return result

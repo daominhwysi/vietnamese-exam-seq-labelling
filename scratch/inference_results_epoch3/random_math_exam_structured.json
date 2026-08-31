@@ -1,0 +1,246 @@
+{
+  "file_name": "random_math_exam.txt",
+  "original_text_length": 6163,
+  "segments": [
+    {
+      "label": "question_label",
+      "text": "9"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "Lệ"
+    },
+    {
+      "label": "stem",
+      "text": "cách"
+    },
+    {
+      "label": "stem",
+      "text": "bạn An"
+    },
+    {
+      "label": "stem",
+      "text": "bạn"
+    },
+    {
+      "label": "stem",
+      "text": "ũng luôn"
+    },
+    {
+      "label": "stem",
+      "text": "ở hai đầu"
+    },
+    {
+      "label": "stem",
+      "text": "khác"
+    },
+    {
+      "label": "stem",
+      "text": "nhau"
+    },
+    {
+      "label": "stem",
+      "text": "ỏi có bao"
+    },
+    {
+      "label": "stem",
+      "text": "cách"
+    },
+    {
+      "label": "stem",
+      "text": "ba"
+    },
+    {
+      "label": "stem",
+      "text": "đã"
+    },
+    {
+      "label": "stem",
+      "text": "mỗi"
+    },
+    {
+      "label": "question_label",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "Lấy ngẫu nhiên 3 quyển sách trên kệ sách ấy. Tính xác suất để 3 quyển được lấy ra đều là sách Toán."
+    },
+    {
+      "label": "option_label",
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "text": "$\\frac{2}{7}$."
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "$\\frac{1}{21}$."
+    },
+    {
+      "label": "option_label",
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "text": "$\\frac{37}{42}$."
+    },
+    {
+      "label": "option_label",
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "text": "$\\frac{5}{42}$."
+    },
+    {
+      "label": "section",
+      "text": "ẦN II. Trắc nghiệm đúng-sai:"
+    },
+    {
+      "label": "option_label",
+      "text": "a)"
+    },
+    {
+      "label": "option_text",
+      "text": "Trong mặt phẳng tọa độ, cho hai đường thẳng $\\Delta: 3x-4y-12=0$ và $\\Delta': \\begin{cases} x=2t \\\\ y=2+3t \\end{cases}$ và hai điểm $N(4;-5), M(2;-1)$. Khi đó, ta có $d(M,\\Delta) = \\frac{3}{5}$ và $d(N,\\Delta') = 2\\sqrt{13}$."
+    },
+    {
+      "label": "option_label",
+      "text": "b)"
+    },
+    {
+      "label": "option_text",
+      "text": "Cho hai đường thẳng $d_1: 3x-4y-1=0$ và $d_2: mx+(m-1)y-2=0$. Các giá trị của $m$ để góc giữa hai đường thẳng $d_1$ và $d_2$ là $45^o$ có tổng bằng $\\frac{17}{24}$."
+    },
+    {
+      "label": "option_label",
+      "text": "c)"
+    },
+    {
+      "label": "option_text",
+      "text": "Chuyển động của một vật thể trong khoảng thời gian 180 phút được thể hiện trong mặt phẳng tọa độ. Theo đó, tại thời điểm $t$ $(0 \\leq t \\leq 180)$ vật thể ở vị trí có tọa độ $(2+\\sin t^{\\circ}; 4+\\cos t^{\\circ})$. Quỹ đạo chuyển động của vật thể có phương trình là $(C): (x-2)^2 + (y-4)^2 = 1$."
+    },
+    {
+      "label": "option_label",
+      "text": "d)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một khu vườn hạnh phúc được thiết kế dưới dạng một hình vuông có độ dài cạnh $10m$. Phần được tô đậm dùng để trồng cỏ, phần còn lại được lát gạch. Gọi $x, y$ lần lượt là bán kính của phần lát gạch hình tròn. Mỗi mét vuông trồng cỏ chi phí 100.000 đồng, mỗi mét vuông lát gạch chi phí 300.000 đồng. Khi đó, để diện tích phần lát gạch nhỏ nhất thì chi phí để thi công khu vườn bằng 22.000.000 đồng."
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 14."
+    },
+    {
+      "label": "option_label",
+      "text": "a)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một hộp đựng 5 viên bi trắng, 3 viên bi xanh. Số cách chọn ra 3 viên bi có đủ 2 màu là 45."
+    },
+    {
+      "label": "option_label",
+      "text": "b)"
+    },
+    {
+      "label": "option_text",
+      "text": "Trong một hộp bánh có 6 loại bánh nhân thịt và 4 loại bánh nhân đậu xanh. Có 120 cách chọn ra 6 loại bánh sao cho số loại bánh nhân thịt nhiều hơn loại bánh nhân đậu xanh."
+    },
+    {
+      "label": "option_label",
+      "text": "c)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một bình đựng 4 quả cầu xanh và 6 quả cầu trắng. Chọn ngẫu nhiên 3 quả cầu. Xác suất để trong 3 quả cầu lấy được có ít nhất 1 quả màu trắng bằng: $\\frac{19}{30}$."
+    },
+    {
+      "label": "option_label",
+      "text": "d)"
+    },
+    {
+      "label": "option_text",
+      "text": "Một nhóm học sinh gồm 5 nam và 5 bạn nữ được xếp thành một hàng dọc. Xác suất để 2 người đứng đầu hàng và cuối hàng là nữ bằng: $\\frac{1}{9}$"
+    },
+    {
+      "label": "section",
+      "text": "PHẦN III. Trắc nghiệm trả lời ngắn"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 15."
+    },
+    {
+      "label": "stem",
+      "text": "Trong mặt phẳng $Oxy$, cho ba đường thẳng lần lượt có phương trình $d_{1}: 5x-4y+15=0$, $d_{2}: 5x+2y-1=0$ và $d_{3}: mx-(2m-1)y+9m-13=0$. Tính tổng tất cả các giá trị của tham số $m$ để ba đường thẳng đã cho cùng đi qua một điểm."
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 16."
+    },
+    {
+      "label": "stem",
+      "text": "Trong mặt phẳng tọa độ $Oxy$, cho đường thẳng $(\\Delta): 3x-4y+m=0$ và đường tròn $(C): x^2+y^2-2x-2y-2=0$. Gọi $S$ là tập hợp tất cả các giá trị nguyên âm của tham số $m$ sao cho đường thẳng $(\\Delta)$ và đường tròn $(C)$ có điểm chung. Số phần tử của tập $S$ là bao nhiêu?"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 17."
+    },
+    {
+      "label": "stem",
+      "text": "Có bao nhiêu số tự nhiên có 7 chữ số khác nhau từng đôi một, trong đó chữ số 5 đứng liền giữa hai chữ số 4 và 6."
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 18."
+    },
+    {
+      "label": "stem",
+      "text": "Có 3 bó hoa. Bó thứ nhất có 8 hoa hồng, bó thứ hai có 7 bông hoa ly, bó thứ ba có 6 bông hoa huệ. Chọn ngẫu nhiên 7 hoa từ ba bó hoa trên để cắm vào lọ hoa, tính xác suất để trong 7 hoa được chọn có số hoa hồng bằng số hoa ly. (làm tròn kết quả đến chữ số thập phân thứ nhất)"
+    },
+    {
+      "label": "section",
+      "text": "PHẦN IV. Tự luận"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 19."
+    },
+    {
+      "label": "stem",
+      "text": "Trong mặt phẳng với hệ tọa độ $Oxy$, cho tam giác $ABC$ có $A(1;2)$, $B(0;3)$ và $C(4;0)$. Tính diện tích tam giác $ABC$?"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 20"
+    },
+    {
+      "label": "stem",
+      "text": "Trong mặt phẳng tọa độ $Oxy$, cho điểm $M(2;1)$ và đường tròn $(C): (x-1)^2+(y-2)^2=4$. Phương trình đường thẳng $(d)$ qua điểm $M$ và cắt $(C)$ tại hai điểm phân biệt $A$; $B$ sao cho độ dài $AB$ ngắn nhất là $(d): ax+by+1=0$. Tính $a^2+b^2$"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 21"
+    },
+    {
+      "label": "stem",
+      "text": "Có 7 học sinh nam và 3 học sinh nữ được xếp ngẫu nhiên thành một hàng ngang. Tính xác suất để khi xếp ngẫu nhiên 10 học sinh đó sao cho không có 2 học sinh nữ nào đứng cạnh nhau?"
+    }
+  ]
+}

@@ -75,9 +75,9 @@ def main():
     p_curr.add_argument("--all", action="store_true", help="Generate curricula for all subjects & grades concurrently")
     p_curr.add_argument("--subject", type=str, help="Subject slug (e.g. 'physics')")
     p_curr.add_argument("--grade", type=int, help="Grade level (e.g. 11)")
-    p_curr.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
-    p_curr.add_argument("--provider", type=str, choices=["deepseek", "nvidia", "vilao"], default=None, help="LLM provider to use")
-    p_curr.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
+    p_curr.add_argument("--model", type=str, default="gpt-5.6-luna", help="LLM model to use")
+    p_curr.add_argument("--provider", type=str, choices=["codex", "deepseek", "nvidia", "vilao", "xah", "commandcode"], default=None, help="LLM provider to use")
+    p_curr.add_argument("--thinking", type=str, default="low", choices=["high", "max", "low", "medium", "minimal", "none", "xhigh"], help="Thinking effort level")
     p_curr.add_argument("-c", "--concurrency", type=int, default=4, help="Number of parallel workers for concurrent generation")
 
     # 3. reconstruct
@@ -109,12 +109,12 @@ def main():
 
     # 4. exam
     p_exam = subparsers.add_parser("exam", help="Stage 4: Generate mock exams as compiled JSON")
-    p_exam.add_argument("-n", "--num-exams", type=int, default=300, help="Number of exams to generate")
+    p_exam.add_argument("-n", "--num-exams", type=int, default=50, help="Number of exams to generate")
     p_exam.add_argument("-o", "--output-dir", type=str, default="output/exams", help="Output directory path")
-    p_exam.add_argument("--model", type=str, default="deepseek-v4-pro", help="LLM model to use")
-    p_exam.add_argument("--provider", type=str, choices=["deepseek", "nvidia", "vilao"], default=None, help="LLM provider to use")
-    p_exam.add_argument("--thinking", type=str, default="high", choices=["high", "max", "low", "medium", "none"], help="Thinking effort level")
-    p_exam.add_argument("-c", "--concurrency", type=int, default=8, help="Number of concurrent threads per exam")
+    p_exam.add_argument("--model", type=str, default="gpt-5.6-luna", help="LLM model to use")
+    p_exam.add_argument("--provider", type=str, choices=["codex", "deepseek", "nvidia", "vilao", "xah", "commandcode"], default=None, help="LLM provider to use")
+    p_exam.add_argument("--thinking", type=str, default="low", choices=["high", "max", "low", "medium", "minimal", "none", "xhigh"], help="Thinking effort level")
+    p_exam.add_argument("-c", "--concurrency", type=int, default=2, help="Number of concurrent threads per exam")
     p_exam.add_argument("--subject", type=str, help="Filter generation for a specific subject")
     p_exam.add_argument("--grade", type=int, help="Filter generation for a specific grade")
 

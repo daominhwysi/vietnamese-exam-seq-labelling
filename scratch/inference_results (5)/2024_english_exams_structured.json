@@ -1,0 +1,10470 @@
+{
+  "file_name": "2024_english_exams.txt",
+  "original_text_length": 15200,
+  "segments": [
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "sentence"
+    },
+    {
+      "label": "option_text",
+      "text": "best"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "option_text",
+      "text": "exchanges"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "option_label",
+      "text": "Sophia"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stem",
+      "text": "Jenny are"
+    },
+    {
+      "label": "option_text",
+      "text": "talking"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "section",
+      "text": "solar"
+    },
+    {
+      "label": "question_label",
+      "text": "energy"
+    },
+    {
+      "label": "option_label",
+      "text": "Sophia"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "option_label",
+      "text": "I"
+    },
+    {
+      "label": "section",
+      "text": "think"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "section",
+      "text": "should"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "section",
+      "text": "solar"
+    },
+    {
+      "label": "question_label",
+      "text": "energy"
+    },
+    {
+      "label": "stem",
+      "text": "Jenny"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "section",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "It'"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "option_label",
+      "text": "clean"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "renewable"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "I"
+    },
+    {
+      "label": "stimulus",
+      "text": "don"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "section",
+      "text": "think"
+    },
+    {
+      "label": "stimulus",
+      "text": "so"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "I"
+    },
+    {
+      "label": "question_label",
+      "text": "agree"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "course"
+    },
+    {
+      "label": "stimulus",
+      "text": "not"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "You"
+    },
+    {
+      "label": "section",
+      "text": "re"
+    },
+    {
+      "label": "stimulus",
+      "text": "wrong"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stem",
+      "text": "Brett is"
+    },
+    {
+      "label": "option_text",
+      "text": "talking"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "Julie"
+    },
+    {
+      "label": "stimulus",
+      "text": "after"
+    },
+    {
+      "label": "section",
+      "text": "work"
+    },
+    {
+      "label": "stem",
+      "text": "Brett"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "section",
+      "text": "Let"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stimulus",
+      "text": "eat"
+    },
+    {
+      "label": "stem",
+      "text": "out"
+    },
+    {
+      "label": "stimulus",
+      "text": "Julie"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "section",
+      "text": "”"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "Yes"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "it'"
+    },
+    {
+      "label": "option_text",
+      "text": "s true"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "Yes"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "I"
+    },
+    {
+      "label": "option_label",
+      "text": "do"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "great"
+    },
+    {
+      "label": "option_text",
+      "text": "idea"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "Here"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "section",
+      "text": "differs"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "other"
+    },
+    {
+      "label": "option_label",
+      "text": "three"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "position"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "stress"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "different"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "national"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": "suggest"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "become"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stem",
+      "text": "whose"
+    },
+    {
+      "label": "stimulus",
+      "text": "underlined"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "section",
+      "text": "differs"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "other"
+    },
+    {
+      "label": "option_label",
+      "text": "three"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": "coast"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "board"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "boat"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "road"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": ". nature"
+    },
+    {
+      "label": "option_label",
+      "text": "B. artist"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "winter"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "photo"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "option_text",
+      "text": "CLOS"
+    },
+    {
+      "label": "stem",
+      "text": "EST in"
+    },
+    {
+      "label": "option_label",
+      "text": "meaning"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "underlined"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "stem",
+      "text": "mass"
+    },
+    {
+      "label": "option_label",
+      "text": "serves"
+    },
+    {
+      "label": "stimulus",
+      "text": "as"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "powerful"
+    },
+    {
+      "label": "option_text",
+      "text": "means"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "option_text",
+      "text": "distributing"
+    },
+    {
+      "label": "question_label",
+      "text": "information"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "public"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stimulus",
+      "text": "cheap"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "great"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "bad"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "weak"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_text",
+      "text": "boy"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stimulus",
+      "text": "unable"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "good"
+    },
+    {
+      "label": "option_label",
+      "text": "reason"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "option_text",
+      "text": "strange"
+    },
+    {
+      "label": "stimulus",
+      "text": "behaviour"
+    },
+    {
+      "label": "stem",
+      "text": "yesterday"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "allow"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "perform"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "give"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "take"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "OP"
+    },
+    {
+      "label": "question_label",
+      "text": "POS"
+    },
+    {
+      "label": "stimulus",
+      "text": "ITE"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "meaning"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "underlined"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "option_text",
+      "text": ": Being"
+    },
+    {
+      "label": "question_label",
+      "text": "frank"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "Tom made"
+    },
+    {
+      "label": "stem",
+      "text": "no"
+    },
+    {
+      "label": "section",
+      "text": "bones"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "stimulus",
+      "text": "discontent"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "section",
+      "text": "proposed"
+    },
+    {
+      "label": "question_label",
+      "text": "by"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "team"
+    },
+    {
+      "label": "option_text",
+      "text": "leader"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": ". attempted"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "express"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "tried"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "hide"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_label",
+      "text": ". failed"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "control"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "wanted"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "voice"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "Despite"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "option_label",
+      "text": "striking"
+    },
+    {
+      "label": "section",
+      "text": "differences"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "they"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_label",
+      "text": "developed"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "good relationship"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "small"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "major"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "clear"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "big"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "best"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "11"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "Lucy"
+    },
+    {
+      "label": "option_label",
+      "text": "was"
+    },
+    {
+      "label": "stimulus",
+      "text": "runner"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the competition"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "faster"
+    },
+    {
+      "label": "stimulus",
+      "text": "than"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_label",
+      "text": "fastest"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "faster"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "fastest"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ": I"
+    },
+    {
+      "label": "stem",
+      "text": "will"
+    },
+    {
+      "label": "option_text",
+      "text": "pick"
+    },
+    {
+      "label": "section",
+      "text": "up"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "until"
+    },
+    {
+      "label": "stem",
+      "text": "will"
+    },
+    {
+      "label": "stimulus",
+      "text": "arrive"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "station"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "stimulus",
+      "text": "arrive"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "station"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "as"
+    },
+    {
+      "label": "stimulus",
+      "text": "soon as"
+    },
+    {
+      "label": "section",
+      "text": "arrived"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "station"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "after"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "section",
+      "text": "arrived"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "station"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "mall"
+    },
+    {
+      "label": "option_label",
+      "text": "was"
+    },
+    {
+      "label": "option_text",
+      "text": "built"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "area"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "local people"
+    },
+    {
+      "label": "stimulus",
+      "text": "access"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_text",
+      "text": "wide"
+    },
+    {
+      "label": "stimulus",
+      "text": "range"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "stem",
+      "text": "goods"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "give"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "giving"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "given"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stem",
+      "text": "giving"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_text",
+      "text": "travel"
+    },
+    {
+      "label": "section",
+      "text": "agency"
+    },
+    {
+      "label": "question_label",
+      "text": "reports"
+    },
+    {
+      "label": "section",
+      "text": "most"
+    },
+    {
+      "label": "option_text",
+      "text": "enjoyed"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "city"
+    },
+    {
+      "label": "section",
+      "text": "tour"
+    },
+    {
+      "label": "section",
+      "text": "much"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stimulus",
+      "text": "sight"
+    },
+    {
+      "label": "stem",
+      "text": "seers"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "spectators"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "commuters"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "viewers"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "stem",
+      "text": "young"
+    },
+    {
+      "label": "section",
+      "text": "star"
+    },
+    {
+      "label": "option_text",
+      "text": "loves"
+    },
+    {
+      "label": "stimulus",
+      "text": "appearing"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "option_text",
+      "text": "television"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "no"
+    },
+    {
+      "label": "stimulus",
+      "text": "violet"
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "stimulus",
+      "text": "comes"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "expressing"
+    },
+    {
+      "label": "section",
+      "text": "her"
+    },
+    {
+      "label": "option_text",
+      "text": "views"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "rotting"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "drying"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "shrinking"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "blooming"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_text",
+      "text": ": My aunt"
+    },
+    {
+      "label": "stem",
+      "text": "doesn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "like"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "go"
+    },
+    {
+      "label": "stem",
+      "text": "out"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "question_label",
+      "text": "night"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": ". an"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "∅ ("
+    },
+    {
+      "label": "stimulus",
+      "text": "no"
+    },
+    {
+      "label": "option_label",
+      "text": "article"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "Trang"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "/4"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "image"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "stimulus",
+      "text": "jpg"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "teachers"
+    },
+    {
+      "label": "stem",
+      "text": "in our"
+    },
+    {
+      "label": "section",
+      "text": "school"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "option_label",
+      "text": "helpful"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "kind"
+    },
+    {
+      "label": "option_label",
+      "text": "_______ us."
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "option_text",
+      "text": ": I"
+    },
+    {
+      "label": "option_label",
+      "text": "stopped"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "order"
+    },
+    {
+      "label": "stem",
+      "text": "to get"
+    },
+    {
+      "label": "option_label",
+      "text": "something"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "eat"
+    },
+    {
+      "label": "section",
+      "text": "because"
+    },
+    {
+      "label": "option_text",
+      "text": "I"
+    },
+    {
+      "label": "option_label",
+      "text": "was"
+    },
+    {
+      "label": "stimulus",
+      "text": "so"
+    },
+    {
+      "label": "option_label",
+      "text": "hungry."
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "working"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "working"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_label",
+      "text": "worked"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "work"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_text",
+      "text": "boy"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "piano"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stimulus",
+      "text": "does"
+    },
+    {
+      "label": "stem",
+      "text": "he"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "isn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "he"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "doesn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "he"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "was"
+    },
+    {
+      "label": "stem",
+      "text": "he"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ": To"
+    },
+    {
+      "label": "section",
+      "text": "disappointment"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "section",
+      "text": "didn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "section",
+      "text": "up"
+    },
+    {
+      "label": "stimulus",
+      "text": "; instead"
+    },
+    {
+      "label": "stem",
+      "text": ", all"
+    },
+    {
+      "label": "section",
+      "text": "the lights went"
+    },
+    {
+      "label": "stem",
+      "text": "out"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "house"
+    },
+    {
+      "label": "stimulus",
+      "text": "into"
+    },
+    {
+      "label": "option_text",
+      "text": "darkness"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "discharged"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "dispersed"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "dis"
+    },
+    {
+      "label": "option_label",
+      "text": "arranged"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "dissolved"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stimulus",
+      "text": "good"
+    },
+    {
+      "label": "stem",
+      "text": "way"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "option_label",
+      "text": "parents"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "children"
+    },
+    {
+      "label": "stem",
+      "text": "to get"
+    },
+    {
+      "label": "question_label",
+      "text": "closer"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stem",
+      "text": "housework"
+    },
+    {
+      "label": "stem",
+      "text": "together"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": ". do"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "take"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "make"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "turn"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "22"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "option_label",
+      "text": "_______ tea"
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "option_label",
+      "text": "sister came"
+    },
+    {
+      "label": "option_text",
+      "text": "home"
+    },
+    {
+      "label": "section",
+      "text": "from school"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "makes"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_label",
+      "text": "was"
+    },
+    {
+      "label": "question_label",
+      "text": "making"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "question_label",
+      "text": "making"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "has made"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "plants"
+    },
+    {
+      "label": "question_label",
+      "text": "by"
+    },
+    {
+      "label": "stem",
+      "text": "my"
+    },
+    {
+      "label": "option_text",
+      "text": "brother"
+    },
+    {
+      "label": "option_text",
+      "text": "every"
+    },
+    {
+      "label": "option_label",
+      "text": "day."
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "watered"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "question_label",
+      "text": "watered"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "water"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "option_text",
+      "text": "watering"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "question_label",
+      "text": "friends"
+    },
+    {
+      "label": "section",
+      "text": "usually"
+    },
+    {
+      "label": "option_label",
+      "text": "early"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "morning"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stimulus",
+      "text": "look"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "turn"
+    },
+    {
+      "label": "question_label",
+      "text": "off"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "wake"
+    },
+    {
+      "label": "section",
+      "text": "up"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "put"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "question_label",
+      "text": "child"
+    },
+    {
+      "label": "question_label",
+      "text": "took a more"
+    },
+    {
+      "label": "stem",
+      "text": "role in"
+    },
+    {
+      "label": "stem",
+      "text": "learning"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "made"
+    },
+    {
+      "label": "stimulus",
+      "text": "great"
+    },
+    {
+      "label": "section",
+      "text": "progress"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "activate"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "active"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "activity"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "actively"
+    },
+    {
+      "label": "stimulus",
+      "text": "Read"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the correct"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "section",
+      "text": "phrase"
+    },
+    {
+      "label": "option_text",
+      "text": "best fits each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "numbered"
+    },
+    {
+      "label": "option_text",
+      "text": "blanks"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_label",
+      "text": "When"
+    },
+    {
+      "label": "option_label",
+      "text": "trying"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "understand"
+    },
+    {
+      "label": "stem",
+      "text": "our"
+    },
+    {
+      "label": "option_label",
+      "text": "own"
+    },
+    {
+      "label": "option_text",
+      "text": "or other people"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stimulus",
+      "text": "behaviour"
+    },
+    {
+      "label": "stem",
+      "text": ", we"
+    },
+    {
+      "label": "option_text",
+      "text": "tend"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "things"
+    },
+    {
+      "label": "stem",
+      "text": "We"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "question_label",
+      "text": "one"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "section",
+      "text": "adjectives"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "sum"
+    },
+    {
+      "label": "option_text",
+      "text": "each other"
+    },
+    {
+      "label": "section",
+      "text": "up"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": ", we"
+    },
+    {
+      "label": "option_label",
+      "text": "may"
+    },
+    {
+      "label": "section",
+      "text": "think of"
+    },
+    {
+      "label": "option_text",
+      "text": "some"
+    },
+    {
+      "label": "question_label",
+      "text": "friends"
+    },
+    {
+      "label": "stimulus",
+      "text": "as"
+    },
+    {
+      "label": "stimulus",
+      "text": "having"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_text",
+      "text": "generally"
+    },
+    {
+      "label": "stimulus",
+      "text": "hopeful"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_text",
+      "text": "positive"
+    },
+    {
+      "label": "stem",
+      "text": "outlook"
+    },
+    {
+      "label": "option_text",
+      "text": "while others"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "stimulus",
+      "text": "considered"
+    },
+    {
+      "label": "question_label",
+      "text": "pessimistic"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "negative."
+    },
+    {
+      "label": "question_label",
+      "text": "course"
+    },
+    {
+      "label": "stem",
+      "text": ", in"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stem",
+      "text": "none"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "option_label",
+      "text": "us"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stimulus",
+      "text": "so"
+    },
+    {
+      "label": "stem",
+      "text": "easily"
+    },
+    {
+      "label": "stem",
+      "text": "defined"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "question_label",
+      "text": "truth"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "we are all"
+    },
+    {
+      "label": "section",
+      "text": "made up of"
+    },
+    {
+      "label": "option_text",
+      "text": "characteristics"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "contradictory"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "question_label",
+      "text": "serious"
+    },
+    {
+      "label": "stem",
+      "text": "and reliable"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "stem",
+      "text": "our"
+    },
+    {
+      "label": "section",
+      "text": "colleagues"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "section",
+      "text": "work"
+    },
+    {
+      "label": "stimulus",
+      "text": "but"
+    },
+    {
+      "label": "stem",
+      "text": "we are"
+    },
+    {
+      "label": "question_label",
+      "text": "more"
+    },
+    {
+      "label": "section",
+      "text": "unpredictable"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "emotional"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "stem",
+      "text": "our"
+    },
+    {
+      "label": "stimulus",
+      "text": "nearest"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "dearest"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "option_text",
+      "text": "home"
+    },
+    {
+      "label": "section",
+      "text": "With"
+    },
+    {
+      "label": "question_label",
+      "text": "one person"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "option_label",
+      "text": "cautious"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "but"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "one"
+    },
+    {
+      "label": "stem",
+      "text": ", we are"
+    },
+    {
+      "label": "stimulus",
+      "text": "adventurous"
+    },
+    {
+      "label": "question_label",
+      "text": "thrill"
+    },
+    {
+      "label": "section",
+      "text": "So"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_text",
+      "text": "people"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "stem",
+      "text": "neatly"
+    },
+    {
+      "label": "question_label",
+      "text": "divided"
+    },
+    {
+      "label": "stimulus",
+      "text": "into"
+    },
+    {
+      "label": "stimulus",
+      "text": "types"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "option_label",
+      "text": "Or do"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "our"
+    },
+    {
+      "label": "option_label",
+      "text": "according"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "the differences"
+    },
+    {
+      "label": "stem",
+      "text": "in our"
+    },
+    {
+      "label": "section",
+      "text": "changing"
+    },
+    {
+      "label": "stimulus",
+      "text": "moods"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "option_label",
+      "text": "Perhaps"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "idea"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "option_label",
+      "text": "fixed"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "question_label",
+      "text": "just a"
+    },
+    {
+      "label": "option_label",
+      "text": "meaningless"
+    },
+    {
+      "label": "question_label",
+      "text": "misconception"
+    },
+    {
+      "label": "section",
+      "text": "Maybe"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "section",
+      "text": "never truly"
+    },
+    {
+      "label": "option_text",
+      "text": "understand"
+    },
+    {
+      "label": "section",
+      "text": "ourselves"
+    },
+    {
+      "label": "option_text",
+      "text": "or other people"
+    },
+    {
+      "label": "stem",
+      "text": "Adapted"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "option_text",
+      "text": "Gold"
+    },
+    {
+      "label": "option_label",
+      "text": "First"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "Because"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "In"
+    },
+    {
+      "label": "option_text",
+      "text": "contrast"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "example"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "distance"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "return"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "reality"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "theory"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "whom"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "who"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_label",
+      "text": ". which"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "whose"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "another"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "many"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "few"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "most"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "fit"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "alter"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_label",
+      "text": ". grow"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": ". divert"
+    },
+    {
+      "label": "stimulus",
+      "text": "Read"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "best"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "option_text",
+      "text": "walk"
+    },
+    {
+      "label": "stimulus",
+      "text": "into"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "streets"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "see someone"
+    },
+    {
+      "label": "stimulus",
+      "text": "throwing"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "plastic"
+    },
+    {
+      "label": "option_label",
+      "text": "bottle"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "section",
+      "text": "the ground"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "ll"
+    },
+    {
+      "label": "question_label",
+      "text": "probably"
+    },
+    {
+      "label": "stem",
+      "text": "get"
+    },
+    {
+      "label": "option_label",
+      "text": "But do"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "option_label",
+      "text": "react"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "same"
+    },
+    {
+      "label": "stem",
+      "text": "way"
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "option_label",
+      "text": "see"
+    },
+    {
+      "label": "option_text",
+      "text": "people"
+    },
+    {
+      "label": "stimulus",
+      "text": "throwing"
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "stimulus",
+      "text": "into"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "sea"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stem",
+      "text": "We all"
+    },
+    {
+      "label": "option_text",
+      "text": "how"
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "stem",
+      "text": "ruins"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "environment"
+    },
+    {
+      "label": "section",
+      "text": "on land"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "but"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "stem",
+      "text": "often"
+    },
+    {
+      "label": "question_label",
+      "text": "forget"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "influence"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "option_label",
+      "text": "environments"
+    },
+    {
+      "label": "question_label",
+      "text": "like"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "sea"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "lakes"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "rivers"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "First"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "stem",
+      "text": "all"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "water"
+    },
+    {
+      "label": "option_label",
+      "text": "pollution"
+    },
+    {
+      "label": "stem",
+      "text": "looks"
+    },
+    {
+      "label": "section",
+      "text": "terrible"
+    },
+    {
+      "label": "stimulus",
+      "text": "Many"
+    },
+    {
+      "label": "stimulus",
+      "text": "beautiful"
+    },
+    {
+      "label": "stimulus",
+      "text": "beaches"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "section",
+      "text": "become"
+    },
+    {
+      "label": "stimulus",
+      "text": "covered"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "option_text",
+      "text": "whatever"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "section",
+      "text": "thrown"
+    },
+    {
+      "label": "stimulus",
+      "text": "into"
+    },
+    {
+      "label": "section",
+      "text": "the water"
+    },
+    {
+      "label": "stimulus",
+      "text": "comes"
+    },
+    {
+      "label": "question_label",
+      "text": "ashore"
+    },
+    {
+      "label": "question_label",
+      "text": "Even rivers"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_text",
+      "text": "lakes"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "some"
+    },
+    {
+      "label": "option_label",
+      "text": "plastic"
+    },
+    {
+      "label": "stimulus",
+      "text": "bags"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stem",
+      "text": "bottles"
+    },
+    {
+      "label": "question_label",
+      "text": "floating"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "them"
+    },
+    {
+      "label": "option_text",
+      "text": "Secondly"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "option_label",
+      "text": "can hurt"
+    },
+    {
+      "label": "option_label",
+      "text": "animals"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "birds"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "question_label",
+      "text": "by"
+    },
+    {
+      "label": "section",
+      "text": "the water"
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "stimulus",
+      "text": "they"
+    },
+    {
+      "label": "option_label",
+      "text": "see"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "plastic"
+    },
+    {
+      "label": "option_label",
+      "text": "bottle"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "they"
+    },
+    {
+      "label": "option_label",
+      "text": "may"
+    },
+    {
+      "label": "section",
+      "text": "think"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "option_text",
+      "text": "is food"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "stimulus",
+      "text": "they"
+    },
+    {
+      "label": "stem",
+      "text": "try"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "eat"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "bottle"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "stem",
+      "text": "get"
+    },
+    {
+      "label": "option_label",
+      "text": "caught"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "stem",
+      "text": "mouth"
+    },
+    {
+      "label": "option_text",
+      "text": "or stomach"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "stop"
+    },
+    {
+      "label": "stimulus",
+      "text": "them"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "option_text",
+      "text": "eating"
+    },
+    {
+      "label": "stimulus",
+      "text": "else"
+    },
+    {
+      "label": "stem",
+      "text": "Plastic"
+    },
+    {
+      "label": "stem",
+      "text": "bottles"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_text",
+      "text": "also"
+    },
+    {
+      "label": "section",
+      "text": "stop"
+    },
+    {
+      "label": "option_label",
+      "text": "dolphins"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "stimulus",
+      "text": "breathing"
+    },
+    {
+      "label": "question_label",
+      "text": "Sometimes"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stem",
+      "text": "boats"
+    },
+    {
+      "label": "stimulus",
+      "text": "leave"
+    },
+    {
+      "label": "option_text",
+      "text": "bits"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "stimulus",
+      "text": "net"
+    },
+    {
+      "label": "option_label",
+      "text": "behind"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the water"
+    },
+    {
+      "label": "question_label",
+      "text": "Fish"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "stem",
+      "text": "get"
+    },
+    {
+      "label": "option_label",
+      "text": "caught"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stem",
+      "text": "Finally"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "people"
+    },
+    {
+      "label": "question_label",
+      "text": "forget"
+    },
+    {
+      "label": "stimulus",
+      "text": "plastics"
+    },
+    {
+      "label": "section",
+      "text": "contain"
+    },
+    {
+      "label": "question_label",
+      "text": "chemicals"
+    },
+    {
+      "label": "section",
+      "text": "stay"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the water"
+    },
+    {
+      "label": "stem",
+      "text": "This"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "question_label",
+      "text": "bad"
+    },
+    {
+      "label": "section",
+      "text": "for both"
+    },
+    {
+      "label": "option_text",
+      "text": "fish"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "plants."
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "stimulus",
+      "text": "eat"
+    },
+    {
+      "label": "option_text",
+      "text": "fish"
+    },
+    {
+      "label": "section",
+      "text": "containing"
+    },
+    {
+      "label": "question_label",
+      "text": "chemicals"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "then"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_text",
+      "text": "also"
+    },
+    {
+      "label": "stem",
+      "text": "get"
+    },
+    {
+      "label": "option_text",
+      "text": "ill"
+    },
+    {
+      "label": "stem",
+      "text": "In"
+    },
+    {
+      "label": "stimulus",
+      "text": "conclusion"
+    },
+    {
+      "label": "stem",
+      "text": ", we"
+    },
+    {
+      "label": "section",
+      "text": "need"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stem",
+      "text": "worry"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "section",
+      "text": "water"
+    },
+    {
+      "label": "option_label",
+      "text": "pollution"
+    },
+    {
+      "label": "stimulus",
+      "text": "as"
+    },
+    {
+      "label": "section",
+      "text": "much"
+    },
+    {
+      "label": "stimulus",
+      "text": "as"
+    },
+    {
+      "label": "stem",
+      "text": "we"
+    },
+    {
+      "label": "question_label",
+      "text": "care"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "section",
+      "text": "land"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "stem",
+      "text": "air"
+    },
+    {
+      "label": "stem",
+      "text": "We"
+    },
+    {
+      "label": "section",
+      "text": "should"
+    },
+    {
+      "label": "stem",
+      "text": "all"
+    },
+    {
+      "label": "stem",
+      "text": "protect"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "seas"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "lakes"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "rivers"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "remember"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "take"
+    },
+    {
+      "label": "stem",
+      "text": "our"
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "option_label",
+      "text": "away"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "option_label",
+      "text": "us."
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "Adapted"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "option_text",
+      "text": "Empower"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "Trang 2"
+    },
+    {
+      "label": "question_label",
+      "text": "/4"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "image"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "stimulus",
+      "text": "e"
+    },
+    {
+      "label": "stimulus",
+      "text": "jpg"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ": What"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "option_label",
+      "text": "mainly"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "Increased"
+    },
+    {
+      "label": "stem",
+      "text": "public"
+    },
+    {
+      "label": "option_text",
+      "text": "awareness"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "option_label",
+      "text": "pollution"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "Preferred"
+    },
+    {
+      "label": "stimulus",
+      "text": "methods"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "protecting water"
+    },
+    {
+      "label": "stem",
+      "text": "creatures"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_label",
+      "text": ". Harmful"
+    },
+    {
+      "label": "stem",
+      "text": "effects"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "stimulus",
+      "text": "waste"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "aquatic"
+    },
+    {
+      "label": "option_label",
+      "text": "environment"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "ways"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "reduce"
+    },
+    {
+      "label": "option_label",
+      "text": "plastic"
+    },
+    {
+      "label": "question_label",
+      "text": "packaging"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stem",
+      "text": "ruins in"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "meaning"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "damages"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "supports"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "replaces"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "covers"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stimulus",
+      "text": "them"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "rivers"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_text",
+      "text": "lakes"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_label",
+      "text": "plastic"
+    },
+    {
+      "label": "stimulus",
+      "text": "bags"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stem",
+      "text": "bottles"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "beautiful"
+    },
+    {
+      "label": "stimulus",
+      "text": "beaches"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "animals"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "birds"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "question_label",
+      "text": "According"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "fish"
+    },
+    {
+      "label": "option_label",
+      "text": "may"
+    },
+    {
+      "label": "stem",
+      "text": "die"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "option_label",
+      "text": "getting caught"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "bits"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "stimulus",
+      "text": "net"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "boats"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "food"
+    },
+    {
+      "label": "question_label",
+      "text": "left"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the water"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "plastic"
+    },
+    {
+      "label": "stem",
+      "text": "bottles"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_text",
+      "text": ": Which"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "option_label",
+      "text": "NOT"
+    },
+    {
+      "label": "option_text",
+      "text": "true"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "according"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": ". When"
+    },
+    {
+      "label": "stimulus",
+      "text": "eaten"
+    },
+    {
+      "label": "question_label",
+      "text": "by"
+    },
+    {
+      "label": "stem",
+      "text": "sea"
+    },
+    {
+      "label": "option_label",
+      "text": "animals"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "question_label",
+      "text": "birds"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "question_label",
+      "text": "threaten"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "option_label",
+      "text": "lives."
+    },
+    {
+      "label": "option_label",
+      "text": "B. When"
+    },
+    {
+      "label": "question_label",
+      "text": "ashore"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "option_label",
+      "text": "can spoil"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "beauty"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "option_text",
+      "text": "many"
+    },
+    {
+      "label": "stimulus",
+      "text": "beaches"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "People"
+    },
+    {
+      "label": "option_text",
+      "text": "eating fish"
+    },
+    {
+      "label": "section",
+      "text": "contain"
+    },
+    {
+      "label": "question_label",
+      "text": "chemicals"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "stem",
+      "text": "no"
+    },
+    {
+      "label": "stimulus",
+      "text": "risk"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "option_label",
+      "text": "getting sick."
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "Chemicals"
+    },
+    {
+      "label": "stem",
+      "text": "contained in"
+    },
+    {
+      "label": "stimulus",
+      "text": "rubbish"
+    },
+    {
+      "label": "stem",
+      "text": "will"
+    },
+    {
+      "label": "section",
+      "text": "stay"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the water"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "harm"
+    },
+    {
+      "label": "option_text",
+      "text": "fish"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "plants."
+    },
+    {
+      "label": "stimulus",
+      "text": "Read"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "best"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "option_text",
+      "text": "smartphones"
+    },
+    {
+      "label": "section",
+      "text": "destroyed"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "generation"
+    },
+    {
+      "label": "option_text",
+      "text": "?”"
+    },
+    {
+      "label": "question_label",
+      "text": "Jean"
+    },
+    {
+      "label": "option_label",
+      "text": "Tw"
+    },
+    {
+      "label": "stimulus",
+      "text": "–"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "psychology professor"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "option_text",
+      "text": "San"
+    },
+    {
+      "label": "option_text",
+      "text": "Diego"
+    },
+    {
+      "label": "stimulus",
+      "text": "State"
+    },
+    {
+      "label": "option_label",
+      "text": "University"
+    },
+    {
+      "label": "stimulus",
+      "text": "–"
+    },
+    {
+      "label": "option_label",
+      "text": "asked"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "her"
+    },
+    {
+      "label": "option_text",
+      "text": "controversial"
+    },
+    {
+      "label": "stimulus",
+      "text": "book"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "i"
+    },
+    {
+      "label": "option_label",
+      "text": "Gen."
+    },
+    {
+      "label": "stem",
+      "text": "In"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "book"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "question_label",
+      "text": "argues"
+    },
+    {
+      "label": "option_text",
+      "text": "those"
+    },
+    {
+      "label": "section",
+      "text": "born"
+    },
+    {
+      "label": "stimulus",
+      "text": "after"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "99"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "section",
+      "text": "facing"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "mental"
+    },
+    {
+      "label": "section",
+      "text": "health"
+    },
+    {
+      "label": "stimulus",
+      "text": "”,"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "option_text",
+      "text": "believes"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "section",
+      "text": "linked"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "growing up"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "question_label",
+      "text": "noses pressed"
+    },
+    {
+      "label": "option_label",
+      "text": "against"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_text",
+      "text": "screen"
+    },
+    {
+      "label": "question_label",
+      "text": "Her"
+    },
+    {
+      "label": "option_label",
+      "text": "newest"
+    },
+    {
+      "label": "question_label",
+      "text": "study"
+    },
+    {
+      "label": "stimulus",
+      "text": "provides"
+    },
+    {
+      "label": "question_label",
+      "text": "more"
+    },
+    {
+      "label": "option_text",
+      "text": "support"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "stimulus",
+      "text": "connection"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "showing"
+    },
+    {
+      "label": "stimulus",
+      "text": "who spent"
+    },
+    {
+      "label": "question_label",
+      "text": "more"
+    },
+    {
+      "label": "stimulus",
+      "text": "than"
+    },
+    {
+      "label": "option_label",
+      "text": "an"
+    },
+    {
+      "label": "stimulus",
+      "text": "hour"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "day"
+    },
+    {
+      "label": "stem",
+      "text": "interacting"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "option_text",
+      "text": "less"
+    },
+    {
+      "label": "section",
+      "text": "happy on"
+    },
+    {
+      "label": "option_label",
+      "text": "average"
+    },
+    {
+      "label": "stimulus",
+      "text": "than"
+    },
+    {
+      "label": "option_text",
+      "text": "those"
+    },
+    {
+      "label": "stimulus",
+      "text": "who"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "question_label",
+      "text": "more"
+    },
+    {
+      "label": "option_text",
+      "text": "face"
+    },
+    {
+      "label": "option_text",
+      "text": "time"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "option_text",
+      "text": "others"
+    },
+    {
+      "label": "option_label",
+      "text": "Tw"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stimulus",
+      "text": "conclusions"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "stem",
+      "text": "come"
+    },
+    {
+      "label": "section",
+      "text": "up"
+    },
+    {
+      "label": "option_label",
+      "text": "against"
+    },
+    {
+      "label": "question_label",
+      "text": "criticism"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "past"
+    },
+    {
+      "label": "stimulus",
+      "text": "Some"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "section",
+      "text": "accused"
+    },
+    {
+      "label": "section",
+      "text": "her of"
+    },
+    {
+      "label": "question_label",
+      "text": "simp"
+    },
+    {
+      "label": "option_label",
+      "text": "lifying"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "stem",
+      "text": "data"
+    },
+    {
+      "label": "option_label",
+      "text": "may"
+    },
+    {
+      "label": "stem",
+      "text": "tell"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "slightly"
+    },
+    {
+      "label": "section",
+      "text": "different"
+    },
+    {
+      "label": "option_text",
+      "text": "story"
+    },
+    {
+      "label": "option_label",
+      "text": ". Tw"
+    },
+    {
+      "label": "option_label",
+      "text": "recognises"
+    },
+    {
+      "label": "section",
+      "text": "her"
+    },
+    {
+      "label": "question_label",
+      "text": "study"
+    },
+    {
+      "label": "section",
+      "text": "suggests"
+    },
+    {
+      "label": "option_label",
+      "text": "only"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_text",
+      "text": "link between screen"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "stem",
+      "text": "and psychological"
+    },
+    {
+      "label": "stimulus",
+      "text": "well"
+    },
+    {
+      "label": "option_text",
+      "text": "being"
+    },
+    {
+      "label": "stimulus",
+      "text": ". A"
+    },
+    {
+      "label": "section",
+      "text": "explanation"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "option_label",
+      "text": "running"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "section",
+      "text": "screens"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "escape"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "things"
+    },
+    {
+      "label": "stem",
+      "text": "in life"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "question_label",
+      "text": "making"
+    },
+    {
+      "label": "stimulus",
+      "text": "them"
+    },
+    {
+      "label": "option_text",
+      "text": "unhappy"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "surveys"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_label",
+      "text": "t say whether"
+    },
+    {
+      "label": "option_text",
+      "text": "screen"
+    },
+    {
+      "label": "option_text",
+      "text": "time"
+    },
+    {
+      "label": "section",
+      "text": "directly"
+    },
+    {
+      "label": "option_text",
+      "text": "changes"
+    },
+    {
+      "label": "stimulus",
+      "text": "mental"
+    },
+    {
+      "label": "option_label",
+      "text": "health"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "the research"
+    },
+    {
+      "label": "option_label",
+      "text": "states."
+    },
+    {
+      "label": "option_text",
+      "text": "ist"
+    },
+    {
+      "label": "option_label",
+      "text": "Melinda"
+    },
+    {
+      "label": "option_text",
+      "text": "Gates"
+    },
+    {
+      "label": "stem",
+      "text": ", whose"
+    },
+    {
+      "label": "section",
+      "text": "three"
+    },
+    {
+      "label": "question_label",
+      "text": "children"
+    },
+    {
+      "label": "option_text",
+      "text": "also"
+    },
+    {
+      "label": "section",
+      "text": "born"
+    },
+    {
+      "label": "stimulus",
+      "text": "after"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "99"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "wrote"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "section",
+      "text": "Washington"
+    },
+    {
+      "label": "option_text",
+      "text": "Post"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "option_label",
+      "text": "phones"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "apps"
+    },
+    {
+      "label": "option_text",
+      "text": "aren"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "good"
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "question_label",
+      "text": "bad"
+    },
+    {
+      "label": "option_text",
+      "text": "themselves"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "but"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "option_label",
+      "text": "adolescents"
+    },
+    {
+      "label": "stimulus",
+      "text": "who"
+    },
+    {
+      "label": "stimulus",
+      "text": "don"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "yet"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "emotional"
+    },
+    {
+      "label": "option_text",
+      "text": "tools"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "overcome"
+    },
+    {
+      "label": "stem",
+      "text": "life"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "they"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "stimulus",
+      "text": "aggravate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "difficulties"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "growing up"
+    },
+    {
+      "label": "option_label",
+      "text": "At"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "same"
+    },
+    {
+      "label": "option_text",
+      "text": "time"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "stem",
+      "text": "learning"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "section",
+      "text": "their"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "novel"
+    },
+    {
+      "label": "section",
+      "text": "ways"
+    },
+    {
+      "label": "stimulus",
+      "text": "studies"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "stimulus",
+      "text": "explored"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "connection"
+    },
+    {
+      "label": "option_text",
+      "text": "between"
+    },
+    {
+      "label": "stem",
+      "text": "social"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "isolation"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_text",
+      "text": "how"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "option_label",
+      "text": "likes”"
+    },
+    {
+      "label": "stem",
+      "text": "activate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "brain"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "question_label",
+      "text": "reward"
+    },
+    {
+      "label": "option_label",
+      "text": "centre."
+    },
+    {
+      "label": "stimulus",
+      "text": "Some"
+    },
+    {
+      "label": "question_label",
+      "text": "analyses"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "found"
+    },
+    {
+      "label": "stimulus",
+      "text": "moderate"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "technologies"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stimulus",
+      "text": "not"
+    },
+    {
+      "label": "stimulus",
+      "text": "harmful"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "itself"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "stimulus",
+      "text": "even"
+    },
+    {
+      "label": "question_label",
+      "text": "children'"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stem",
+      "text": "social"
+    },
+    {
+      "label": "option_label",
+      "text": "skills"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "build"
+    },
+    {
+      "label": "question_label",
+      "text": "emotional"
+    },
+    {
+      "label": "option_label",
+      "text": "strength."
+    },
+    {
+      "label": "question_label",
+      "text": "There"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "no"
+    },
+    {
+      "label": "option_label",
+      "text": "doubt"
+    },
+    {
+      "label": "option_text",
+      "text": "people"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "option_text",
+      "text": "spending"
+    },
+    {
+      "label": "question_label",
+      "text": "more"
+    },
+    {
+      "label": "option_text",
+      "text": "time"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stimulus",
+      "text": "having"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "major"
+    },
+    {
+      "label": "question_label",
+      "text": "impact"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "adults"
+    },
+    {
+      "label": "stem",
+      "text": "alike"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "option_label",
+      "text": "These"
+    },
+    {
+      "label": "stem",
+      "text": "are"
+    },
+    {
+      "label": "stem",
+      "text": "really"
+    },
+    {
+      "label": "section",
+      "text": "important"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "stimulus",
+      "text": "changed"
+    },
+    {
+      "label": "stem",
+      "text": "our"
+    },
+    {
+      "label": "option_label",
+      "text": "lives"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "so"
+    },
+    {
+      "label": "option_text",
+      "text": "many"
+    },
+    {
+      "label": "section",
+      "text": "ways"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "not"
+    },
+    {
+      "label": "section",
+      "text": "just for"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "worse"
+    },
+    {
+      "label": "stimulus",
+      "text": "but"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "better"
+    },
+    {
+      "label": "section",
+      "text": ",”"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "stimulus",
+      "text": "Amanda"
+    },
+    {
+      "label": "option_label",
+      "text": "Len"
+    },
+    {
+      "label": "section",
+      "text": "hart"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "deputy"
+    },
+    {
+      "label": "option_label",
+      "text": "director"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_label",
+      "text": "Better"
+    },
+    {
+      "label": "option_label",
+      "text": "Life"
+    },
+    {
+      "label": "stem",
+      "text": "Lab"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "option_label",
+      "text": "York"
+    },
+    {
+      "label": "question_label",
+      "text": "America"
+    },
+    {
+      "label": "option_label",
+      "text": "But"
+    },
+    {
+      "label": "section",
+      "text": "the latest research"
+    },
+    {
+      "label": "stimulus",
+      "text": "“"
+    },
+    {
+      "label": "stimulus",
+      "text": "is"
+    },
+    {
+      "label": "question_label",
+      "text": "looking"
+    },
+    {
+      "label": "option_text",
+      "text": "straight"
+    },
+    {
+      "label": "section",
+      "text": "at"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "wanting"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "section",
+      "text": "the scape"
+    },
+    {
+      "label": "stimulus",
+      "text": "goat"
+    },
+    {
+      "label": "stem",
+      "text": "Adapted"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "stem",
+      "text": "CNN"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_text",
+      "text": ": What"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "option_label",
+      "text": "mainly"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "Practical"
+    },
+    {
+      "label": "section",
+      "text": "ways"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "teenagers"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "option_label",
+      "text": "getting"
+    },
+    {
+      "label": "stem",
+      "text": "addicted"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "stem",
+      "text": "reasons"
+    },
+    {
+      "label": "option_label",
+      "text": "behind"
+    },
+    {
+      "label": "stimulus",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "professor"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stimulus",
+      "text": "book"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stem",
+      "text": "critical"
+    },
+    {
+      "label": "option_text",
+      "text": "comments"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "Different"
+    },
+    {
+      "label": "option_text",
+      "text": "views"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "psychological"
+    },
+    {
+      "label": "stem",
+      "text": "effects"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "stimulus",
+      "text": "teenagers"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "question_label",
+      "text": "smart"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "positively"
+    },
+    {
+      "label": "option_text",
+      "text": "change"
+    },
+    {
+      "label": "stimulus",
+      "text": "teenagers"
+    },
+    {
+      "label": "option_label",
+      "text": "brains"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "mental"
+    },
+    {
+      "label": "section",
+      "text": "health"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "her"
+    },
+    {
+      "label": "option_text",
+      "text": "controversial"
+    },
+    {
+      "label": "stimulus",
+      "text": "book"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "generation"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_text",
+      "text": "screen"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stem",
+      "text": "slightly in"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "meaning"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stimulus",
+      "text": "clearly"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "lot"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "a little"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "completely"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "question_label",
+      "text": "According"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "teenagers"
+    },
+    {
+      "label": "option_label",
+      "text": "possibly"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "option_text",
+      "text": "smartphones"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "avoid"
+    },
+    {
+      "label": "option_text",
+      "text": "unhappy"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "understand themselves"
+    },
+    {
+      "label": "stem",
+      "text": "better"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "create happy"
+    },
+    {
+      "label": "stimulus",
+      "text": "stories"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "solve"
+    },
+    {
+      "label": "question_label",
+      "text": "real"
+    },
+    {
+      "label": "stem",
+      "text": "life"
+    },
+    {
+      "label": "stem",
+      "text": "Trang"
+    },
+    {
+      "label": "question_label",
+      "text": "/4"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ": Which"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "option_label",
+      "text": "NOT"
+    },
+    {
+      "label": "option_text",
+      "text": "true"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "according"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": ". Tw"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "option_label",
+      "text": "claims"
+    },
+    {
+      "label": "option_text",
+      "text": "about"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "impact"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "option_text",
+      "text": "screen"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "section",
+      "text": "gone"
+    },
+    {
+      "label": "option_text",
+      "text": "un"
+    },
+    {
+      "label": "stimulus",
+      "text": "challenged"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "Gates"
+    },
+    {
+      "label": "option_label",
+      "text": "states"
+    },
+    {
+      "label": "stimulus",
+      "text": "teenagers"
+    },
+    {
+      "label": "stem",
+      "text": "are using"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "interact"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "stimulus",
+      "text": "new"
+    },
+    {
+      "label": "stem",
+      "text": ", interesting"
+    },
+    {
+      "label": "section",
+      "text": "ways"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "According"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "Len"
+    },
+    {
+      "label": "section",
+      "text": "hart"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "technological"
+    },
+    {
+      "label": "question_label",
+      "text": "play a"
+    },
+    {
+      "label": "section",
+      "text": "significant"
+    },
+    {
+      "label": "stem",
+      "text": "role in our"
+    },
+    {
+      "label": "option_label",
+      "text": "lives."
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": ". Tw"
+    },
+    {
+      "label": "option_text",
+      "text": "s"
+    },
+    {
+      "label": "stimulus",
+      "text": "book"
+    },
+    {
+      "label": "option_label",
+      "text": "iGen"
+    },
+    {
+      "label": "section",
+      "text": "has"
+    },
+    {
+      "label": "stem",
+      "text": "caused"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "great"
+    },
+    {
+      "label": "section",
+      "text": "deal of"
+    },
+    {
+      "label": "question_label",
+      "text": "discussion"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "option_label",
+      "text": "argument."
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "option_label",
+      "text": "word"
+    },
+    {
+      "label": "stimulus",
+      "text": "aggravate"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "paragraph"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "meaning"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "create"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "reject"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "worsen"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "option_text",
+      "text": "expect"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ": Which"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "option_text",
+      "text": "inferred"
+    },
+    {
+      "label": "section",
+      "text": "from"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "question_label",
+      "text": "passage"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "question_label",
+      "text": "Evidence"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "being"
+    },
+    {
+      "label": "stem",
+      "text": "responsible"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "quality"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "stimulus",
+      "text": "teenagers"
+    },
+    {
+      "label": "stimulus",
+      "text": "mental"
+    },
+    {
+      "label": "option_label",
+      "text": "health"
+    },
+    {
+      "label": "section",
+      "text": "inconclusive"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "question_label",
+      "text": "There"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "option_label",
+      "text": "only"
+    },
+    {
+      "label": "question_label",
+      "text": "one"
+    },
+    {
+      "label": "stimulus",
+      "text": "possible"
+    },
+    {
+      "label": "section",
+      "text": "explanation for"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "link between"
+    },
+    {
+      "label": "option_label",
+      "text": "smartphone"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "stimulus",
+      "text": "mental"
+    },
+    {
+      "label": "option_label",
+      "text": "health"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": ". Teen"
+    },
+    {
+      "label": "stem",
+      "text": "agers"
+    },
+    {
+      "label": "stimulus",
+      "text": "who"
+    },
+    {
+      "label": "option_text",
+      "text": "aren"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "yet ready"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "stem",
+      "text": "life"
+    },
+    {
+      "label": "option_text",
+      "text": "shouldn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "section",
+      "text": "apps for"
+    },
+    {
+      "label": "question_label",
+      "text": "more"
+    },
+    {
+      "label": "stimulus",
+      "text": "than"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "stimulus",
+      "text": "hours"
+    },
+    {
+      "label": "question_label",
+      "text": "daily"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": ". Immediate"
+    },
+    {
+      "label": "stem",
+      "text": "action"
+    },
+    {
+      "label": "option_text",
+      "text": "must"
+    },
+    {
+      "label": "option_label",
+      "text": "be"
+    },
+    {
+      "label": "question_label",
+      "text": "taken"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "encourage"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "use"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "for"
+    },
+    {
+      "label": "option_text",
+      "text": "educational"
+    },
+    {
+      "label": "question_label",
+      "text": "purposes"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "sentence"
+    },
+    {
+      "label": "option_text",
+      "text": "best"
+    },
+    {
+      "label": "option_label",
+      "text": "combines"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "stem",
+      "text": "pair"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "sentences"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": ": You"
+    },
+    {
+      "label": "section",
+      "text": "should"
+    },
+    {
+      "label": "stimulus",
+      "text": "go"
+    },
+    {
+      "label": "question_label",
+      "text": "your test paper"
+    },
+    {
+      "label": "option_text",
+      "text": "You shouldn"
+    },
+    {
+      "label": "option_label",
+      "text": "t hand"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "stem",
+      "text": "in until"
+    },
+    {
+      "label": "section",
+      "text": "then"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "Only"
+    },
+    {
+      "label": "stimulus",
+      "text": "after"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "section",
+      "text": "gone"
+    },
+    {
+      "label": "question_label",
+      "text": "your test paper"
+    },
+    {
+      "label": "section",
+      "text": "should"
+    },
+    {
+      "label": "option_label",
+      "text": "hand"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stimulus",
+      "text": "Were"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "go"
+    },
+    {
+      "label": "question_label",
+      "text": "your test paper"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "hand"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "Not"
+    },
+    {
+      "label": "stem",
+      "text": "until"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_label",
+      "text": "handed"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "question_label",
+      "text": "your test paper"
+    },
+    {
+      "label": "section",
+      "text": "should"
+    },
+    {
+      "label": "stimulus",
+      "text": "go"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "Hardly"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "option_label",
+      "text": "handed"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "question_label",
+      "text": "your test paper"
+    },
+    {
+      "label": "section",
+      "text": "when"
+    },
+    {
+      "label": "section",
+      "text": "went"
+    },
+    {
+      "label": "question_label",
+      "text": "it"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "44"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "section",
+      "text": "She"
+    },
+    {
+      "label": "stem",
+      "text": "doesn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "sister."
+    },
+    {
+      "label": "section",
+      "text": "She"
+    },
+    {
+      "label": "stem",
+      "text": "doesn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "anyone"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "play"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "sister"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "stem",
+      "text": "will"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_label",
+      "text": "someone"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "play"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "sister"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "option_text",
+      "text": "wouldn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "anyone"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "play"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "sister"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_label",
+      "text": "someone"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "play"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stem",
+      "text": "If"
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_label",
+      "text": "sister"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "she"
+    },
+    {
+      "label": "section",
+      "text": "won"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "anyone"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "question_label",
+      "text": "play"
+    },
+    {
+      "label": "stimulus",
+      "text": "with"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "underlined"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "section",
+      "text": "needs"
+    },
+    {
+      "label": "question_label",
+      "text": "correction"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "All"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stimulus",
+      "text": "students"
+    },
+    {
+      "label": "section",
+      "text": "should"
+    },
+    {
+      "label": "option_text",
+      "text": "submit"
+    },
+    {
+      "label": "stimulus",
+      "text": "writing"
+    },
+    {
+      "label": "stem",
+      "text": "assignments"
+    },
+    {
+      "label": "stem",
+      "text": "Friday"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "The"
+    },
+    {
+      "label": "section",
+      "text": "school"
+    },
+    {
+      "label": "option_text",
+      "text": "organ"
+    },
+    {
+      "label": "section",
+      "text": "ises"
+    },
+    {
+      "label": "stimulus",
+      "text": "a"
+    },
+    {
+      "label": "question_label",
+      "text": "trip"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_label",
+      "text": "Cuc"
+    },
+    {
+      "label": "stem",
+      "text": "Phu"
+    },
+    {
+      "label": "option_label",
+      "text": "ong"
+    },
+    {
+      "label": "option_text",
+      "text": "National"
+    },
+    {
+      "label": "section",
+      "text": "Park"
+    },
+    {
+      "label": "question_label",
+      "text": "last"
+    },
+    {
+      "label": "option_text",
+      "text": "week"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "section",
+      "text": "Like"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "former"
+    },
+    {
+      "label": "option_text",
+      "text": "village"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "perceptive"
+    },
+    {
+      "label": "section",
+      "text": "successor has"
+    },
+    {
+      "label": "option_label",
+      "text": "an"
+    },
+    {
+      "label": "option_text",
+      "text": "admirable"
+    },
+    {
+      "label": "stimulus",
+      "text": "ability"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "put"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "aside"
+    },
+    {
+      "label": "option_text",
+      "text": "emotions"
+    },
+    {
+      "label": "stem",
+      "text": "and"
+    },
+    {
+      "label": "section",
+      "text": "remain"
+    },
+    {
+      "label": "option_text",
+      "text": "imp"
+    },
+    {
+      "label": "section",
+      "text": "assioned"
+    },
+    {
+      "label": "option_text",
+      "text": "while"
+    },
+    {
+      "label": "stimulus",
+      "text": "resolving"
+    },
+    {
+      "label": "option_text",
+      "text": "local"
+    },
+    {
+      "label": "section",
+      "text": "conflicts"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "Mark"
+    },
+    {
+      "label": "section",
+      "text": "the letter"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "or"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "on"
+    },
+    {
+      "label": "question_label",
+      "text": "your"
+    },
+    {
+      "label": "section",
+      "text": "answer"
+    },
+    {
+      "label": "question_label",
+      "text": "sheet"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "stimulus",
+      "text": "indicate"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "option_text",
+      "text": "sentence"
+    },
+    {
+      "label": "stem",
+      "text": "is"
+    },
+    {
+      "label": "stem",
+      "text": "in"
+    },
+    {
+      "label": "option_label",
+      "text": "meaning"
+    },
+    {
+      "label": "stem",
+      "text": "to"
+    },
+    {
+      "label": "option_text",
+      "text": "each"
+    },
+    {
+      "label": "section",
+      "text": "of"
+    },
+    {
+      "label": "section",
+      "text": "the"
+    },
+    {
+      "label": "stem",
+      "text": "following"
+    },
+    {
+      "label": "question_label",
+      "text": "questions"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "48"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "section",
+      "text": "Mai"
+    },
+    {
+      "label": "question_label",
+      "text": "last"
+    },
+    {
+      "label": "section",
+      "text": "went abroad"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "stimulus",
+      "text": "years"
+    },
+    {
+      "label": "option_text",
+      "text": "ago"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "section",
+      "text": "Mai"
+    },
+    {
+      "label": "option_label",
+      "text": "started"
+    },
+    {
+      "label": "section",
+      "text": "going abroad"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "stimulus",
+      "text": "years"
+    },
+    {
+      "label": "option_text",
+      "text": "ago"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "section",
+      "text": "Mai has gone abroad for"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "stimulus",
+      "text": "years"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "Mai"
+    },
+    {
+      "label": "stimulus",
+      "text": "hasn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "section",
+      "text": "gone abroad for"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "stimulus",
+      "text": "years"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "Mai"
+    },
+    {
+      "label": "section",
+      "text": "didn"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "go"
+    },
+    {
+      "label": "section",
+      "text": "abroad"
+    },
+    {
+      "label": "stem",
+      "text": "two"
+    },
+    {
+      "label": "stimulus",
+      "text": "years"
+    },
+    {
+      "label": "option_text",
+      "text": "ago"
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "option_label",
+      "text": "I"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "found"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "question_label",
+      "text": "-time"
+    },
+    {
+      "label": "stem",
+      "text": ",\""
+    },
+    {
+      "label": "stimulus",
+      "text": "Bob"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "A."
+    },
+    {
+      "label": "stimulus",
+      "text": "Bob"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "option_text",
+      "text": "I"
+    },
+    {
+      "label": "stimulus",
+      "text": "have"
+    },
+    {
+      "label": "option_text",
+      "text": "found"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "question_label",
+      "text": "-time"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "Bob"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "stem",
+      "text": "he"
+    },
+    {
+      "label": "option_text",
+      "text": "found"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "question_label",
+      "text": "-time"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "Bob"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "stem",
+      "text": "he had"
+    },
+    {
+      "label": "option_text",
+      "text": "found"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "question_label",
+      "text": "-time"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "Bob"
+    },
+    {
+      "label": "question_label",
+      "text": "said"
+    },
+    {
+      "label": "option_text",
+      "text": "I"
+    },
+    {
+      "label": "stem",
+      "text": "had"
+    },
+    {
+      "label": "option_text",
+      "text": "found"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stem",
+      "text": "part"
+    },
+    {
+      "label": "question_label",
+      "text": "-time"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "Question"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "question_label",
+      "text": "It"
+    },
+    {
+      "label": "option_text",
+      "text": "is"
+    },
+    {
+      "label": "stimulus",
+      "text": "possible"
+    },
+    {
+      "label": "stem",
+      "text": "he"
+    },
+    {
+      "label": "stem",
+      "text": "will"
+    },
+    {
+      "label": "stimulus",
+      "text": "re"
+    },
+    {
+      "label": "section",
+      "text": "decorate"
+    },
+    {
+      "label": "option_text",
+      "text": "house"
+    },
+    {
+      "label": "stem",
+      "text": "this"
+    },
+    {
+      "label": "section",
+      "text": "year"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "A."
+    },
+    {
+      "label": "section",
+      "text": "He"
+    },
+    {
+      "label": "option_text",
+      "text": "might"
+    },
+    {
+      "label": "stimulus",
+      "text": "re"
+    },
+    {
+      "label": "section",
+      "text": "decorate"
+    },
+    {
+      "label": "option_text",
+      "text": "house"
+    },
+    {
+      "label": "stem",
+      "text": "this"
+    },
+    {
+      "label": "section",
+      "text": "year"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "He"
+    },
+    {
+      "label": "option_label",
+      "text": "can"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "re"
+    },
+    {
+      "label": "section",
+      "text": "decorate"
+    },
+    {
+      "label": "option_text",
+      "text": "house"
+    },
+    {
+      "label": "stem",
+      "text": "this"
+    },
+    {
+      "label": "section",
+      "text": "year"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "He"
+    },
+    {
+      "label": "option_text",
+      "text": "must"
+    },
+    {
+      "label": "stimulus",
+      "text": "re"
+    },
+    {
+      "label": "section",
+      "text": "decorate"
+    },
+    {
+      "label": "option_text",
+      "text": "house"
+    },
+    {
+      "label": "stem",
+      "text": "this"
+    },
+    {
+      "label": "section",
+      "text": "year"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "He"
+    },
+    {
+      "label": "section",
+      "text": "won"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "re"
+    },
+    {
+      "label": "section",
+      "text": "decorate"
+    },
+    {
+      "label": "option_text",
+      "text": "house"
+    },
+    {
+      "label": "stem",
+      "text": "this"
+    },
+    {
+      "label": "section",
+      "text": "year"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "section",
+      "text": "-----------"
+    },
+    {
+      "label": "section",
+      "text": "H"
+    },
+    {
+      "label": "option_label",
+      "text": "ẾT"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "section",
+      "text": "-----------"
+    },
+    {
+      "label": "stem",
+      "text": "Trang"
+    },
+    {
+      "label": "question_label",
+      "text": "4/4"
+    },
+    {
+      "label": "section",
+      "text": "Mã"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    }
+  ]
+}

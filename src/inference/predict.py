@@ -77,6 +77,9 @@ def is_valid_latex(content: str) -> bool:
         return False
     if len(content_stripped) == 1:
         return content_stripped.isalnum()
+    # Case 2: Mathematical interval notation like (-\infty; 0] or [8; +\infty) or (1; 2]
+    if re.match(r'^[\[\(][^\[\]\(\)]+[\]\)]$', content_stripped) and (';' in content_stripped or ',' in content_stripped):
+        return True
     brackets = {'{': '}', '(': ')', '[': ']'}
     stack = []
     for char in content_stripped:

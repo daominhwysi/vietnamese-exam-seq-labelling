@@ -1,0 +1,83 @@
+
+ĐỀ ÔN TẬP SỐ 3
+*Giáo viên biên soạn: Thầy Hoàng Tuấn Nghĩa*
+
+
+PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn.
+
+Câu 1. Cho $f(x) = ax^2 + bx + c \:(a \neq 0)$. Điều kiện để $f(x) \geq 0, \forall x \in \mathbb{R}$ là
+A. $\begin{cases} a > 0 \\ \Delta < 0 \end{cases}$ B. $\begin{cases} a > 0 \\ \Delta \leq 0 \end{cases}$ C. $\begin{cases} a > 0 \\ \Delta \geq 0 \end{cases}$ D. $\begin{cases} a < 0 \\ \Delta \leq 0 \end{cases}$
+
+Câu 2. Cho bất phương trình $x^2 - 8x + 7 \geq 0$. Trong các tập hợp sau đây, tập nào có chứa phần tử không phải là nghiệm của bất phương trình.
+A. $(-\infty;0]$. B. $[8;+\infty)$. C. $(-\infty;1]$. D. $[6;+\infty)$.
+
+Câu 3. Số nghiệm nguyên dương của phương trình $\sqrt{x-1} = x-3$ là
+A. 0. B. 1. C. 2. D. 3.
+
+Câu 4. Viết phương trình tổng quát của đường thẳng $d$ đi qua điểm $M (-2;-5)$ và song song với đường phân giác góc phần tư thứ nhất.
+A. $x+y+7 = 0$. B. $x-y-3 = 0$. C. $x-y = 0$. D. $2x-y-1 = 0$.
+
+Câu 5. Tìm tọa độ giao điểm của hai đường thẳng $d_1: \begin{cases} x = -3+4t \\ y = 2+5t \end{cases}$ và $d_2: \begin{cases} x = 1+4t' \\ y = 7-5t' \end{cases}$
+A. (1;7). B. (-3;2). C. (2;-3). D. (5;1).
+
+Câu 6. Trong mặt phẳng với hệ tọa độ $Oxy$, cho đường thẳng $\Delta: ax+by+c = 0$ và hai điểm $M (x_M;y_M), N (x_N;y_N)$ không thuộc $\Delta$. Chọn khẳng định đúng trong các khẳng định sau:
+A. $M,N$ khác phía so với $\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) > 0$.
+B. $M,N$ cùng phía so với $\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) \geq 0$.
+C. $M,N$ khác phía so với $\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) \leq 0$.
+D. $M,N$ cùng phía so với $\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) > 0$.
+
+Câu 7. Đường tròn $(C): x^2 + y^2 - 6x + 2y + 6 = 0$ có tâm $I$ và bán kính $R$ lần lượt là:
+A. $I(3;-1), R=4$. B. $I(-3;1), R=4$. C. $I(3;-1), R=2$. D. $I(-3;1), R=2$.
+
+Câu 8. Đường tròn $C$ có tâm $I$ thuộc đường thẳng $d: x+5y-12 = 0$ và tiếp xúc với hai trục tọa độ có phương trình là:
+A. $(x-2)^2 + (y-2)^2 = 4$.
+B. $(x+3)^2 + (y-3)^2 = <question_label>9</question_label>$.
+C. $(x-2)^2 + (y-2)^2 = 4$ hoặc $(x-3)^2 + (y+3)^2 = 9$.
+<stem>D</stem>. $(x-2)^2 + (y-2)^2 = 4$ hoặc $(x+3)^2 - (y-3)^2 = 9$.
+
+Câu 9. Sắp xếp năm bạn học sinh An, Bình, Chi, Dũng, <stem>Lệ</stem> vào một chiếc ghế dài có 5 chỗ ngồi. Hỏi có bao nhiêu <stem>cách</stem> sắp xếp sao cho <stem>bạn An</stem> và <stem>bạn</stem> D<stem>ũng luôn</stem> ngồi <stem>ở hai đầu</stem> ghế?
+A. 120. B. 16. C. 12. D. 24.
+
+Câu 10. Giả sử có bảy bông hoa <stem>khác</stem> <stem>nhau</stem> và ba lọ hoa khác nhau. H<stem>ỏi có bao</stem> nhiêu <stem>cách</stem> cắm <stem>ba</stem> bông hoa vào lọ <stem>đã</stem> cho (<stem>mỗi</stem> lọ cắm một bông)?
+A. 35. B. 30240. C. 2<question_label>1</question_label>0. D. <question_label>2</question_label>1.
+
+Câu 11. Tìm hệ số của $x^2y^2$ trong khai triển nhị thức Niu-ton của $(x+2y)^4$.
+A. 32. B. 8. C. 24. D. 16.
+
+Câu 12. Trên giá sách có 4 quyển sách Toán, 3 quyển sách Vật lý, 2 quyển sách Hoá học. <stem>Lấy ngẫu nhiên 3 quyển sách trên kệ sách ấy. Tính xác suất để 3 quyển được lấy ra đều là sách Toán.</stem>
+<option_label>A.</option_label> <option_text>$\frac{2}{7}$.</option_text> <option_label>B.</option_label> <option_text>$\frac{1}{21}$.</option_text> <option_label>C.</option_label> <option_text>$\frac{37}{42}$.</option_text> <option_label>D.</option_label> <option_text>$\frac{5}{42}$.</option_text>
+
+
+PH<section>ẦN II. Trắc nghiệm đúng-sai:</section>
+
+Câu 13.
+<option_label>a)</option_label> <option_text>Trong mặt phẳng tọa độ, cho hai đường thẳng $\Delta: 3x-4y-12=0$ và $\Delta': \begin{cases} x=2t \\ y=2+3t \end{cases}$ và hai điểm $N(4;-5), M(2;-1)$. Khi đó, ta có $d(M,\Delta) = \frac{3}{5}$ và $d(N,\Delta') = 2\sqrt{13}$.</option_text>
+<option_label>b)</option_label> <option_text>Cho hai đường thẳng $d_1: 3x-4y-1=0$ và $d_2: mx+(m-1)y-2=0$. Các giá trị của $m$ để góc giữa hai đường thẳng $d_1$ và $d_2$ là $45^o$ có tổng bằng $\frac{17}{24}$.</option_text>
+<option_label>c)</option_label> <option_text>Chuyển động của một vật thể trong khoảng thời gian 180 phút được thể hiện trong mặt phẳng tọa độ. Theo đó, tại thời điểm $t$ $(0 \leq t \leq 180)$ vật thể ở vị trí có tọa độ $(2+\sin t^{\circ}; 4+\cos t^{\circ})$. Quỹ đạo chuyển động của vật thể có phương trình là $(C): (x-2)^2 + (y-4)^2 = 1$.</option_text>
+<option_label>d)</option_label> <option_text>Một khu vườn hạnh phúc được thiết kế dưới dạng một hình vuông có độ dài cạnh $10m$. Phần được tô đậm dùng để trồng cỏ, phần còn lại được lát gạch. Gọi $x, y$ lần lượt là bán kính của phần lát gạch hình tròn. Mỗi mét vuông trồng cỏ chi phí 100.000 đồng, mỗi mét vuông lát gạch chi phí 300.000 đồng. Khi đó, để diện tích phần lát gạch nhỏ nhất thì chi phí để thi công khu vườn bằng 22.000.000 đồng.</option_text>
+
+<question_label>Câu 14.</question_label>
+<option_label>a)</option_label> <option_text>Một hộp đựng 5 viên bi trắng, 3 viên bi xanh. Số cách chọn ra 3 viên bi có đủ 2 màu là 45.</option_text>
+<option_label>b)</option_label> <option_text>Trong một hộp bánh có 6 loại bánh nhân thịt và 4 loại bánh nhân đậu xanh. Có 120 cách chọn ra 6 loại bánh sao cho số loại bánh nhân thịt nhiều hơn loại bánh nhân đậu xanh.</option_text>
+<option_label>c)</option_label> <option_text>Một bình đựng 4 quả cầu xanh và 6 quả cầu trắng. Chọn ngẫu nhiên 3 quả cầu. Xác suất để trong 3 quả cầu lấy được có ít nhất 1 quả màu trắng bằng: $\frac{19}{30}$.</option_text>
+<option_label>d)</option_label> <option_text>Một nhóm học sinh gồm 5 nam và 5 bạn nữ được xếp thành một hàng dọc. Xác suất để 2 người đứng đầu hàng và cuối hàng là nữ bằng: $\frac{1}{9}$</option_text>
+
+
+<section>PHẦN III. Trắc nghiệm trả lời ngắn</section>
+
+<question_label>Câu 15.</question_label> <stem>Trong mặt phẳng $Oxy$, cho ba đường thẳng lần lượt có phương trình $d_{1}: 5x-4y+15=0$, $d_{2}: 5x+2y-1=0$ và $d_{3}: mx-(2m-1)y+9m-13=0$. Tính tổng tất cả các giá trị của tham số $m$ để ba đường thẳng đã cho cùng đi qua một điểm.</stem>
+
+<question_label>Câu 16.</question_label> <stem>Trong mặt phẳng tọa độ $Oxy$, cho đường thẳng $(\Delta): 3x-4y+m=0$ và đường tròn $(C): x^2+y^2-2x-2y-2=0$. Gọi $S$ là tập hợp tất cả các giá trị nguyên âm của tham số $m$ sao cho đường thẳng $(\Delta)$ và đường tròn $(C)$ có điểm chung. Số phần tử của tập $S$ là bao nhiêu?</stem>
+
+<question_label>Câu 17.</question_label> <stem>Có bao nhiêu số tự nhiên có 7 chữ số khác nhau từng đôi một, trong đó chữ số 5 đứng liền giữa hai chữ số 4 và 6.</stem>
+
+<question_label>Câu 18.</question_label> <stem>Có 3 bó hoa. Bó thứ nhất có 8 hoa hồng, bó thứ hai có 7 bông hoa ly, bó thứ ba có 6 bông hoa huệ. Chọn ngẫu nhiên 7 hoa từ ba bó hoa trên để cắm vào lọ hoa, tính xác suất để trong 7 hoa được chọn có số hoa hồng bằng số hoa ly. (làm tròn kết quả đến chữ số thập phân thứ nhất)</stem>
+
+
+<section>PHẦN IV. Tự luận</section>
+
+<question_label>Câu 19.</question_label> <stem>Trong mặt phẳng với hệ tọa độ $Oxy$, cho tam giác $ABC$ có $A(1;2)$, $B(0;3)$ và $C(4;0)$. Tính diện tích tam giác $ABC$?</stem>
+
+<question_label>Câu 20</question_label>. <stem>Trong mặt phẳng tọa độ $Oxy$, cho điểm $M(2;1)$ và đường tròn $(C): (x-1)^2+(y-2)^2=4$. Phương trình đường thẳng $(d)$ qua điểm $M$ và cắt $(C)$ tại hai điểm phân biệt $A$; $B$ sao cho độ dài $AB$ ngắn nhất là $(d): ax+by+1=0$. Tính $a^2+b^2$</stem>
+
+<question_label>Câu 21</question_label>. <stem>Có 7 học sinh nam và 3 học sinh nữ được xếp ngẫu nhiên thành một hàng ngang. Tính xác suất để khi xếp ngẫu nhiên 10 học sinh đó sao cho không có 2 học sinh nữ nào đứng cạnh nhau?</stem>

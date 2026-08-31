@@ -1,5 +1,5 @@
 [project]
-dependencies = ["openai", "pymupdf>=1.27.2.3,<2"]
+dependencies = ["openai", "pymupdf>=1.27.2.3,<2", "openai-codex>=0.147.0,<0.148"]
 name = "sequence-labelling-data-generator"
 requires-python = ">= 3.11"
 version = "0.1.0"

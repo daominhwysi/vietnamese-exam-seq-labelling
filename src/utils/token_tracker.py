@@ -36,6 +36,18 @@ def _get_log_path() -> Path:
     return _LOGS_DIR / f"token_usage_{date_str}.jsonl"
 
 
+def _to_int(val: Any) -> int:
+    if val is None:
+        return 0
+    if isinstance(val, bool):
+        return int(val)
+    if isinstance(val, (int, float)):
+        return int(val)
+    if isinstance(val, str) and val.strip().isdigit():
+        return int(val.strip())
+    return 0
+
+
 def log_response(response: Any, model: str | None = None) -> None:
     """
     Append a token-usage record for *response* to today's JSONL log.
@@ -43,25 +55,49 @@ def log_response(response: Any, model: str | None = None) -> None:
     Parameters
     ----------
     response:
-        The ``ChatCompletion`` object returned by
-        ``client.chat.completions.create()``.
+        The ``ChatCompletion`` or Codex ``TurnResult`` object.
     model:
         Override the model name. If *None*, taken from ``response.model``.
     """
     usage = getattr(response, "usage", None)
+    if isinstance(response, dict) and usage is None:
+        usage = response.get("usage")
 
-    # Reasoning tokens live inside completion_tokens_details (DeepSeek-specific)
-    details = getattr(usage, "completion_tokens_details", None)
-    reasoning_tokens: int = getattr(details, "reasoning_tokens", 0) or 0
+    input_tokens = 0
+    completion_tokens = 0
+    reasoning_tokens = 0
+    output_tokens = 0
 
-    completion_tokens: int = getattr(usage, "completion_tokens", 0) or 0
-    # output_tokens = only the visible response, not the chain-of-thought
-    output_tokens: int = completion_tokens - reasoning_tokens
+    if usage is not None:
+        if isinstance(usage, dict):
+            input_tokens = _to_int(usage.get("prompt_tokens") or usage.get("input_tokens"))
+            completion_tokens = _to_int(usage.get("completion_tokens") or usage.get("output_tokens"))
+            details = usage.get("completion_tokens_details") or {}
+            if isinstance(details, dict):
+                reasoning_tokens = _to_int(details.get("reasoning_tokens"))
+            else:
+                reasoning_tokens = _to_int(getattr(details, "reasoning_tokens", 0))
+            if "reasoning_tokens" in usage:
+                reasoning_tokens = _to_int(usage.get("reasoning_tokens"))
+            if "output_tokens" in usage and "completion_tokens" not in usage:
+                output_tokens = _to_int(usage.get("output_tokens"))
+            else:
+                output_tokens = max(0, completion_tokens - reasoning_tokens)
+        else:
+            input_tokens = _to_int(getattr(usage, "prompt_tokens", None) or getattr(usage, "input_tokens", 0))
+            completion_tokens = _to_int(getattr(usage, "completion_tokens", None) or getattr(usage, "output_tokens", 0))
+            details = getattr(usage, "completion_tokens_details", None)
+            reasoning_tokens = _to_int(getattr(details, "reasoning_tokens", 0) or getattr(usage, "reasoning_tokens", 0))
+
+            if getattr(usage, "output_tokens", None) is not None and getattr(usage, "completion_tokens", None) is None:
+                output_tokens = _to_int(getattr(usage, "output_tokens", 0))
+            else:
+                output_tokens = max(0, completion_tokens - reasoning_tokens)
 
     record = {
         "timestamp": datetime.now(tz=timezone.utc).isoformat(),
         "model": model or getattr(response, "model", "unknown"),
-        "input_tokens": getattr(usage, "prompt_tokens", 0) or 0,
+        "input_tokens": input_tokens,
         "reasoning_tokens": reasoning_tokens,
         "output_tokens": output_tokens,
     }
