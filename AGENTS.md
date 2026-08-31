@@ -19,6 +19,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
 - `README.md` - Comprehensive developer guide, pipeline workflow description, execution tasks, and data contract specifications.
 - `samples/` - Sample raw image and OCR visualization files.
 - `tests/` - Directory housing all unittest suites.
+  - `test_codex_provider.py` - Tests for OpenAI Codex API provider, reasoning effort mapping, and token tracking.
   - `test_curriculum.py` - Tests for curriculum loader, parser, and level mapping.
   - `test_exam_compiler.py` - Tests for exam generator and section compilation.
   - `test_prepare_dataset.py` - Tests for mmBERT / ModernBERT dataset tokenizer alignments.
@@ -27,6 +28,7 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
   - `test_iter_logger.py` - Tests for iteration-based training logger and epoch-proportional step calculation.
   - `test_enhanced_head.py` - Tests for Enhanced Token Classification Head, Multi-Sample Dropout, Layer Pooling, and Focal Loss.
 - `scratch/` - Directory housing temporary and utility debug scripts.
+  - `generate_bio_lit_50.py` - Batch generation script for 25 Literature and 25 Biology exams using Codex.
   - `benchmark_augmentation.py` - Benchmarks online data augmentation latency and CPU vs GPU throughput.
   - `test_raw_exams/` - Sample raw exam text documents for batch inference testing.
   - `inference_output/` - Output directory containing segmented JSON, predictions TXT, and tagged XML outputs from batch inference.
@@ -51,10 +53,10 @@ You MUST update the project structure section in this file (`AGENTS.md`) every t
     - `exam_compiler.py` - Compiles multiple questions into section-grouped mock exams.
     - `generator.py` - Orchestrates question generation with AI prompting.
     - `parser.py` - Parses standard and group question elements from LLM XML output.
-    - `reconstructor.py` - Rebuilds raw text from structured questions and maps span offsets.
+    - `reconstructor.py` - Rebuilds raw text from structured questions and maps span offsets with layout, whitespace collapsing, and noise augmentations.
   - `model/` - Downstream Training & Export Subpackage.
     - `head.py` - Enhanced Token Classification Head (Weighted Layer Pooling, Dense MLP, Multi-Sample Dropout) and Focal Loss module.
-    - `train.py` - Performs token-classification training (with optional LoRA adapters and FP16/BF16 falling back).
+    - `train.py` - Performs token-classification training (with online/offline dynamic data augmentations, LoRA adapters, and FP16/BF16 support).
     - `export.py` - Merges LoRA adapters and exports the sequence labeling model to ONNX.
     - `upload.py` - Uploads trained LoRA adapters or full fine-tuned model checkpoints to HF Hub.
   - `inference/` - Downstream Inference & Batch Predictions.

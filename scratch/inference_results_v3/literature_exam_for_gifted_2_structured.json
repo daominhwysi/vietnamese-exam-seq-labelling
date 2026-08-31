@@ -1,0 +1,26 @@
+{
+  "file_name": "literature_exam_for_gifted_2.txt",
+  "original_text_length": 2395,
+  "segments": [
+    {
+      "label": "section",
+      "text": "THI CHỌN HỌC SIN"
+    },
+    {
+      "label": "section",
+      "text": "GIỎI QUỐC GIA"
+    },
+    {
+      "label": "section",
+      "text": "Ề THI CH"
+    },
+    {
+      "label": "section",
+      "text": "NH"
+    },
+    {
+      "label": "question_label",
+      "text": "C"
+    }
+  ]
+}

@@ -1,0 +1,10862 @@
+{
+  "file_name": "official_math_exam_2025.txt",
+  "original_text_length": 10035,
+  "segments": [
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "option_label",
+      "text": "bản"
+    },
+    {
+      "label": "option_text",
+      "text": "chuyển chữ"
+    },
+    {
+      "label": "option_text",
+      "text": "OCR"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "option_label",
+      "text": "đầy"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_label",
+      "text": "chính"
+    },
+    {
+      "label": "stem",
+      "text": "xác"
+    },
+    {
+      "label": "stem",
+      "text": "cấu"
+    },
+    {
+      "label": "stem",
+      "text": "trúc"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "section",
+      "text": "toàn"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "trang"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "option_text",
+      "text": "To"
+    },
+    {
+      "label": "section",
+      "text": "án"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "question_label",
+      "text": "ảnh"
+    },
+    {
+      "label": "question_label",
+      "text": "bạn"
+    },
+    {
+      "label": "stem",
+      "text": "cấp"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Các"
+    },
+    {
+      "label": "stem",
+      "text": "công thức"
+    },
+    {
+      "label": "option_text",
+      "text": "toán"
+    },
+    {
+      "label": "section",
+      "text": "học"
+    },
+    {
+      "label": "option_label",
+      "text": "đã"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "định"
+    },
+    {
+      "label": "option_text",
+      "text": "dạng"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stimulus",
+      "text": "hệ"
+    },
+    {
+      "label": "option_text",
+      "text": "thống"
+    },
+    {
+      "label": "option_label",
+      "text": "ký"
+    },
+    {
+      "label": "stimulus",
+      "text": "tự"
+    },
+    {
+      "label": "stimulus",
+      "text": "biệt và"
+    },
+    {
+      "label": "option_text",
+      "text": "biểu"
+    },
+    {
+      "label": "stem",
+      "text": "thức"
+    },
+    {
+      "label": "option_text",
+      "text": "trực"
+    },
+    {
+      "label": "section",
+      "text": "quan"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "question_label",
+      "text": "dễ"
+    },
+    {
+      "label": "option_label",
+      "text": "dàng"
+    },
+    {
+      "label": "stimulus",
+      "text": "đọc và"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "Ộ"
+    },
+    {
+      "label": "option_text",
+      "text": "GI"
+    },
+    {
+      "label": "question_label",
+      "text": "Á"
+    },
+    {
+      "label": "option_text",
+      "text": "O"
+    },
+    {
+      "label": "option_text",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "Ụ"
+    },
+    {
+      "label": "option_label",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "V"
+    },
+    {
+      "label": "question_label",
+      "text": "À"
+    },
+    {
+      "label": "stem",
+      "text": "Đ"
+    },
+    {
+      "label": "question_label",
+      "text": "À"
+    },
+    {
+      "label": "option_text",
+      "text": "O"
+    },
+    {
+      "label": "option_text",
+      "text": "T"
+    },
+    {
+      "label": "option_text",
+      "text": "Ạ"
+    },
+    {
+      "label": "option_text",
+      "text": "O"
+    },
+    {
+      "label": "option_text",
+      "text": "**"
+    },
+    {
+      "label": "question_label",
+      "text": "Đ"
+    },
+    {
+      "label": "stimulus",
+      "text": "Ề"
+    },
+    {
+      "label": "option_label",
+      "text": "THI"
+    },
+    {
+      "label": "section",
+      "text": "CH"
+    },
+    {
+      "label": "stem",
+      "text": "Í"
+    },
+    {
+      "label": "stimulus",
+      "text": "NH"
+    },
+    {
+      "label": "question_label",
+      "text": "TH"
+    },
+    {
+      "label": "stimulus",
+      "text": "Ứ"
+    },
+    {
+      "label": "option_label",
+      "text": "C"
+    },
+    {
+      "label": "option_text",
+      "text": "**"
+    },
+    {
+      "label": "option_text",
+      "text": "*("
+    },
+    {
+      "label": "question_label",
+      "text": "Đ"
+    },
+    {
+      "label": "option_label",
+      "text": "ề thi"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "trang"
+    },
+    {
+      "label": "stimulus",
+      "text": ")*"
+    },
+    {
+      "label": "question_label",
+      "text": "Ỳ"
+    },
+    {
+      "label": "option_label",
+      "text": "THI"
+    },
+    {
+      "label": "option_text",
+      "text": "T"
+    },
+    {
+      "label": "section",
+      "text": "Ố"
+    },
+    {
+      "label": "section",
+      "text": "T"
+    },
+    {
+      "label": "question_label",
+      "text": "NG"
+    },
+    {
+      "label": "option_label",
+      "text": "HI"
+    },
+    {
+      "label": "question_label",
+      "text": "Ệ"
+    },
+    {
+      "label": "option_text",
+      "text": "P"
+    },
+    {
+      "label": "stimulus",
+      "text": "TR"
+    },
+    {
+      "label": "question_label",
+      "text": "UNG"
+    },
+    {
+      "label": "section",
+      "text": "H"
+    },
+    {
+      "label": "option_text",
+      "text": "Ọ"
+    },
+    {
+      "label": "option_label",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "PH"
+    },
+    {
+      "label": "option_text",
+      "text": "Ổ"
+    },
+    {
+      "label": "question_label",
+      "text": "TH"
+    },
+    {
+      "label": "section",
+      "text": "NĂ"
+    },
+    {
+      "label": "stimulus",
+      "text": "M"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_text",
+      "text": "**"
+    },
+    {
+      "label": "stimulus",
+      "text": "M"
+    },
+    {
+      "label": "question_label",
+      "text": "ôn"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stem",
+      "text": "TO"
+    },
+    {
+      "label": "option_text",
+      "text": "**"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "Thời"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian làm"
+    },
+    {
+      "label": "option_label",
+      "text": "bài"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "section",
+      "text": "0 phút"
+    },
+    {
+      "label": "stem",
+      "text": ", không"
+    },
+    {
+      "label": "section",
+      "text": "thời"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian"
+    },
+    {
+      "label": "option_label",
+      "text": "phát"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_label",
+      "text": "**Mã"
+    },
+    {
+      "label": "section",
+      "text": "đề"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": "**"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "stem",
+      "text": "PH"
+    },
+    {
+      "label": "section",
+      "text": "Ầ"
+    },
+    {
+      "label": "option_text",
+      "text": "N I"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "stem",
+      "text": "í"
+    },
+    {
+      "label": "section",
+      "text": "sinh"
+    },
+    {
+      "label": "stem",
+      "text": "trả"
+    },
+    {
+      "label": "stimulus",
+      "text": "lời"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "M"
+    },
+    {
+      "label": "option_text",
+      "text": "ỗi"
+    },
+    {
+      "label": "option_label",
+      "text": "câu hỏi"
+    },
+    {
+      "label": "option_label",
+      "text": "th"
+    },
+    {
+      "label": "stem",
+      "text": "í"
+    },
+    {
+      "label": "section",
+      "text": "sinh"
+    },
+    {
+      "label": "option_label",
+      "text": "chỉ"
+    },
+    {
+      "label": "stem",
+      "text": "chọn"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_text",
+      "text": "phương"
+    },
+    {
+      "label": "stem",
+      "text": "án"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "option_label",
+      "text": "chó"
+    },
+    {
+      "label": "stimulus",
+      "text": "p"
+    },
+    {
+      "label": "stem",
+      "text": "O"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stem",
+      "text": "OA"
+    },
+    {
+      "label": "section",
+      "text": "vuông"
+    },
+    {
+      "label": "stem",
+      "text": "góc với"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "stimulus",
+      "text": "),"
+    },
+    {
+      "label": "stem",
+      "text": "tam"
+    },
+    {
+      "label": "option_text",
+      "text": "giác"
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "section",
+      "text": "vuông"
+    },
+    {
+      "label": "section",
+      "text": "tại"
+    },
+    {
+      "label": "stimulus",
+      "text": "A và"
+    },
+    {
+      "label": "stem",
+      "text": "OA"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "AB"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "AC"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "stem",
+      "text": "ể"
+    },
+    {
+      "label": "question_label",
+      "text": "tích"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "option_label",
+      "text": "chó"
+    },
+    {
+      "label": "stimulus",
+      "text": "p"
+    },
+    {
+      "label": "stem",
+      "text": "O"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_label",
+      "text": "l"
+    },
+    {
+      "label": "section",
+      "text": "ăng trụ"
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "A'"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "option_label",
+      "text": "C"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "section",
+      "text": "xem"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "section",
+      "text": "dưới"
+    },
+    {
+      "label": "section",
+      "text": "Đường"
+    },
+    {
+      "label": "option_label",
+      "text": "thẳng"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "option_label",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "song song"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "section",
+      "text": "nào"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "A'"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "option_label",
+      "text": "C')."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "AB"
+    },
+    {
+      "label": "option_label",
+      "text": "C')."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "question_label",
+      "text": "BC"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "option_text",
+      "text": "Họ"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "f"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "option_label",
+      "text": "sin"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+ cos"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "stimulus",
+      "text": "cos"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_label",
+      "text": "sin"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "option_label",
+      "text": "cos"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_label",
+      "text": "sin"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "stimulus",
+      "text": "cos"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_label",
+      "text": "sin"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "option_label",
+      "text": "cos"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_label",
+      "text": "sin"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "Nghi"
+    },
+    {
+      "label": "option_text",
+      "text": "ệm"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "phương"
+    },
+    {
+      "label": "stimulus",
+      "text": "trình"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "}"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "1."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "question_label",
+      "text": "5/"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "stimulus",
+      "text": "hệ"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "ọa"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "O"
+    },
+    {
+      "label": "option_text",
+      "text": "xyz"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "stem",
+      "text": "đi"
+    },
+    {
+      "label": "stimulus",
+      "text": "qua"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "ọa"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "section",
+      "text": "nhận n"
+    },
+    {
+      "label": "stem",
+      "text": "(-"
+    },
+    {
+      "label": "stimulus",
+      "text": "1;"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stimulus",
+      "text": "làm"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "option_text",
+      "text": "tuyến có"
+    },
+    {
+      "label": "option_text",
+      "text": "phương"
+    },
+    {
+      "label": "stimulus",
+      "text": "trình"
+    },
+    {
+      "label": "option_text",
+      "text": "tổng"
+    },
+    {
+      "label": "question_label",
+      "text": "qu"
+    },
+    {
+      "label": "stimulus",
+      "text": "át"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "z"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "z"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "z"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "ax"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "question_label",
+      "text": "b"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "/"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "cx"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "d"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stimulus",
+      "text": "ac"
+    },
+    {
+      "label": "stem",
+      "text": "≠"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "ad"
+    },
+    {
+      "label": "section",
+      "text": "bc"
+    },
+    {
+      "label": "stem",
+      "text": "≠"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ") có bảng biến"
+    },
+    {
+      "label": "section",
+      "text": "thiên"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "section",
+      "text": "dưới"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": "→"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_text",
+      "text": "→"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "Đường"
+    },
+    {
+      "label": "stem",
+      "text": "ti"
+    },
+    {
+      "label": "option_text",
+      "text": "ệm"
+    },
+    {
+      "label": "section",
+      "text": "cận"
+    },
+    {
+      "label": "option_label",
+      "text": "đứng"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_label",
+      "text": "đồ"
+    },
+    {
+      "label": "stem",
+      "text": "thị"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_label",
+      "text": "đã"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stem",
+      "text": "phương"
+    },
+    {
+      "label": "stimulus",
+      "text": "trình"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stimulus",
+      "text": "1."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "1."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "stimulus",
+      "text": "hệ"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "ọa"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "O"
+    },
+    {
+      "label": "option_text",
+      "text": "xyz"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": "P"
+    },
+    {
+      "label": "stem",
+      "text": "): 2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "z"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "V"
+    },
+    {
+      "label": "stem",
+      "text": "ect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "section",
+      "text": "nào"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "option_text",
+      "text": "tuyến"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": "P"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "section",
+      "text": "n"
+    },
+    {
+      "label": "option_text",
+      "text": "₂"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "section",
+      "text": "n₃"
+    },
+    {
+      "label": "stem",
+      "text": "(-2"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "section",
+      "text": "n"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "n"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_label",
+      "text": "chó"
+    },
+    {
+      "label": "stimulus",
+      "text": "p"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": "ứ"
+    },
+    {
+      "label": "option_text",
+      "text": "giác"
+    },
+    {
+      "label": "stem",
+      "text": "đều"
+    },
+    {
+      "label": "question_label",
+      "text": "S"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "ABCD ("
+    },
+    {
+      "label": "section",
+      "text": "xem"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_label",
+      "text": "bên"
+    },
+    {
+      "label": "option_label",
+      "text": "ọi"
+    },
+    {
+      "label": "stem",
+      "text": "O là"
+    },
+    {
+      "label": "option_text",
+      "text": "giao"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_label",
+      "text": "AC"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_label",
+      "text": "BD"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "át"
+    },
+    {
+      "label": "option_text",
+      "text": "biểu"
+    },
+    {
+      "label": "section",
+      "text": "nào"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "option_text",
+      "text": "đúng"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "stimulus",
+      "text": "SA +"
+    },
+    {
+      "label": "stem",
+      "text": "SB"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_label",
+      "text": "SC"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "SD"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "SA +"
+    },
+    {
+      "label": "stem",
+      "text": "SB"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_label",
+      "text": "SC"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "SD"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "stimulus",
+      "text": "SA +"
+    },
+    {
+      "label": "stem",
+      "text": "SB"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_label",
+      "text": "SC"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "SD"
+    },
+    {
+      "label": "option_text",
+      "text": "SO"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "SA +"
+    },
+    {
+      "label": "stem",
+      "text": "SB"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "option_label",
+      "text": "SC"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "SD"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "question_label",
+      "text": "Một"
+    },
+    {
+      "label": "section",
+      "text": "chia thời"
+    },
+    {
+      "label": "stimulus",
+      "text": "lượng"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "đ"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơn"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "thực"
+    },
+    {
+      "label": "stimulus",
+      "text": "hiện"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "cuộc"
+    },
+    {
+      "label": "question_label",
+      "text": "gọi"
+    },
+    {
+      "label": "option_text",
+      "text": "điện"
+    },
+    {
+      "label": "stem",
+      "text": "thoại"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "stem",
+      "text": "tuần"
+    },
+    {
+      "label": "stimulus",
+      "text": "thành"
+    },
+    {
+      "label": "option_label",
+      "text": "s"
+    },
+    {
+      "label": "stem",
+      "text": "áu"
+    },
+    {
+      "label": "option_label",
+      "text": "nhóm"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "stem",
+      "text": "lập"
+    },
+    {
+      "label": "option_text",
+      "text": "bảng"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": "ần"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "ghép"
+    },
+    {
+      "label": "option_label",
+      "text": "nhóm"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_label",
+      "text": "Nh"
+    },
+    {
+      "label": "stem",
+      "text": "óm"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "["
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "["
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "["
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "["
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stimulus",
+      "text": "12"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "["
+    },
+    {
+      "label": "stimulus",
+      "text": "12"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "["
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "Tần"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0 |"
+    },
+    {
+      "label": "stimulus",
+      "text": "11"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "option_text",
+      "text": "T"
+    },
+    {
+      "label": "option_text",
+      "text": "ứ"
+    },
+    {
+      "label": "question_label",
+      "text": "phân"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "option_label",
+      "text": "thứ"
+    },
+    {
+      "label": "stem",
+      "text": "ba"
+    },
+    {
+      "label": "option_text",
+      "text": "Q"
+    },
+    {
+      "label": "section",
+      "text": "₃ ("
+    },
+    {
+      "label": "stem",
+      "text": "đ"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơn"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "mẫu"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "ghép"
+    },
+    {
+      "label": "option_label",
+      "text": "nhóm"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": "T"
+    },
+    {
+      "label": "option_label",
+      "text": "ập"
+    },
+    {
+      "label": "section",
+      "text": "nghiệm"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "stem",
+      "text": "phương"
+    },
+    {
+      "label": "stimulus",
+      "text": "trình"
+    },
+    {
+      "label": "option_label",
+      "text": "sin"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.** S"
+    },
+    {
+      "label": "stimulus",
+      "text": "{"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "section",
+      "text": "| k"
+    },
+    {
+      "label": "option_text",
+      "text": "∈"
+    },
+    {
+      "label": "question_label",
+      "text": "ℤ"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "question_label",
+      "text": ".** S"
+    },
+    {
+      "label": "stimulus",
+      "text": "{"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "section",
+      "text": "| k"
+    },
+    {
+      "label": "option_text",
+      "text": "∈"
+    },
+    {
+      "label": "question_label",
+      "text": "ℤ"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "question_label",
+      "text": ".** S"
+    },
+    {
+      "label": "stimulus",
+      "text": "{"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "section",
+      "text": "| k"
+    },
+    {
+      "label": "option_text",
+      "text": "∈"
+    },
+    {
+      "label": "question_label",
+      "text": "ℤ"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": ".** S"
+    },
+    {
+      "label": "stimulus",
+      "text": "{"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "section",
+      "text": "| k"
+    },
+    {
+      "label": "option_text",
+      "text": "∈"
+    },
+    {
+      "label": "question_label",
+      "text": "ℤ"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "11"
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "stimulus",
+      "text": "hệ"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "ọa"
+    },
+    {
+      "label": "option_label",
+      "text": "độ Oxy"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "diện tích S"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "option_text",
+      "text": "giới"
+    },
+    {
+      "label": "stem",
+      "text": "hạn"
+    },
+    {
+      "label": "option_label",
+      "text": "đồ"
+    },
+    {
+      "label": "stem",
+      "text": "thị"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "tr"
+    },
+    {
+      "label": "stimulus",
+      "text": "ục"
+    },
+    {
+      "label": "option_label",
+      "text": "hoành"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "option_label",
+      "text": "đường"
+    },
+    {
+      "label": "option_label",
+      "text": "thẳng"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "xác định"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "công thức"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.** S"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_label",
+      "text": ")²"
+    },
+    {
+      "label": "stem",
+      "text": "dx"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "question_label",
+      "text": ".** S"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "dx"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "question_label",
+      "text": ".** S"
+    },
+    {
+      "label": "stem",
+      "text": "π"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_label",
+      "text": ")²"
+    },
+    {
+      "label": "stem",
+      "text": "dx"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "question_label",
+      "text": ".** S"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "dx"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "stem",
+      "text": "cấp"
+    },
+    {
+      "label": "option_label",
+      "text": "số cộng"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "section",
+      "text": "u"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "section",
+      "text": "n"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "stimulus",
+      "text": "u"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "stem",
+      "text": "công"
+    },
+    {
+      "label": "section",
+      "text": "sai"
+    },
+    {
+      "label": "section",
+      "text": "d"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Giá"
+    },
+    {
+      "label": "section",
+      "text": "trị"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "stimulus",
+      "text": "u"
+    },
+    {
+      "label": "option_label",
+      "text": "₅"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "A.**"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**C"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "D"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "7."
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "stem",
+      "text": "PH"
+    },
+    {
+      "label": "section",
+      "text": "Ầ"
+    },
+    {
+      "label": "option_text",
+      "text": "N"
+    },
+    {
+      "label": "stem",
+      "text": "II"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "stem",
+      "text": "í"
+    },
+    {
+      "label": "section",
+      "text": "sinh"
+    },
+    {
+      "label": "stem",
+      "text": "trả"
+    },
+    {
+      "label": "stimulus",
+      "text": "lời"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "section",
+      "text": "ý"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "),"
+    },
+    {
+      "label": "question_label",
+      "text": "b"
+    },
+    {
+      "label": "stimulus",
+      "text": "),"
+    },
+    {
+      "label": "option_label",
+      "text": "c"
+    },
+    {
+      "label": "stimulus",
+      "text": "),"
+    },
+    {
+      "label": "section",
+      "text": "d"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "ở"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "th"
+    },
+    {
+      "label": "stem",
+      "text": "í"
+    },
+    {
+      "label": "section",
+      "text": "sinh"
+    },
+    {
+      "label": "stem",
+      "text": "chọn"
+    },
+    {
+      "label": "option_text",
+      "text": "đúng"
+    },
+    {
+      "label": "stem",
+      "text": "hoặc"
+    },
+    {
+      "label": "section",
+      "text": "sai"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "Một"
+    },
+    {
+      "label": "stem",
+      "text": "phần"
+    },
+    {
+      "label": "stimulus",
+      "text": "mềm"
+    },
+    {
+      "label": "section",
+      "text": "nhận"
+    },
+    {
+      "label": "option_text",
+      "text": "dạng"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "question_label",
+      "text": "quảng"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "option_text",
+      "text": "điện"
+    },
+    {
+      "label": "stem",
+      "text": "thoại"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "option_label",
+      "text": "cách"
+    },
+    {
+      "label": "question_label",
+      "text": "dựa"
+    },
+    {
+      "label": "stimulus",
+      "text": "theo"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "option_text",
+      "text": "khóa"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "section",
+      "text": "gửi"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "stimulus",
+      "text": "Qua"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "section",
+      "text": "thời"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian"
+    },
+    {
+      "label": "stimulus",
+      "text": "dài"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "ta"
+    },
+    {
+      "label": "stem",
+      "text": "thấy"
+    },
+    {
+      "label": "stimulus",
+      "text": "rằng trong"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "section",
+      "text": "tất cả"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "section",
+      "text": "gửi"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "không phải là"
+    },
+    {
+      "label": "question_label",
+      "text": "quảng"
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "quảng"
+    },
+    {
+      "label": "option_label",
+      "text": "Ch"
+    },
+    {
+      "label": "option_label",
+      "text": "ọn"
+    },
+    {
+      "label": "stem",
+      "text": "ẫu"
+    },
+    {
+      "label": "option_text",
+      "text": "nhiên"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "section",
+      "text": "gửi"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "option_text",
+      "text": "điện"
+    },
+    {
+      "label": "stem",
+      "text": "thoại"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "section",
+      "text": "X"
+    },
+    {
+      "label": "option_text",
+      "text": "ác"
+    },
+    {
+      "label": "option_text",
+      "text": "suất"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "đó không"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "section",
+      "text": "X"
+    },
+    {
+      "label": "option_text",
+      "text": "ác"
+    },
+    {
+      "label": "option_text",
+      "text": "suất"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "đó không phải là"
+    },
+    {
+      "label": "question_label",
+      "text": "quảng"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "biết rằng"
+    },
+    {
+      "label": "option_label",
+      "text": "nó"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**c)**"
+    },
+    {
+      "label": "section",
+      "text": "X"
+    },
+    {
+      "label": "option_text",
+      "text": "ác"
+    },
+    {
+      "label": "option_text",
+      "text": "suất"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "đó không phải là"
+    },
+    {
+      "label": "question_label",
+      "text": "quảng"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "d"
+    },
+    {
+      "label": "section",
+      "text": "X"
+    },
+    {
+      "label": "option_text",
+      "text": "ác"
+    },
+    {
+      "label": "option_text",
+      "text": "suất"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "question_label",
+      "text": "tin"
+    },
+    {
+      "label": "stimulus",
+      "text": "nhắn"
+    },
+    {
+      "label": "stem",
+      "text": "đó không"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "stem",
+      "text": "dấu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "biết rằng"
+    },
+    {
+      "label": "option_label",
+      "text": "nó"
+    },
+    {
+      "label": "stem",
+      "text": "không phải là"
+    },
+    {
+      "label": "question_label",
+      "text": "quảng"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "nhỏ"
+    },
+    {
+      "label": "question_label",
+      "text": "hơn"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stem",
+      "text": "Đ"
+    },
+    {
+      "label": "section",
+      "text": "ối"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "section",
+      "text": "ngành"
+    },
+    {
+      "label": "question_label",
+      "text": "nuôi"
+    },
+    {
+      "label": "stem",
+      "text": "trồng"
+    },
+    {
+      "label": "stimulus",
+      "text": "thủy"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "việc"
+    },
+    {
+      "label": "question_label",
+      "text": "kiểm"
+    },
+    {
+      "label": "stimulus",
+      "text": "soát lượng"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stem",
+      "text": "tồn"
+    },
+    {
+      "label": "stem",
+      "text": "dư"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "nhiệm vụ"
+    },
+    {
+      "label": "section",
+      "text": "quan"
+    },
+    {
+      "label": "stimulus",
+      "text": "trọng"
+    },
+    {
+      "label": "stem",
+      "text": "nhằm"
+    },
+    {
+      "label": "stimulus",
+      "text": "đáp"
+    },
+    {
+      "label": "section",
+      "text": "ứng"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "tiêu"
+    },
+    {
+      "label": "stimulus",
+      "text": "chuẩn"
+    },
+    {
+      "label": "option_label",
+      "text": "an"
+    },
+    {
+      "label": "section",
+      "text": "toàn"
+    },
+    {
+      "label": "stem",
+      "text": "về"
+    },
+    {
+      "label": "option_text",
+      "text": "môi"
+    },
+    {
+      "label": "option_label",
+      "text": "trường"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Khi"
+    },
+    {
+      "label": "stem",
+      "text": "nghiên"
+    },
+    {
+      "label": "stem",
+      "text": "cứu"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "loại"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "section",
+      "text": "trị"
+    },
+    {
+      "label": "option_label",
+      "text": "bệnh"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "question_label",
+      "text": "nuôi"
+    },
+    {
+      "label": "stem",
+      "text": "trồng"
+    },
+    {
+      "label": "stimulus",
+      "text": "thủy"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "ta"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc đó"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "stimulus",
+      "text": "lần và"
+    },
+    {
+      "label": "stimulus",
+      "text": "theo"
+    },
+    {
+      "label": "stem",
+      "text": "dõi"
+    },
+    {
+      "label": "section",
+      "text": "nồng"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stem",
+      "text": "tồn"
+    },
+    {
+      "label": "stem",
+      "text": "dư"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "question_label",
+      "text": "lúc"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "Kết"
+    },
+    {
+      "label": "stem",
+      "text": "quả"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "stem",
+      "text": "thấy"
+    },
+    {
+      "label": "section",
+      "text": "nồng"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "đ"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơn"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "stimulus",
+      "text": "mg"
+    },
+    {
+      "label": "question_label",
+      "text": "l"
+    },
+    {
+      "label": "section",
+      "text": "ít"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "tồn"
+    },
+    {
+      "label": "stem",
+      "text": "dư"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "section",
+      "text": "tại thời"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "section",
+      "text": "ngày ("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "≥"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "question_label",
+      "text": "lúc"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "th"
+    },
+    {
+      "label": "question_label",
+      "text": "ỏa"
+    },
+    {
+      "label": "option_label",
+      "text": "mã"
+    },
+    {
+      "label": "section",
+      "text": "n"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stimulus",
+      "text": ">"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "≥"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "), trong"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "h"
+    },
+    {
+      "label": "stem",
+      "text": "ằng"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "question_label",
+      "text": "khác"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stem",
+      "text": "Đ"
+    },
+    {
+      "label": "option_text",
+      "text": "o"
+    },
+    {
+      "label": "section",
+      "text": "nồng"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stem",
+      "text": "tồn"
+    },
+    {
+      "label": "stem",
+      "text": "dư"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "section",
+      "text": "tại"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "section",
+      "text": "thời"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "nhận"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "question_label",
+      "text": "kết"
+    },
+    {
+      "label": "stem",
+      "text": "quả"
+    },
+    {
+      "label": "stimulus",
+      "text": "lần"
+    },
+    {
+      "label": "stimulus",
+      "text": "lượt"
+    },
+    {
+      "label": "stem",
+      "text": "là 2"
+    },
+    {
+      "label": "stimulus",
+      "text": "mg"
+    },
+    {
+      "label": "question_label",
+      "text": "l"
+    },
+    {
+      "label": "section",
+      "text": "ít"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "mg"
+    },
+    {
+      "label": "question_label",
+      "text": "l"
+    },
+    {
+      "label": "section",
+      "text": "ít"
+    },
+    {
+      "label": "stimulus",
+      "text": ". Cho biết"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "option_text",
+      "text": "e"
+    },
+    {
+      "label": "stimulus",
+      "text": "g"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")}"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "≥"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "section",
+      "text": "g"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "kt"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "C ("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "≥"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "question_label",
+      "text": "h"
+    },
+    {
+      "label": "stem",
+      "text": "ằng"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stem",
+      "text": "xác định"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "option_text",
+      "text": "-("
+    },
+    {
+      "label": "option_label",
+      "text": "ln"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "/"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**c)**"
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "option_label",
+      "text": "ln"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "d"
+    },
+    {
+      "label": "section",
+      "text": "Nồng"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stem",
+      "text": "tồn"
+    },
+    {
+      "label": "stem",
+      "text": "dư"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "section",
+      "text": "tại thời"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "question_label",
+      "text": "lúc"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stem",
+      "text": "thuốc"
+    },
+    {
+      "label": "stimulus",
+      "text": "lớn"
+    },
+    {
+      "label": "question_label",
+      "text": "hơn"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "mg"
+    },
+    {
+      "label": "question_label",
+      "text": "l"
+    },
+    {
+      "label": "section",
+      "text": "ít"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "option_label",
+      "text": "Mô"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_text",
+      "text": "toán"
+    },
+    {
+      "label": "section",
+      "text": "học"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "option_label",
+      "text": "được sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "section",
+      "text": "quan"
+    },
+    {
+      "label": "stimulus",
+      "text": "sát"
+    },
+    {
+      "label": "option_text",
+      "text": "chuyển"
+    },
+    {
+      "label": "section",
+      "text": "động"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "section",
+      "text": "vật"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "stimulus",
+      "text": "hệ"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "ọa"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "O"
+    },
+    {
+      "label": "option_text",
+      "text": "xyz có"
+    },
+    {
+      "label": "question_label",
+      "text": "i"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "j"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "stimulus",
+      "text": "lần"
+    },
+    {
+      "label": "stimulus",
+      "text": "lượt"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "option_label",
+      "text": "đơn"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "tr"
+    },
+    {
+      "label": "stimulus",
+      "text": "ục"
+    },
+    {
+      "label": "option_text",
+      "text": "Ox"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "Oy"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_text",
+      "text": "Oz"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stimulus",
+      "text": "dài"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "option_label",
+      "text": "đơn"
+    },
+    {
+      "label": "stem",
+      "text": "vị đó"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_label",
+      "text": "mét"
+    },
+    {
+      "label": "stimulus",
+      "text": ". Cho"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "stimulus",
+      "text": "A và"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "stem",
+      "text": "đó điểm"
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "question_label",
+      "text": "ọa"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "7;"
+    },
+    {
+      "label": "stimulus",
+      "text": "7;"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "question_label",
+      "text": "Một"
+    },
+    {
+      "label": "section",
+      "text": "vật"
+    },
+    {
+      "label": "option_text",
+      "text": "co"
+    },
+    {
+      "label": "stem",
+      "text": "i"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_text",
+      "text": "hạt"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "option_text",
+      "text": "chuyển"
+    },
+    {
+      "label": "section",
+      "text": "động"
+    },
+    {
+      "label": "option_label",
+      "text": "thẳng"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "option_label",
+      "text": "tốc độ"
+    },
+    {
+      "label": "option_text",
+      "text": "phụ"
+    },
+    {
+      "label": "question_label",
+      "text": "thuộc"
+    },
+    {
+      "label": "section",
+      "text": "thời"
+    },
+    {
+      "label": "stimulus",
+      "text": "gian"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stem",
+      "text": "gi"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stimulus",
+      "text": "theo"
+    },
+    {
+      "label": "stem",
+      "text": "công thức"
+    },
+    {
+      "label": "option_label",
+      "text": "v"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "β"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "m"
+    },
+    {
+      "label": "stem",
+      "text": "gi"
+    },
+    {
+      "label": "stimulus",
+      "text": "), trong"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "section",
+      "text": "β"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "h"
+    },
+    {
+      "label": "stem",
+      "text": "ằng"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "dương và"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "≤"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "section",
+      "text": "≤"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "Ở"
+    },
+    {
+      "label": "section",
+      "text": "thời"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "section",
+      "text": "ban đầu"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "),"
+    },
+    {
+      "label": "section",
+      "text": "vật"
+    },
+    {
+      "label": "stem",
+      "text": "đi"
+    },
+    {
+      "label": "stimulus",
+      "text": "qua A"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "option_label",
+      "text": "tốc độ"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_label",
+      "text": "m"
+    },
+    {
+      "label": "stem",
+      "text": "gi"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "stimulus",
+      "text": "hướng"
+    },
+    {
+      "label": "option_label",
+      "text": "tới"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "Sau"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "từ thời"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "section",
+      "text": "ban đầu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "vật"
+    },
+    {
+      "label": "stem",
+      "text": "đi"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "question_label",
+      "text": "qu"
+    },
+    {
+      "label": "option_text",
+      "text": "ãng"
+    },
+    {
+      "label": "option_label",
+      "text": "đường"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "option_label",
+      "text": "m"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "ọi"
+    },
+    {
+      "label": "stimulus",
+      "text": "u"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "b"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "option_label",
+      "text": "c"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "section",
+      "text": "cùng"
+    },
+    {
+      "label": "stimulus",
+      "text": "hướng"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "section",
+      "text": "AB"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "ết rằng"
+    },
+    {
+      "label": "section",
+      "text": "|"
+    },
+    {
+      "label": "section",
+      "text": "u"
+    },
+    {
+      "label": "stem",
+      "text": "|"
+    },
+    {
+      "label": "stimulus",
+      "text": "1 và"
+    },
+    {
+      "label": "stem",
+      "text": "góc"
+    },
+    {
+      "label": "option_text",
+      "text": "giữa"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ u"
+    },
+    {
+      "label": "stimulus",
+      "text": "lần"
+    },
+    {
+      "label": "stimulus",
+      "text": "lượt"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "question_label",
+      "text": "vect"
+    },
+    {
+      "label": "stimulus",
+      "text": "ơ"
+    },
+    {
+      "label": "question_label",
+      "text": "i"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "j"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "k"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "question_label",
+      "text": "tương"
+    },
+    {
+      "label": "section",
+      "text": "ứng"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0°,"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0°,"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "stimulus",
+      "text": "cos"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "section",
+      "text": "Phương"
+    },
+    {
+      "label": "stimulus",
+      "text": "trình"
+    },
+    {
+      "label": "option_label",
+      "text": "đường"
+    },
+    {
+      "label": "option_label",
+      "text": "thẳng"
+    },
+    {
+      "label": "section",
+      "text": "AB"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "7)/1"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stimulus",
+      "text": "7)/1"
+    },
+    {
+      "label": "stimulus",
+      "text": "z"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "**c)**"
+    },
+    {
+      "label": "section",
+      "text": "β"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "d"
+    },
+    {
+      "label": "option_label",
+      "text": ")** Gi"
+    },
+    {
+      "label": "option_text",
+      "text": "ả"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "từ thời"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "section",
+      "text": "ban đầu"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "vật"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "stem",
+      "text": "điểm"
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": "; z"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "option_text",
+      "text": "Khi"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "_"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stimulus",
+      "text": ">"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "f"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stem",
+      "text": "³"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "stimulus",
+      "text": "1."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "section",
+      "text": "Hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_label",
+      "text": "đã"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "section",
+      "text": "đạo"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "f"
+    },
+    {
+      "label": "question_label",
+      "text": "'(x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "section",
+      "text": "**"
+    },
+    {
+      "label": "stem",
+      "text": "b"
+    },
+    {
+      "label": "section",
+      "text": "Phương"
+    },
+    {
+      "label": "stimulus",
+      "text": "trình"
+    },
+    {
+      "label": "option_text",
+      "text": "f"
+    },
+    {
+      "label": "question_label",
+      "text": "'(x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "question_label",
+      "text": "tập"
+    },
+    {
+      "label": "section",
+      "text": "nghiệm"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "S"
+    },
+    {
+      "label": "stimulus",
+      "text": "{1"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "option_label",
+      "text": "c)**"
+    },
+    {
+      "label": "option_text",
+      "text": "f"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "question_label",
+      "text": "d"
+    },
+    {
+      "label": "option_text",
+      "text": "Giá"
+    },
+    {
+      "label": "section",
+      "text": "trị"
+    },
+    {
+      "label": "question_label",
+      "text": "nhỏ nhất"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "hàm"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_text",
+      "text": "f"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "stimulus",
+      "text": "đoạn"
+    },
+    {
+      "label": "option_text",
+      "text": "[-"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "question_label",
+      "text": "8"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "stem",
+      "text": "PH"
+    },
+    {
+      "label": "section",
+      "text": "Ầ"
+    },
+    {
+      "label": "option_text",
+      "text": "N"
+    },
+    {
+      "label": "section",
+      "text": "III"
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "stem",
+      "text": "í"
+    },
+    {
+      "label": "section",
+      "text": "sinh"
+    },
+    {
+      "label": "stem",
+      "text": "trả"
+    },
+    {
+      "label": "stimulus",
+      "text": "lời"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "**"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "Bạn"
+    },
+    {
+      "label": "option_text",
+      "text": "Nam"
+    },
+    {
+      "label": "question_label",
+      "text": "tham"
+    },
+    {
+      "label": "stem",
+      "text": "gia"
+    },
+    {
+      "label": "question_label",
+      "text": "cuộc"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "stem",
+      "text": "giải"
+    },
+    {
+      "label": "stimulus",
+      "text": "mật thư"
+    },
+    {
+      "label": "question_label",
+      "text": "Theo"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "question_label",
+      "text": "tắc"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "question_label",
+      "text": "cuộc"
+    },
+    {
+      "label": "option_label",
+      "text": "thi"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "chơi"
+    },
+    {
+      "label": "stem",
+      "text": "cần chọn"
+    },
+    {
+      "label": "option_label",
+      "text": "ra"
+    },
+    {
+      "label": "option_label",
+      "text": "s"
+    },
+    {
+      "label": "stem",
+      "text": "áu"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "question_label",
+      "text": "tập S"
+    },
+    {
+      "label": "stimulus",
+      "text": "{"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "1;"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "44"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "7;"
+    },
+    {
+      "label": "question_label",
+      "text": "48"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "9"
+    },
+    {
+      "label": "stem",
+      "text": "}"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp mỗi"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_label",
+      "text": "vào"
+    },
+    {
+      "label": "option_text",
+      "text": "đúng"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "stimulus",
+      "text": "trí trong"
+    },
+    {
+      "label": "option_label",
+      "text": "s"
+    },
+    {
+      "label": "stem",
+      "text": "áu"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "stimulus",
+      "text": "trí A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "M"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "N"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "P"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_label",
+      "text": "bên"
+    },
+    {
+      "label": "option_text",
+      "text": "sao"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "stimulus",
+      "text": "trí"
+    },
+    {
+      "label": "option_label",
+      "text": "chỉ"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "số."
+    },
+    {
+      "label": "stimulus",
+      "text": "M"
+    },
+    {
+      "label": "section",
+      "text": "ật"
+    },
+    {
+      "label": "stimulus",
+      "text": "thư"
+    },
+    {
+      "label": "stem",
+      "text": "sẽ"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "giải"
+    },
+    {
+      "label": "stimulus",
+      "text": "nếu"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "stem",
+      "text": "ba"
+    },
+    {
+      "label": "option_label",
+      "text": "số xuất"
+    },
+    {
+      "label": "stimulus",
+      "text": "hiện"
+    },
+    {
+      "label": "question_label",
+      "text": "ở"
+    },
+    {
+      "label": "stem",
+      "text": "những"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "stem",
+      "text": "ba"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "stimulus",
+      "text": "trí"
+    },
+    {
+      "label": "question_label",
+      "text": "(A"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "M"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "B"
+    },
+    {
+      "label": "option_text",
+      "text": "B"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "N"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "C"
+    },
+    {
+      "label": "option_label",
+      "text": "C"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "P"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "question_label",
+      "text": "tạo"
+    },
+    {
+      "label": "stimulus",
+      "text": "thành"
+    },
+    {
+      "label": "stem",
+      "text": "các cấp"
+    },
+    {
+      "label": "option_label",
+      "text": "số cộng"
+    },
+    {
+      "label": "stimulus",
+      "text": "theo"
+    },
+    {
+      "label": "option_label",
+      "text": "thứ"
+    },
+    {
+      "label": "stimulus",
+      "text": "tự"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Bạn"
+    },
+    {
+      "label": "option_text",
+      "text": "Nam"
+    },
+    {
+      "label": "stem",
+      "text": "chọn"
+    },
+    {
+      "label": "stem",
+      "text": "ẫu"
+    },
+    {
+      "label": "option_text",
+      "text": "nhiên"
+    },
+    {
+      "label": "option_label",
+      "text": "s"
+    },
+    {
+      "label": "stem",
+      "text": "áu"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "question_label",
+      "text": "tập S"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stem",
+      "text": "ẫu"
+    },
+    {
+      "label": "option_text",
+      "text": "nhiên"
+    },
+    {
+      "label": "option_label",
+      "text": "vào"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "stem",
+      "text": "vị"
+    },
+    {
+      "label": "stimulus",
+      "text": "trí"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "yêu"
+    },
+    {
+      "label": "option_text",
+      "text": "cầu"
+    },
+    {
+      "label": "option_label",
+      "text": "ọi"
+    },
+    {
+      "label": "stem",
+      "text": "xác"
+    },
+    {
+      "label": "option_text",
+      "text": "suất"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "question_label",
+      "text": "bạn"
+    },
+    {
+      "label": "option_text",
+      "text": "Nam"
+    },
+    {
+      "label": "stem",
+      "text": "giải"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stimulus",
+      "text": "mật thư"
+    },
+    {
+      "label": "question_label",
+      "text": "ở"
+    },
+    {
+      "label": "stimulus",
+      "text": "lần"
+    },
+    {
+      "label": "stem",
+      "text": "chọn"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stem",
+      "text": "đó là"
+    },
+    {
+      "label": "question_label",
+      "text": "a"
+    },
+    {
+      "label": "option_text",
+      "text": "Giá"
+    },
+    {
+      "label": "section",
+      "text": "trị"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "question_label",
+      "text": "4/a"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "question_label",
+      "text": "nhiêu"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "Cho"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_label",
+      "text": "chó"
+    },
+    {
+      "label": "question_label",
+      "text": "S"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "ABCD"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "option_text",
+      "text": "đá"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "option_text",
+      "text": "ABCD"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "section",
+      "text": "vuông"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "section",
+      "text": "AB"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stimulus",
+      "text": "ết rằng"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_text",
+      "text": "chiếu"
+    },
+    {
+      "label": "section",
+      "text": "vuông"
+    },
+    {
+      "label": "stem",
+      "text": "góc"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "question_label",
+      "text": "S"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "section",
+      "text": "(ABCD"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stimulus",
+      "text": "trọng"
+    },
+    {
+      "label": "option_label",
+      "text": "tâm"
+    },
+    {
+      "label": "section",
+      "text": "H"
+    },
+    {
+      "label": "stem",
+      "text": "của tam"
+    },
+    {
+      "label": "option_text",
+      "text": "giác"
+    },
+    {
+      "label": "option_label",
+      "text": "ABC"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_text",
+      "text": "SH"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "Kho"
+    },
+    {
+      "label": "section",
+      "text": "ảng"
+    },
+    {
+      "label": "option_label",
+      "text": "cách"
+    },
+    {
+      "label": "option_text",
+      "text": "giữa"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "option_label",
+      "text": "đường"
+    },
+    {
+      "label": "option_label",
+      "text": "thẳng AC"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "section",
+      "text": "SD"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "question_label",
+      "text": "nhiêu"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "option_text",
+      "text": "tròn"
+    },
+    {
+      "label": "question_label",
+      "text": "kết"
+    },
+    {
+      "label": "stem",
+      "text": "quả"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "section",
+      "text": "phép"
+    },
+    {
+      "label": "stimulus",
+      "text": "tính"
+    },
+    {
+      "label": "stimulus",
+      "text": "trung gian"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "chỉ"
+    },
+    {
+      "label": "option_text",
+      "text": "tròn"
+    },
+    {
+      "label": "question_label",
+      "text": "kết"
+    },
+    {
+      "label": "stem",
+      "text": "quả"
+    },
+    {
+      "label": "stimulus",
+      "text": "cuối"
+    },
+    {
+      "label": "section",
+      "text": "cùng"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "option_label",
+      "text": "hàng"
+    },
+    {
+      "label": "stem",
+      "text": "phần"
+    },
+    {
+      "label": "question_label",
+      "text": "trăm"
+    },
+    {
+      "label": "stimulus",
+      "text": "---"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stem",
+      "text": "Để"
+    },
+    {
+      "label": "option_label",
+      "text": "gây"
+    },
+    {
+      "label": "question_label",
+      "text": "qu"
+    },
+    {
+      "label": "option_text",
+      "text": "ỹ"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "stem",
+      "text": "thiện"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "question_label",
+      "text": "lạc"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "stem",
+      "text": "thiện"
+    },
+    {
+      "label": "section",
+      "text": "nguy"
+    },
+    {
+      "label": "question_label",
+      "text": "ện"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "trường"
+    },
+    {
+      "label": "question_label",
+      "text": "TH"
+    },
+    {
+      "label": "section",
+      "text": "PT"
+    },
+    {
+      "label": "option_label",
+      "text": "tổ chức"
+    },
+    {
+      "label": "question_label",
+      "text": "hoạt"
+    },
+    {
+      "label": "section",
+      "text": "động"
+    },
+    {
+      "label": "stem",
+      "text": "bán"
+    },
+    {
+      "label": "option_label",
+      "text": "hàng"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "option_label",
+      "text": "hàng"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "stem",
+      "text": "chanh"
+    },
+    {
+      "label": "stimulus",
+      "text": "và khoai"
+    },
+    {
+      "label": "stem",
+      "text": "chiên"
+    },
+    {
+      "label": "section",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "lạc"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "option_label",
+      "text": "thiết"
+    },
+    {
+      "label": "section",
+      "text": "kế"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "question_label",
+      "text": "thực"
+    },
+    {
+      "label": "option_label",
+      "text": "đơn."
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "section",
+      "text": "ực"
+    },
+    {
+      "label": "option_label",
+      "text": "đơn"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stem",
+      "text": "giá"
+    },
+    {
+      "label": "stimulus",
+      "text": "tiền"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_text",
+      "text": "suất"
+    },
+    {
+      "label": "stem",
+      "text": "bán là"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "stem",
+      "text": "chanh"
+    },
+    {
+      "label": "stimulus",
+      "text": "và khoai"
+    },
+    {
+      "label": "stem",
+      "text": "chiên"
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "section",
+      "text": "ực"
+    },
+    {
+      "label": "option_label",
+      "text": "đơn"
+    },
+    {
+      "label": "stem",
+      "text": "2"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stem",
+      "text": "giá"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "nghìn"
+    },
+    {
+      "label": "option_label",
+      "text": "đồng"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "stem",
+      "text": "gồm"
+    },
+    {
+      "label": "stem",
+      "text": "ba"
+    },
+    {
+      "label": "stimulus",
+      "text": "cốc"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "stem",
+      "text": "chanh"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_label",
+      "text": "hai túi"
+    },
+    {
+      "label": "stimulus",
+      "text": "khoai"
+    },
+    {
+      "label": "stem",
+      "text": "chiên"
+    },
+    {
+      "label": "stimulus",
+      "text": "ết rằng"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "question_label",
+      "text": "lạc"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "option_label",
+      "text": "chỉ"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "không quá"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "cốc"
+    },
+    {
+      "label": "option_label",
+      "text": "nước"
+    },
+    {
+      "label": "stem",
+      "text": "chanh"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_label",
+      "text": "túi"
+    },
+    {
+      "label": "stimulus",
+      "text": "khoai"
+    },
+    {
+      "label": "stem",
+      "text": "chiên"
+    },
+    {
+      "label": "stimulus",
+      "text": "Số"
+    },
+    {
+      "label": "stimulus",
+      "text": "tiền"
+    },
+    {
+      "label": "stimulus",
+      "text": "lớn"
+    },
+    {
+      "label": "question_label",
+      "text": "nhất"
+    },
+    {
+      "label": "option_label",
+      "text": "câu"
+    },
+    {
+      "label": "question_label",
+      "text": "lạc"
+    },
+    {
+      "label": "stem",
+      "text": "bộ"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "question_label",
+      "text": "thể"
+    },
+    {
+      "label": "section",
+      "text": "nhận"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "stem",
+      "text": "khi"
+    },
+    {
+      "label": "stem",
+      "text": "bán"
+    },
+    {
+      "label": "option_label",
+      "text": "hết hàng"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "question_label",
+      "text": "nhiêu"
+    },
+    {
+      "label": "stimulus",
+      "text": "nghìn"
+    },
+    {
+      "label": "option_label",
+      "text": "đồng"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "Có"
+    },
+    {
+      "label": "section",
+      "text": "bốn"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "stem",
+      "text": "giá"
+    },
+    {
+      "label": "option_label",
+      "text": "để sách"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "section",
+      "text": "đánh"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_label",
+      "text": "thứ"
+    },
+    {
+      "label": "stimulus",
+      "text": "tự"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": ", 2"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "ám"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "question_label",
+      "text": "khác"
+    },
+    {
+      "label": "option_label",
+      "text": "nhau"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Bạn"
+    },
+    {
+      "label": "stem",
+      "text": "An"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "option_label",
+      "text": "hết"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "ám"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "option_label",
+      "text": "nói"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "option_label",
+      "text": "vào"
+    },
+    {
+      "label": "section",
+      "text": "bốn"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "option_text",
+      "text": "sao"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "option_text",
+      "text": "có"
+    },
+    {
+      "label": "stem",
+      "text": "ít"
+    },
+    {
+      "label": "question_label",
+      "text": "nhất"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "option_label",
+      "text": "thẳng"
+    },
+    {
+      "label": "option_label",
+      "text": "đứng"
+    },
+    {
+      "label": "stimulus",
+      "text": "thành"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "hàng"
+    },
+    {
+      "label": "stem",
+      "text": "với"
+    },
+    {
+      "label": "section",
+      "text": "g"
+    },
+    {
+      "label": "stem",
+      "text": "áy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "question_label",
+      "text": "quay"
+    },
+    {
+      "label": "option_label",
+      "text": "ra"
+    },
+    {
+      "label": "stimulus",
+      "text": "ngoài"
+    },
+    {
+      "label": "question_label",
+      "text": "ở"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Khi"
+    },
+    {
+      "label": "option_label",
+      "text": "đã"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "section",
+      "text": "xong"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "stimulus",
+      "text": "ám"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "hai cách"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "question_label",
+      "text": "bạn"
+    },
+    {
+      "label": "stem",
+      "text": "An"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "question_label",
+      "text": "gọi"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "section",
+      "text": "giống"
+    },
+    {
+      "label": "option_label",
+      "text": "nhau"
+    },
+    {
+      "label": "stimulus",
+      "text": "nếu"
+    },
+    {
+      "label": "option_label",
+      "text": "chúng"
+    },
+    {
+      "label": "option_label",
+      "text": "th"
+    },
+    {
+      "label": "question_label",
+      "text": "ỏa"
+    },
+    {
+      "label": "option_label",
+      "text": "mã"
+    },
+    {
+      "label": "section",
+      "text": "n"
+    },
+    {
+      "label": "option_label",
+      "text": "đồng"
+    },
+    {
+      "label": "section",
+      "text": "thời"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "section",
+      "text": "điều"
+    },
+    {
+      "label": "stem",
+      "text": "kiện"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "question_label",
+      "text": "đây"
+    },
+    {
+      "label": "option_text",
+      "text": ":"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stimulus",
+      "text": "Với"
+    },
+    {
+      "label": "question_label",
+      "text": "từng"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "stimulus",
+      "text": "lượng"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "question_label",
+      "text": "ở"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "stem",
+      "text": "đó là"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "option_label",
+      "text": "nhau"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "section",
+      "text": "cả"
+    },
+    {
+      "label": "option_label",
+      "text": "hai cách"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "section",
+      "text": "*"
+    },
+    {
+      "label": "stimulus",
+      "text": "Với"
+    },
+    {
+      "label": "question_label",
+      "text": "từng"
+    },
+    {
+      "label": "option_label",
+      "text": "ngăn"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "thứ"
+    },
+    {
+      "label": "stimulus",
+      "text": "tự"
+    },
+    {
+      "label": "section",
+      "text": "từ"
+    },
+    {
+      "label": "option_label",
+      "text": "trái"
+    },
+    {
+      "label": "option_text",
+      "text": "sang"
+    },
+    {
+      "label": "stem",
+      "text": "phải"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "stimulus",
+      "text": "quy"
+    },
+    {
+      "label": "option_label",
+      "text": "sách"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "option_label",
+      "text": "nhau"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "section",
+      "text": "cả"
+    },
+    {
+      "label": "option_label",
+      "text": "hai cách"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_label",
+      "text": "ọi"
+    },
+    {
+      "label": "option_text",
+      "text": "T"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "option_label",
+      "text": "số cách"
+    },
+    {
+      "label": "option_text",
+      "text": "xếp"
+    },
+    {
+      "label": "stimulus",
+      "text": "đôi"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "question_label",
+      "text": "khác"
+    },
+    {
+      "label": "option_label",
+      "text": "nhau"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "question_label",
+      "text": "bạn"
+    },
+    {
+      "label": "stem",
+      "text": "An"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "option_text",
+      "text": "Giá"
+    },
+    {
+      "label": "section",
+      "text": "trị"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "T"
+    },
+    {
+      "label": "question_label",
+      "text": "/4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "question_label",
+      "text": "nhiêu"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "Nếu"
+    },
+    {
+      "label": "stimulus",
+      "text": "một doanh"
+    },
+    {
+      "label": "option_text",
+      "text": "nghiệp"
+    },
+    {
+      "label": "option_label",
+      "text": "xuất"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": "phẩm"
+    },
+    {
+      "label": "stimulus",
+      "text": "trong"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "tháng"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": "∈"
+    },
+    {
+      "label": "option_label",
+      "text": "ℕ"
+    },
+    {
+      "label": "section",
+      "text": "^*"
+    },
+    {
+      "label": "stimulus",
+      "text": ";"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "≤"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "section",
+      "text": "≤"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "stimulus",
+      "text": "doanh"
+    },
+    {
+      "label": "stimulus",
+      "text": "thu"
+    },
+    {
+      "label": "section",
+      "text": "nhận"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "khi"
+    },
+    {
+      "label": "stem",
+      "text": "bán"
+    },
+    {
+      "label": "option_label",
+      "text": "hết"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_text",
+      "text": "phẩm"
+    },
+    {
+      "label": "stem",
+      "text": "đó là"
+    },
+    {
+      "label": "stimulus",
+      "text": "F"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "section",
+      "text": "("
+    },
+    {
+      "label": "stimulus",
+      "text": "nghìn"
+    },
+    {
+      "label": "option_label",
+      "text": "đồng"
+    },
+    {
+      "label": "stimulus",
+      "text": "), trong"
+    },
+    {
+      "label": "stem",
+      "text": "khi chi"
+    },
+    {
+      "label": "option_label",
+      "text": "phí"
+    },
+    {
+      "label": "option_label",
+      "text": "xuất bình"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "option_text",
+      "text": "mỗi"
+    },
+    {
+      "label": "option_text",
+      "text": "phẩm"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "stem",
+      "text": "("
+    },
+    {
+      "label": "question_label",
+      "text": "x"
+    },
+    {
+      "label": "option_text",
+      "text": ")"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "question_label",
+      "text": "/x"
+    },
+    {
+      "label": "stimulus",
+      "text": "+"
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "nghìn"
+    },
+    {
+      "label": "option_label",
+      "text": "đồng"
+    },
+    {
+      "label": "option_label",
+      "text": "). Gi"
+    },
+    {
+      "label": "option_text",
+      "text": "ả"
+    },
+    {
+      "label": "option_label",
+      "text": "sử"
+    },
+    {
+      "label": "option_label",
+      "text": "số"
+    },
+    {
+      "label": "option_text",
+      "text": "phẩm"
+    },
+    {
+      "label": "option_label",
+      "text": "xuất ra"
+    },
+    {
+      "label": "option_label",
+      "text": "luôn"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stem",
+      "text": "bán"
+    },
+    {
+      "label": "option_label",
+      "text": "hết"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "question_label",
+      "text": "Trong"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_label",
+      "text": "tháng"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "stimulus",
+      "text": "doanh"
+    },
+    {
+      "label": "option_text",
+      "text": "nghiệp"
+    },
+    {
+      "label": "stem",
+      "text": "đó cần"
+    },
+    {
+      "label": "option_label",
+      "text": "xuất"
+    },
+    {
+      "label": "stem",
+      "text": "ít"
+    },
+    {
+      "label": "question_label",
+      "text": "nhất"
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "option_label",
+      "text": "nhiêu"
+    },
+    {
+      "label": "option_text",
+      "text": "phẩm"
+    },
+    {
+      "label": "option_label",
+      "text": "để"
+    },
+    {
+      "label": "option_text",
+      "text": "lợi nhu"
+    },
+    {
+      "label": "option_text",
+      "text": "ận"
+    },
+    {
+      "label": "stimulus",
+      "text": "thu"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "stimulus",
+      "text": "lớn"
+    },
+    {
+      "label": "question_label",
+      "text": "hơn"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stimulus",
+      "text": "triệu"
+    },
+    {
+      "label": "option_label",
+      "text": "đồng"
+    },
+    {
+      "label": "stimulus",
+      "text": "?"
+    },
+    {
+      "label": "option_text",
+      "text": "Câu"
+    },
+    {
+      "label": "stem",
+      "text": "6"
+    },
+    {
+      "label": "stem",
+      "text": "Để đặt"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "section",
+      "text": "vật trang"
+    },
+    {
+      "label": "stimulus",
+      "text": "trí"
+    },
+    {
+      "label": "section",
+      "text": "trên"
+    },
+    {
+      "label": "stem",
+      "text": "bàn"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "ta"
+    },
+    {
+      "label": "option_label",
+      "text": "thiết"
+    },
+    {
+      "label": "section",
+      "text": "kế"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "question_label",
+      "text": "chân"
+    },
+    {
+      "label": "option_text",
+      "text": "như"
+    },
+    {
+      "label": "question_label",
+      "text": "sau"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "stimulus",
+      "text": "L"
+    },
+    {
+      "label": "stem",
+      "text": "ấy"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "section",
+      "text": "gỗ"
+    },
+    {
+      "label": "option_text",
+      "text": "có dạng khối"
+    },
+    {
+      "label": "option_label",
+      "text": "chó"
+    },
+    {
+      "label": "stimulus",
+      "text": "p"
+    },
+    {
+      "label": "option_label",
+      "text": "cụ"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_label",
+      "text": "t"
+    },
+    {
+      "label": "option_text",
+      "text": "ứ"
+    },
+    {
+      "label": "option_text",
+      "text": "giác"
+    },
+    {
+      "label": "stem",
+      "text": "đều với"
+    },
+    {
+      "label": "option_label",
+      "text": "độ"
+    },
+    {
+      "label": "stimulus",
+      "text": "dài"
+    },
+    {
+      "label": "option_label",
+      "text": "hai"
+    },
+    {
+      "label": "stimulus",
+      "text": "cạnh"
+    },
+    {
+      "label": "option_text",
+      "text": "đá"
+    },
+    {
+      "label": "option_text",
+      "text": "y"
+    },
+    {
+      "label": "stimulus",
+      "text": "lần"
+    },
+    {
+      "label": "stimulus",
+      "text": "lượt"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stimulus",
+      "text": "7"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stimulus",
+      "text": "và"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "section",
+      "text": "0"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "4"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "bề"
+    },
+    {
+      "label": "stem",
+      "text": "dày"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "section",
+      "text": "gỗ"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stimulus",
+      "text": "1"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "."
+    },
+    {
+      "label": "section",
+      "text": "Sau"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "stimulus",
+      "text": "kho"
+    },
+    {
+      "label": "question_label",
+      "text": "ét"
+    },
+    {
+      "label": "question_label",
+      "text": "bỏ"
+    },
+    {
+      "label": "stem",
+      "text": "đi"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "stem",
+      "text": "phần"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "section",
+      "text": "gỗ"
+    },
+    {
+      "label": "option_text",
+      "text": "sao"
+    },
+    {
+      "label": "question_label",
+      "text": "cho"
+    },
+    {
+      "label": "stem",
+      "text": "phần đó"
+    },
+    {
+      "label": "option_text",
+      "text": "có dạng"
+    },
+    {
+      "label": "section",
+      "text": "vật"
+    },
+    {
+      "label": "question_label",
+      "text": "thể"
+    },
+    {
+      "label": "section",
+      "text": "H"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "ở"
+    },
+    {
+      "label": "stem",
+      "text": "đó"
+    },
+    {
+      "label": "section",
+      "text": "H"
+    },
+    {
+      "label": "section",
+      "text": "nhận"
+    },
+    {
+      "label": "option_label",
+      "text": "được"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "option_label",
+      "text": "cách"
+    },
+    {
+      "label": "option_text",
+      "text": "cắt khối"
+    },
+    {
+      "label": "option_text",
+      "text": "cầu"
+    },
+    {
+      "label": "stem",
+      "text": "bán"
+    },
+    {
+      "label": "stem",
+      "text": "kính"
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "stimulus",
+      "text": "một"
+    },
+    {
+      "label": "option_text",
+      "text": "ph"
+    },
+    {
+      "label": "stimulus",
+      "text": "ẳng"
+    },
+    {
+      "label": "option_text",
+      "text": "cắt"
+    },
+    {
+      "label": "option_text",
+      "text": "cắt"
+    },
+    {
+      "label": "stem",
+      "text": "là"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "option_text",
+      "text": "tròn"
+    },
+    {
+      "label": "stem",
+      "text": "bán"
+    },
+    {
+      "label": "stem",
+      "text": "kính"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "question_label",
+      "text": "5"
+    },
+    {
+      "label": "section",
+      "text": "xem"
+    },
+    {
+      "label": "question_label",
+      "text": "hình"
+    },
+    {
+      "label": "section",
+      "text": "dưới"
+    },
+    {
+      "label": "stem",
+      "text": "Th"
+    },
+    {
+      "label": "stem",
+      "text": "ể"
+    },
+    {
+      "label": "question_label",
+      "text": "tích"
+    },
+    {
+      "label": "stem",
+      "text": "của"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "question_label",
+      "text": "chân"
+    },
+    {
+      "label": "section",
+      "text": "bằng"
+    },
+    {
+      "label": "stem",
+      "text": "bao"
+    },
+    {
+      "label": "question_label",
+      "text": "nhiêu"
+    },
+    {
+      "label": "option_label",
+      "text": "centi"
+    },
+    {
+      "label": "stimulus",
+      "text": "m"
+    },
+    {
+      "label": "question_label",
+      "text": "ét"
+    },
+    {
+      "label": "option_text",
+      "text": "khối"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "option_text",
+      "text": "tròn"
+    },
+    {
+      "label": "question_label",
+      "text": "kết"
+    },
+    {
+      "label": "stem",
+      "text": "quả"
+    },
+    {
+      "label": "stem",
+      "text": "các"
+    },
+    {
+      "label": "section",
+      "text": "phép"
+    },
+    {
+      "label": "stimulus",
+      "text": "tính"
+    },
+    {
+      "label": "stimulus",
+      "text": "trung gian"
+    },
+    {
+      "label": "stem",
+      "text": ","
+    },
+    {
+      "label": "option_label",
+      "text": "chỉ"
+    },
+    {
+      "label": "option_text",
+      "text": "tròn"
+    },
+    {
+      "label": "question_label",
+      "text": "kết"
+    },
+    {
+      "label": "stem",
+      "text": "quả"
+    },
+    {
+      "label": "stimulus",
+      "text": "cuối"
+    },
+    {
+      "label": "section",
+      "text": "cùng"
+    },
+    {
+      "label": "stimulus",
+      "text": "đến"
+    },
+    {
+      "label": "option_label",
+      "text": "hàng"
+    },
+    {
+      "label": "stem",
+      "text": "phần"
+    },
+    {
+      "label": "option_label",
+      "text": "m"
+    },
+    {
+      "label": "option_text",
+      "text": "ười"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "option_text",
+      "text": "H"
+    },
+    {
+      "label": "option_label",
+      "text": "ẾT"
+    },
+    {
+      "label": "option_text",
+      "text": "**"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "stem",
+      "text": "----------------"
+    },
+    {
+      "label": "section",
+      "text": "* *"
+    },
+    {
+      "label": "stimulus",
+      "text": "Th"
+    },
+    {
+      "label": "stem",
+      "text": "í"
+    },
+    {
+      "label": "section",
+      "text": "sinh"
+    },
+    {
+      "label": "stem",
+      "text": "không"
+    },
+    {
+      "label": "option_label",
+      "text": "được sử"
+    },
+    {
+      "label": "section",
+      "text": "dụng"
+    },
+    {
+      "label": "question_label",
+      "text": "tài"
+    },
+    {
+      "label": "section",
+      "text": ";*"
+    },
+    {
+      "label": "section",
+      "text": "* *Gi"
+    },
+    {
+      "label": "stimulus",
+      "text": "ám"
+    },
+    {
+      "label": "stem",
+      "text": "thị không"
+    },
+    {
+      "label": "stem",
+      "text": "giải"
+    },
+    {
+      "label": "stimulus",
+      "text": "thích gì"
+    },
+    {
+      "label": "question_label",
+      "text": "thêm"
+    }
+  ]
+}

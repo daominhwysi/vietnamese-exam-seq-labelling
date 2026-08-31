@@ -260,7 +260,11 @@ def is_valid_latex(content: str) -> bool:
     if len(content_stripped) == 1:
         return content_stripped.isalnum()
         
-    # Case 2: Balanced braces, brackets, and parentheses
+    # Case 2: Mathematical interval notation like (-\infty; 0] or [8; +\infty) or (1; 2]
+    if re.match(r'^[\[\(][^\[\]\(\)]+[\]\)]$', content_stripped) and (';' in content_stripped or ',' in content_stripped):
+        return True
+
+    # Case 3: Balanced braces, brackets, and parentheses
     brackets = {'{': '}', '(': ')', '[': ']'}
     stack = []
     for char in content_stripped:
@@ -275,12 +279,12 @@ def is_valid_latex(content: str) -> bool:
     if stack:
         return False
         
-    # Case 3: Contains standard math/latex character indicators
+    # Case 4: Contains standard math/latex character indicators
     math_indicators = ['\\', '^', '_', '+', '-', '*', '/', '=', '<', '>', '{', '}', '[', ']']
     if any(ind in content_stripped for ind in math_indicators):
         return True
         
-    # Case 4: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
+    # Case 5: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
     if len(content_stripped) < 10 and re.match(r'^[a-zA-Z0-9]+$', content_stripped):
         return True
         

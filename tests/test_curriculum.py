@@ -221,7 +221,7 @@ class TestCurriculum(unittest.TestCase):
             thinking=True
         )
         
-        mock_load.assert_called_with('physics', 11, autogenerate=True, model='custom-model-2', thinking=True)
+        mock_load.assert_called_with('physics', 11, autogenerate=True, model='custom-model-2', thinking=True, provider=None)
         
         mock_chat.assert_called_once()
         kwargs = mock_chat.call_args[1]
@@ -246,7 +246,7 @@ class TestCurriculum(unittest.TestCase):
         
         mock_create.return_value = mock_response
         
-        chat("prompt")
+        chat("prompt", provider="deepseek", model="deepseek-v4-flash")
         mock_create.assert_called_with(
             model="deepseek-v4-flash",
             messages=[
@@ -257,7 +257,7 @@ class TestCurriculum(unittest.TestCase):
         )
         
         mock_create.reset_mock()
-        chat("prompt", thinking=True)
+        chat("prompt", thinking=True, provider="deepseek", model="deepseek-v4-flash")
         mock_create.assert_called_with(
             model="deepseek-v4-flash",
             messages=[
@@ -269,7 +269,7 @@ class TestCurriculum(unittest.TestCase):
         )
         
         mock_create.reset_mock()
-        chat("prompt", thinking="max")
+        chat("prompt", thinking="max", provider="deepseek", model="deepseek-v4-flash")
         mock_create.assert_called_with(
             model="deepseek-v4-flash",
             messages=[
@@ -281,7 +281,7 @@ class TestCurriculum(unittest.TestCase):
         )
         
         mock_create.reset_mock()
-        chat("prompt", thinking="none")
+        chat("prompt", thinking="none", provider="deepseek", model="deepseek-v4-flash")
         mock_create.assert_called_with(
             model="deepseek-v4-flash",
             messages=[

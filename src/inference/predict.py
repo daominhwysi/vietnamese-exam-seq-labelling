@@ -77,6 +77,9 @@ def is_valid_latex(content: str) -> bool:
         return False
     if len(content_stripped) == 1:
         return content_stripped.isalnum()
+    # Case 2: Mathematical interval notation like (-\infty; 0] or [8; +\infty) or (1; 2]
+    if re.match(r'^[\[\(][^\[\]\(\)]+[\]\)]$', content_stripped) and (';' in content_stripped or ',' in content_stripped):
+        return True
     brackets = {'{': '}', '(': ')', '[': ']'}
     stack = []
     for char in content_stripped:
@@ -338,11 +341,24 @@ def load_inference_model(model_dir: str, base_model_name: str = None, device: st
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Auto-detect default model path if default "./results" doesn't exist
+    if model_dir.startswith("./content/"):
+        alt_path = model_dir[1:]  # /content/...
+        if os.path.exists(alt_path):
+            model_dir = alt_path
+        elif os.path.exists(model_dir[10:]):  # stripped ./content/
+            model_dir = model_dir[10:]
+
     if model_dir == "./results" and not os.path.exists("./results"):
-        if os.path.exists("./results_full"):
+        if os.path.exists("./results_enhanced_v3"):
+            model_dir = "./results_enhanced_v3"
+        elif os.path.exists("./results_full"):
             model_dir = "./results_full"
         else:
             model_dir = "daominhwysi/results_full"
+
+    if not os.path.exists(model_dir) and (model_dir.startswith((".", "/", "\\")) or "/" in model_dir and os.path.exists(os.path.abspath(model_dir))):
+        if os.path.exists(os.path.abspath(model_dir)):
+            model_dir = os.path.abspath(model_dir)
 
     print(f"Model Identifier: {model_dir}")
     print(f"Inference Device: {device}")
@@ -371,13 +387,23 @@ def load_inference_model(model_dir: str, base_model_name: str = None, device: st
         is_lora = True
     else:
         try:
-            from huggingface_hub import file_exists
-            if file_exists(repo_id=model_dir, filename="enhanced_head_config.json"):
-                has_enhanced_head = True
-            elif file_exists(repo_id=model_dir, filename="adapter_config.json"):
-                is_lora = True
+            from transformers.utils.hub import cached_file
+            st_file = os.path.join(model_dir, "model.safetensors") if os.path.isdir(model_dir) else cached_file(model_dir, "model.safetensors")
+            if st_file and os.path.exists(st_file):
+                from safetensors import safe_open
+                with safe_open(st_file, framework="pt") as f:
+                    st_keys = f.keys()
+                    if any("head.layer_weights" in k or "head.dense" in k for k in st_keys):
+                        has_enhanced_head = True
         except Exception:
             pass
+        if not is_lora:
+            try:
+                from huggingface_hub import file_exists
+                if file_exists(repo_id=model_dir, filename="adapter_config.json"):
+                    is_lora = True
+            except Exception:
+                pass
 
     if has_enhanced_head:
         print("Detected Enhanced Head model checkpoint. Loading with EnhancedTokenClassifierModel...")

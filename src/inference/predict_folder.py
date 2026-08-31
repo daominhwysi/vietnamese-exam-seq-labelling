@@ -40,7 +40,11 @@ def is_valid_latex(content):
     if len(content_stripped) == 1:
         return content_stripped.isalnum()
         
-    # Case 2: Balanced braces, brackets, and parentheses
+    # Case 2: Mathematical interval notation like (-\infty; 0] or [8; +\infty) or (1; 2]
+    if re.match(r'^[\[\(][^\[\]\(\)]+[\]\)]$', content_stripped) and (';' in content_stripped or ',' in content_stripped):
+        return True
+
+    # Case 3: Balanced braces, brackets, and parentheses
     brackets = {'{': '}', '(': ')', '[': ']'}
     stack = []
     for char in content_stripped:
@@ -55,12 +59,12 @@ def is_valid_latex(content):
     if stack:
         return False
         
-    # Case 3: Contains standard math/latex character indicators
+    # Case 4: Contains standard math/latex character indicators
     math_indicators = ['\\', '^', '_', '+', '-', '*', '/', '=', '<', '>', '{', '}', '[', ']']
     if any(ind in content_stripped for ind in math_indicators):
         return True
         
-    # Case 4: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
+    # Case 5: Short alphanumeric math terms without spaces (e.g. $2a$, $x1$, $100$)
     if len(content_stripped) < 10 and re.match(r'^[a-zA-Z0-9]+$', content_stripped):
         return True
         
@@ -118,7 +122,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
             if current_label and current_start < current_end:
                 segments.append({
                     "label": current_label,
-                    "text": raw_text[current_start:current_end].strip()
+                    "start": current_start,
+                    "end": current_end,
+                    "text": raw_text[current_start:current_end]
                 })
             current_label = label[2:]
             current_start = start
@@ -133,7 +139,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
                 if current_label and current_start < current_end:
                     segments.append({
                         "label": current_label,
-                        "text": raw_text[current_start:current_end].strip()
+                        "start": current_start,
+                        "end": current_end,
+                        "text": raw_text[current_start:current_end]
                     })
                 # Auto-promote orphaned I-tag to start a new segment
                 current_label = tag_name
@@ -143,7 +151,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
             if current_label and current_start < current_end:
                 segments.append({
                     "label": current_label,
-                    "text": raw_text[current_start:current_end].strip()
+                    "start": current_start,
+                    "end": current_end,
+                    "text": raw_text[current_start:current_end]
                 })
                 current_label = None
                 current_start = -1
@@ -153,7 +163,9 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
     if current_label and current_start < current_end:
         segments.append({
             "label": current_label,
-            "text": raw_text[current_start:current_end].strip()
+            "start": current_start,
+            "end": current_end,
+            "text": raw_text[current_start:current_end]
         })
 
     # Filter out empty and spurious non-alphanumeric label segments (e.g. '*' or '-' tagged as option_label)
@@ -172,38 +184,34 @@ def extract_segments(raw_text, predictions, offsets, attention_mask, id_to_tag):
 def segments_to_xml(raw_text: str, segments: list) -> str:
     """
     Reconstructs the full raw text with inline XML tags around each labeled segment,
-    matching the format produced by annotate_ocr.py:
+    matching the ground-truth format using character offsets directly to avoid runaway offset drift:
         <question_label>Câu 1.</question_label> <stem>Nội dung câu hỏi...</stem>
 
     Untagged text between segments (e.g. page headers, separators) is preserved
-    verbatim outside any tag. Character offsets on the segments are used to find
-    the exact gap text from raw_text.
+    verbatim outside any tag.
     """
-    # Re-derive character offsets by searching for each segment's text in order.
-    # The segments list from extract_segments() only carries stripped text,
-    # so we locate each one forward from the previous match end.
+    sorted_segs = sorted(segments, key=lambda x: (x.get("start", 0), -x.get("end", 0)))
     result = []
     cursor = 0
 
-    for seg in segments:
+    for seg in sorted_segs:
         label = seg["label"]
-        text = seg["text"]
-        if not text:
-            continue
+        start = seg.get("start", -1)
+        end = seg.get("end", -1)
+        text = seg.get("text", "")
 
-        # Find next occurrence of this text starting from cursor
-        idx = raw_text.find(text, cursor)
-        if idx == -1:
-            # Fallback: skip this segment gracefully
-            continue
-
-        # Append any untagged gap text before this segment
-        if idx > cursor:
-            result.append(raw_text[cursor:idx])
-
-        # Append the tagged segment
-        result.append(f"<{label}>{text}</{label}>")
-        cursor = idx + len(text)
+        if start >= 0 and end >= 0 and start >= cursor:
+            if start > cursor:
+                result.append(raw_text[cursor:start])
+            result.append(f"<{label}>{raw_text[start:end]}</{label}>")
+            cursor = end
+        elif start == -1 or end == -1:
+            idx = raw_text.find(text, cursor)
+            if idx != -1:
+                if idx > cursor:
+                    result.append(raw_text[cursor:idx])
+                result.append(f"<{label}>{text}</{label}>")
+                cursor = idx + len(text)
 
     # Append any trailing untagged text after the last segment
     if cursor < len(raw_text):
@@ -266,11 +274,24 @@ def main():
     
     # Auto-detect default model path if default "./results" doesn't exist
     model_dir = args.model_dir
+    if model_dir.startswith("./content/"):
+        alt_path = model_dir[1:]  # /content/...
+        if os.path.exists(alt_path):
+            model_dir = alt_path
+        elif os.path.exists(model_dir[10:]):  # stripped ./content/
+            model_dir = model_dir[10:]
+            
     if model_dir == "./results" and not os.path.exists("./results"):
-        if os.path.exists("./results_full"):
+        if os.path.exists("./results_enhanced_v3"):
+            model_dir = "./results_enhanced_v3"
+        elif os.path.exists("./results_full"):
             model_dir = "./results_full"
         else:
             model_dir = "daominhwysi/results_full"
+            
+    if not os.path.exists(model_dir) and (model_dir.startswith((".", "/", "\\")) or "/" in model_dir and os.path.exists(os.path.abspath(model_dir))):
+        if os.path.exists(os.path.abspath(model_dir)):
+            model_dir = os.path.abspath(model_dir)
     
     # 1. Load Tokenizer (prefer local checkpoint, fallback to base model with correct special tokens)
     print(f"Loading tokenizer from: {model_dir}...")
@@ -293,6 +314,26 @@ def main():
     print(f"Loading model weights from: {model_dir}...")
     is_lora = os.path.exists(os.path.join(model_dir, "adapter_config.json"))
     has_enhanced_head = os.path.exists(os.path.join(model_dir, "enhanced_head_config.json"))
+    if not has_enhanced_head:
+        try:
+            from transformers.utils.hub import cached_file
+            st_file = os.path.join(model_dir, "model.safetensors") if os.path.isdir(model_dir) else cached_file(model_dir, "model.safetensors")
+            if st_file and os.path.exists(st_file):
+                from safetensors import safe_open
+                with safe_open(st_file, framework="pt") as f:
+                    st_keys = f.keys()
+                    if any("head.layer_weights" in k or "head.dense" in k for k in st_keys):
+                        has_enhanced_head = True
+        except Exception:
+            pass
+    if not is_lora and not os.path.exists(model_dir):
+        try:
+            from transformers.utils.hub import cached_file
+            hf_lora = cached_file(model_dir, "adapter_config.json")
+            if hf_lora is not None:
+                is_lora = True
+        except Exception:
+            pass
     
     if has_enhanced_head:
         print("Detected Enhanced Head model checkpoint. Loading with EnhancedTokenClassifierModel...")

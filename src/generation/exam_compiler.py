@@ -45,14 +45,17 @@ ENG_INST_REORDERING = "Mark the letter A, B, C, or D on your answer sheet to ind
 
 def get_available_curricula() -> List[Tuple[str, int]]:
     curriculum_dir = Path("output") / "curriculum"
-    if not curriculum_dir.exists():
-        return []
-
     pairs = []
-    for file in curriculum_dir.glob("*.json"):
-        match = re.match(r"^([a-zA-Z0-9_]+)_(\d+)\.json$", file.name)
-        if match:
-            pairs.append((match.group(1), int(match.group(2))))
+    if curriculum_dir.exists():
+        for file in curriculum_dir.glob("*.json"):
+            match = re.match(r"^([a-zA-Z0-9_]+)_(\d+)\.json$", file.name)
+            if match:
+                pairs.append((match.group(1), int(match.group(2))))
+
+    if not pairs:
+        for s in Subject:
+            for g in [10, 11, 12]:
+                pairs.append((s.value, g))
     return pairs
 
 
@@ -395,7 +398,7 @@ def generate_exam_tasks(
                 SECTION_LIT_WRITING,
                 QuestionType.SHORT_ANSWER,
                 Difficulty.APPLICATION,
-                {"problem_type_filter": "social_argumentation_essay"},
+                {"problem_type_filter": "literary_analysis_paragraph"},
             )
         )
         tasks.append(
@@ -403,7 +406,7 @@ def generate_exam_tasks(
                 SECTION_LIT_WRITING,
                 QuestionType.SHORT_ANSWER,
                 Difficulty.HIGH_APPLICATION,
-                {"problem_type_filter": "literary_analysis_essay"},
+                {"problem_type_filter": "social_argumentation_essay"},
             )
         )
 
@@ -544,10 +547,11 @@ def run_batch_exams_generator(
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
 
-    available_pairs = get_available_curricula()
-    for g in [10, 11, 12]:
-        available_pairs.append(("english", g))
-        available_pairs.append(("literature", g))
+    available_pairs = list(dict.fromkeys(get_available_curricula()))
+    for s in Subject:
+        for g in [10, 11, 12]:
+            if (s.value, g) not in available_pairs:
+                available_pairs.append((s.value, g))
 
     print("=" * 60)
     print(f"Starting batch generation of {num_exams} mock exam JSON files...")
@@ -568,16 +572,12 @@ def run_batch_exams_generator(
             subj_str, gr = subject, grade
         elif subject:
             matching = [p for p in available_pairs if p[0] == subject]
-            subj_str, gr = (
-                random.choice(matching) if matching else random.choice(available_pairs)
-            )
+            subj_str, gr = matching[i % len(matching)] if matching else (subject, 10 + (i % 3))
         elif grade:
             matching = [p for p in available_pairs if p[1] == grade]
-            subj_str, gr = (
-                random.choice(matching) if matching else random.choice(available_pairs)
-            )
+            subj_str, gr = matching[i % len(matching)] if matching else (available_pairs[i % len(available_pairs)][0], grade)
         else:
-            subj_str, gr = random.choice(available_pairs)
+            subj_str, gr = available_pairs[i % len(available_pairs)]
 
         subject_enum = Subject(subj_str)
 

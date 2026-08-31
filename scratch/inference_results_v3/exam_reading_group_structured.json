@@ -1,0 +1,106 @@
+{
+  "file_name": "exam_reading_group.txt",
+  "original_text_length": 672,
+  "segments": [
+    {
+      "label": "section",
+      "text": "# ĐỀ THI ĐÁNH GIÁ TƯ DUY 2025 - PHẦN TƯ DUY KHOA HỌC"
+    },
+    {
+      "label": "stimulus",
+      "text": "Dựa vào"
+    },
+    {
+      "label": "stem",
+      "text": "thông tin sau để trả lời câu"
+    },
+    {
+      "label": "stimulus",
+      "text": "hỏi"
+    },
+    {
+      "label": "stem",
+      "text": "1 và 2:\nTrong tự nhiên, quá trình cố định đạm sinh học được thực hiện bởi các nhóm vi sinh vật tự do (như vi khuẩn lam Anabaena) hoặc vi sinh vật cộng sinh (như vi khuẩn Rhizobium trong nốt sần rễ cây họ Đậu). Chúng sử dụng enzyme nitrogenase để bẻ gãy liên kết ba bền vững trong phân tử N2 để tạo thành NH3."
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 1:"
+    },
+    {
+      "label": "stem",
+      "text": "Vi khuẩn nào sau đây sống cộng sinh trong nốt sần cây họ Đậu để cố định nitơ?"
+    },
+    {
+      "label": "option_label",
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "text": "Rhizobium"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "Clostridium"
+    },
+    {
+      "label": "option_label",
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "text": "Azotobacter"
+    },
+    {
+      "label": "option_label",
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "text": "Anabaena"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 2:"
+    },
+    {
+      "label": "stem",
+      "text": "Enzyme chịu trách nhiệm bẻ gãy liên kết trong phân tử nitơ là:"
+    },
+    {
+      "label": "option_label",
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "text": "Amylase"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "Nitrogenase"
+    },
+    {
+      "label": "option_label",
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "text": "DNA polymerase"
+    },
+    {
+      "label": "option_label",
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "text": "Protease"
+    }
+  ]
+}

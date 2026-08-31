@@ -165,14 +165,14 @@ def parse_args():
     parser.add_argument(
         "--focal-gamma",
         type=float,
-        default=2.0,
-        help="Gamma focusing parameter for Focal Loss (default: 2.0)"
+        default=1.5,
+        help="Gamma focusing parameter for Focal Loss (default: 1.5)"
     )
     parser.add_argument(
         "--label-smoothing",
         type=float,
-        default=0.05,
-        help="Label smoothing factor for loss computation (default: 0.05)"
+        default=0.0,
+        help="Label smoothing factor for loss computation (default: 0.0)"
     )
     parser.add_argument(
         "--no-class-weights",
@@ -216,7 +216,108 @@ def parse_args():
         default=None,
         help="Explicit number of update steps between logging metrics (overrides logs_per_epoch if specified)"
     )
+    parser.add_argument(
+        "--online_augmentation",
+        action="store_true",
+        default=False,
+        help="Enable dynamic on-the-fly online data augmentation during training (default: False)"
+    )
+    parser.add_argument(
+        "--dataloader_num_workers",
+        type=int,
+        default=4,
+        help="Number of DataLoader worker subprocesses for data loading & online augmentation (default: 4)"
+    )
+    parser.add_argument(
+        "--raw_data_dir",
+        type=str,
+        default="output",
+        help="Directory containing raw question JSONs or XMLs for online augmentation (default: 'output')"
+    )
     return parser.parse_args()
+
+class OnlineAugmentedDataset(torch.utils.data.Dataset):
+    """
+    Dynamic Online PyTorch Dataset that reconstructs, augments, tokenizes,
+    and aligns character spans on-the-fly inside the DataLoader multi-worker processes.
+    """
+    def __init__(
+        self,
+        raw_items: list,
+        tokenizer: Any,
+        tag_to_id: Dict[str, int],
+        is_train: bool = True,
+        max_length: int = 1024
+    ):
+        self.raw_items = raw_items
+        self.tokenizer = tokenizer
+        self.tag_to_id = tag_to_id
+        self.is_train = is_train
+        self.max_length = max_length
+
+    def __len__(self):
+        return len(self.raw_items)
+
+    def __getitem__(self, idx):
+        import random
+        from src.generation.reconstructor import reconstruct_question, ReconstructorConfig
+        from src.data.prepare import align_tokens_to_spans
+        
+        item = self.raw_items[idx]
+        
+        if self.is_train:
+            aug_config = ReconstructorConfig(
+                question_prefix_template=random.choice([
+                    "Câu {num}: ", "Câu {num}. ", "Câu {num}:", "Câu {num} - ", "{num}. ", "{num}) ", "Question {num}: "
+                ]),
+                option_prefix_style=random.choice([
+                    "capital_dot", "lowercase_paren", "capital_paren", "lowercase_dot", "bold_capital_dot", "bold_lowercase_paren"
+                ]),
+                separator_stem_options=random.choice(["\n", " ", "\n\n"]),
+                separator_options=random.choice(["\n", "    ", "\t\t", "   "]),
+                option_drop_prob=0.10,
+                space_noise_rate=0.15,
+                formatting_noise_prob=0.15,
+                casing_noise_prob=0.10,
+                typo_rate=0.02,
+                latex_mask_prob=0.50,
+                enable_permutations=True,
+                inline_option_prob=0.35,
+                min_inline_spaces=1,
+                max_inline_spaces=30,
+                grid_2x2_prob=0.15,
+                same_line_stem_options_prob=0.20,
+                flatten_newlines_prob=0.15,
+                collapse_whitespace_prob=0.50,
+                randomize_q_num=True
+            )
+        else:
+            aug_config = ReconstructorConfig(randomize_q_num=False)
+
+        rec = reconstruct_question(item, aug_config)
+        raw_text = rec["raw_text"]
+        spans = rec["spans"]
+
+        tokenized = self.tokenizer(
+            raw_text,
+            return_offsets_mapping=True,
+            truncation=True,
+            max_length=self.max_length,
+            add_special_tokens=True
+        )
+
+        labels = align_tokens_to_spans(
+            tokenized["offset_mapping"],
+            spans,
+            self.tag_to_id,
+            raw_text=raw_text
+        )
+
+        return {
+            "input_ids": torch.tensor(tokenized["input_ids"], dtype=torch.long),
+            "attention_mask": torch.tensor(tokenized["attention_mask"], dtype=torch.long),
+            "labels": torch.tensor(labels, dtype=torch.long)
+        }
 
 def main():
     args = parse_args()
@@ -328,58 +429,102 @@ def run_train(args):
         print("Automatic Mixed Precision (AMP) disabled (training in float32)")
 
     # 3. Download Label Mapping & Dataset
-    print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
-    try:
-        from datasets import load_dataset
-        # Load the custom split jsonl files
-        dataset = load_dataset(
-            args.repo_id,
-            data_files={
-                "train": "train.jsonl",
-                "validation": "val.jsonl",
-                "test": "test.jsonl"
-            },
-            token=hf_token
-        )
-    except Exception as e:
-        print(f"Error loading dataset: {e}")
-        print("Make sure you specify the correct --repo_id and provide a valid token if private.")
-        sys.exit(1)
+    train_dataset_obj = None
+    eval_dataset_obj = None
+    
+    if getattr(args, "online_augmentation", False):
+        print(f"Online Dynamic Augmentation enabled! Loading raw question/exam files from '{args.raw_data_dir}'...")
+        from src.data.prepare import get_tag_mappings
+        tag_to_id, id_to_tag = get_tag_mappings()
+        
+        from pathlib import Path
+        raw_path = Path(args.raw_data_dir)
+        raw_files = list(raw_path.glob("question_*.json")) + list(raw_path.glob("**/exam_*.json"))
+        raw_items = []
+        for rf in raw_files:
+            try:
+                with open(rf, "r", encoding="utf-8") as fp:
+                    data = json.load(fp)
+                    if isinstance(data, list):
+                        raw_items.extend(data)
+                    elif isinstance(data, dict):
+                        if "sections" in data:
+                            for sec_name, q_list in data["sections"].items():
+                                raw_items.extend(q_list)
+                        else:
+                            raw_items.append(data)
+            except Exception:
+                pass
+                
+        if not raw_items:
+            print(f"Warning: No raw questions found in '{args.raw_data_dir}'. Falling back to offline dataset from Hub.")
+        else:
+            import random as rand_mod
+            print(f"Successfully loaded {len(raw_items)} raw items for online dynamic augmentation.")
+            rng_split = rand_mod.Random(args.seed)
+            rng_split.shuffle(raw_items)
+            val_size = max(10, int(len(raw_items) * 0.1))
+            train_items = raw_items[val_size:]
+            val_items = raw_items[:val_size]
+            
+            train_dataset_obj = OnlineAugmentedDataset(train_items, None, tag_to_id, is_train=True)
+            eval_dataset_obj = OnlineAugmentedDataset(val_items, None, tag_to_id, is_train=False)
+            
+            # Dummy dataset wrapper for step calculation
+            dataset = {"train": train_items, "validation": val_items}
 
-    try:
-        from huggingface_hub import hf_hub_download
-        label_mapping_path = hf_hub_download(
-            repo_id=args.repo_id,
-            filename="label_mapping.json",
-            repo_type="dataset",
-            token=hf_token
-        )
-        with open(label_mapping_path, "r", encoding="utf-8") as f:
-            label_mapping = json.load(f)
+    if train_dataset_obj is None:
+        print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
+        try:
+            from datasets import load_dataset
+            # Load the custom split jsonl files
+            dataset = load_dataset(
+                args.repo_id,
+                data_files={
+                    "train": "train.jsonl",
+                    "validation": "val.jsonl",
+                    "test": "test.jsonl"
+                },
+                token=hf_token
+            )
+        except Exception as e:
+            print(f"Error loading dataset: {e}")
+            print("Make sure you specify the correct --repo_id and provide a valid token if private.")
+            sys.exit(1)
 
-        tag_to_id = label_mapping["tag_to_id"]
-        id_to_tag = {int(k): v for k, v in label_mapping["id_to_tag"].items()}
-        print(f"Loaded label mapping from Hub. Found {len(tag_to_id)} labels.")
-    except Exception as e:
-        print(f"Warning: Could not download 'label_mapping.json' from the repository: {e}")
-        print("Building label mapping dynamically from training dataset tags...")
-        # Fallback dynamic mapping builder
-        unique_labels = set()
-        for split in ["train", "validation"]:
-            for sample in dataset[split]:
-                unique_labels.update(sample["labels"])
-        # Remove ignored index
-        unique_labels.discard(-100)
-        # Sort labels to be deterministic
-        sorted_labels = sorted(list(unique_labels))
+        try:
+            from huggingface_hub import hf_hub_download
+            label_mapping_path = hf_hub_download(
+                repo_id=args.repo_id,
+                filename="label_mapping.json",
+                repo_type="dataset",
+                token=hf_token
+            )
+            with open(label_mapping_path, "r", encoding="utf-8") as f:
+                label_mapping = json.load(f)
 
-        # Build standard mappings (assuming standard schema tags)
-        # Note: If label_mapping.json is missing, we try to reconstruct labels
-        print(f"Found unique label IDs in dataset: {sorted_labels}")
-        # Standard tag labels used for logging validation
-        id_to_tag = {l: f"LABEL_{l}" for l in sorted_labels}
-        id_to_tag[0] = "O" # Ensure label 0 is marked "O"
-        tag_to_id = {v: k for k, v in id_to_tag.items()}
+            tag_to_id = label_mapping["tag_to_id"]
+            id_to_tag = {int(k): v for k, v in label_mapping["id_to_tag"].items()}
+            print(f"Loaded label mapping from Hub. Found {len(tag_to_id)} labels.")
+        except Exception as e:
+            print(f"Warning: Could not download 'label_mapping.json' from the repository: {e}")
+            print("Building label mapping dynamically from training dataset tags...")
+            # Fallback dynamic mapping builder
+            unique_labels = set()
+            for split in ["train", "validation"]:
+                for sample in dataset[split]:
+                    if isinstance(sample, dict) and "labels" in sample:
+                        unique_labels.update(sample["labels"])
+            # Remove ignored index
+            unique_labels.discard(-100)
+            # Sort labels to be deterministic
+            sorted_labels = sorted(list(unique_labels))
+
+            # Build standard mappings (assuming standard schema tags)
+            print(f"Found unique label IDs in dataset: {sorted_labels}")
+            id_to_tag = {l: f"LABEL_{l}" for l in sorted_labels}
+            id_to_tag[0] = "O" # Ensure label 0 is marked "O"
+            tag_to_id = {v: k for k, v in id_to_tag.items()}
 
     num_labels = len(tag_to_id)
     label_list = [id_to_tag[i] for i in sorted(id_to_tag.keys())]
@@ -393,6 +538,10 @@ def run_train(args):
     special_tokens = ["<blank />", "<blank/>", "[BLANK]", "[LATEX]"]
     print(f"Adding additional special tokens to the tokenizer: {special_tokens}")
     tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
+
+    if train_dataset_obj is not None:
+        train_dataset_obj.tokenizer = tokenizer
+        eval_dataset_obj.tokenizer = tokenizer
 
     # 5. Initialize Model
     use_enhanced = getattr(args, "enhanced_head", True)
@@ -657,7 +806,8 @@ def run_train(args):
 
             # Normalize so mean weight across all classes is 1.0
             weights = weights / weights.mean()
-            class_weights = torch.tensor(weights, dtype=torch.float32).to(device)
+            target_device = training_args.device if "training_args" in locals() else device
+            class_weights = torch.tensor(weights, dtype=torch.float32).to(target_device)
 
             # Update model's loss function with tied class weights if available
             if hasattr(model, "loss_fct") and hasattr(model.loss_fct, "weight"):
@@ -753,8 +903,13 @@ def run_train(args):
             if getattr(self.args, "past_index", -1) >= 0:
                 self._past = outputs[self.args.past_index]
 
-            if labels is not None and self.class_weights is not None:
-                logits = outputs.get("logits")
+            # 1. Prefer model's built-in loss if computed (e.g. EnhancedTokenClassifierModel's FocalLoss)
+            if hasattr(outputs, "loss") and outputs.loss is not None:
+                loss = outputs.loss
+            elif isinstance(outputs, dict) and "loss" in outputs and outputs["loss"] is not None:
+                loss = outputs["loss"]
+            elif labels is not None and self.class_weights is not None:
+                logits = outputs.get("logits") if isinstance(outputs, dict) else outputs[0]
                 loss_fct = torch.nn.CrossEntropyLoss(weight=self.class_weights)
                 loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
             else:
@@ -764,11 +919,19 @@ def run_train(args):
 
     # 10. Instantiate Trainer (support both processing_class and tokenizer dynamically)
     import inspect
+    
+    if train_dataset_obj is not None:
+        train_dataset_final = train_dataset_obj
+        eval_dataset_final = eval_dataset_obj
+    else:
+        train_dataset_final = dataset["train"]
+        eval_dataset_final = dataset["validation"]
+        
     trainer_kwargs = {
         "model": model,
         "args": training_args,
-        "train_dataset": dataset["train"],
-        "eval_dataset": dataset["validation"],
+        "train_dataset": train_dataset_final,
+        "eval_dataset": eval_dataset_final,
         "data_collator": data_collator,
         "compute_metrics": compute_metrics,
     }

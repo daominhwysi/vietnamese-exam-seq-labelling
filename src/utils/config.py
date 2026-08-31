@@ -79,12 +79,38 @@ DEFAULT_CONFIG: Dict[str, Any] = {
             "logs_per_epoch": 10,
         },
     },
+    "providers": {
+        "codex": {
+            "base_url": "",
+            "api_key_env": "OPENAI_API_KEY",
+        },
+        "xah": {
+            "base_url": "https://api.xah.io/v1",
+            "api_key_env": "XAH_API_KEY",
+        },
+        "vilao": {
+            "base_url": "https://api.vilao.ai/v1",
+            "api_key_env": "LLM_API_KEY",
+        },
+        "nvidia": {
+            "base_url": "https://integrate.api.nvidia.com/v1",
+            "api_key_env": "NVIDIA_API_KEY",
+        },
+        "deepseek": {
+            "base_url": "https://api.deepseek.com/v1",
+            "api_key_env": "DEEPSEEK_API_KEY",
+        },
+        "commandcode": {
+            "base_url": "http://127.0.0.1:3050/v1",
+            "api_key_env": "CMD_API_KEY",
+        },
+    },
     "generation": {
-        "model": "deepseek-v4-pro",
-        "provider": "deepseek",
-        "thinking": "high",
-        "concurrency": 8,
-        "num_exams": 300,
+        "model": "gpt-5.6-luna",
+        "provider": "codex",
+        "thinking": "low",
+        "concurrency": 2,
+        "num_exams": 50,
         "output_dir": "output/exams",
     },
     "inference": {

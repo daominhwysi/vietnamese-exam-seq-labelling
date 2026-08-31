@@ -1,0 +1,90 @@
+{
+  "file_name": "exam_math.txt",
+  "original_text_length": 320,
+  "segments": [
+    {
+      "label": "section",
+      "text": "# ĐỀ KHẢO SÁT CHẤT LƯỢNG MÔN TOÁN 12"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 1."
+    },
+    {
+      "label": "stem",
+      "text": "Cho hàm số y = f(x) có đạo hàm f'(x) = x(x - 1)^2(x + 2). Số điểm cực trị của hàm số đã cho là:"
+    },
+    {
+      "label": "option_label",
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "text": "1"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "2"
+    },
+    {
+      "label": "option_label",
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "text": "3"
+    },
+    {
+      "label": "option_label",
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "text": "4"
+    },
+    {
+      "label": "question_label",
+      "text": "Câu 2."
+    },
+    {
+      "label": "stem",
+      "text": "Cho tứ diện ABCD có các cạnh AB, AC, AD đôi một vuông góc với nhau và AB = 6, AC = 7, AD = 8. Thể tích khối tứ diện ABCD là:"
+    },
+    {
+      "label": "option_label",
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "text": "112"
+    },
+    {
+      "label": "option_label",
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "text": "56"
+    },
+    {
+      "label": "option_label",
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "text": "336"
+    },
+    {
+      "label": "option_label",
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "text": "28"
+    }
+  ]
+}

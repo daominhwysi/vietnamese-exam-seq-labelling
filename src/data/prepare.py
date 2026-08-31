@@ -820,6 +820,30 @@ def main():
         help="Maximum random tabs to inject between inline options (default: 3)"
     )
     parser.add_argument(
+        "--grid-2x2-prob",
+        type=float,
+        default=0.0,
+        help="Probability of formatting options in a 2x2 grid layout (default: 0.0)"
+    )
+    parser.add_argument(
+        "--same-line-stem-options-prob",
+        type=float,
+        default=0.0,
+        help="Probability of placing stem and first option on the same line (default: 0.0)"
+    )
+    parser.add_argument(
+        "--flatten-newlines-prob",
+        type=float,
+        default=0.0,
+        help="Probability of flattening all newlines and tabs into single spaces (default: 0.0)"
+    )
+    parser.add_argument(
+        "--collapse-whitespace-prob",
+        type=float,
+        default=0.0,
+        help="Probability of collapsing repeated spaces/tabs into a single space (default: 0.0)"
+    )
+    parser.add_argument(
         "--only-passed",
         action="store_true",
         default=True,
@@ -850,16 +874,25 @@ def run_prepare_dataset(args):
         print(f"Error: Input directory '{args.input_dir}' does not exist.")
         sys.exit(1)
         
-    json_files = list(input_path.glob("question_*.json"))
-    exam_files = list(input_path.glob("**/exam_*.json"))
-    real_exam_files = list(input_path.glob("**/real_exam_*.json"))
+    def _find_files(root: Path, pattern: str) -> List[Path]:
+        matches = []
+        for dirpath, _, filenames in os.walk(root, followlinks=True):
+            dp = Path(dirpath)
+            for fn in filenames:
+                if fn.endswith(pattern) or Path(fn).match(pattern):
+                    matches.append(dp / fn)
+        return matches
+
+    json_files = _find_files(input_path, "question_*.json")
+    exam_files = _find_files(input_path, "exam_*.json")
+    real_exam_files = _find_files(input_path, "real_exam_*.json")
     
     # Also find XML annotations (e.g. merged.xml, *_annotated.xml, or any XML files in source directories)
-    xml_files = list(input_path.glob("**/merged.xml"))
+    xml_files = _find_files(input_path, "merged.xml")
     if not xml_files:
-        xml_files = list(input_path.glob("**/*_annotated.xml"))
+        xml_files = _find_files(input_path, "*_annotated.xml")
     if not xml_files:
-        xml_files = [f for f in input_path.glob("**/*.xml") if not f.name.startswith("chunk_") and "output/dataset/xml" not in str(f)]
+        xml_files = [f for f in _find_files(input_path, "*.xml") if not f.name.startswith("chunk_") and "output/dataset/xml" not in str(f)]
 
     if not json_files and not exam_files and not real_exam_files and not xml_files:
         print(f"No question JSON files, exam JSON files, real exam JSON files, or annotated XML files found in '{args.input_dir}'. Please generate data first.")
@@ -917,10 +950,14 @@ def run_prepare_dataset(args):
         synonym_swap_prob=args.synonym_swap_prob,
         formatting_noise_prob=args.formatting_noise_prob,
         inline_option_prob=getattr(args, "inline_option_prob", 0.0),
-        min_inline_spaces=getattr(args, "min_inline_spaces", 5),
+        min_inline_spaces=getattr(args, "min_inline_spaces", 1),
         max_inline_spaces=getattr(args, "max_inline_spaces", 30),
         min_inline_tabs=getattr(args, "min_inline_tabs", 1),
-        max_inline_tabs=getattr(args, "max_inline_tabs", 3)
+        max_inline_tabs=getattr(args, "max_inline_tabs", 3),
+        grid_2x2_prob=getattr(args, "grid_2x2_prob", 0.0),
+        same_line_stem_options_prob=getattr(args, "same_line_stem_options_prob", 0.0),
+        flatten_newlines_prob=getattr(args, "flatten_newlines_prob", 0.0),
+        collapse_whitespace_prob=getattr(args, "collapse_whitespace_prob", 0.0)
     )
         
     print(f"Processing data: found {len(json_files)} question file(s), {len(exam_files)} exam file(s), and {len(xml_files)} XML exam file(s)...")

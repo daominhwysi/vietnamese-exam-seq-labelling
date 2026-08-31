@@ -16,6 +16,7 @@ SUBJECT_DISPLAY = {
     "math_geometry": "Toán hình học",
     "physics": "Vật lý",
     "chemistry": "Hóa học",
+    "biology": "Sinh học",
     "english": "Tiếng Anh",
     "literature": "Ngữ văn"
 }
@@ -235,7 +236,8 @@ def load_curriculum(
     grade: int,
     autogenerate: bool = True,
     model: Optional[str] = None,
-    thinking: Optional[bool] = None
+    thinking: Optional[bool] = None,
+    provider: Optional[str] = None,
 ) -> Optional[dict]:
     """
     Loads the curriculum JSON file from output/curriculum/{subject}_{grade}.json.
@@ -246,7 +248,7 @@ def load_curriculum(
     if not file_path.exists():
         if autogenerate:
             try:
-                return generate_curriculum(subject, grade, model=model, thinking=thinking)
+                return generate_curriculum(subject, grade, model=model, thinking=thinking, provider=provider)
             except Exception as e:
                 print(f"Auto-generation of curriculum failed: {e}")
                 return None
@@ -372,6 +374,17 @@ def generate_all_curricula(model: Optional[str] = None, thinking: Optional[Any] 
             tasks.append((subject, grade))
             
     def generate_single_curriculum_task(subj, grd):
+        curr_path = get_curriculum_path(subj, grd)
+        if curr_path.exists():
+            try:
+                with open(curr_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if data and "chapters" in data and len(data["chapters"]) > 0:
+                    print(f"[Curriculum Exists] Skipping Subject={subj}, Grade={grd} (found {curr_path.name})")
+                    return True
+            except Exception:
+                pass
+
         try:
             print(f"[Curriculum Start] Subject={subj}, Grade={grd}")
             generate_curriculum(
