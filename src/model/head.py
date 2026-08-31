@@ -333,15 +333,42 @@ class EnhancedTokenClassifierModel(nn.Module):
         config = AutoConfig.from_pretrained(model_name_or_path, token=token, **config_kwargs)
         config.output_hidden_states = True
         
-        # Check if loading from an existing enhanced model directory
-        meta_path = os.path.join(str(model_name_or_path), "enhanced_head_config.json")
-        model_bin_path = os.path.join(str(model_name_or_path), "pytorch_model.bin")
-        safetensors_path = os.path.join(str(model_name_or_path), "model.safetensors")
-        
-        num_layers_to_fuse = 4
-        if os.path.exists(meta_path):
+        # Check if loading from local path or HuggingFace Hub
+        meta_file = None
+        safetensors_file = None
+        model_bin_file = None
+
+        if os.path.isdir(str(model_name_or_path)):
+            p_meta = os.path.join(str(model_name_or_path), "enhanced_head_config.json")
+            if os.path.exists(p_meta):
+                meta_file = p_meta
+            p_safe = os.path.join(str(model_name_or_path), "model.safetensors")
+            if os.path.exists(p_safe):
+                safetensors_file = p_safe
+            p_bin = os.path.join(str(model_name_or_path), "pytorch_model.bin")
+            if os.path.exists(p_bin):
+                model_bin_file = p_bin
+        else:
             try:
-                with open(meta_path, "r", encoding="utf-8") as f:
+                from transformers.utils.hub import cached_file
+                meta_file = cached_file(str(model_name_or_path), "enhanced_head_config.json", token=token)
+            except Exception:
+                meta_file = None
+            try:
+                from transformers.utils.hub import cached_file
+                safetensors_file = cached_file(str(model_name_or_path), "model.safetensors", token=token)
+            except Exception:
+                safetensors_file = None
+            try:
+                from transformers.utils.hub import cached_file
+                model_bin_file = cached_file(str(model_name_or_path), "pytorch_model.bin", token=token)
+            except Exception:
+                model_bin_file = None
+
+        num_layers_to_fuse = 4
+        if meta_file and os.path.exists(meta_file):
+            try:
+                with open(meta_file, "r", encoding="utf-8") as f:
                     meta = json.load(f)
                     num_layers_to_fuse = meta.get("num_layers_to_fuse", 4)
             except Exception:
@@ -364,17 +391,17 @@ class EnhancedTokenClassifierModel(nn.Module):
 
         # Load trained enhanced weights if present
         loaded_state_dict = None
-        if os.path.exists(safetensors_path):
+        if safetensors_file and os.path.exists(safetensors_file):
             try:
                 from safetensors.torch import load_file
-                loaded_state_dict = load_file(safetensors_path, device="cpu")
-                print(f"  Successfully loaded Enhanced Head weights from '{safetensors_path}'.")
+                loaded_state_dict = load_file(safetensors_file, device="cpu")
+                print(f"  Successfully loaded Enhanced Head weights from '{safetensors_file}'.")
             except Exception as e:
                 print(f"  Notice reading safetensors: {e}")
-        elif os.path.exists(model_bin_path):
+        elif model_bin_file and os.path.exists(model_bin_file):
             try:
-                loaded_state_dict = torch.load(model_bin_path, map_location="cpu")
-                print(f"  Successfully loaded Enhanced Head weights from '{model_bin_path}'.")
+                loaded_state_dict = torch.load(model_bin_file, map_location="cpu")
+                print(f"  Successfully loaded Enhanced Head weights from '{model_bin_file}'.")
             except Exception as e:
                 print(f"  Notice reading pytorch_model.bin: {e}")
 

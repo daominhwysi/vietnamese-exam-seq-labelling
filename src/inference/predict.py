@@ -384,13 +384,23 @@ def load_inference_model(model_dir: str, base_model_name: str = None, device: st
         is_lora = True
     else:
         try:
-            from huggingface_hub import file_exists
-            if file_exists(repo_id=model_dir, filename="enhanced_head_config.json"):
-                has_enhanced_head = True
-            elif file_exists(repo_id=model_dir, filename="adapter_config.json"):
-                is_lora = True
+            from transformers.utils.hub import cached_file
+            st_file = os.path.join(model_dir, "model.safetensors") if os.path.isdir(model_dir) else cached_file(model_dir, "model.safetensors")
+            if st_file and os.path.exists(st_file):
+                from safetensors import safe_open
+                with safe_open(st_file, framework="pt") as f:
+                    st_keys = f.keys()
+                    if any("head.layer_weights" in k or "head.dense" in k for k in st_keys):
+                        has_enhanced_head = True
         except Exception:
             pass
+        if not is_lora:
+            try:
+                from huggingface_hub import file_exists
+                if file_exists(repo_id=model_dir, filename="adapter_config.json"):
+                    is_lora = True
+            except Exception:
+                pass
 
     if has_enhanced_head:
         print("Detected Enhanced Head model checkpoint. Loading with EnhancedTokenClassifierModel...")

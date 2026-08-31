@@ -306,6 +306,26 @@ def main():
     print(f"Loading model weights from: {model_dir}...")
     is_lora = os.path.exists(os.path.join(model_dir, "adapter_config.json"))
     has_enhanced_head = os.path.exists(os.path.join(model_dir, "enhanced_head_config.json"))
+    if not has_enhanced_head:
+        try:
+            from transformers.utils.hub import cached_file
+            st_file = os.path.join(model_dir, "model.safetensors") if os.path.isdir(model_dir) else cached_file(model_dir, "model.safetensors")
+            if st_file and os.path.exists(st_file):
+                from safetensors import safe_open
+                with safe_open(st_file, framework="pt") as f:
+                    st_keys = f.keys()
+                    if any("head.layer_weights" in k or "head.dense" in k for k in st_keys):
+                        has_enhanced_head = True
+        except Exception:
+            pass
+    if not is_lora and not os.path.exists(model_dir):
+        try:
+            from transformers.utils.hub import cached_file
+            hf_lora = cached_file(model_dir, "adapter_config.json")
+            if hf_lora is not None:
+                is_lora = True
+        except Exception:
+            pass
     
     if has_enhanced_head:
         print("Detected Enhanced Head model checkpoint. Loading with EnhancedTokenClassifierModel...")
