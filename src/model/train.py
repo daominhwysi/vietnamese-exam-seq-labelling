@@ -806,7 +806,8 @@ def run_train(args):
 
             # Normalize so mean weight across all classes is 1.0
             weights = weights / weights.mean()
-            class_weights = torch.tensor(weights, dtype=torch.float32).to(device)
+            target_device = training_args.device if "training_args" in locals() else device
+            class_weights = torch.tensor(weights, dtype=torch.float32).to(target_device)
 
             # Update model's loss function with tied class weights if available
             if hasattr(model, "loss_fct") and hasattr(model.loss_fct, "weight"):
