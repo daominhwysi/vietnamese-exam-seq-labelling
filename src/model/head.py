@@ -289,7 +289,14 @@ class EnhancedTokenClassifierModel(nn.Module):
             with open(os.path.join(save_directory, "config.json"), "w", encoding="utf-8") as f:
                 json.dump(self.config, f, indent=2)
 
-        # 2. Save complete state dict
+        # 2. Save complete state dict in both safetensors and pytorch_model.bin
+        try:
+            from safetensors.torch import save_file
+            tensors = {k: v.contiguous() for k, v in self.state_dict().items()}
+            save_file(tensors, os.path.join(save_directory, "model.safetensors"))
+        except Exception:
+            pass
+
         model_save_path = os.path.join(save_directory, "pytorch_model.bin")
         torch.save(self.state_dict(), model_save_path)
 
@@ -329,6 +336,7 @@ class EnhancedTokenClassifierModel(nn.Module):
         # Check if loading from an existing enhanced model directory
         meta_path = os.path.join(str(model_name_or_path), "enhanced_head_config.json")
         model_bin_path = os.path.join(str(model_name_or_path), "pytorch_model.bin")
+        safetensors_path = os.path.join(str(model_name_or_path), "model.safetensors")
         
         num_layers_to_fuse = 4
         if os.path.exists(meta_path):
@@ -355,8 +363,22 @@ class EnhancedTokenClassifierModel(nn.Module):
         )
 
         # Load trained enhanced weights if present
-        if os.path.exists(model_bin_path):
-            state_dict = torch.load(model_bin_path, map_location="cpu")
-            model.load_state_dict(state_dict, strict=False)
+        loaded_state_dict = None
+        if os.path.exists(safetensors_path):
+            try:
+                from safetensors.torch import load_file
+                loaded_state_dict = load_file(safetensors_path, device="cpu")
+                print(f"  Successfully loaded Enhanced Head weights from '{safetensors_path}'.")
+            except Exception as e:
+                print(f"  Notice reading safetensors: {e}")
+        elif os.path.exists(model_bin_path):
+            try:
+                loaded_state_dict = torch.load(model_bin_path, map_location="cpu")
+                print(f"  Successfully loaded Enhanced Head weights from '{model_bin_path}'.")
+            except Exception as e:
+                print(f"  Notice reading pytorch_model.bin: {e}")
+
+        if loaded_state_dict is not None:
+            model.load_state_dict(loaded_state_dict, strict=False)
 
         return model
