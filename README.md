@@ -41,22 +41,7 @@ pixi run generate -n 5 --subject literature --grade 12 --concurrency 8
   * `-c, --concurrency`: Số luồng sinh câu hỏi đồng thời (mặc định: `8`).
   * `--output-dir`: Thư mục lưu file JSON (mặc định: `output/exams`).
 
----
-
-### 2. Sửa dữ liệu gốc trên đĩa (`fix-root-data`)
-Quét đệ quy thư mục `output/`, sửa các file XML và JSON để đưa trích dẫn nguồn `(Adapted from...)`, `(Nguồn:...)` vào trong thẻ `<stimulus>`.
-```bash
-pixi run fix-root-data
-
-# Tùy chỉnh thư mục quét
-python src/data/fix_root_data.py --input-dir output/real_annotated
-```
-* **Tham số**:
-  * `--input-dir`: Thư mục cần quét và sửa (mặc định: `output`).
-
----
-
-### 3. Gom dữ liệu thô (`consolidate-raw`)
+### 2. Gom dữ liệu thô (`consolidate-raw`)
 Gom toàn bộ đề thi OCR thật và đề synthetic trong `output/` vào file `output/dataset/raw_exams.jsonl`.
 ```bash
 pixi run consolidate-raw
@@ -67,7 +52,7 @@ pixi run consolidate-raw
 
 ---
 
-### 4. Chuẩn bị Dataset Tokenized Offline (`prepare-offline-dataset` / `prepare-dataset`)
+### 3. Chuẩn bị Dataset Tokenized Offline (`prepare-offline-dataset` / `prepare-dataset`)
 Cắt sliding window (512, 1024), căn chỉnh nhãn token và xuất ra `train.jsonl`, `val.jsonl`, `test.jsonl`, `xml/`.
 ```bash
 pixi run prepare-offline-dataset
@@ -89,7 +74,7 @@ sequence-labelling-generator prepare \
 
 ---
 
-### 5. Upload Dataset lên Hugging Face Hub
+### 4. Upload Dataset lên Hugging Face Hub
 
 #### a. Upload cho Online Training (`upload-online-dataset`)
 Chỉ upload `raw_exams.jsonl` và `label_mapping.json` (dung lượng ~35MB, hoàn tất trong vài giây).
@@ -108,7 +93,7 @@ pixi run upload-dataset
 
 ---
 
-### 6. Huấn luyện mô hình (`train`)
+### 5. Huấn luyện mô hình (`train`)
 
 #### a. Chế độ Online Augmentation (Tự động tải `raw_exams.jsonl` từ Hub)
 ```bash
@@ -145,7 +130,7 @@ torchrun --nproc_per_node=2 src/model/train.py \
 
 ---
 
-### 7. Phân đoạn thư mục đề thi thô (`batch-inference`)
+### 6. Phân đoạn thư mục đề thi thô (`batch-inference`)
 Phân đoạn toàn bộ các file `.txt` trong thư mục ra JSON cấu trúc, TXT dự đoán và XML gắn thẻ.
 ```bash
 pixi run batch-inference
@@ -163,7 +148,7 @@ python src/inference/predict_folder.py \
 
 ---
 
-### 8. Web App
+### 7. Web App
 
 ```bash
 # Trình duyệt quản lý & xem nhãn đề thi (Cổng 8000)
@@ -175,14 +160,14 @@ pixi run view-inference
 
 ---
 
-### 9. Kiểm thử (`test`)
+### 8. Kiểm thử (`test`)
 ```bash
 pixi run test
 ```
 
 ---
 
-### 10. Upload Model lên Hugging Face Hub (`upload-model`)
+### 9. Upload Model lên Hugging Face Hub (`upload-model`)
 ```bash
 pixi run upload-model
 
@@ -194,10 +179,18 @@ sequence-labelling-generator upload-model \
 
 ---
 
+### 10. Tiện ích Bảo trì Dữ liệu Gốc (`fix-root-data`)
+Script audit và chuẩn hóa lại các file XML/JSON cũ trên đĩa để đưa trích dẫn nguồn `(Adapted from...)`, `(Nguồn:...)` vào trong thẻ `<stimulus>`.
+```bash
+pixi run fix-root-data
+```
+
+---
+
 ## 🚀 Pipeline Overview
 
 Quy trình hoạt động gồm 3 bước:
-1. **Chuẩn bị Dữ liệu**: Sinh câu hỏi qua LLM + Gán nhãn đề OCR thật $\rightarrow$ Sửa dữ liệu gốc (`fix-root-data`) $\rightarrow$ Gom vào `raw_exams.jsonl` (`consolidate-raw`).
+1. **Chuẩn bị Dữ liệu**: Sinh câu hỏi qua LLM + Gán nhãn đề OCR thật $\rightarrow$ Gom vào `raw_exams.jsonl` (`consolidate-raw`).
 2. **Huấn luyện Mô hình**: Upload dữ liệu lên Hub (`upload-online-dataset`) $\rightarrow$ Huấn luyện `mmBERT-base` với Enhanced Head và Focal Loss trên multi-GPU (Kaggle/Server).
 3. **Phân đoạn & Khai thác**: Chạy bóc tách cấu trúc đề thi qua CLI (`batch-inference`) hoặc Web App (`view-inference`).
 
