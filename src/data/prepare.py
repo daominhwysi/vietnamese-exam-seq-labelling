@@ -5,7 +5,7 @@ import re
 import argparse
 import random
 from pathlib import Path
-from typing import Dict, Any, List, Tuple, Optional
+from typing import Dict, Any, List, Tuple, Optional, Union
 
 # Set up local import path if needed
 sys.path.append(str(Path(__file__).parent.parent))
