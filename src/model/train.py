@@ -25,11 +25,14 @@ except ImportError:
 def parse_args():
     parser = argparse.ArgumentParser(description="Train XLM-RoBERTa for Sequence Labeling using LoRA and AMP")
     parser.add_argument(
+        "--dataset_repo_id",
+        "--dataset-repo-id",
         "--repo_id",
         "--repo-id",
         type=str,
         default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
-        help="Hugging Face Dataset repository ID"
+        dest="dataset_repo_id",
+        help="Hugging Face Dataset repository ID (e.g. 'username/dataset-name')"
     )
     parser.add_argument(
         "--data_dir",
@@ -305,7 +308,8 @@ def parse_args():
 class OnlineAugmentedDataset(torch.utils.data.Dataset):
     """
     Dynamic Online PyTorch Dataset that reconstructs, augments, tokenizes,
-    and aligns character spans on-the-fly inside the DataLoader multi-worker processes.
+    and aligns character spans on-the-fly across Multi-Scale Sliding Windows
+    ((512, 128), (768, 192), (1024, 256), (2048, 512)) for 100% of all available chunks.
     """
     def __init__(
         self,
@@ -313,24 +317,80 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
         tokenizer: Any,
         tag_to_id: Dict[str, int],
         is_train: bool = True,
-        max_length: int = 1024
+        window_configs: Optional[List[Tuple[int, int]]] = None
     ):
         self.raw_items = raw_items
-        self.tokenizer = tokenizer
+        self._tokenizer = tokenizer
         self.tag_to_id = tag_to_id
         self.is_train = is_train
-        self.max_length = max_length
+        self.window_configs = window_configs or [
+            (512, 128),
+            (768, 192),
+            (1024, 256),
+            (2048, 512)
+        ]
+        self.index_map = []
+        if self._tokenizer is not None:
+            self._build_index_map()
+
+    @property
+    def tokenizer(self):
+        return self._tokenizer
+
+    @tokenizer.setter
+    def tokenizer(self, tok):
+        self._tokenizer = tok
+        if tok is not None and not self.index_map:
+            self._build_index_map()
+
+    def _build_index_map(self):
+        from src.generation.reconstructor import reconstruct_question, reconstruct_exam, ReconstructorConfig
+        base_config = ReconstructorConfig(randomize_q_num=False)
+        self.index_map = []
+        for doc_idx, item in enumerate(self.raw_items):
+            if item.get("is_real", False) and "raw_text" in item:
+                raw_text = item["raw_text"]
+            elif "sections" in item:
+                rec = reconstruct_exam(item, base_config)
+                raw_text = rec["raw_text"]
+            else:
+                rec = reconstruct_question(item, base_config)
+                raw_text = rec["raw_text"]
+
+            for max_len, stride in self.window_configs:
+                tokenized = self._tokenizer(
+                    raw_text,
+                    return_offsets_mapping=False,
+                    truncation=True,
+                    max_length=max_len,
+                    stride=stride,
+                    return_overflowing_tokens=True,
+                    add_special_tokens=True
+                )
+                num_chunks = len(tokenized["input_ids"])
+                for chunk_idx in range(num_chunks):
+                    self.index_map.append((doc_idx, max_len, stride, chunk_idx))
+
+        split_name = "Train" if self.is_train else "Eval/Test"
+        print(f"[{split_name}] Initialized {len(self.index_map)} multi-scale window chunks across {len(self.raw_items)} documents (100% full coverage).")
 
     def __len__(self):
-        return len(self.raw_items)
+        return len(self.index_map) if self.index_map else len(self.raw_items)
 
     def __getitem__(self, idx):
         import random
         from src.generation.reconstructor import reconstruct_question, reconstruct_exam, ReconstructorConfig
         from src.data.prepare import align_tokens_to_spans, mask_latex_in_real_data
-        
-        item = self.raw_items[idx]
-        
+
+        if not self.index_map:
+            doc_idx = idx
+            max_len, stride = (1024, 256)
+            target_chunk_idx = 0
+        else:
+            doc_idx, max_len, stride, target_chunk_idx = self.index_map[idx]
+
+        item = self.raw_items[doc_idx]
+
         if self.is_train:
             aug_config = ReconstructorConfig(
                 question_prefix_template=random.choice([
@@ -377,24 +437,36 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
             raw_text = rec["raw_text"]
             spans = rec["spans"]
 
-        tokenized = self.tokenizer(
+        if self._tokenizer is None:
+            raise ValueError("Tokenizer has not been assigned to OnlineAugmentedDataset before sampling.")
+
+        tokenized = self._tokenizer(
             raw_text,
             return_offsets_mapping=True,
             truncation=True,
-            max_length=self.max_length,
+            max_length=max_len,
+            stride=stride,
+            return_overflowing_tokens=True,
             add_special_tokens=True
         )
 
+        num_chunks = len(tokenized["input_ids"])
+        chunk_idx = target_chunk_idx % num_chunks
+
+        input_ids = tokenized["input_ids"][chunk_idx]
+        attention_mask = tokenized["attention_mask"][chunk_idx]
+        offset_mapping = tokenized["offset_mapping"][chunk_idx]
+
         labels = align_tokens_to_spans(
-            tokenized["offset_mapping"],
+            offset_mapping,
             spans,
             self.tag_to_id,
             raw_text=raw_text
         )
 
         return {
-            "input_ids": torch.tensor(tokenized["input_ids"], dtype=torch.long),
-            "attention_mask": torch.tensor(tokenized["attention_mask"], dtype=torch.long),
+            "input_ids": torch.tensor(input_ids, dtype=torch.long),
+            "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
             "labels": torch.tensor(labels, dtype=torch.long)
         }
 
@@ -589,12 +661,13 @@ def run_train(args):
                             except Exception:
                                 pass
                 
-        if not raw_items and args.repo_id:
-            print(f"No local raw items found. Attempting to download 'raw_exams.jsonl' from Hugging Face dataset '{args.repo_id}'...")
+        target_dataset_repo = getattr(args, "dataset_repo_id", None) or getattr(args, "repo_id", None)
+        if not raw_items and target_dataset_repo:
+            print(f"No local raw items found. Attempting to download 'raw_exams.jsonl' from Hugging Face dataset '{target_dataset_repo}'...")
             try:
                 from huggingface_hub import hf_hub_download
                 downloaded_file = hf_hub_download(
-                    repo_id=args.repo_id,
+                    repo_id=target_dataset_repo,
                     filename="raw_exams.jsonl",
                     repo_type="dataset",
                     token=hf_token
@@ -634,12 +707,13 @@ def run_train(args):
             dataset = {"train": train_dataset_obj, "validation": eval_dataset_obj, "test": test_dataset_obj}
 
     if train_dataset_obj is None:
-        print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
+        target_dataset_repo = getattr(args, "dataset_repo_id", None) or getattr(args, "repo_id", None)
+        print(f"Downloading dataset and label mapping from HF: '{target_dataset_repo}'...")
         try:
             from datasets import load_dataset
             # Load the custom split jsonl files
             dataset = load_dataset(
-                args.repo_id,
+                target_dataset_repo,
                 data_files={
                     "train": "train.jsonl",
                     "validation": "val.jsonl",
@@ -649,13 +723,13 @@ def run_train(args):
             )
         except Exception as e:
             print(f"Error loading dataset: {e}")
-            print("Make sure you specify the correct --repo_id and provide a valid token if private.")
+            print("Make sure you specify the correct --dataset_repo_id and provide a valid token if private.")
             sys.exit(1)
 
         try:
             from huggingface_hub import hf_hub_download
             label_mapping_path = hf_hub_download(
-                repo_id=args.repo_id,
+                repo_id=target_dataset_repo,
                 filename="label_mapping.json",
                 repo_type="dataset",
                 token=hf_token

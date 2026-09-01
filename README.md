@@ -120,7 +120,7 @@ pixi run upload-dataset
 ```
 * **Danh sách toàn bộ tham số**:
   * `--mode` *(choice: `all`, `online-only`, `raw-only`, `online`, `raw`, default: `all`)*: Chế độ upload.
-  * `--repo-id, --repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: Target repo ID trên Hugging Face.
+  * `--dataset-repo-id, --dataset_repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`, alias: `--repo-id`)*: Target repo ID trên Hugging Face.
   * `--dataset-dir, --dataset_dir` *(str, default: `output/dataset`)*: Thư mục chứa dữ liệu trên máy local.
   * `--token` *(str, default: None)*: Token xác thực Hugging Face (hoặc lấy từ biến môi trường `HF_TOKEN`).
 
@@ -131,7 +131,7 @@ pixi run upload-dataset
 # Huấn luyện PyTorch DDP với Online Dynamic Augmentation
 torchrun --nproc_per_node=2 src/model/train.py \
     --online-augmentation \
-    --repo_id daominhwysi/synthetic-seq-labelling-vi-exam-v2 \
+    --dataset_repo_id daominhwysi/synthetic-seq-labelling-vi-exam-v2 \
     --model_name jhu-clsp/mmBERT-base \
     --output_dir output/models/mmbert-vi-exam-v5 \
     --epochs 3 \
@@ -143,7 +143,7 @@ torchrun --nproc_per_node=2 src/model/train.py \
 * **Danh sách toàn bộ tham số**:
   * `--model_name` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model backbone trên Hugging Face.
   * `--output_dir` *(str, default: `./results`)*: Thư mục lưu checkpoint và adapter weights.
-  * `--repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: Repo ID trên HF Hub để tải dữ liệu.
+  * `--dataset_repo_id, --dataset-repo-id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`, alias: `--repo_id`)*: Repo ID trên HF Hub để tải dữ liệu.
   * `--data-dir` *(str, default: None)*: Thư mục local chứa dataset offline splits.
   * `--online-augmentation` *(flag)*: Bật sinh biến thể bố cục và tokenize trực tiếp trong RAM lúc huấn luyện.
   * `--raw-data-dir` *(str, default: `output`)*: Thư mục local chứa file `raw_exams.jsonl` hoặc các đề thi gốc.

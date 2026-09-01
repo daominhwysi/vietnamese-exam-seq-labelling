@@ -100,7 +100,7 @@ data_preparation:
 # ------------------------------------------------------------------------------
 training:
   # Hugging Face dataset repository for remote loading / fallback
-  repo_id: "daominhwysi/synthetic-seq-labelling-vi-exam-v2"
+  dataset_repo_id: "daominhwysi/synthetic-seq-labelling-vi-exam-v2"
   output_dir: "./results"
   epochs: 3
   batch_size: 8

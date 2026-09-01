@@ -180,9 +180,11 @@ def upload_model(
     """
     # -- Resolve HF token --------------------------------------------------
     if not token:
-        from dotenv import load_dotenv
-
-        load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
+        try:
+            from dotenv import load_dotenv
+            load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
+        except ImportError:
+            pass
         token = os.getenv("HF_TOKEN")
 
     if not token:
