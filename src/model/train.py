@@ -303,12 +303,20 @@ def parse_args():
         default="output",
         help="Directory containing raw question JSONs or XMLs for online augmentation (default: 'output')"
     )
+    parser.add_argument(
+        "--windows_per_exam",
+        "--windows-per-exam",
+        type=int,
+        default=12,
+        help="Number of Multi-Scale Sliding Window chunks sampled per exam document per epoch during online training (default: 12)"
+    )
     return parser.parse_args()
 
 class OnlineAugmentedDataset(torch.utils.data.Dataset):
     """
     Dynamic Online PyTorch Dataset that reconstructs, augments, tokenizes,
-    and aligns character spans on-the-fly inside the DataLoader multi-worker processes.
+    and aligns character spans on-the-fly across Multi-Scale Sliding Windows
+    ((512, 128), (768, 192), (1024, 256), (2048, 512)) inside DataLoader multi-worker processes.
     """
     def __init__(
         self,
@@ -316,23 +324,32 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
         tokenizer: Any,
         tag_to_id: Dict[str, int],
         is_train: bool = True,
-        max_length: int = 1024
+        windows_per_item: int = 12,
+        window_configs: Optional[List[Tuple[int, int]]] = None
     ):
         self.raw_items = raw_items
         self.tokenizer = tokenizer
         self.tag_to_id = tag_to_id
         self.is_train = is_train
-        self.max_length = max_length
+        self.windows_per_item = max(1, windows_per_item if is_train else min(4, windows_per_item))
+        self.window_configs = window_configs or [
+            (512, 128),
+            (768, 192),
+            (1024, 256),
+            (2048, 512)
+        ]
 
     def __len__(self):
-        return len(self.raw_items)
+        return len(self.raw_items) * self.windows_per_item
 
     def __getitem__(self, idx):
         import random
         from src.generation.reconstructor import reconstruct_question, reconstruct_exam, ReconstructorConfig
         from src.data.prepare import align_tokens_to_spans, mask_latex_in_real_data
         
-        item = self.raw_items[idx]
+        item_idx = idx // self.windows_per_item
+        window_slot = idx % self.windows_per_item
+        item = self.raw_items[item_idx]
         
         if self.is_train:
             aug_config = ReconstructorConfig(
@@ -380,24 +397,39 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
             raw_text = rec["raw_text"]
             spans = rec["spans"]
 
+        # Select window config
+        max_len, stride = self.window_configs[window_slot % len(self.window_configs)]
+
+        if self.tokenizer is None:
+            raise ValueError("Tokenizer has not been assigned to OnlineAugmentedDataset before sampling.")
+
         tokenized = self.tokenizer(
             raw_text,
             return_offsets_mapping=True,
             truncation=True,
-            max_length=self.max_length,
+            max_length=max_len,
+            stride=stride,
+            return_overflowing_tokens=True,
             add_special_tokens=True
         )
 
+        num_chunks = len(tokenized["input_ids"])
+        chunk_idx = (window_slot // len(self.window_configs)) % num_chunks
+
+        input_ids = tokenized["input_ids"][chunk_idx]
+        attention_mask = tokenized["attention_mask"][chunk_idx]
+        offset_mapping = tokenized["offset_mapping"][chunk_idx]
+
         labels = align_tokens_to_spans(
-            tokenized["offset_mapping"],
+            offset_mapping,
             spans,
             self.tag_to_id,
             raw_text=raw_text
         )
 
         return {
-            "input_ids": torch.tensor(tokenized["input_ids"], dtype=torch.long),
-            "attention_mask": torch.tensor(tokenized["attention_mask"], dtype=torch.long),
+            "input_ids": torch.tensor(input_ids, dtype=torch.long),
+            "attention_mask": torch.tensor(attention_mask, dtype=torch.long),
             "labels": torch.tensor(labels, dtype=torch.long)
         }
 
@@ -630,9 +662,10 @@ def run_train(args):
             val_items = raw_items[:val_size]
             test_items = raw_items[val_size:val_size + test_size]
             
-            train_dataset_obj = OnlineAugmentedDataset(train_items, None, tag_to_id, is_train=True)
-            eval_dataset_obj = OnlineAugmentedDataset(val_items, None, tag_to_id, is_train=False)
-            test_dataset_obj = OnlineAugmentedDataset(test_items, None, tag_to_id, is_train=False)
+            windows_per_exam = getattr(args, "windows_per_exam", 12)
+            train_dataset_obj = OnlineAugmentedDataset(train_items, None, tag_to_id, is_train=True, windows_per_item=windows_per_exam)
+            eval_dataset_obj = OnlineAugmentedDataset(val_items, None, tag_to_id, is_train=False, windows_per_item=4)
+            test_dataset_obj = OnlineAugmentedDataset(test_items, None, tag_to_id, is_train=False, windows_per_item=4)
             
             # Dataset wrapper supporting train, validation, and test splits
             dataset = {"train": train_dataset_obj, "validation": eval_dataset_obj, "test": test_dataset_obj}

@@ -835,6 +835,16 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
         barem_mode = "none"
 
     sections = exam_data.get("sections", {})
+    if isinstance(sections, list):
+        sec_dict = {}
+        for s in sections:
+            if isinstance(s, dict):
+                st = s.get("section_title", s.get("title", "Phần"))
+                sec_dict[st] = s.get("questions", [])
+        sections = sec_dict
+    elif not isinstance(sections, dict):
+        sections = {}
+
     q_num = 1
     collected_questions = []
     

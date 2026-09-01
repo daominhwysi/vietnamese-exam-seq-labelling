@@ -150,6 +150,7 @@ torchrun --nproc_per_node=2 src/model/train.py \
   * `--train_ratio` *(float, default: 0.85)*: Tỷ lệ tập train khi chia online.
   * `--val_ratio` *(float, default: 0.10)*: Tỷ lệ tập validation khi chia online.
   * `--test_ratio` *(float, default: 0.05)*: Tỷ lệ tập test khi chia online.
+  * `--windows_per_exam` *(int, default: 12)*: Số lượng lát cắt Multi-Scale Sliding Windows được trích xuất từ mỗi đề thi trong mỗi epoch lúc huấn luyện online.
   * `--enhanced-head` *(flag, default: True)*: Kích hoạt Weighted Layer Pooling (4 lớp) + Dense MLP + Multi-Sample Dropout (5 masks) + Focal Loss.
   * `--no-enhanced-head` *(flag)*: Tắt Enhanced Head, dùng linear classification head tiêu chuẩn.
   * `--focal-gamma` *(float, default: 2.0)*: Hệ số focusing $\gamma$ của Focal Loss.
