@@ -123,18 +123,21 @@ def parse_args():
     )
     parser.add_argument(
         "--weight_decay",
+        "--weight-decay",
         type=float,
         default=0.01,
         help="Weight decay coefficient"
     )
     parser.add_argument(
         "--save_total_limit",
+        "--save-total-limit",
         type=int,
         default=2,
         help="Max number of checkpoints to retain"
     )
     parser.add_argument(
         "--push_to_hub",
+        "--push-to-hub",
         action="store_true",
         help="Push final trained model/adapters back to Hugging Face Hub"
     )
@@ -223,6 +226,7 @@ def parse_args():
     )
     parser.add_argument(
         "--resume-from-checkpoint",
+        "--resume_from_checkpoint",
         type=str,
         default=None,
         help="Path to checkpoint folder (e.g. './results_enhanced_v3/checkpoint-3564' or 'auto' or 'True') to resume training from."
