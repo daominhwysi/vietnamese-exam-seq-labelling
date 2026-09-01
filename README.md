@@ -75,9 +75,9 @@ sequence-labelling-generator prepare \
     --model jhu-clsp/mmBERT-base \
     --max-len 512,1024 \
     --stride 128,256 \
-    --train-ratio 0.8 \
-    --val-ratio 0.1 \
-    --test-ratio 0.1 \
+    --train-ratio 0.85 \
+    --val-ratio 0.10 \
+    --test-ratio 0.05 \
     --exam-level
 ```
 * **Danh sách toàn bộ tham số**:
@@ -86,8 +86,8 @@ sequence-labelling-generator prepare \
   * `--model` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model để lấy tokenizer.
   * `--max-len` *(str, default: `512,768,1024,2048`)*: Danh sách độ dài cửa sổ trượt (ngăn cách bởi dấu phẩy).
   * `--stride` *(str, default: `128,192,256,512`)*: Danh sách bước trượt tương ứng (ngăn cách bởi dấu phẩy).
-  * `--train-ratio` *(float, default: 0.8)*: Tỷ lệ chia tập train.
-  * `--val-ratio` *(float, default: 0.1)*: Tỷ lệ chia tập validation.
+  * `--train-ratio` *(float, default: 0.85)*: Tỷ lệ chia tập train.
+  * `--val-ratio` *(float, default: 0.10)*: Tỷ lệ chia tập validation.
   * `--seed` *(int, default: 42)*: Random seed chia split.
   * `--exam-level` *(flag)*: Ghép toàn bộ đề thi thành chuỗi dài thay vì cắt từng câu hỏi đơn lẻ.
   * `--latex-placeholder` *(str, default: `[LATEX]`)*: Chuỗi thay thế cho công thức toán LaTeX.
@@ -147,6 +147,9 @@ torchrun --nproc_per_node=2 src/model/train.py \
   * `--data-dir` *(str, default: None)*: Thư mục local chứa dataset offline splits.
   * `--online-augmentation` *(flag)*: Bật sinh biến thể bố cục và tokenize trực tiếp trong RAM lúc huấn luyện.
   * `--raw-data-dir` *(str, default: `output`)*: Thư mục local chứa file `raw_exams.jsonl` hoặc các đề thi gốc.
+  * `--train_ratio` *(float, default: 0.85)*: Tỷ lệ tập train khi chia online.
+  * `--val_ratio` *(float, default: 0.10)*: Tỷ lệ tập validation khi chia online.
+  * `--test_ratio` *(float, default: 0.05)*: Tỷ lệ tập test khi chia online.
   * `--enhanced-head` *(flag, default: True)*: Kích hoạt Weighted Layer Pooling (4 lớp) + Dense MLP + Multi-Sample Dropout (5 masks) + Focal Loss.
   * `--no-enhanced-head` *(flag)*: Tắt Enhanced Head, dùng linear classification head tiêu chuẩn.
   * `--focal-gamma` *(float, default: 2.0)*: Hệ số focusing $\gamma$ của Focal Loss.

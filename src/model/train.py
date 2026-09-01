@@ -244,6 +244,24 @@ def parse_args():
         help="Enable dynamic on-the-fly online data augmentation during training (default: False)"
     )
     parser.add_argument(
+        "--train_ratio",
+        type=float,
+        default=0.85,
+        help="Ratio of training set for online splitting (default: 0.85)"
+    )
+    parser.add_argument(
+        "--val_ratio",
+        type=float,
+        default=0.10,
+        help="Ratio of validation set for online splitting (default: 0.10)"
+    )
+    parser.add_argument(
+        "--test_ratio",
+        type=float,
+        default=0.05,
+        help="Ratio of test set for online splitting (default: 0.05)"
+    )
+    parser.add_argument(
         "--dataloader_num_workers",
         type=int,
         default=4,
@@ -577,11 +595,11 @@ def run_train(args):
             print(f"Successfully loaded {len(raw_items)} raw items for online dynamic augmentation.")
             rng_split = rand_mod.Random(args.seed)
             rng_split.shuffle(raw_items)
-            val_size = max(5, int(len(raw_items) * 0.1))
-            test_size = max(5, int(len(raw_items) * 0.1))
+            val_size = max(5, int(len(raw_items) * getattr(args, "val_ratio", 0.10)))
+            test_size = max(5, int(len(raw_items) * getattr(args, "test_ratio", 0.05)))
             if len(raw_items) <= val_size + test_size:
-                val_size = max(1, len(raw_items) // 5)
-                test_size = max(1, len(raw_items) // 5)
+                val_size = max(1, len(raw_items) // 10)
+                test_size = max(1, len(raw_items) // 20)
             train_items = raw_items[val_size + test_size:]
             val_items = raw_items[:val_size]
             test_items = raw_items[val_size:val_size + test_size]
