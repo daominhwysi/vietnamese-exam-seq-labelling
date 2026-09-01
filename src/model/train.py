@@ -303,20 +303,13 @@ def parse_args():
         default="output",
         help="Directory containing raw question JSONs or XMLs for online augmentation (default: 'output')"
     )
-    parser.add_argument(
-        "--windows_per_exam",
-        "--windows-per-exam",
-        type=int,
-        default=12,
-        help="Number of Multi-Scale Sliding Window chunks sampled per exam document per epoch during online training (default: 12)"
-    )
     return parser.parse_args()
 
 class OnlineAugmentedDataset(torch.utils.data.Dataset):
     """
     Dynamic Online PyTorch Dataset that reconstructs, augments, tokenizes,
     and aligns character spans on-the-fly across Multi-Scale Sliding Windows
-    ((512, 128), (768, 192), (1024, 256), (2048, 512)) inside DataLoader multi-worker processes.
+    ((512, 128), (768, 192), (1024, 256), (2048, 512)) for 100% of all available chunks.
     """
     def __init__(
         self,
@@ -324,33 +317,80 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
         tokenizer: Any,
         tag_to_id: Dict[str, int],
         is_train: bool = True,
-        windows_per_item: int = 12,
         window_configs: Optional[List[Tuple[int, int]]] = None
     ):
         self.raw_items = raw_items
-        self.tokenizer = tokenizer
+        self._tokenizer = tokenizer
         self.tag_to_id = tag_to_id
         self.is_train = is_train
-        self.windows_per_item = max(1, windows_per_item if is_train else min(4, windows_per_item))
         self.window_configs = window_configs or [
             (512, 128),
             (768, 192),
             (1024, 256),
             (2048, 512)
         ]
+        self.index_map = []
+        if self._tokenizer is not None:
+            self._build_index_map()
+
+    @property
+    def tokenizer(self):
+        return self._tokenizer
+
+    @tokenizer.setter
+    def tokenizer(self, tok):
+        self._tokenizer = tok
+        if tok is not None and not self.index_map:
+            self._build_index_map()
+
+    def _build_index_map(self):
+        from src.generation.reconstructor import reconstruct_question, reconstruct_exam, ReconstructorConfig
+        base_config = ReconstructorConfig(randomize_q_num=False)
+        self.index_map = []
+        for doc_idx, item in enumerate(self.raw_items):
+            if item.get("is_real", False) and "raw_text" in item:
+                raw_text = item["raw_text"]
+            elif "sections" in item:
+                rec = reconstruct_exam(item, base_config)
+                raw_text = rec["raw_text"]
+            else:
+                rec = reconstruct_question(item, base_config)
+                raw_text = rec["raw_text"]
+
+            for max_len, stride in self.window_configs:
+                tokenized = self._tokenizer(
+                    raw_text,
+                    return_offsets_mapping=False,
+                    truncation=True,
+                    max_length=max_len,
+                    stride=stride,
+                    return_overflowing_tokens=True,
+                    add_special_tokens=True
+                )
+                num_chunks = len(tokenized["input_ids"])
+                for chunk_idx in range(num_chunks):
+                    self.index_map.append((doc_idx, max_len, stride, chunk_idx))
+
+        split_name = "Train" if self.is_train else "Eval/Test"
+        print(f"[{split_name}] Initialized {len(self.index_map)} multi-scale window chunks across {len(self.raw_items)} documents (100% full coverage).")
 
     def __len__(self):
-        return len(self.raw_items) * self.windows_per_item
+        return len(self.index_map) if self.index_map else len(self.raw_items)
 
     def __getitem__(self, idx):
         import random
         from src.generation.reconstructor import reconstruct_question, reconstruct_exam, ReconstructorConfig
         from src.data.prepare import align_tokens_to_spans, mask_latex_in_real_data
-        
-        item_idx = idx // self.windows_per_item
-        window_slot = idx % self.windows_per_item
-        item = self.raw_items[item_idx]
-        
+
+        if not self.index_map:
+            doc_idx = idx
+            max_len, stride = (1024, 256)
+            target_chunk_idx = 0
+        else:
+            doc_idx, max_len, stride, target_chunk_idx = self.index_map[idx]
+
+        item = self.raw_items[doc_idx]
+
         if self.is_train:
             aug_config = ReconstructorConfig(
                 question_prefix_template=random.choice([
@@ -397,13 +437,10 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
             raw_text = rec["raw_text"]
             spans = rec["spans"]
 
-        # Select window config
-        max_len, stride = self.window_configs[window_slot % len(self.window_configs)]
-
-        if self.tokenizer is None:
+        if self._tokenizer is None:
             raise ValueError("Tokenizer has not been assigned to OnlineAugmentedDataset before sampling.")
 
-        tokenized = self.tokenizer(
+        tokenized = self._tokenizer(
             raw_text,
             return_offsets_mapping=True,
             truncation=True,
@@ -414,7 +451,7 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
         )
 
         num_chunks = len(tokenized["input_ids"])
-        chunk_idx = (window_slot // len(self.window_configs)) % num_chunks
+        chunk_idx = target_chunk_idx % num_chunks
 
         input_ids = tokenized["input_ids"][chunk_idx]
         attention_mask = tokenized["attention_mask"][chunk_idx]
@@ -662,10 +699,9 @@ def run_train(args):
             val_items = raw_items[:val_size]
             test_items = raw_items[val_size:val_size + test_size]
             
-            windows_per_exam = getattr(args, "windows_per_exam", 12)
-            train_dataset_obj = OnlineAugmentedDataset(train_items, None, tag_to_id, is_train=True, windows_per_item=windows_per_exam)
-            eval_dataset_obj = OnlineAugmentedDataset(val_items, None, tag_to_id, is_train=False, windows_per_item=4)
-            test_dataset_obj = OnlineAugmentedDataset(test_items, None, tag_to_id, is_train=False, windows_per_item=4)
+            train_dataset_obj = OnlineAugmentedDataset(train_items, None, tag_to_id, is_train=True)
+            eval_dataset_obj = OnlineAugmentedDataset(val_items, None, tag_to_id, is_train=False)
+            test_dataset_obj = OnlineAugmentedDataset(test_items, None, tag_to_id, is_train=False)
             
             # Dataset wrapper supporting train, validation, and test splits
             dataset = {"train": train_dataset_obj, "validation": eval_dataset_obj, "test": test_dataset_obj}
