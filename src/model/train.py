@@ -25,11 +25,14 @@ except ImportError:
 def parse_args():
     parser = argparse.ArgumentParser(description="Train XLM-RoBERTa for Sequence Labeling using LoRA and AMP")
     parser.add_argument(
+        "--dataset_repo_id",
+        "--dataset-repo-id",
         "--repo_id",
         "--repo-id",
         type=str,
         default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
-        help="Hugging Face Dataset repository ID"
+        dest="dataset_repo_id",
+        help="Hugging Face Dataset repository ID (e.g. 'username/dataset-name')"
     )
     parser.add_argument(
         "--data_dir",
@@ -589,12 +592,13 @@ def run_train(args):
                             except Exception:
                                 pass
                 
-        if not raw_items and args.repo_id:
-            print(f"No local raw items found. Attempting to download 'raw_exams.jsonl' from Hugging Face dataset '{args.repo_id}'...")
+        target_dataset_repo = getattr(args, "dataset_repo_id", None) or getattr(args, "repo_id", None)
+        if not raw_items and target_dataset_repo:
+            print(f"No local raw items found. Attempting to download 'raw_exams.jsonl' from Hugging Face dataset '{target_dataset_repo}'...")
             try:
                 from huggingface_hub import hf_hub_download
                 downloaded_file = hf_hub_download(
-                    repo_id=args.repo_id,
+                    repo_id=target_dataset_repo,
                     filename="raw_exams.jsonl",
                     repo_type="dataset",
                     token=hf_token
@@ -634,12 +638,13 @@ def run_train(args):
             dataset = {"train": train_dataset_obj, "validation": eval_dataset_obj, "test": test_dataset_obj}
 
     if train_dataset_obj is None:
-        print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
+        target_dataset_repo = getattr(args, "dataset_repo_id", None) or getattr(args, "repo_id", None)
+        print(f"Downloading dataset and label mapping from HF: '{target_dataset_repo}'...")
         try:
             from datasets import load_dataset
             # Load the custom split jsonl files
             dataset = load_dataset(
-                args.repo_id,
+                target_dataset_repo,
                 data_files={
                     "train": "train.jsonl",
                     "validation": "val.jsonl",
@@ -649,13 +654,13 @@ def run_train(args):
             )
         except Exception as e:
             print(f"Error loading dataset: {e}")
-            print("Make sure you specify the correct --repo_id and provide a valid token if private.")
+            print("Make sure you specify the correct --dataset_repo_id and provide a valid token if private.")
             sys.exit(1)
 
         try:
             from huggingface_hub import hf_hub_download
             label_mapping_path = hf_hub_download(
-                repo_id=args.repo_id,
+                repo_id=target_dataset_repo,
                 filename="label_mapping.json",
                 repo_type="dataset",
                 token=hf_token

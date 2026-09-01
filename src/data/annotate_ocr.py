@@ -13,7 +13,12 @@ script_dir = Path(__file__).resolve().parent
 workspace_dir = script_dir.parent.parent
 sys.path.append(str(workspace_dir))
 
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=workspace_dir / ".env")
+except ImportError:
+    pass
+
 from openai import OpenAI
 from tqdm import tqdm
 from src.utils.token_tracker import log_response
@@ -21,8 +26,6 @@ from src.utils.token_tracker import log_response
 # Reconfigure stdout for UTF-8 to handle Vietnamese terminal logging
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
-
-load_dotenv(dotenv_path=workspace_dir / ".env")
 
 SYSTEM_PROMPT = """You are an expert NLP data annotator for Vietnamese educational exam papers.
 Your task is to annotate the provided raw OCR text of an exam paper by wrapping specific components in XML tags.

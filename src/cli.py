@@ -152,7 +152,16 @@ def main():
 
     # 6. train
     p_train = subparsers.add_parser("train", help="Stage 6: Train XLM-RoBERTa model with LoRA")
-    p_train.add_argument("--repo_id", type=str, default="daominhwysi/synthetic-seq-labelling-vi-exam-v2", help="HF Dataset repository ID")
+    p_train.add_argument(
+        "--dataset_repo_id",
+        "--dataset-repo-id",
+        "--repo_id",
+        "--repo-id",
+        type=str,
+        default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
+        dest="dataset_repo_id",
+        help="HF Dataset repository ID"
+    )
     p_train.add_argument("--model_name", type=str, default="jhu-clsp/mmBERT-base", help="HF base model name")
     p_train.add_argument("--output_dir", type=str, default="./results", help="Directory to save checkpoints")
     p_train.add_argument("--epochs", type=int, default=3, help="Number of training epochs")
@@ -201,7 +210,15 @@ def main():
     # 8. upload (dataset)
     p_upl = subparsers.add_parser("upload", help="Upload dataset splits to Hugging Face Hub")
     p_upl.add_argument("--token", type=str, help="HF Token")
-    p_upl.add_argument("--repo-id", type=str, help="HF dataset repository target path")
+    p_upl.add_argument(
+        "--dataset-repo-id",
+        "--dataset_repo_id",
+        "--repo-id",
+        "--repo_id",
+        type=str,
+        dest="dataset_repo_id",
+        help="HF dataset repository target path"
+    )
     p_upl.add_argument(
         "--dataset-dir",
         type=str,
@@ -348,7 +365,7 @@ def main():
         from src.data.upload import upload_dataset
         upload_dataset(
             token=args.token,
-            repo_id=args.repo_id,
+            repo_id=getattr(args, "dataset_repo_id", None) or getattr(args, "repo_id", None),
             dataset_dir=args.dataset_dir,
             mode=args.mode,
         )

@@ -3,7 +3,11 @@ import sys
 import json
 import tempfile
 from pathlib import Path
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
 
 # Add local path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -140,7 +144,8 @@ def upload_dataset(token=None, repo_id=None, dataset_dir=None, mode="all"):
         dataset_dir: Local folder containing train/val/test JSONL + label_mapping.json + xml/.
         mode:        'all' or 'online-only' / 'raw-only'.
     """
-    load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
+    if load_dotenv is not None:
+        load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
 
     if not token:
         token = os.getenv("HF_TOKEN")
@@ -268,10 +273,13 @@ def upload_dataset(token=None, repo_id=None, dataset_dir=None, mode="all"):
 def main():
     parser = argparse.ArgumentParser(description="Upload dataset splits and annotation files to Hugging Face Hub")
     parser.add_argument(
+        "--dataset_repo_id",
+        "--dataset-repo-id",
         "--repo-id",
         "--repo_id",
         type=str,
         default=DEFAULT_DATASET_REPO,
+        dest="dataset_repo_id",
         help="Target Hugging Face Dataset repository ID (e.g. username/repo-name)"
     )
     parser.add_argument(
@@ -295,7 +303,7 @@ def main():
         help="Hugging Face authentication token (or set HF_TOKEN env var)"
     )
     args = parser.parse_args()
-    upload_dataset(token=args.token, repo_id=args.repo_id, dataset_dir=args.dataset_dir, mode=args.mode)
+    upload_dataset(token=args.token, repo_id=args.dataset_repo_id, dataset_dir=args.dataset_dir, mode=args.mode)
 
 
 if __name__ == "__main__":

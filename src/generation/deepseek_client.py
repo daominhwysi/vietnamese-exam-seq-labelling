@@ -2,7 +2,23 @@ import os
 import time
 from typing import Optional, Any, List, Dict
 from pathlib import Path
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    # Locate .env by searching up directory hierarchy
+    current_dir = Path(__file__).resolve().parent
+    env_path = None
+    for p in [current_dir] + list(current_dir.parents):
+        if (p / ".env").exists():
+            env_path = p / ".env"
+            break
+
+    if env_path:
+        load_dotenv(dotenv_path=env_path)
+    else:
+        load_dotenv()
+except ImportError:
+    pass
+
 from openai import OpenAI
 
 try:
@@ -15,19 +31,6 @@ except ImportError:
 
 from src.utils.token_tracker import log_response
 from src.utils.config import load_config
-
-# Locate .env by searching up directory hierarchy
-current_dir = Path(__file__).resolve().parent
-env_path = None
-for p in [current_dir] + list(current_dir.parents):
-    if (p / ".env").exists():
-        env_path = p / ".env"
-        break
-
-if env_path:
-    load_dotenv(dotenv_path=env_path)
-else:
-    load_dotenv()
 
 # Load providers config
 _cfg = load_config()

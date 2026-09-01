@@ -48,7 +48,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         },
     },
     "training": {
-        "repo_id": "daominhwysi/synthetic-seq-labelling-vi-exam-v2",
+        "dataset_repo_id": "daominhwysi/synthetic-seq-labelling-vi-exam-v2",
         "output_dir": "./results",
         "epochs": 3,
         "batch_size": 8,
