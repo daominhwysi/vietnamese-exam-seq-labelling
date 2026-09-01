@@ -26,18 +26,28 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Train XLM-RoBERTa for Sequence Labeling using LoRA and AMP")
     parser.add_argument(
         "--repo_id",
+        "--repo-id",
         type=str,
         default="daominhwysi/synthetic-seq-labelling-vi-exam-v2",
         help="Hugging Face Dataset repository ID"
     )
     parser.add_argument(
+        "--data_dir",
+        "--data-dir",
+        type=str,
+        default=None,
+        help="Local directory containing offline dataset splits (train.jsonl, val.jsonl, label_mapping.json)"
+    )
+    parser.add_argument(
         "--model_name",
+        "--model-name",
         type=str,
         default="jhu-clsp/mmBERT-base",
         help="Hugging Face base model name"
     )
     parser.add_argument(
         "--output_dir",
+        "--output-dir",
         type=str,
         default="./results",
         help="Directory to save checkpoint results and models"
@@ -50,18 +60,21 @@ def parse_args():
     )
     parser.add_argument(
         "--batch_size",
+        "--batch-size",
         type=int,
         default=8,
         help="Training batch size per device"
     )
     parser.add_argument(
         "--eval_batch_size",
+        "--eval-batch-size",
         type=int,
         default=8,
         help="Evaluation batch size per device"
     )
     parser.add_argument(
         "--eval_accumulation_steps",
+        "--eval-accumulation-steps",
         type=int,
         default=10,
         help="Number of evaluation steps to accumulate outputs before moving to CPU (default: 10). Prevents GPU OOM during validation."
@@ -74,29 +87,34 @@ def parse_args():
     )
     parser.add_argument(
         "--lora_r",
+        "--lora-r",
         type=int,
         default=16,
         help="LoRA rank dimension"
     )
     parser.add_argument(
         "--lora_alpha",
+        "--lora-alpha",
         type=int,
         default=32,
         help="LoRA alpha scaling parameter"
     )
     parser.add_argument(
         "--lora_dropout",
+        "--lora-dropout",
         type=float,
         default=0.1,
         help="LoRA dropout rate"
     )
     parser.add_argument(
         "--use_bf16",
+        "--use-bf16",
         action="store_true",
         help="Use bfloat16 mixed precision (requires compatible GPU like A100+)"
     )
     parser.add_argument(
         "--no_fp16",
+        "--no-fp16",
         action="store_true",
         help="Disable float16 mixed precision (defaults to True otherwise on CUDA)"
     )
@@ -221,54 +239,63 @@ def parse_args():
     )
     parser.add_argument(
         "--wandb_project",
+        "--wandb-project",
         type=str,
         default="vietnamese-exam-seq-labelling",
         help="Weights & Biases project name"
     )
     parser.add_argument(
         "--logs_per_epoch",
+        "--logs-per-epoch",
         type=int,
         default=10,
         help="Number of log outputs per epoch (default: 10). Dynamically calculates logging_steps."
     )
     parser.add_argument(
         "--logging_steps",
+        "--logging-steps",
         type=int,
         default=None,
         help="Explicit number of update steps between logging metrics (overrides logs_per_epoch if specified)"
     )
     parser.add_argument(
         "--online_augmentation",
+        "--online-augmentation",
         action="store_true",
         default=False,
         help="Enable dynamic on-the-fly online data augmentation during training (default: False)"
     )
     parser.add_argument(
         "--train_ratio",
+        "--train-ratio",
         type=float,
         default=0.85,
         help="Ratio of training set for online splitting (default: 0.85)"
     )
     parser.add_argument(
         "--val_ratio",
+        "--val-ratio",
         type=float,
         default=0.10,
         help="Ratio of validation set for online splitting (default: 0.10)"
     )
     parser.add_argument(
         "--test_ratio",
+        "--test-ratio",
         type=float,
         default=0.05,
         help="Ratio of test set for online splitting (default: 0.05)"
     )
     parser.add_argument(
         "--dataloader_num_workers",
+        "--dataloader-num-workers",
         type=int,
         default=4,
         help="Number of DataLoader worker subprocesses for data loading & online augmentation (default: 4)"
     )
     parser.add_argument(
         "--raw_data_dir",
+        "--raw-data-dir",
         type=str,
         default="output",
         help="Directory containing raw question JSONs or XMLs for online augmentation (default: 'output')"
