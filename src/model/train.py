@@ -549,8 +549,29 @@ def run_train(args):
                             except Exception:
                                 pass
                 
+        if not raw_items and args.repo_id:
+            print(f"No local raw items found. Attempting to download 'raw_exams.jsonl' from Hugging Face dataset '{args.repo_id}'...")
+            try:
+                from huggingface_hub import hf_hub_download
+                downloaded_file = hf_hub_download(
+                    repo_id=args.repo_id,
+                    filename="raw_exams.jsonl",
+                    repo_type="dataset",
+                    token=hf_token
+                )
+                print(f"Downloaded '{downloaded_file}'. Loading raw exams...")
+                with open(downloaded_file, "r", encoding="utf-8") as f:
+                    for line in f:
+                        if line.strip():
+                            try:
+                                raw_items.append(json.loads(line))
+                            except Exception:
+                                pass
+            except Exception as e:
+                print(f"Notice: Could not download 'raw_exams.jsonl' from Hub ({e}).")
+
         if not raw_items:
-            print(f"Warning: No raw questions found in '{args.raw_data_dir}'. Falling back to offline dataset from Hub.")
+            print(f"Warning: No raw questions found in '{args.raw_data_dir}' or Hub. Falling back to offline dataset from Hub.")
         else:
             import random as rand_mod
             print(f"Successfully loaded {len(raw_items)} raw items for online dynamic augmentation.")

@@ -208,6 +208,13 @@ def main():
         default="output/dataset",
         help="Local folder with train/val/test JSONL splits and xml/ subfolder (default: 'output/dataset')",
     )
+    p_upl.add_argument(
+        "--mode",
+        type=str,
+        default="all",
+        choices=["all", "online-only", "raw-only", "online", "raw"],
+        help="Upload mode: 'all' (entire folder) or 'online-only' / 'raw-only' (only raw_exams.jsonl + label_mapping.json)",
+    )
 
     # 8b. upload-model
     p_upl_m = subparsers.add_parser("upload-model", help="Upload trained model/adapter checkpoint to Hugging Face Hub")
@@ -343,6 +350,7 @@ def main():
             token=args.token,
             repo_id=args.repo_id,
             dataset_dir=args.dataset_dir,
+            mode=args.mode,
         )
 
     elif args.command == "upload-model":
