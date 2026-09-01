@@ -1,0 +1,948 @@
+{
+  "file_name": "random_math_exam.txt",
+  "original_text_length": 6163,
+  "segments": [
+    {
+      "label": "section",
+      "start": 1,
+      "end": 15,
+      "text": "ĐỀ ÔN TẬP SỐ 3"
+    },
+    {
+      "label": "section",
+      "start": 63,
+      "end": 112,
+      "text": "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn."
+    },
+    {
+      "label": "question_label",
+      "start": 114,
+      "end": 120,
+      "text": "Câu 1."
+    },
+    {
+      "label": "stem",
+      "start": 120,
+      "end": 217,
+      "text": " Cho $f(x) = ax^2 + bx + c \\:(a \\neq 0)$. Điều kiện để $f(x) \\geq 0, \\forall x \\in \\mathbb{R}$ là"
+    },
+    {
+      "label": "option_label",
+      "start": 218,
+      "end": 220,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 221,
+      "end": 268,
+      "text": "$\\begin{cases} a > 0 \\\\ \\Delta < 0 \\end{cases}$"
+    },
+    {
+      "label": "option_label",
+      "start": 268,
+      "end": 271,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 272,
+      "end": 322,
+      "text": "$\\begin{cases} a > 0 \\\\ \\Delta \\leq 0 \\end{cases}$"
+    },
+    {
+      "label": "option_label",
+      "start": 322,
+      "end": 325,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 326,
+      "end": 376,
+      "text": "$\\begin{cases} a > 0 \\\\ \\Delta \\geq 0 \\end{cases}$"
+    },
+    {
+      "label": "option_label",
+      "start": 376,
+      "end": 379,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 380,
+      "end": 430,
+      "text": "$\\begin{cases} a < 0 \\\\ \\Delta \\leq 0 \\end{cases}$"
+    },
+    {
+      "label": "question_label",
+      "start": 432,
+      "end": 438,
+      "text": "Câu 2."
+    },
+    {
+      "label": "stem",
+      "start": 438,
+      "end": 576,
+      "text": " Cho bất phương trình $x^2 - 8x + 7 \\geq 0$. Trong các tập hợp sau đây, tập nào có chứa phần tử không phải là nghiệm của bất phương trình."
+    },
+    {
+      "label": "option_label",
+      "start": 577,
+      "end": 579,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 580,
+      "end": 593,
+      "text": "$(-\\infty;0]$"
+    },
+    {
+      "label": "option_label",
+      "start": 594,
+      "end": 597,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 598,
+      "end": 611,
+      "text": "$[8;+\\infty)$"
+    },
+    {
+      "label": "option_label",
+      "start": 612,
+      "end": 615,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 616,
+      "end": 629,
+      "text": "$(-\\infty;1]$"
+    },
+    {
+      "label": "option_label",
+      "start": 630,
+      "end": 633,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 634,
+      "end": 648,
+      "text": "$[6;+\\infty)$."
+    },
+    {
+      "label": "question_label",
+      "start": 650,
+      "end": 656,
+      "text": "Câu 3."
+    },
+    {
+      "label": "stem",
+      "start": 656,
+      "end": 718,
+      "text": " Số nghiệm nguyên dương của phương trình $\\sqrt{x-1} = x-3$ là"
+    },
+    {
+      "label": "option_label",
+      "start": 719,
+      "end": 721,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 722,
+      "end": 724,
+      "text": "0."
+    },
+    {
+      "label": "option_label",
+      "start": 724,
+      "end": 727,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 728,
+      "end": 730,
+      "text": "1."
+    },
+    {
+      "label": "option_label",
+      "start": 730,
+      "end": 733,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 734,
+      "end": 736,
+      "text": "2."
+    },
+    {
+      "label": "option_label",
+      "start": 736,
+      "end": 739,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 740,
+      "end": 742,
+      "text": "3."
+    },
+    {
+      "label": "question_label",
+      "start": 744,
+      "end": 750,
+      "text": "Câu 4."
+    },
+    {
+      "label": "stem",
+      "start": 750,
+      "end": 877,
+      "text": " Viết phương trình tổng quát của đường thẳng $d$ đi qua điểm $M (-2;-5)$ và song song với đường phân giác góc phần tư thứ nhất."
+    },
+    {
+      "label": "option_label",
+      "start": 878,
+      "end": 880,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 881,
+      "end": 892,
+      "text": "$x+y+7 = 0$"
+    },
+    {
+      "label": "option_label",
+      "start": 893,
+      "end": 896,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 897,
+      "end": 908,
+      "text": "$x-y-3 = 0$"
+    },
+    {
+      "label": "option_label",
+      "start": 909,
+      "end": 912,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 913,
+      "end": 922,
+      "text": "$x-y = 0$"
+    },
+    {
+      "label": "option_label",
+      "start": 923,
+      "end": 926,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 927,
+      "end": 940,
+      "text": "$2x-y-1 = 0$."
+    },
+    {
+      "label": "question_label",
+      "start": 942,
+      "end": 948,
+      "text": "Câu 5."
+    },
+    {
+      "label": "stem",
+      "start": 948,
+      "end": 1103,
+      "text": " Tìm tọa độ giao điểm của hai đường thẳng $d_1: \\begin{cases} x = -3+4t \\\\ y = 2+5t \\end{cases}$ và $d_2: \\begin{cases} x = 1+4t' \\\\ y = 7-5t' \\end{cases}$"
+    },
+    {
+      "label": "option_label",
+      "start": 1104,
+      "end": 1106,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1106,
+      "end": 1113,
+      "text": " (1;7)."
+    },
+    {
+      "label": "option_label",
+      "start": 1113,
+      "end": 1116,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 1116,
+      "end": 1124,
+      "text": " (-3;2)."
+    },
+    {
+      "label": "option_label",
+      "start": 1124,
+      "end": 1127,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 1127,
+      "end": 1135,
+      "text": " (2;-3)."
+    },
+    {
+      "label": "option_label",
+      "start": 1135,
+      "end": 1138,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 1138,
+      "end": 1145,
+      "text": " (5;1)."
+    },
+    {
+      "label": "question_label",
+      "start": 1147,
+      "end": 1153,
+      "text": "Câu 6."
+    },
+    {
+      "label": "stem",
+      "start": 1153,
+      "end": 1336,
+      "text": " Trong mặt phẳng với hệ tọa độ $Oxy$, cho đường thẳng $\\Delta: ax+by+c = 0$ và hai điểm $M (x_M;y_M), N (x_N;y_N)$ không thuộc $\\Delta$. Chọn khẳng định đúng trong các khẳng định sau:"
+    },
+    {
+      "label": "option_label",
+      "start": 1337,
+      "end": 1339,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1339,
+      "end": 1417,
+      "text": " $M,N$ khác phía so với $\\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) > 0$."
+    },
+    {
+      "label": "option_label",
+      "start": 1418,
+      "end": 1420,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1420,
+      "end": 1501,
+      "text": " $M,N$ cùng phía so với $\\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) \\geq 0$."
+    },
+    {
+      "label": "option_label",
+      "start": 1502,
+      "end": 1504,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1504,
+      "end": 1585,
+      "text": " $M,N$ khác phía so với $\\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) \\leq 0$."
+    },
+    {
+      "label": "option_label",
+      "start": 1586,
+      "end": 1588,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1588,
+      "end": 1666,
+      "text": " $M,N$ cùng phía so với $\\Delta$ khi $(ax_M + by_M + c)(ax_N + by_N + c) > 0$."
+    },
+    {
+      "label": "question_label",
+      "start": 1668,
+      "end": 1674,
+      "text": "Câu 7."
+    },
+    {
+      "label": "stem",
+      "start": 1674,
+      "end": 1760,
+      "text": " Đường tròn $(C): x^2 + y^2 - 6x + 2y + 6 = 0$ có tâm $I$ và bán kính $R$ lần lượt là:"
+    },
+    {
+      "label": "option_label",
+      "start": 1761,
+      "end": 1763,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1764,
+      "end": 1778,
+      "text": "$I(3;-1), R=4$"
+    },
+    {
+      "label": "option_label",
+      "start": 1779,
+      "end": 1782,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 1783,
+      "end": 1797,
+      "text": "$I(-3;1), R=4$"
+    },
+    {
+      "label": "option_label",
+      "start": 1798,
+      "end": 1801,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 1802,
+      "end": 1816,
+      "text": "$I(3;-1), R=2$"
+    },
+    {
+      "label": "option_label",
+      "start": 1817,
+      "end": 1820,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 1821,
+      "end": 1836,
+      "text": "$I(-3;1), R=2$."
+    },
+    {
+      "label": "question_label",
+      "start": 1838,
+      "end": 1844,
+      "text": "Câu 8."
+    },
+    {
+      "label": "stem",
+      "start": 1844,
+      "end": 1957,
+      "text": " Đường tròn $C$ có tâm $I$ thuộc đường thẳng $d: x+5y-12 = 0$ và tiếp xúc với hai trục tọa độ có phương trình là:"
+    },
+    {
+      "label": "option_label",
+      "start": 1958,
+      "end": 1960,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1961,
+      "end": 1984,
+      "text": "$(x-2)^2 + (y-2)^2 = 4$"
+    },
+    {
+      "label": "option_label",
+      "start": 1986,
+      "end": 1988,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1989,
+      "end": 2013,
+      "text": "$(x+3)^2 + (y-3)^2 = 9$."
+    },
+    {
+      "label": "option_label",
+      "start": 2014,
+      "end": 2016,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2017,
+      "end": 2070,
+      "text": "$(x-2)^2 + (y-2)^2 = 4$ hoặc $(x-3)^2 + (y+3)^2 = 9$."
+    },
+    {
+      "label": "option_label",
+      "start": 2071,
+      "end": 2073,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2074,
+      "end": 2127,
+      "text": "$(x-2)^2 + (y-2)^2 = 4$ hoặc $(x+3)^2 - (y-3)^2 = 9$."
+    },
+    {
+      "label": "question_label",
+      "start": 2129,
+      "end": 2135,
+      "text": "Câu 9."
+    },
+    {
+      "label": "stem",
+      "start": 2135,
+      "end": 2303,
+      "text": " Sắp xếp năm bạn học sinh An, Bình, Chi, Dũng, Lệ vào một chiếc ghế dài có 5 chỗ ngồi. Hỏi có bao nhiêu cách sắp xếp sao cho bạn An và bạn Dũng luôn ngồi ở hai đầu ghế?"
+    },
+    {
+      "label": "option_label",
+      "start": 2304,
+      "end": 2306,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2307,
+      "end": 2311,
+      "text": "120."
+    },
+    {
+      "label": "option_label",
+      "start": 2311,
+      "end": 2314,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 2315,
+      "end": 2318,
+      "text": "16."
+    },
+    {
+      "label": "option_label",
+      "start": 2318,
+      "end": 2321,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 2322,
+      "end": 2325,
+      "text": "12."
+    },
+    {
+      "label": "option_label",
+      "start": 2325,
+      "end": 2328,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 2329,
+      "end": 2332,
+      "text": "24."
+    },
+    {
+      "label": "question_label",
+      "start": 2334,
+      "end": 2341,
+      "text": "Câu 10."
+    },
+    {
+      "label": "stem",
+      "start": 2341,
+      "end": 2473,
+      "text": " Giả sử có bảy bông hoa khác nhau và ba lọ hoa khác nhau. Hỏi có bao nhiêu cách cắm ba bông hoa vào lọ đã cho (mỗi lọ cắm một bông)?"
+    },
+    {
+      "label": "option_label",
+      "start": 2474,
+      "end": 2476,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2477,
+      "end": 2480,
+      "text": "35."
+    },
+    {
+      "label": "option_label",
+      "start": 2480,
+      "end": 2483,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 2484,
+      "end": 2490,
+      "text": "30240."
+    },
+    {
+      "label": "option_label",
+      "start": 2490,
+      "end": 2493,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 2494,
+      "end": 2498,
+      "text": "210."
+    },
+    {
+      "label": "option_label",
+      "start": 2498,
+      "end": 2501,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 2502,
+      "end": 2505,
+      "text": "21."
+    },
+    {
+      "label": "question_label",
+      "start": 2507,
+      "end": 2514,
+      "text": "Câu 11."
+    },
+    {
+      "label": "stem",
+      "start": 2514,
+      "end": 2587,
+      "text": " Tìm hệ số của $x^2y^2$ trong khai triển nhị thức Niu-ton của $(x+2y)^4$."
+    },
+    {
+      "label": "option_label",
+      "start": 2588,
+      "end": 2590,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2591,
+      "end": 2594,
+      "text": "32."
+    },
+    {
+      "label": "option_label",
+      "start": 2594,
+      "end": 2597,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 2598,
+      "end": 2600,
+      "text": "8."
+    },
+    {
+      "label": "option_label",
+      "start": 2600,
+      "end": 2603,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 2604,
+      "end": 2607,
+      "text": "24."
+    },
+    {
+      "label": "option_label",
+      "start": 2607,
+      "end": 2610,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 2611,
+      "end": 2614,
+      "text": "16."
+    },
+    {
+      "label": "question_label",
+      "start": 2616,
+      "end": 2623,
+      "text": "Câu 12."
+    },
+    {
+      "label": "stem",
+      "start": 2623,
+      "end": 2802,
+      "text": " Trên giá sách có 4 quyển sách Toán, 3 quyển sách Vật lý, 2 quyển sách Hoá học. Lấy ngẫu nhiên 3 quyển sách trên kệ sách ấy. Tính xác suất để 3 quyển được lấy ra đều là sách Toán."
+    },
+    {
+      "label": "option_label",
+      "start": 2803,
+      "end": 2805,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2806,
+      "end": 2819,
+      "text": "$\\frac{2}{7}$"
+    },
+    {
+      "label": "option_label",
+      "start": 2820,
+      "end": 2823,
+      "text": " B."
+    },
+    {
+      "label": "option_text",
+      "start": 2824,
+      "end": 2838,
+      "text": "$\\frac{1}{21}$"
+    },
+    {
+      "label": "option_label",
+      "start": 2839,
+      "end": 2842,
+      "text": " C."
+    },
+    {
+      "label": "option_text",
+      "start": 2843,
+      "end": 2858,
+      "text": "$\\frac{37}{42}$"
+    },
+    {
+      "label": "option_label",
+      "start": 2859,
+      "end": 2862,
+      "text": " D."
+    },
+    {
+      "label": "option_text",
+      "start": 2863,
+      "end": 2878,
+      "text": "$\\frac{5}{42}$."
+    },
+    {
+      "label": "section",
+      "start": 2881,
+      "end": 2911,
+      "text": "PHẦN II. Trắc nghiệm đúng-sai:"
+    },
+    {
+      "label": "question_label",
+      "start": 2913,
+      "end": 2920,
+      "text": "Câu 13."
+    },
+    {
+      "label": "option_label",
+      "start": 2921,
+      "end": 2923,
+      "text": "a)"
+    },
+    {
+      "label": "option_text",
+      "start": 2923,
+      "end": 3149,
+      "text": " Trong mặt phẳng tọa độ, cho hai đường thẳng $\\Delta: 3x-4y-12=0$ và $\\Delta': \\begin{cases} x=2t \\\\ y=2+3t \\end{cases}$ và hai điểm $N(4;-5), M(2;-1)$. Khi đó, ta có $d(M,\\Delta) = \\frac{3}{5}$ và $d(N,\\Delta') = 2\\sqrt{13}$."
+    },
+    {
+      "label": "option_label",
+      "start": 3150,
+      "end": 3152,
+      "text": "b)"
+    },
+    {
+      "label": "option_text",
+      "start": 3152,
+      "end": 3317,
+      "text": " Cho hai đường thẳng $d_1: 3x-4y-1=0$ và $d_2: mx+(m-1)y-2=0$. Các giá trị của $m$ để góc giữa hai đường thẳng $d_1$ và $d_2$ là $45^o$ có tổng bằng $\\frac{17}{24}$."
+    },
+    {
+      "label": "option_label",
+      "start": 3318,
+      "end": 3320,
+      "text": "c)"
+    },
+    {
+      "label": "option_text",
+      "start": 3320,
+      "end": 3615,
+      "text": " Chuyển động của một vật thể trong khoảng thời gian 180 phút được thể hiện trong mặt phẳng tọa độ. Theo đó, tại thời điểm $t$ $(0 \\leq t \\leq 180)$ vật thể ở vị trí có tọa độ $(2+\\sin t^{\\circ}; 4+\\cos t^{\\circ})$. Quỹ đạo chuyển động của vật thể có phương trình là $(C): (x-2)^2 + (y-4)^2 = 1$."
+    },
+    {
+      "label": "option_label",
+      "start": 3616,
+      "end": 3618,
+      "text": "d)"
+    },
+    {
+      "label": "option_text",
+      "start": 3618,
+      "end": 4015,
+      "text": " Một khu vườn hạnh phúc được thiết kế dưới dạng một hình vuông có độ dài cạnh $10m$. Phần được tô đậm dùng để trồng cỏ, phần còn lại được lát gạch. Gọi $x, y$ lần lượt là bán kính của phần lát gạch hình tròn. Mỗi mét vuông trồng cỏ chi phí 100.000 đồng, mỗi mét vuông lát gạch chi phí 300.000 đồng. Khi đó, để diện tích phần lát gạch nhỏ nhất thì chi phí để thi công khu vườn bằng 22.000.000 đồng."
+    },
+    {
+      "label": "question_label",
+      "start": 4017,
+      "end": 4024,
+      "text": "Câu 14."
+    },
+    {
+      "label": "option_label",
+      "start": 4025,
+      "end": 4027,
+      "text": "a)"
+    },
+    {
+      "label": "option_text",
+      "start": 4027,
+      "end": 4118,
+      "text": " Một hộp đựng 5 viên bi trắng, 3 viên bi xanh. Số cách chọn ra 3 viên bi có đủ 2 màu là 45."
+    },
+    {
+      "label": "option_label",
+      "start": 4119,
+      "end": 4121,
+      "text": "b)"
+    },
+    {
+      "label": "option_text",
+      "start": 4121,
+      "end": 4293,
+      "text": " Trong một hộp bánh có 6 loại bánh nhân thịt và 4 loại bánh nhân đậu xanh. Có 120 cách chọn ra 6 loại bánh sao cho số loại bánh nhân thịt nhiều hơn loại bánh nhân đậu xanh."
+    },
+    {
+      "label": "option_label",
+      "start": 4294,
+      "end": 4296,
+      "text": "c)"
+    },
+    {
+      "label": "option_text",
+      "start": 4296,
+      "end": 4459,
+      "text": " Một bình đựng 4 quả cầu xanh và 6 quả cầu trắng. Chọn ngẫu nhiên 3 quả cầu. Xác suất để trong 3 quả cầu lấy được có ít nhất 1 quả màu trắng bằng: $\\frac{19}{30}$."
+    },
+    {
+      "label": "option_label",
+      "start": 4460,
+      "end": 4462,
+      "text": "d)"
+    },
+    {
+      "label": "option_text",
+      "start": 4462,
+      "end": 4604,
+      "text": " Một nhóm học sinh gồm 5 nam và 5 bạn nữ được xếp thành một hàng dọc. Xác suất để 2 người đứng đầu hàng và cuối hàng là nữ bằng: $\\frac{1}{9}$"
+    },
+    {
+      "label": "section",
+      "start": 4607,
+      "end": 4641,
+      "text": "PHẦN III. Trắc nghiệm trả lời ngắn"
+    },
+    {
+      "label": "question_label",
+      "start": 4643,
+      "end": 4650,
+      "text": "Câu 15."
+    },
+    {
+      "label": "stem",
+      "start": 4650,
+      "end": 4881,
+      "text": " Trong mặt phẳng $Oxy$, cho ba đường thẳng lần lượt có phương trình $d_{1}: 5x-4y+15=0$, $d_{2}: 5x+2y-1=0$ và $d_{3}: mx-(2m-1)y+9m-13=0$. Tính tổng tất cả các giá trị của tham số $m$ để ba đường thẳng đã cho cùng đi qua một điểm."
+    },
+    {
+      "label": "question_label",
+      "start": 4883,
+      "end": 4890,
+      "text": "Câu 16."
+    },
+    {
+      "label": "stem",
+      "start": 4890,
+      "end": 5165,
+      "text": " Trong mặt phẳng tọa độ $Oxy$, cho đường thẳng $(\\Delta): 3x-4y+m=0$ và đường tròn $(C): x^2+y^2-2x-2y-2=0$. Gọi $S$ là tập hợp tất cả các giá trị nguyên âm của tham số $m$ sao cho đường thẳng $(\\Delta)$ và đường tròn $(C)$ có điểm chung. Số phần tử của tập $S$ là bao nhiêu?"
+    },
+    {
+      "label": "question_label",
+      "start": 5167,
+      "end": 5174,
+      "text": "Câu 17."
+    },
+    {
+      "label": "stem",
+      "start": 5174,
+      "end": 5287,
+      "text": " Có bao nhiêu số tự nhiên có 7 chữ số khác nhau từng đôi một, trong đó chữ số 5 đứng liền giữa hai chữ số 4 và 6."
+    },
+    {
+      "label": "question_label",
+      "start": 5289,
+      "end": 5296,
+      "text": "Câu 18."
+    },
+    {
+      "label": "stem",
+      "start": 5296,
+      "end": 5572,
+      "text": " Có 3 bó hoa. Bó thứ nhất có 8 hoa hồng, bó thứ hai có 7 bông hoa ly, bó thứ ba có 6 bông hoa huệ. Chọn ngẫu nhiên 7 hoa từ ba bó hoa trên để cắm vào lọ hoa, tính xác suất để trong 7 hoa được chọn có số hoa hồng bằng số hoa ly. (làm tròn kết quả đến chữ số thập phân thứ nhất)"
+    },
+    {
+      "label": "section",
+      "start": 5575,
+      "end": 5591,
+      "text": "PHẦN IV. Tự luận"
+    },
+    {
+      "label": "question_label",
+      "start": 5593,
+      "end": 5600,
+      "text": "Câu 19."
+    },
+    {
+      "label": "stem",
+      "start": 5600,
+      "end": 5722,
+      "text": " Trong mặt phẳng với hệ tọa độ $Oxy$, cho tam giác $ABC$ có $A(1;2)$, $B(0;3)$ và $C(4;0)$. Tính diện tích tam giác $ABC$?"
+    },
+    {
+      "label": "question_label",
+      "start": 5724,
+      "end": 5731,
+      "text": "Câu 20."
+    },
+    {
+      "label": "stem",
+      "start": 5731,
+      "end": 5974,
+      "text": " Trong mặt phẳng tọa độ $Oxy$, cho điểm $M(2;1)$ và đường tròn $(C): (x-1)^2+(y-2)^2=4$. Phương trình đường thẳng $(d)$ qua điểm $M$ và cắt $(C)$ tại hai điểm phân biệt $A$; $B$ sao cho độ dài $AB$ ngắn nhất là $(d): ax+by+1=0$. Tính $a^2+b^2$"
+    },
+    {
+      "label": "question_label",
+      "start": 5976,
+      "end": 5983,
+      "text": "Câu 21."
+    },
+    {
+      "label": "stem",
+      "start": 5983,
+      "end": 6162,
+      "text": " Có 7 học sinh nam và 3 học sinh nữ được xếp ngẫu nhiên thành một hàng ngang. Tính xác suất để khi xếp ngẫu nhiên 10 học sinh đó sao cho không có 2 học sinh nữ nào đứng cạnh nhau?"
+    }
+  ]
+}

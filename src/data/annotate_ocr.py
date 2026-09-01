@@ -32,13 +32,14 @@ You MUST wrap the following entities:
 2. <stem>...</stem>: Wrap the main text body of a question or main sub-question (including any ordering items or list of items to order). Note: If a question has sub-parts a), b), c) that are annotated as options, the introductory text (e.g. "Cho tam giác ABC...") should be the <stem> of that question, NOT <context>.
 3. <option_label>...</option_label>: Wrap options letters/prefixes or sub-question letters/prefixes (e.g. "A.", "B.", "C.", "D.", "a)", "b)", "c)", "d)", "a.", "b.", "c.", "d.").
 4. <option_text>...</option_text>: Wrap the textual content of options or sub-questions (e.g., the requirement/proof statement of part a, b, etc.).
-5. <stimulus>...</stimulus>: Wrap the shared passage/stimulus block in group questions (passages, reading texts, shared diagrams description). Do NOT use stimulus for standard question introductions that have parts a), b), c) treated as options.
-6. <section>...</section>: Wrap section headers, subheaders, and directions (e.g., "PHẦN I. Câu trắc nghiệm...", "Mark the letter A, B, C, or D...", "Phần II: Đúng sai", "Đọc đoạn văn sau và trả lời...").
+5. <stimulus>...</stimulus>: Wrap the shared passage/stimulus block in group questions (passages, reading texts, shared diagrams description). CRITICAL: If there is a source attribution or citation at the end of the passage (e.g. '(Adapted from ...)', '*(Adapted from ...)*', '(Nguồn: ...)', '(Theo ...)', '(Trích: ...)'), you MUST wrap it INSIDE the <stimulus> tag as part of the stimulus block (e.g. "<stimulus>... (Adapted from CNN)</stimulus>"). Do NOT leave it outside as untagged text, and do NOT put it in <section> or <stem>. Do NOT use stimulus for standard question introductions that have parts a), b), c) treated as options.
+6. <section>...</section>: Wrap ONLY structural exam section divisions, part titles, or group directions that divide the exam into parts (e.g., "PHẦN I. Câu trắc nghiệm...", "PHẦN II: Câu trắc nghiệm đúng sai", "Part 1: Photographs", "Chủ đề Địa lí: ...", "Chuyên đề 1: ...", "Mark the letter A, B, C, or D..."). DO NOT wrap administrative headers (Sở GD, Trường THPT, Đề thi thử, Mã đề, Thời gian), footers (--- HẾT ---), or question numbers in <section>.
+7. <explanation>...</explanation>: Wrap solutions, detailed explanations, marking scheme tables (barem điểm, biểu điểm), and answer key lookup grids (bảng đáp án trắc nghiệm).
 
 CRITICAL RULES:
 1. Do NOT modify, correct, rephrase, or change any part of the input text. Preserve all spelling mistakes, typos, symbols, page markers (like "<|page|>Page X"), LaTeX formulas (enclosed in $...$ or $$...$$), and formatting exactly as they are in the input. ONLY insert the opening and closing XML tags.
 2. Every tag MUST be properly closed. Do not nest tags. Tags must be strictly sequential.
-3. Text that does not belong to any entity (e.g., page numbers, header information like "SỞ GD-ĐT...", "ĐỀ CHÍNH THỨC", horizontal separators) must NOT be wrapped in any tags. Keep it outside the XML tags.
+3. Text that does not belong to any entity (e.g., school/dept headers "SỞ GD-ĐT...", "TRƯỜNG THPT...", exam titles "ĐỀ CHÍNH THỨC", "ĐỀ THI THỬ...", test codes "MÃ ĐỀ: 101", test duration "Thời gian làm bài: 50 phút", page numbers, horizontal separators, end-of-test markers "--- HẾT ---", exam proctor instructions) must NOT be wrapped in any tags. Keep it strictly outside XML tags.
 4. Output ONLY the annotated text. Do not write any markdown code blocks (e.g. ```xml), introduction, or conversational filler.
 5. You MUST output the ENTIRE input text from the very first character to the very last character. Do NOT omit, truncate, or skip any sections (such as headers, footers, page indicators, end markers like "HẾT", or reference tables/answer keys at the end). Everything that is not tagged must still be outputted exactly as it is in the input, outside of XML tags.
 6. **ORDERING QUESTIONS (câu sắp xếp / arrangement)**: When a question asks you to arrange items into the correct order, the scrambled items themselves (labeled a. b. c. d. e. or similar lowercase letters) are NOT options — they are the material to be arranged. You MUST include ALL scrambled items (plus any surrounding introductory/closing text like "Dear...", "Sincerely,") inside a SINGLE <stem> tag. Only the final lettered choices (A. B. C. D.) showing the ordering sequences (e.g. "d – a – e – b – c") are real options and should be tagged as <option_label>/<option_text>. The KEY signal is: if option texts contain dash-separated letter sequences (e.g. "b – d – a – c – e"), it is an ordering question.
@@ -79,7 +80,7 @@ Câu 1 (2,00 điểm). Cho phương trình $x^2 - 2(m-1)x + m^2 - 6 = 0$.
 
 ---
 
-### Example 2: English (Pronunciation, passages, and inline options)
+### Example 2: English (Pronunciation, passages with citations, and inline options)
 
 #### Input:
 **Question 1.** Choose the word whose underlined part is pronounced differently:
@@ -87,6 +88,7 @@ Câu 1 (2,00 điểm). Cho phương trình $x^2 - 2(m-1)x + m^2 - 6 = 0$.
 
 *Read the passage and choose the correct answer:*
 In today's digital age, Vietnamese young people are depending on the virtual world.
+(Adapted from Tech Trends Magazine)
 **Question 2.** What is the main topic of the passage?
     A. Tech trends.    B. Virtual reality.
 
@@ -94,25 +96,26 @@ In today's digital age, Vietnamese young people are depending on the virtual wor
 <think>
 **Document Structure Analysis:**
 - Subject: English exam with inline options and a shared reading passage.
-- Layout: Question 1 (inline options A, B with HTML underline markup), followed by a reading passage instruction, context, and Question 2.
+- Layout: Question 1 (inline options A, B with HTML underline markup), followed by a reading passage instruction, reading passage with source citation, and Question 2.
 
 **Layout & Tagging Strategy by Section:**
 - "**Question 1.**" -> Tag as <question_label>.
 - "Choose the word whose underlined part is pronounced differently:" -> Tag as <stem>.
 - Inline prefixes "A." and "B." -> Tag as <option_label>.
 - Inline option text "finished" / "explained" containing <u> markup -> Tag as <option_text>, keeping <u> tags exactly intact.
-- Passage text "In today's digital age..." -> Tag as <stimulus> since it is a reading block.
+- Passage text and source attribution "In today's digital age...\n(Adapted from Tech Trends Magazine)" -> Tag entirely as <stimulus>.
 - "**Question 2.**" -> Tag as <question_label>.
 - "What is the main topic..." -> Tag as <stem>.
 - Option prefixes and texts -> Tag as <option_label> and <option_text>.
 
 **Sequential Verification:**
-- Check tag matching and nesting boundaries. Ensure no text is altered.
+- Check tag matching and nesting boundaries. Ensure source citation is enclosed inside <stimulus> and no text is altered.
 </think><question_label>**Question 1.**</question_label> <stem>Choose the word whose underlined part is pronounced differently:</stem>
     <option_label>A.</option_label> <option_text>fini<u>sh</u>ed</option_text>    <option_label>B.</option_label> <option_text>expla<u>i</u>ned</option_text>
 
 <section>*Read the passage and choose the correct answer:*</section>
-<stimulus>In today's digital age, Vietnamese young people are depending on the virtual world.</stimulus>
+<stimulus>In today's digital age, Vietnamese young people are depending on the virtual world.
+(Adapted from Tech Trends Magazine)</stimulus>
 <question_label>**Question 2.**</question_label> <stem>What is the main topic of the passage?</stem>
     <option_label>A.</option_label> <option_text>Tech trends.</option_text>    <option_label>B.</option_label> <option_text>Virtual reality.</option_text>
 
@@ -242,15 +245,14 @@ def clean_llm_response(text: str) -> str:
 
 
 def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
-    allowed_tags = {"question_label", "stem", "option_label", "option_text", "stimulus", "section"}
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "stimulus", "section", "explanation"}
     raw_chars = []
     spans = []
 
     tag_pattern = re.compile(r"<(/)?([a-zA-Z_0-9]+)>")
 
     pos = 0
-    current_open_tag = None
-    tag_start_idx = -1
+    tag_stack: List[Tuple[str, int]] = []
 
     for match in tag_pattern.finditer(tagged_text):
         start, end = match.span()
@@ -263,14 +265,15 @@ def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
         tag_name = "stimulus" if raw_tag_name == "context" else raw_tag_name
 
         if tag_name in allowed_tags:
+            current_char_len = len("".join(raw_chars))
             if not is_closing:
                 # Open tag
-                current_open_tag = tag_name
-                tag_start_idx = len("".join(raw_chars))
+                tag_stack.append((tag_name, current_char_len))
             else:
                 # Close tag
-                if current_open_tag == tag_name and tag_start_idx != -1:
-                    tag_end_idx = len("".join(raw_chars))
+                if tag_stack and tag_stack[-1][0] == tag_name:
+                    open_tag, tag_start_idx = tag_stack.pop()
+                    tag_end_idx = current_char_len
                     span_text = "".join(raw_chars)[tag_start_idx:tag_end_idx]
                     spans.append(
                         {
@@ -280,8 +283,21 @@ def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
                             "text": span_text,
                         }
                     )
-                current_open_tag = None
-                tag_start_idx = -1
+                else:
+                    for s_idx in range(len(tag_stack) - 1, -1, -1):
+                        if tag_stack[s_idx][0] == tag_name:
+                            open_tag, tag_start_idx = tag_stack.pop(s_idx)
+                            tag_end_idx = current_char_len
+                            span_text = "".join(raw_chars)[tag_start_idx:tag_end_idx]
+                            spans.append(
+                                {
+                                    "start": tag_start_idx,
+                                    "end": tag_end_idx,
+                                    "label": tag_name,
+                                    "text": span_text,
+                                }
+                            )
+                            break
         else:
             # If it's an unallowed tag, treat it as literal text
             raw_chars.append(match.group(0))
@@ -592,16 +608,21 @@ def main():
                     # Parse XML
                     raw_text, spans = parse_xml_annotations(tagged_text)
 
-                    # Simple length validation (should be similar to original text)
-                    original_len = len(raw_ocr_text)
-                    stripped_len = len(raw_text)
-                    ratio = stripped_len / max(1, original_len)
+                    if not spans:
+                        print("  Warning: No valid entity spans parsed from LLM annotations.")
+                        continue
 
-                    if ratio < 0.85 or ratio > 1.15:
+                    # Text fidelity validation against original OCR content
+                    import difflib
+                    norm_orig = re.sub(r'\s+', ' ', raw_ocr_text).strip()
+                    norm_stripped = re.sub(r'\s+', ' ', raw_text).strip()
+                    similarity = difflib.SequenceMatcher(None, norm_orig, norm_stripped).ratio()
+
+                    if similarity < 0.92:
                         print(
-                            f"  Warning: Text mismatch detected (original: {original_len}, stripped: {stripped_len}, ratio: {ratio:.2f})."
+                            f"  Warning: Text mismatch detected (similarity: {similarity:.2%}, expected >= 92%). Retrying..."
                         )
-                        continue  # Trigger retry loop
+                        continue
                     
                     success = True
                     break  # Success, exit retry loop

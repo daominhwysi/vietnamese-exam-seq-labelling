@@ -1,0 +1,2370 @@
+{
+  "file_name": "official_english_exam_2025.txt",
+  "original_text_length": 19567,
+  "segments": [
+    {
+      "label": "section",
+      "start": 306,
+      "end": 458,
+      "text": "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from."
+    },
+    {
+      "label": "stimulus",
+      "start": 459,
+      "end": 1743,
+      "text": "The process of sorting through the various holidays on offer and determining which is the best for you is inevitably complex and individual personality traits will determine the eventual decision. Some people undertake a process of extensive problem solving, in which information is sought about a series of products, (1) ______. Other consumers with no patience to explore a variety of choices (2) ______ the sake of their convenience rather than trying to guarantee that they buy the best possible product. This is known as limited problem solving.\nMany consumers engage in routinised response behaviour, in which choices change relatively little over time. (3) ______. Also, some holidaymakers who have been content with a particular company or destination in the past may opt for the same experience again.\nFinally, some consumers will buy on impulse. (4) ______. It is, in fact, a pattern of behaviour that is becoming increasingly prevalent – to the dismay of the operators, who then have less scope for forward planning and reduced opportunities to gain from investing deposits in the short term, (5) ______, where ‘distressed stock’ needs to be cleared at short notice and this can be stimulated by late availability offers particularly.\n(Adapted from The business of tourism)"
+    },
+    {
+      "label": "question_label",
+      "start": 1744,
+      "end": 1755,
+      "text": "Question 1:"
+    },
+    {
+      "label": "option_label",
+      "start": 1756,
+      "end": 1758,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1758,
+      "end": 1836,
+      "text": " every one of them undergoes evaluations and comparisons with similar products"
+    },
+    {
+      "label": "option_label",
+      "start": 1837,
+      "end": 1839,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1839,
+      "end": 1922,
+      "text": " those with similarities to other products will be evaluated and compared carefully"
+    },
+    {
+      "label": "option_label",
+      "start": 1923,
+      "end": 1925,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1925,
+      "end": 1987,
+      "text": " each of which is evaluated and compared with similar products"
+    },
+    {
+      "label": "option_label",
+      "start": 1988,
+      "end": 1990,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1990,
+      "end": 2054,
+      "text": " when it is similarly evaluated and compared with other products"
+    },
+    {
+      "label": "question_label",
+      "start": 2055,
+      "end": 2066,
+      "text": "Question 2:"
+    },
+    {
+      "label": "option_label",
+      "start": 2067,
+      "end": 2069,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2069,
+      "end": 2134,
+      "text": " be deliberate to confine themselves to a small number of choices"
+    },
+    {
+      "label": "option_label",
+      "start": 2135,
+      "end": 2137,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2137,
+      "end": 2203,
+      "text": " will deliberately confine themselves to a small number of choices"
+    },
+    {
+      "label": "option_label",
+      "start": 2204,
+      "end": 2206,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2206,
+      "end": 2260,
+      "text": " fewer choices are deliberately confined to themselves"
+    },
+    {
+      "label": "option_label",
+      "start": 2261,
+      "end": 2263,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2263,
+      "end": 2319,
+      "text": " being deliberately confined themselves to fewer choices"
+    },
+    {
+      "label": "question_label",
+      "start": 2320,
+      "end": 2331,
+      "text": "Question 3:"
+    },
+    {
+      "label": "option_label",
+      "start": 2332,
+      "end": 2334,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2334,
+      "end": 2398,
+      "text": " Common brands, by contrast, are a pattern among loyal consumers"
+    },
+    {
+      "label": "option_label",
+      "start": 2399,
+      "end": 2401,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2401,
+      "end": 2467,
+      "text": " This is a common pattern among brand-loyal consumers, for example"
+    },
+    {
+      "label": "option_label",
+      "start": 2468,
+      "end": 2470,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2470,
+      "end": 2536,
+      "text": " By contrast, a consumer-loyal pattern is seen among common brands"
+    },
+    {
+      "label": "option_label",
+      "start": 2537,
+      "end": 2539,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2539,
+      "end": 2609,
+      "text": " This is a common example of brands with loyalty to a consumer pattern"
+    },
+    {
+      "label": "question_label",
+      "start": 2610,
+      "end": 2621,
+      "text": "Question 4:"
+    },
+    {
+      "label": "option_label",
+      "start": 2622,
+      "end": 2624,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2624,
+      "end": 2730,
+      "text": " While this is more typical of products costing little, it is by no means unknown among holiday purchasers"
+    },
+    {
+      "label": "option_label",
+      "start": 2731,
+      "end": 2733,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2733,
+      "end": 2841,
+      "text": " The products cost little, which means they are better known and more favoured by typical holiday purchasers"
+    },
+    {
+      "label": "option_label",
+      "start": 2842,
+      "end": 2844,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2844,
+      "end": 2948,
+      "text": " In the meantime, holidays costing little are known to be products typically favoured by many purchasers"
+    },
+    {
+      "label": "option_label",
+      "start": 2949,
+      "end": 2951,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2951,
+      "end": 3059,
+      "text": " It doesn't matter whether products are unknown, it is typical of purchasers to have holidays costing little"
+    },
+    {
+      "label": "question_label",
+      "start": 3060,
+      "end": 3071,
+      "text": "Question 5:"
+    },
+    {
+      "label": "option_label",
+      "start": 3072,
+      "end": 3074,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3074,
+      "end": 3136,
+      "text": " Though such trait of impulse purchasing proves to be valuable"
+    },
+    {
+      "label": "option_label",
+      "start": 3137,
+      "end": 3139,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3139,
+      "end": 3201,
+      "text": " Such impulse purchasing proves to be a valuable trait, though"
+    },
+    {
+      "label": "option_label",
+      "start": 3202,
+      "end": 3204,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3204,
+      "end": 3272,
+      "text": " So valuable is such purchasing trait that it proves to be impulsive"
+    },
+    {
+      "label": "option_label",
+      "start": 3273,
+      "end": 3275,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3275,
+      "end": 3346,
+      "text": " Such trait is so impulsive that it proves to be valuable to purchasers"
+    },
+    {
+      "label": "section",
+      "start": 3347,
+      "end": 3490,
+      "text": "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the best answer to each of the following questions"
+    },
+    {
+      "label": "stimulus",
+      "start": 3490,
+      "end": 5363,
+      "text": ".\nWhen several farmers merge plots into a single “project farm”, they use digital tools to make that teamwork far more effective. GPS mapping, drones, and in-field sensors build a live, shared picture of soil types, weather shifts, and plant growth. Because everyone works on the same data, the team can settle seeding dates, determine when to spray, and track machinery in real time. What once depended on guesswork is now driven by verifiable information.\nWith GPS technology, farmers can accurately map out their fields and create customised planting plans. Seeding machines change their rate on the fly, drones spray pests on targeted zones, and smart spreaders apply fertiliser only where data shows a need. Because inputs go exactly where they help, fields yield more while chemical input falls. This report considerable savings on seed, fuel, and sprays – benefits the partners split at the season’s end.\nWater management is just as precise. Specialised equipment tracks moisture every hour, and forecast apps predict rain, wind, or heatwaves. Automated pumps deliver measured water amounts to thirsty zones and stop when a storm is coming, slashing waste and energy bills. The result is steadier yields in dry years, fewer nutrients washed away, and a smaller water footprint for the whole partnership. Smart irrigation also helps limit weed growth, reducing herbicide use.\nThe journey from field to market is equally digital. Cloud platforms record harvest weights, storage temperatures, and shipment times the moment they change, while blockchain records freeze each entry so customers can rely on it. Analytic tools browse the records to indicate weak points in the procedure, forecast prices, and suggest better planting plans for the next season to project partners. This makes project farming both profitable and sustainable.\n(Adapted from consumersearch.com)"
+    },
+    {
+      "label": "question_label",
+      "start": 5364,
+      "end": 5375,
+      "text": "Question 6:"
+    },
+    {
+      "label": "stem",
+      "start": 5375,
+      "end": 5427,
+      "text": " The word settle in paragraph 1 mostly means ______."
+    },
+    {
+      "label": "option_label",
+      "start": 5428,
+      "end": 5430,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5430,
+      "end": 5437,
+      "text": " decide"
+    },
+    {
+      "label": "option_label",
+      "start": 5438,
+      "end": 5440,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5440,
+      "end": 5449,
+      "text": " exchange"
+    },
+    {
+      "label": "option_label",
+      "start": 5450,
+      "end": 5452,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5452,
+      "end": 5459,
+      "text": " expect"
+    },
+    {
+      "label": "option_label",
+      "start": 5460,
+      "end": 5462,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5462,
+      "end": 5471,
+      "text": " announce"
+    },
+    {
+      "label": "question_label",
+      "start": 5472,
+      "end": 5483,
+      "text": "Question 7:"
+    },
+    {
+      "label": "stem",
+      "start": 5483,
+      "end": 5590,
+      "text": " Which of the following is NOT mentioned in paragraph 1 as information displayed on a live, shared picture?"
+    },
+    {
+      "label": "option_label",
+      "start": 5591,
+      "end": 5593,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5593,
+      "end": 5608,
+      "text": " weather shifts"
+    },
+    {
+      "label": "option_label",
+      "start": 5609,
+      "end": 5611,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5611,
+      "end": 5622,
+      "text": " soil types"
+    },
+    {
+      "label": "option_label",
+      "start": 5623,
+      "end": 5625,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5625,
+      "end": 5632,
+      "text": " drones"
+    },
+    {
+      "label": "option_label",
+      "start": 5633,
+      "end": 5635,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5635,
+      "end": 5648,
+      "text": " plant growth"
+    },
+    {
+      "label": "question_label",
+      "start": 5649,
+      "end": 5660,
+      "text": "Question 8:"
+    },
+    {
+      "label": "stem",
+      "start": 5660,
+      "end": 5708,
+      "text": " The word their in paragraph 2 refers to ______."
+    },
+    {
+      "label": "option_label",
+      "start": 5709,
+      "end": 5711,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5711,
+      "end": 5718,
+      "text": " fields"
+    },
+    {
+      "label": "option_label",
+      "start": 5719,
+      "end": 5721,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5721,
+      "end": 5729,
+      "text": " farmers"
+    },
+    {
+      "label": "option_label",
+      "start": 5730,
+      "end": 5732,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5732,
+      "end": 5747,
+      "text": " planting plans"
+    },
+    {
+      "label": "option_label",
+      "start": 5748,
+      "end": 5750,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5750,
+      "end": 5767,
+      "text": " seeding machines"
+    },
+    {
+      "label": "question_label",
+      "start": 5768,
+      "end": 5779,
+      "text": "Question 9:"
+    },
+    {
+      "label": "stem",
+      "start": 5779,
+      "end": 5859,
+      "text": " Which of the following best paraphrases the underlined sentence in paragraph 2?"
+    },
+    {
+      "label": "option_label",
+      "start": 5860,
+      "end": 5862,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5862,
+      "end": 5981,
+      "text": " As resources are directed to the areas that need them, harvests increase and pollution from excess chemicals declines."
+    },
+    {
+      "label": "option_label",
+      "start": 5982,
+      "end": 5984,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5984,
+      "end": 6094,
+      "text": " When chemicals are placed only where they are needed, productivity increases yet more chemicals are released."
+    },
+    {
+      "label": "option_label",
+      "start": 6095,
+      "end": 6097,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 6097,
+      "end": 6220,
+      "text": " Precise application of fertilisers and sprays to required areas raises crop output but in turn increases chemical wastage."
+    },
+    {
+      "label": "option_label",
+      "start": 6221,
+      "end": 6223,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 6223,
+      "end": 6341,
+      "text": " There is an increase in chemical wastage and crop output though fewer resources are used for the indicated land area."
+    },
+    {
+      "label": "question_label",
+      "start": 6342,
+      "end": 6354,
+      "text": "Question 10:"
+    },
+    {
+      "label": "stem",
+      "start": 6354,
+      "end": 6421,
+      "text": " The word slashing in paragraph 3 is OPPOSITE in meaning to ______."
+    },
+    {
+      "label": "option_label",
+      "start": 6422,
+      "end": 6424,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 6424,
+      "end": 6434,
+      "text": " disposing"
+    },
+    {
+      "label": "option_label",
+      "start": 6435,
+      "end": 6437,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 6437,
+      "end": 6448,
+      "text": " increasing"
+    },
+    {
+      "label": "option_label",
+      "start": 6449,
+      "end": 6451,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 6451,
+      "end": 6462,
+      "text": " converting"
+    },
+    {
+      "label": "option_label",
+      "start": 6463,
+      "end": 6465,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 6465,
+      "end": 6474,
+      "text": " reducing"
+    },
+    {
+      "label": "question_label",
+      "start": 6475,
+      "end": 6487,
+      "text": "Question 11:"
+    },
+    {
+      "label": "stem",
+      "start": 6487,
+      "end": 6544,
+      "text": " Which of the following is TRUE according to the passage?"
+    },
+    {
+      "label": "option_label",
+      "start": 6545,
+      "end": 6547,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 6547,
+      "end": 6632,
+      "text": " Analytic tools offer suggestions for better planting plans for the following season."
+    },
+    {
+      "label": "option_label",
+      "start": 6633,
+      "end": 6635,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 6635,
+      "end": 6720,
+      "text": " Buyers have little reliable information on harvest weights and storage temperatures."
+    },
+    {
+      "label": "option_label",
+      "start": 6721,
+      "end": 6723,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 6723,
+      "end": 6808,
+      "text": " Farmers regard cloud platforms the best tools to improve the quality of their crops."
+    },
+    {
+      "label": "option_label",
+      "start": 6809,
+      "end": 6811,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 6811,
+      "end": 6892,
+      "text": " Project partners are unable to forecast prices of crops in the following season."
+    },
+    {
+      "label": "question_label",
+      "start": 6893,
+      "end": 6905,
+      "text": "Question 12:"
+    },
+    {
+      "label": "stem",
+      "start": 6905,
+      "end": 6972,
+      "text": " Which paragraph mentions approaches to different weather patterns?"
+    },
+    {
+      "label": "option_label",
+      "start": 6973,
+      "end": 6975,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 6975,
+      "end": 6987,
+      "text": " Paragraph 2"
+    },
+    {
+      "label": "option_label",
+      "start": 6988,
+      "end": 6990,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 6990,
+      "end": 7002,
+      "text": " Paragraph 3"
+    },
+    {
+      "label": "option_label",
+      "start": 7003,
+      "end": 7005,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 7005,
+      "end": 7017,
+      "text": " Paragraph 1"
+    },
+    {
+      "label": "option_label",
+      "start": 7018,
+      "end": 7020,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 7020,
+      "end": 7032,
+      "text": " Paragraph 4"
+    },
+    {
+      "label": "question_label",
+      "start": 7033,
+      "end": 7045,
+      "text": "Question 13:"
+    },
+    {
+      "label": "stem",
+      "start": 7045,
+      "end": 7101,
+      "text": " Which paragraph mentions real-time tracking of produce?"
+    },
+    {
+      "label": "option_label",
+      "start": 7102,
+      "end": 7104,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 7104,
+      "end": 7116,
+      "text": " Paragraph 2"
+    },
+    {
+      "label": "option_label",
+      "start": 7117,
+      "end": 7119,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 7119,
+      "end": 7131,
+      "text": " Paragraph 3"
+    },
+    {
+      "label": "option_label",
+      "start": 7132,
+      "end": 7134,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 7134,
+      "end": 7146,
+      "text": " Paragraph 1"
+    },
+    {
+      "label": "option_label",
+      "start": 7147,
+      "end": 7149,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 7149,
+      "end": 7161,
+      "text": " Paragraph 4"
+    },
+    {
+      "label": "section",
+      "start": 7162,
+      "end": 7329,
+      "text": "Read the following piece of news and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 14 to 19."
+    },
+    {
+      "label": "stimulus",
+      "start": 7330,
+      "end": 8247,
+      "text": "Da Nang International Fireworks Festival (DIFF) 2025\nWith ten teams worldwide, DIFF 2025 features the largest (14) ______ of participating teams in its history, and is predicted to be the most thrilling (15) ______ so far.\nZ121 Vina Pyrotech, a company (16) ______ by Vietnam Ministry of National Defence, is a newcomer this year. With thirty years of experience in fireworks, Z121 Vina Pyrotech is expected to deliver a breathtaking performance. It is among the (17) ______ candidates to win the championship.\nFrom May 31st to July 12th, DIFF 2025 promises a series of spectacular fireworks displays, (18) ______ is hoped to bring spectators a world-class entertainment experience.\nOver the past twelve years, the Da Nang International Fireworks Festival has helped the city (19) ______ the reputation as \"The City of Fireworks\" and become an attractive tourist destination.\n(Adapted from https://www.vietnamnews.vn)"
+    },
+    {
+      "label": "question_label",
+      "start": 8248,
+      "end": 8260,
+      "text": "Question 14."
+    },
+    {
+      "label": "option_label",
+      "start": 8260,
+      "end": 8263,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 8263,
+      "end": 8270,
+      "text": " number"
+    },
+    {
+      "label": "option_label",
+      "start": 8272,
+      "end": 8274,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8274,
+      "end": 8281,
+      "text": " volume"
+    },
+    {
+      "label": "option_label",
+      "start": 8283,
+      "end": 8285,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8285,
+      "end": 8292,
+      "text": " amount"
+    },
+    {
+      "label": "option_label",
+      "start": 8293,
+      "end": 8295,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8295,
+      "end": 8301,
+      "text": " level"
+    },
+    {
+      "label": "question_label",
+      "start": 8302,
+      "end": 8314,
+      "text": "Question 15."
+    },
+    {
+      "label": "option_label",
+      "start": 8314,
+      "end": 8317,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 8317,
+      "end": 8325,
+      "text": " compete"
+    },
+    {
+      "label": "option_label",
+      "start": 8327,
+      "end": 8329,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8329,
+      "end": 8343,
+      "text": " competitively"
+    },
+    {
+      "label": "option_label",
+      "start": 8345,
+      "end": 8347,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8347,
+      "end": 8359,
+      "text": " competitive"
+    },
+    {
+      "label": "option_label",
+      "start": 8361,
+      "end": 8363,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8363,
+      "end": 8375,
+      "text": " competition"
+    },
+    {
+      "label": "question_label",
+      "start": 8376,
+      "end": 8388,
+      "text": "Question 16."
+    },
+    {
+      "label": "option_label",
+      "start": 8388,
+      "end": 8391,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 8391,
+      "end": 8400,
+      "text": " managing"
+    },
+    {
+      "label": "option_label",
+      "start": 8402,
+      "end": 8404,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8404,
+      "end": 8416,
+      "text": " is managing"
+    },
+    {
+      "label": "option_label",
+      "start": 8418,
+      "end": 8420,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8420,
+      "end": 8432,
+      "text": " has managed"
+    },
+    {
+      "label": "option_label",
+      "start": 8434,
+      "end": 8436,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8436,
+      "end": 8444,
+      "text": " managed"
+    },
+    {
+      "label": "question_label",
+      "start": 8445,
+      "end": 8457,
+      "text": "Question 17."
+    },
+    {
+      "label": "option_label",
+      "start": 8457,
+      "end": 8460,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 8460,
+      "end": 8465,
+      "text": " high"
+    },
+    {
+      "label": "option_label",
+      "start": 8467,
+      "end": 8469,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8469,
+      "end": 8473,
+      "text": " top"
+    },
+    {
+      "label": "option_label",
+      "start": 8475,
+      "end": 8477,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8477,
+      "end": 8483,
+      "text": " smart"
+    },
+    {
+      "label": "option_label",
+      "start": 8484,
+      "end": 8486,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8486,
+      "end": 8492,
+      "text": " quick"
+    },
+    {
+      "label": "question_label",
+      "start": 8493,
+      "end": 8505,
+      "text": "Question 18."
+    },
+    {
+      "label": "option_label",
+      "start": 8505,
+      "end": 8508,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 8508,
+      "end": 8512,
+      "text": " who"
+    },
+    {
+      "label": "option_label",
+      "start": 8514,
+      "end": 8516,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8516,
+      "end": 8520,
+      "text": " why"
+    },
+    {
+      "label": "option_label",
+      "start": 8522,
+      "end": 8524,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8524,
+      "end": 8530,
+      "text": " which"
+    },
+    {
+      "label": "option_label",
+      "start": 8532,
+      "end": 8534,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8534,
+      "end": 8539,
+      "text": " when"
+    },
+    {
+      "label": "question_label",
+      "start": 8540,
+      "end": 8552,
+      "text": "Question 19."
+    },
+    {
+      "label": "option_label",
+      "start": 8552,
+      "end": 8555,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 8555,
+      "end": 8563,
+      "text": " come up"
+    },
+    {
+      "label": "option_label",
+      "start": 8565,
+      "end": 8567,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8567,
+      "end": 8576,
+      "text": " build up"
+    },
+    {
+      "label": "option_label",
+      "start": 8578,
+      "end": 8580,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8580,
+      "end": 8588,
+      "text": " look up"
+    },
+    {
+      "label": "option_label",
+      "start": 8590,
+      "end": 8592,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8592,
+      "end": 8598,
+      "text": " go up"
+    },
+    {
+      "label": "section",
+      "start": 8599,
+      "end": 8760,
+      "text": "Read the following leaflet and mark the letter A, B, C or D on your answer sheet to indicate the option that best fits each of the numbered blanks from 20 to 25."
+    },
+    {
+      "label": "stimulus",
+      "start": 8761,
+      "end": 9514,
+      "text": "How to Manage Your Money Wisely?\nManaging your finances properly is essential for a stable and secure life. (20) ______ many people struggle with budgeting and saving and give up their financial plans sooner or later, eventually leading (21) ______ overspending and financial stress. Here are some tips to well manage your pocket:\nInvest some of your money if possible.\nHave a bank account with an increasing amount of savings (22) by setting realistic financial goals.\nBuy (23) ______ within your price range.\nTrack your spending carefully to avoid (24) ______ expenditure on unnecessary purchases.\nPrioritise things that bring you lasting happiness and financial security to get your money's (25) ______!\n(Adapted from https://www.thebalancemoney.com)"
+    },
+    {
+      "label": "question_label",
+      "start": 9515,
+      "end": 9527,
+      "text": "Question 20."
+    },
+    {
+      "label": "option_label",
+      "start": 9527,
+      "end": 9530,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 9530,
+      "end": 9538,
+      "text": " However"
+    },
+    {
+      "label": "option_label",
+      "start": 9540,
+      "end": 9542,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 9542,
+      "end": 9548,
+      "text": " While"
+    },
+    {
+      "label": "option_label",
+      "start": 9550,
+      "end": 9552,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 9552,
+      "end": 9559,
+      "text": " Though"
+    },
+    {
+      "label": "option_label",
+      "start": 9561,
+      "end": 9563,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 9563,
+      "end": 9573,
+      "text": " Otherwise"
+    },
+    {
+      "label": "question_label",
+      "start": 9574,
+      "end": 9586,
+      "text": "Question 21."
+    },
+    {
+      "label": "option_label",
+      "start": 9586,
+      "end": 9589,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 9589,
+      "end": 9592,
+      "text": " in"
+    },
+    {
+      "label": "option_label",
+      "start": 9594,
+      "end": 9596,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 9596,
+      "end": 9599,
+      "text": " to"
+    },
+    {
+      "label": "option_label",
+      "start": 9601,
+      "end": 9603,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 9603,
+      "end": 9606,
+      "text": " on"
+    },
+    {
+      "label": "option_label",
+      "start": 9608,
+      "end": 9610,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 9610,
+      "end": 9613,
+      "text": " at"
+    },
+    {
+      "label": "question_label",
+      "start": 9614,
+      "end": 9626,
+      "text": "Question 22."
+    },
+    {
+      "label": "option_label",
+      "start": 9626,
+      "end": 9629,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 9629,
+      "end": 9634,
+      "text": " much"
+    },
+    {
+      "label": "option_label",
+      "start": 9636,
+      "end": 9638,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 9638,
+      "end": 9643,
+      "text": " many"
+    },
+    {
+      "label": "option_label",
+      "start": 9645,
+      "end": 9647,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 9647,
+      "end": 9652,
+      "text": " each"
+    },
+    {
+      "label": "option_label",
+      "start": 9654,
+      "end": 9656,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 9656,
+      "end": 9661,
+      "text": " some"
+    },
+    {
+      "label": "question_label",
+      "start": 9662,
+      "end": 9674,
+      "text": "Question 23."
+    },
+    {
+      "label": "option_label",
+      "start": 9674,
+      "end": 9677,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 9677,
+      "end": 9705,
+      "text": " products quality affordable"
+    },
+    {
+      "label": "option_label",
+      "start": 9707,
+      "end": 9709,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 9709,
+      "end": 9737,
+      "text": " affordable quality products"
+    },
+    {
+      "label": "option_label",
+      "start": 9738,
+      "end": 9740,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 9740,
+      "end": 9768,
+      "text": " affordable products quality"
+    },
+    {
+      "label": "option_label",
+      "start": 9770,
+      "end": 9772,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 9772,
+      "end": 9800,
+      "text": " products affordable quality"
+    },
+    {
+      "label": "question_label",
+      "start": 9801,
+      "end": 9813,
+      "text": "Question 24."
+    },
+    {
+      "label": "option_label",
+      "start": 9813,
+      "end": 9816,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 9816,
+      "end": 9828,
+      "text": " restrictive"
+    },
+    {
+      "label": "option_label",
+      "start": 9830,
+      "end": 9832,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 9832,
+      "end": 9842,
+      "text": " objective"
+    },
+    {
+      "label": "option_label",
+      "start": 9844,
+      "end": 9846,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 9846,
+      "end": 9856,
+      "text": " excessive"
+    },
+    {
+      "label": "option_label",
+      "start": 9858,
+      "end": 9860,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 9860,
+      "end": 9871,
+      "text": " possessive"
+    },
+    {
+      "label": "question_label",
+      "start": 9872,
+      "end": 9884,
+      "text": "Question 25."
+    },
+    {
+      "label": "option_label",
+      "start": 9884,
+      "end": 9887,
+      "text": " A."
+    },
+    {
+      "label": "option_text",
+      "start": 9887,
+      "end": 9893,
+      "text": " worth"
+    },
+    {
+      "label": "option_label",
+      "start": 9895,
+      "end": 9897,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 9897,
+      "end": 9903,
+      "text": " price"
+    },
+    {
+      "label": "option_label",
+      "start": 9905,
+      "end": 9907,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 9907,
+      "end": 9912,
+      "text": " rate"
+    },
+    {
+      "label": "option_label",
+      "start": 9914,
+      "end": 9916,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 9916,
+      "end": 9921,
+      "text": " cost"
+    },
+    {
+      "label": "section",
+      "start": 9922,
+      "end": 10066,
+      "text": "Read the following passage and mark the letter A, B, C or D on your answer sheet to indicate the best answer to each of the following questions."
+    },
+    {
+      "label": "stimulus",
+      "start": 10067,
+      "end": 12548,
+      "text": "We seem to be entering a boom era for greenwashing — the tactic of covering routine pollution in eco-friendly language. [I] Picture running a high-emitting corporation: meaningful decarbonisation would demand painful expenses, huge infrastructural outlays, and a full redesign of the business model. Hiring an expert agency to splash “carbon-neutral” slogans across its products is far easier, buying time while emissions remain untouched.\nConsumers must see this sleight of hand everywhere. Airlines sell “carbon-neutral” flights, filling stations boast about “climate-friendly” petrol, and even breakfast bacon is re-labelled as breakfast planet-safe. Advertising spin is old, yet today it is manipulated to amplify the sense of environmental damage. Social media influencers and glossy sustainability reports amplify these greenwashed claims far beyond traditional marketing channels.\nThe term greenwashing emerged in the 1980s, an era of oil spills and growing climate science, but the practice has acquired new traction. [II] Intensifying public anxiety over global heating and ecosystem collapse has placed companies under sharp scrutiny; many boards therefore choose eye-catching PR over the tougher route of restructuring supply chains, energy sources, and product lines. Regulators on both sides of the Atlantic are struggling to police false eco-claims, yet enforcement still lags behind corporate ingenuity. Investors, eager to protect short-term returns, frequently applaud these surface-level initiatives, reinforcing the cycle. [III] No sector illustrates the issue better than oil and gas. Having realised that denying climate science now backfires, the industry has swapped denial for “green” paint. Press releases trumpet potential renewable ventures while drilling plans expand unabated.\nWhy does this matter? Greenwashing and climate denial share a core objective: to postpone the deep emission cuts claimed by scientists as urgent this decade. [IV] Whereas denial disputes the crisis, greenwashing misleads the public into believing problems are solved, thereby eroding consumer advocacy of genuine environmental actions and stalling regulatory reforms. In effect, it acts as a soothing lullaby, guiding society ever closer to ecological breakdown while fostering a false sense of progress. Exposing the facade – and insisting on verifiable, measurable carbon reductions – is essential if rhetoric is to give way to real action.\n(Adapted from greenpeace.org.uk)"
+    },
+    {
+      "label": "question_label",
+      "start": 12549,
+      "end": 12561,
+      "text": "Question 26:"
+    },
+    {
+      "label": "stem",
+      "start": 12561,
+      "end": 12690,
+      "text": " According to paragraph 1, having products claimed as eco-friendly rather than conducting meaningful decarbonisation will ______."
+    },
+    {
+      "label": "option_label",
+      "start": 12691,
+      "end": 12693,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 12693,
+      "end": 12753,
+      "text": " lead to delays without solving the current emission problem"
+    },
+    {
+      "label": "option_label",
+      "start": 12754,
+      "end": 12756,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 12756,
+      "end": 12814,
+      "text": " involve spending a huge amount of money paying the agency"
+    },
+    {
+      "label": "option_label",
+      "start": 12815,
+      "end": 12817,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 12817,
+      "end": 12880,
+      "text": " bring about a full redesign of the business model of a company"
+    },
+    {
+      "label": "option_label",
+      "start": 12881,
+      "end": 12883,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 12883,
+      "end": 12944,
+      "text": " cause physical injuries to those involved in the negotiation"
+    },
+    {
+      "label": "question_label",
+      "start": 12945,
+      "end": 12957,
+      "text": "Question 27:"
+    },
+    {
+      "label": "stem",
+      "start": 12957,
+      "end": 13013,
+      "text": " The word manipulated in paragraph 2 mostly means ______"
+    },
+    {
+      "label": "option_label",
+      "start": 13014,
+      "end": 13016,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 13016,
+      "end": 13034,
+      "text": " randomly deployed"
+    },
+    {
+      "label": "option_label",
+      "start": 13035,
+      "end": 13037,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 13037,
+      "end": 13056,
+      "text": " purposely adjusted"
+    },
+    {
+      "label": "option_label",
+      "start": 13057,
+      "end": 13059,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 13059,
+      "end": 13076,
+      "text": " hastily produced"
+    },
+    {
+      "label": "option_label",
+      "start": 13077,
+      "end": 13079,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 13079,
+      "end": 13097,
+      "text": " legally regulated"
+    },
+    {
+      "label": "question_label",
+      "start": 13098,
+      "end": 13110,
+      "text": "Question 28:"
+    },
+    {
+      "label": "stem",
+      "start": 13110,
+      "end": 13162,
+      "text": " Which of the following best summarises paragraph 2?"
+    },
+    {
+      "label": "option_label",
+      "start": 13163,
+      "end": 13165,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 13165,
+      "end": 13289,
+      "text": " Social media influencers and impressive reports have a role to play in the dissemination of deceptive environmental claims."
+    },
+    {
+      "label": "option_label",
+      "start": 13290,
+      "end": 13292,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 13292,
+      "end": 13410,
+      "text": " Sustainability buzzwords now fill every sector, with their reach being amplified by influencers and polished reports."
+    },
+    {
+      "label": "option_label",
+      "start": 13411,
+      "end": 13413,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 13413,
+      "end": 13548,
+      "text": " The stories about greenwashing reach a much wider audience due to the joint effort of social media and traditional marketing channels."
+    },
+    {
+      "label": "option_label",
+      "start": 13549,
+      "end": 13551,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 13551,
+      "end": 13714,
+      "text": " Commercials for everyday products and services, ranging from holiday bookings to petrol pumps and bacon packs, are prevalent on unconventional marketing channels."
+    },
+    {
+      "label": "question_label",
+      "start": 13715,
+      "end": 13727,
+      "text": "Question 29:"
+    },
+    {
+      "label": "stem",
+      "start": 13727,
+      "end": 13779,
+      "text": " What causes corporate boards to adopt greenwashing?"
+    },
+    {
+      "label": "option_label",
+      "start": 13780,
+      "end": 13782,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 13782,
+      "end": 13835,
+      "text": " Public belief that carbon reductions are unnecessary"
+    },
+    {
+      "label": "option_label",
+      "start": 13836,
+      "end": 13838,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 13838,
+      "end": 13894,
+      "text": " Public pressure on corporations to opt for PR campaigns"
+    },
+    {
+      "label": "option_label",
+      "start": 13895,
+      "end": 13897,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 13897,
+      "end": 13959,
+      "text": " Growing public interest in the development of climate science"
+    },
+    {
+      "label": "option_label",
+      "start": 13960,
+      "end": 13962,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 13962,
+      "end": 14015,
+      "text": " Increasing public concern about environmental issues"
+    },
+    {
+      "label": "question_label",
+      "start": 14016,
+      "end": 14028,
+      "text": "Question 30:"
+    },
+    {
+      "label": "stem",
+      "start": 14028,
+      "end": 14097,
+      "text": " What challenge do regulators face in monitoring greenwashing claims?"
+    },
+    {
+      "label": "option_label",
+      "start": 14098,
+      "end": 14100,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 14100,
+      "end": 14128,
+      "text": " Insufficient public support"
+    },
+    {
+      "label": "option_label",
+      "start": 14131,
+      "end": 14133,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 14133,
+      "end": 14180,
+      "text": " Conflicting laws on both sides of the Atlantic"
+    },
+    {
+      "label": "option_label",
+      "start": 14181,
+      "end": 14183,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 14183,
+      "end": 14209,
+      "text": " Lack of clear terminology"
+    },
+    {
+      "label": "option_label",
+      "start": 14211,
+      "end": 14213,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 14213,
+      "end": 14264,
+      "text": " Enforcement that falls behind corporate creativity"
+    },
+    {
+      "label": "question_label",
+      "start": 14265,
+      "end": 14277,
+      "text": "Question 31:"
+    },
+    {
+      "label": "stem",
+      "start": 14277,
+      "end": 14333,
+      "text": " The phrase the practice in paragraph 3 refers to ______"
+    },
+    {
+      "label": "option_label",
+      "start": 14334,
+      "end": 14336,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 14336,
+      "end": 14351,
+      "text": " global heating"
+    },
+    {
+      "label": "option_label",
+      "start": 14352,
+      "end": 14354,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 14354,
+      "end": 14363,
+      "text": " scrutiny"
+    },
+    {
+      "label": "option_label",
+      "start": 14364,
+      "end": 14366,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 14366,
+      "end": 14379,
+      "text": " greenwashing"
+    },
+    {
+      "label": "option_label",
+      "start": 14380,
+      "end": 14382,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 14382,
+      "end": 14398,
+      "text": " climate science"
+    },
+    {
+      "label": "question_label",
+      "start": 14399,
+      "end": 14411,
+      "text": "Question 32:"
+    },
+    {
+      "label": "stem",
+      "start": 14411,
+      "end": 14491,
+      "text": " Which of the following best paraphrases the underlined sentence in paragraph 4?"
+    },
+    {
+      "label": "option_label",
+      "start": 14492,
+      "end": 14494,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 14494,
+      "end": 14627,
+      "text": " To make way for meaningful activities in reality, it is vital to expose the public to proper and specific measures to reduce carbon."
+    },
+    {
+      "label": "option_label",
+      "start": 14628,
+      "end": 14630,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 14630,
+      "end": 14761,
+      "text": " Greenwashing is, in fact, a fallacy and therefore should be replaced by feasible actions which are encouraged by public movements."
+    },
+    {
+      "label": "option_label",
+      "start": 14762,
+      "end": 14764,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 14764,
+      "end": 14907,
+      "text": " The real solution to the issue of carbon is to verify and measure carbon reductions rather than just raise public awareness through campaigns."
+    },
+    {
+      "label": "option_label",
+      "start": 14908,
+      "end": 14910,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 14910,
+      "end": 15040,
+      "text": " For empty slogans to be realised into moves, revelations about greenwashing and practical measures to reduce carbon are required."
+    },
+    {
+      "label": "question_label",
+      "start": 15041,
+      "end": 15053,
+      "text": "Question 33:"
+    },
+    {
+      "label": "stem",
+      "start": 15053,
+      "end": 15110,
+      "text": " Which of the following can be inferred from the passage?"
+    },
+    {
+      "label": "option_label",
+      "start": 15111,
+      "end": 15113,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 15113,
+      "end": 15235,
+      "text": " Investors who value long-term environmental impact put pressure on companies to implement substantial structural reforms."
+    },
+    {
+      "label": "option_label",
+      "start": 15236,
+      "end": 15238,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 15238,
+      "end": 15372,
+      "text": " The shift from denying climate science to applying \"green\" paint reflects high-emitting industries' genuine commitment to renewables."
+    },
+    {
+      "label": "option_label",
+      "start": 15373,
+      "end": 15375,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 15375,
+      "end": 15500,
+      "text": " Greenwashing brings corporations benefits in terms of finance and reputation without having to reform their core operations."
+    },
+    {
+      "label": "option_label",
+      "start": 15501,
+      "end": 15503,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 15503,
+      "end": 15641,
+      "text": " Regulators are effectively utilising the tools and resources to verify most environmental claims, tackling the wide spread of eco-labels."
+    },
+    {
+      "label": "question_label",
+      "start": 15642,
+      "end": 15654,
+      "text": "Question 34:"
+    },
+    {
+      "label": "stem",
+      "start": 15654,
+      "end": 15758,
+      "text": " Where in the passage does the following sentence best fit?\nYet greenwashing is arguably more insidious."
+    },
+    {
+      "label": "option_label",
+      "start": 15759,
+      "end": 15761,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 15761,
+      "end": 15766,
+      "text": " [II]"
+    },
+    {
+      "label": "option_label",
+      "start": 15767,
+      "end": 15769,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 15769,
+      "end": 15774,
+      "text": " [IV]"
+    },
+    {
+      "label": "option_label",
+      "start": 15775,
+      "end": 15777,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 15777,
+      "end": 15783,
+      "text": " [III]"
+    },
+    {
+      "label": "option_label",
+      "start": 15784,
+      "end": 15786,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 15786,
+      "end": 15790,
+      "text": " [I]"
+    },
+    {
+      "label": "question_label",
+      "start": 15791,
+      "end": 15803,
+      "text": "Question 35:"
+    },
+    {
+      "label": "stem",
+      "start": 15803,
+      "end": 15855,
+      "text": " Which of the following best summarises the passage?"
+    },
+    {
+      "label": "option_label",
+      "start": 15856,
+      "end": 15858,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 15858,
+      "end": 16028,
+      "text": " Instead of investing in meaningful decarbonisation, major emitters have a tendency to opt for denying the claim of “carbon-neutral” or “net-zero” on their product lines."
+    },
+    {
+      "label": "option_label",
+      "start": 16029,
+      "end": 16031,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 16031,
+      "end": 16188,
+      "text": " Once a prevalent strategy of corporations in response to public scrutiny, climate denial is losing its effectiveness and has to be replaced by greenwashing."
+    },
+    {
+      "label": "option_label",
+      "start": 16189,
+      "end": 16191,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 16191,
+      "end": 16358,
+      "text": " High-emitting sectors follow the trend of greenwashing, boasting about promising renewable ventures in press releases while quietly going on damaging the environment."
+    },
+    {
+      "label": "option_label",
+      "start": 16359,
+      "end": 16361,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 16361,
+      "end": 16529,
+      "text": " Greenwashing is surging as firms cover ongoing pollution in eco-friendly rhetoric, distracting the public and postponing the deep emission cuts scientists deem urgent."
+    },
+    {
+      "label": "section",
+      "start": 16530,
+      "end": 16738,
+      "text": "Mark the letter A, B, C or D on your answer sheet to indicate the best arrangement of utterances or sentences to make a cohesive and coherent exchange or text in each of the following questions from 36 to 40."
+    },
+    {
+      "label": "question_label",
+      "start": 16739,
+      "end": 16751,
+      "text": "Question 36."
+    },
+    {
+      "label": "stem",
+      "start": 16752,
+      "end": 16945,
+      "text": "a. Tom: Then, text me when you’re home.\nb. Tom: It’s getting late. Would you like me to give you a lift home?\nc. Mary: Thanks, but I’m going to walk to the supermarket and then take a bus home."
+    },
+    {
+      "label": "option_label",
+      "start": 16946,
+      "end": 16948,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 16948,
+      "end": 16954,
+      "text": " a-b-c"
+    },
+    {
+      "label": "option_label",
+      "start": 16955,
+      "end": 16957,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 16957,
+      "end": 16963,
+      "text": " b-c-a"
+    },
+    {
+      "label": "option_label",
+      "start": 16964,
+      "end": 16966,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 16966,
+      "end": 16972,
+      "text": " a-c-b"
+    },
+    {
+      "label": "option_label",
+      "start": 16973,
+      "end": 16975,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 16975,
+      "end": 16981,
+      "text": " b-a-c"
+    },
+    {
+      "label": "question_label",
+      "start": 16982,
+      "end": 16994,
+      "text": "Question 37."
+    },
+    {
+      "label": "stem",
+      "start": 16995,
+      "end": 17348,
+      "text": "a. David: I used to, but now I use social media and news apps.\nb. Lisa: Same here! It’s more convenient, but I think traditional newspapers have their own charm.\nc. Lisa: Do you still read newspapers?\nd. Lisa: I believe each type has its own value that we can make full use of.\ne. David: You’re right. They fill us with nostalgia that’s hard to replace."
+    },
+    {
+      "label": "option_label",
+      "start": 17349,
+      "end": 17351,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 17351,
+      "end": 17361,
+      "text": " d-a-c-e-b"
+    },
+    {
+      "label": "option_label",
+      "start": 17362,
+      "end": 17364,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 17364,
+      "end": 17374,
+      "text": " c-a-b-e-d"
+    },
+    {
+      "label": "option_label",
+      "start": 17375,
+      "end": 17377,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 17377,
+      "end": 17388,
+      "text": " c-e-d-a- b"
+    },
+    {
+      "label": "option_label",
+      "start": 17389,
+      "end": 17391,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 17391,
+      "end": 17401,
+      "text": " d-e-b-a-c"
+    },
+    {
+      "label": "question_label",
+      "start": 17402,
+      "end": 17414,
+      "text": "Question 38."
+    },
+    {
+      "label": "stem",
+      "start": 17414,
+      "end": 17948,
+      "text": " Dear Ms Smith,\na. This has been pre-approved, but you need to have this letter and your identification card produced at the nearest branch to apply.\nb. The offer is exclusive and expires on December 31st.\nc. Your application will be processed, and your card will be issued within 48 hours for immediate use.\nd. It is our honour to offer you credit facilities of $6000, affordable with the monthly instalment of $99.\ne. Should you require further details, please call 012388888, or visit any of our branches.\nYours sincerely,\nABC Bank"
+    },
+    {
+      "label": "option_label",
+      "start": 17949,
+      "end": 17951,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 17951,
+      "end": 17962,
+      "text": " d-a-c-b-e."
+    },
+    {
+      "label": "option_label",
+      "start": 17963,
+      "end": 17965,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 17965,
+      "end": 17975,
+      "text": " a-c-d-b-e"
+    },
+    {
+      "label": "option_label",
+      "start": 17976,
+      "end": 17978,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 17978,
+      "end": 17988,
+      "text": " b-d-a-c-e"
+    },
+    {
+      "label": "option_label",
+      "start": 17989,
+      "end": 17991,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 17991,
+      "end": 18001,
+      "text": " c-a-d-b-e"
+    },
+    {
+      "label": "question_label",
+      "start": 18002,
+      "end": 18014,
+      "text": "Question 39."
+    },
+    {
+      "label": "stem",
+      "start": 18015,
+      "end": 18878,
+      "text": "a. The developments demonstrate a clear modernisation of the city of Paragon, transforming it from a primarily residential locality into a more diverse and economically vibrant area.\nb. This shift was further evidenced by the industrialisation of the surrounding agricultural land, with the appearance of some plants and factories.\nc. Residential areas were noticeably transformed, with the replacement of established terraced housing with new dwellings and the relocation of the original park.\nd. Simultaneously, a significant expansion of commercial infrastructure took place, most prominently with the construction of a large supermarket and an accompanying car park where housing once stood.\ne. Between 2000 and 2015, the outskirts of Paragon city underwent a dramatic reshaping, indicating a move towards urban regeneration and increased commercial activity."
+    },
+    {
+      "label": "option_label",
+      "start": 18879,
+      "end": 18881,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 18881,
+      "end": 18891,
+      "text": " e-c-d-b-a"
+    },
+    {
+      "label": "option_label",
+      "start": 18892,
+      "end": 18894,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 18894,
+      "end": 18904,
+      "text": " e-c-a-d-b"
+    },
+    {
+      "label": "option_label",
+      "start": 18905,
+      "end": 18907,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 18907,
+      "end": 18917,
+      "text": " e-d-b-a-c"
+    },
+    {
+      "label": "option_label",
+      "start": 18918,
+      "end": 18920,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 18920,
+      "end": 18930,
+      "text": " e-b-a-c-d"
+    },
+    {
+      "label": "question_label",
+      "start": 18931,
+      "end": 18943,
+      "text": "Question 40."
+    },
+    {
+      "label": "stem",
+      "start": 18944,
+      "end": 19513,
+      "text": "a. I had to burn the midnight oil to make engaging lesson plans, expecting to capture my students’ attention.\nb. The reality, however, was not what I had expected when I completely failed to keep the class under control despite shouting loudly.\nc. This valuable experience was indeed memorable and made me more confident in my career of choice.\nd. Working as an intern at a local high school encouraged me to pursue a teaching career, a demanding yet rewarding one.\ne. Instead of giving up, I reflected on what I had done and made improvements in the following lessons."
+    },
+    {
+      "label": "option_label",
+      "start": 19514,
+      "end": 19516,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 19516,
+      "end": 19526,
+      "text": " d-b-e-c-a"
+    },
+    {
+      "label": "option_label",
+      "start": 19527,
+      "end": 19529,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 19529,
+      "end": 19539,
+      "text": " d-a-b-e-c"
+    },
+    {
+      "label": "option_label",
+      "start": 19540,
+      "end": 19542,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 19542,
+      "end": 19552,
+      "text": " c-b-e-a-d"
+    },
+    {
+      "label": "option_label",
+      "start": 19553,
+      "end": 19555,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 19555,
+      "end": 19565,
+      "text": " c-a-e-d-b"
+    }
+  ]
+}

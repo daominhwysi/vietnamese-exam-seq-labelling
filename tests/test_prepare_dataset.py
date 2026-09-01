@@ -13,6 +13,9 @@ class MockTokenizer:
     def __init__(self):
         pass
 
+    def add_special_tokens(self, *args, **kwargs):
+        pass
+
     def __call__(self, text, return_offsets_mapping=True, truncation=True, add_special_tokens=True):
         # A simple mock tokenizer return that splits by spaces
         # and returns dummy offset mappings
@@ -54,7 +57,15 @@ class TestPrepareDataset(unittest.TestCase):
         self.assertEqual(self.id_to_tag[0], "O")
         self.assertIn("B-section", self.tag_to_id)
         self.assertIn("I-section", self.tag_to_id)
-        self.assertEqual(len(self.tag_to_id), 1 + 2 * 6)  # O + B/I for 6 tags
+        self.assertIn("B-explanation", self.tag_to_id)
+        self.assertIn("I-explanation", self.tag_to_id)
+        self.assertEqual(len(self.tag_to_id), 1 + 2 * 7)  # O + B/I for 7 tags = 15 classes
+
+    def test_sanitize_nested_explanation_tags(self):
+        from src.data.prepare import sanitize_nested_explanation_tags
+        xml_in = "<explanation>Lời giải: <option_label>a.</option_label> <stem>Xét tam giác</stem> ABC.</explanation>"
+        sanitized = sanitize_nested_explanation_tags(xml_in)
+        self.assertEqual(sanitized, "<explanation>Lời giải: a. Xét tam giác ABC.</explanation>")
 
     def test_align_tokens_to_spans_basic(self):
         # Spans:
@@ -191,6 +202,144 @@ class TestPrepareDataset(unittest.TestCase):
         ]
         xml = spans_to_xml(raw_text, spans)
         self.assertEqual(xml, "<stimulus>Stimulus text.</stimulus> <question_label>Question 1:</question_label> <stem>Stem text.</stem>")
+
+    def test_consolidate_raw_exams(self):
+        import tempfile
+        import json
+        from pathlib import Path
+        from src.data.prepare import consolidate_raw_exams
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmppath = Path(tmpdir)
+            
+            # 1. Create a synthetic question file
+            q_file = tmppath / "question_math_g10_1.json"
+            with open(q_file, "w", encoding="utf-8") as f:
+                json.dump({
+                    "is_group": False,
+                    "stem": "Tính giá trị $x$?",
+                    "options": ["1", "2", "3", "4"],
+                    "question_type": "multiple_choice",
+                    "subject": "math_algebra",
+                    "grade": 10
+                }, f)
+
+            # 2. Create a real annotated folder with audit PASS
+            real_folder = tmppath / "real_annotated" / "exam_test"
+            real_folder.mkdir(parents=True)
+            with open(real_folder / "merged.xml", "w", encoding="utf-8") as f:
+                f.write("<question_label>Câu 1:</question_label> <stem>Đề thi thử</stem>")
+            with open(real_folder / "audit_report.json", "w", encoding="utf-8") as f:
+                json.dump({"decision": "PASS", "is_malfunctioned": False}, f)
+
+            # 3. Create a real annotated folder with audit FAIL
+            fail_folder = tmppath / "real_annotated" / "exam_fail"
+            fail_folder.mkdir(parents=True)
+            with open(fail_folder / "merged.xml", "w", encoding="utf-8") as f:
+                f.write("<question_label>Câu 1:</question_label> <stem>Hỏng</stem>")
+            with open(fail_folder / "audit_report.json", "w", encoding="utf-8") as f:
+                json.dump({"decision": "FAIL", "is_malfunctioned": True}, f)
+
+            out_jsonl = tmppath / "raw_exams.jsonl"
+            records = consolidate_raw_exams(
+                input_dir=tmppath,
+                output_file=out_jsonl,
+                filter_passed=True
+            )
+
+            self.assertTrue(out_jsonl.exists())
+            self.assertEqual(len(records), 2)  # 1 synthetic + 1 passed real (fail filtered out)
+            ids = [r["exam_id"] for r in records]
+            self.assertIn("real_annotated_exam_test", ids)
+            self.assertNotIn("real_annotated_exam_fail", ids)
+
+    def test_fix_xml_stimulus_citations_trailing_untagged(self):
+        from src.data.fix_root_data import fix_xml_stimulus_citations
+        xml = "<stimulus>Passage text.</stimulus>\n*(Adapted from CNN)*\n<question_label>Question 1:</question_label>"
+        normalized = fix_xml_stimulus_citations(xml)
+        self.assertIn("<stimulus>Passage text.\n\n*(Adapted from CNN)*</stimulus>", normalized)
+        self.assertNotIn("</stimulus>\n*(Adapted from CNN)*", normalized)
+
+    def test_fix_xml_stimulus_citations_in_stem(self):
+        from src.data.fix_root_data import fix_xml_stimulus_citations
+        xml = "<stimulus>Passage text.</stimulus>\n<stem>(Adapted from The Guardian)\nWhat is the main idea?</stem>"
+        normalized = fix_xml_stimulus_citations(xml)
+        self.assertIn("<stimulus>Passage text.\n\n(Adapted from The Guardian)</stimulus>", normalized)
+        self.assertIn("<stem>What is the main idea?</stem>", normalized)
+
+    def test_parse_xml_annotations_with_explanation(self):
+        xml = "<question_label>Câu 1:</question_label> <stem>Tính 1+1?</stem> <explanation>Lời giải: 1+1=2. Chọn A.</explanation>"
+        raw_text, spans = parse_xml_annotations(xml)
+        expl_spans = [s for s in spans if s["label"] == "explanation"]
+        self.assertEqual(len(expl_spans), 1)
+        self.assertEqual(expl_spans[0]["text"], "Lời giải: 1+1=2. Chọn A.")
+        self.assertEqual(raw_text[expl_spans[0]["start"]:expl_spans[0]["end"]], "Lời giải: 1+1=2. Chọn A.")
+
+    def test_document_level_partitioning_no_leakage(self):
+        import tempfile
+        import json
+        from pathlib import Path
+        import argparse
+        from unittest.mock import patch
+        from src.data.prepare import main
+
+        with tempfile.TemporaryDirectory() as tmp_in, tempfile.TemporaryDirectory() as tmp_out:
+            in_path = Path(tmp_in)
+            out_path = Path(tmp_out)
+
+            # Create 10 synthetic question files
+            for i in range(10):
+                q_file = in_path / f"question_math_g10_{i}.json"
+                with open(q_file, "w", encoding="utf-8") as f:
+                    json.dump({
+                        "is_group": False,
+                        "stem": f"Câu hỏi số {i} với độ dài nội dung dài để tạo sliding window.",
+                        "options": ["A", "B", "C", "D"],
+                        "question_type": "multiple_choice",
+                        "subject": "math_algebra",
+                        "grade": 10
+                    }, f)
+
+            test_args = [
+                "prepare.py",
+                "--input-dir", str(in_path),
+                "--output-dir", str(out_path),
+                "--model", "mock-model",
+                "--train-ratio", "0.6",
+                "--val-ratio", "0.2",
+                "--seed", "42"
+            ]
+
+            with patch("sys.argv", test_args), patch("transformers.AutoTokenizer.from_pretrained", return_value=MockTokenizer()):
+                main()
+
+            train_file = out_path / "train.jsonl"
+            val_file = out_path / "val.jsonl"
+            test_file = out_path / "test.jsonl"
+
+            self.assertTrue(train_file.exists())
+            self.assertTrue(val_file.exists())
+            self.assertTrue(test_file.exists())
+
+            train_sources = set()
+            with open(train_file) as f:
+                for line in f:
+                    train_sources.add(json.loads(line)["metadata"]["source_file"])
+
+            val_sources = set()
+            with open(val_file) as f:
+                for line in f:
+                    val_sources.add(json.loads(line)["metadata"]["source_file"])
+
+            test_sources = set()
+            with open(test_file) as f:
+                for line in f:
+                    test_sources.add(json.loads(line)["metadata"]["source_file"])
+
+            # Zero leakage verification
+            self.assertEqual(len(train_sources.intersection(val_sources)), 0)
+            self.assertEqual(len(train_sources.intersection(test_sources)), 0)
+            self.assertEqual(len(val_sources.intersection(test_sources)), 0)
 
 if __name__ == '__main__':
     unittest.main()

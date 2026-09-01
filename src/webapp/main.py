@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 EXAMS_DIR = Path("output/exams")
+REAL_ANNOTATED_DIR = Path("output/real_annotated")
 REAL_EXAMS_DIR = Path("output/real_exams")
 DATASET_DIR = Path("output/dataset")
 
@@ -89,6 +90,12 @@ def get_all_exams() -> List[Dict[str, Any]]:
     exam_files = []
     if EXAMS_DIR.exists():
         exam_files.extend(list(EXAMS_DIR.glob("*.json")))
+    if REAL_ANNOTATED_DIR.exists():
+        import os
+        for dirpath, _, filenames in os.walk(REAL_ANNOTATED_DIR, followlinks=True):
+            for fn in filenames:
+                if fn == "merged.json" or fn.startswith("real_") and fn.endswith(".json"):
+                    exam_files.append(Path(dirpath) / fn)
     if REAL_EXAMS_DIR.exists():
         exam_files.extend(list(REAL_EXAMS_DIR.glob("*.json")))
         

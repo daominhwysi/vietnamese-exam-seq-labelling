@@ -1,0 +1,2994 @@
+{
+  "file_name": "2024_english_exams.txt",
+  "original_text_length": 15200,
+  "segments": [
+    {
+      "label": "section",
+      "start": 0,
+      "end": 128,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the sentence that best completes each of the following exchanges."
+    },
+    {
+      "label": "question_label",
+      "start": 130,
+      "end": 141,
+      "text": "Question 1:"
+    },
+    {
+      "label": "stem",
+      "start": 141,
+      "end": 192,
+      "text": " Sophia and Jenny are talking about solar energy.\n\n"
+    },
+    {
+      "label": "stem",
+      "start": 192,
+      "end": 283,
+      "text": "Sophia: “I think we should use solar energy.”\n\nJenny: “_______ . It's clean and renewable.”"
+    },
+    {
+      "label": "option_label",
+      "start": 285,
+      "end": 287,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 287,
+      "end": 304,
+      "text": " I don't think so"
+    },
+    {
+      "label": "option_label",
+      "start": 306,
+      "end": 308,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 308,
+      "end": 325,
+      "text": " I agree with you"
+    },
+    {
+      "label": "option_label",
+      "start": 327,
+      "end": 329,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 329,
+      "end": 343,
+      "text": " Of course not"
+    },
+    {
+      "label": "option_label",
+      "start": 345,
+      "end": 347,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 347,
+      "end": 360,
+      "text": " You're wrong"
+    },
+    {
+      "label": "question_label",
+      "start": 362,
+      "end": 373,
+      "text": "Question 2:"
+    },
+    {
+      "label": "stem",
+      "start": 373,
+      "end": 463,
+      "text": " Brett is talking to Julie after work.\n\nBrett: “Let's eat out tonight.”\n\nJulie: “_______ ”"
+    },
+    {
+      "label": "option_label",
+      "start": 465,
+      "end": 467,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 467,
+      "end": 482,
+      "text": " Yes, it's true"
+    },
+    {
+      "label": "option_label",
+      "start": 484,
+      "end": 486,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 486,
+      "end": 496,
+      "text": " Yes, I do"
+    },
+    {
+      "label": "option_label",
+      "start": 498,
+      "end": 500,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 500,
+      "end": 520,
+      "text": " That's a great idea"
+    },
+    {
+      "label": "option_label",
+      "start": 522,
+      "end": 524,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 524,
+      "end": 537,
+      "text": " Here you are"
+    },
+    {
+      "label": "section",
+      "start": 539,
+      "end": 706,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the word that differs from the other three in the position of stress in each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 708,
+      "end": 719,
+      "text": "Question 3:"
+    },
+    {
+      "label": "option_label",
+      "start": 721,
+      "end": 723,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 723,
+      "end": 733,
+      "text": " different"
+    },
+    {
+      "label": "option_label",
+      "start": 735,
+      "end": 737,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 737,
+      "end": 746,
+      "text": " creative"
+    },
+    {
+      "label": "option_label",
+      "start": 748,
+      "end": 750,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 750,
+      "end": 759,
+      "text": " possible"
+    },
+    {
+      "label": "option_label",
+      "start": 761,
+      "end": 763,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 763,
+      "end": 772,
+      "text": " national"
+    },
+    {
+      "label": "question_label",
+      "start": 774,
+      "end": 785,
+      "text": "Question 4:"
+    },
+    {
+      "label": "option_label",
+      "start": 787,
+      "end": 789,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 789,
+      "end": 797,
+      "text": " suggest"
+    },
+    {
+      "label": "option_label",
+      "start": 799,
+      "end": 801,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 801,
+      "end": 808,
+      "text": " become"
+    },
+    {
+      "label": "option_label",
+      "start": 810,
+      "end": 812,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 812,
+      "end": 820,
+      "text": " prepare"
+    },
+    {
+      "label": "option_label",
+      "start": 822,
+      "end": 824,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 824,
+      "end": 831,
+      "text": " answer"
+    },
+    {
+      "label": "section",
+      "start": 833,
+      "end": 1008,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the word whose underlined part differs from the other three in pronunciation in each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 1010,
+      "end": 1021,
+      "text": "Question 5:"
+    },
+    {
+      "label": "option_label",
+      "start": 1023,
+      "end": 1025,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1025,
+      "end": 1031,
+      "text": " coast"
+    },
+    {
+      "label": "option_label",
+      "start": 1033,
+      "end": 1035,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1035,
+      "end": 1041,
+      "text": " board"
+    },
+    {
+      "label": "option_label",
+      "start": 1043,
+      "end": 1045,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1045,
+      "end": 1050,
+      "text": " boat"
+    },
+    {
+      "label": "option_label",
+      "start": 1052,
+      "end": 1054,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1054,
+      "end": 1059,
+      "text": " road"
+    },
+    {
+      "label": "question_label",
+      "start": 1061,
+      "end": 1072,
+      "text": "Question 6:"
+    },
+    {
+      "label": "option_label",
+      "start": 1074,
+      "end": 1076,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1076,
+      "end": 1083,
+      "text": " nature"
+    },
+    {
+      "label": "option_label",
+      "start": 1085,
+      "end": 1087,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1087,
+      "end": 1094,
+      "text": " artist"
+    },
+    {
+      "label": "option_label",
+      "start": 1096,
+      "end": 1098,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1098,
+      "end": 1105,
+      "text": " winter"
+    },
+    {
+      "label": "option_label",
+      "start": 1107,
+      "end": 1109,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1109,
+      "end": 1115,
+      "text": " photo"
+    },
+    {
+      "label": "section",
+      "start": 1117,
+      "end": 1266,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the word CLOSEST in meaning to the underlined word in each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 1268,
+      "end": 1279,
+      "text": "Question 7:"
+    },
+    {
+      "label": "stem",
+      "start": 1279,
+      "end": 1364,
+      "text": " The mass media serves as a powerful means of distributing information to the public."
+    },
+    {
+      "label": "option_label",
+      "start": 1366,
+      "end": 1368,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1368,
+      "end": 1374,
+      "text": " cheap"
+    },
+    {
+      "label": "option_label",
+      "start": 1376,
+      "end": 1378,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1378,
+      "end": 1384,
+      "text": " great"
+    },
+    {
+      "label": "option_label",
+      "start": 1386,
+      "end": 1388,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1388,
+      "end": 1392,
+      "text": " bad"
+    },
+    {
+      "label": "option_label",
+      "start": 1394,
+      "end": 1396,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1396,
+      "end": 1401,
+      "text": " weak"
+    },
+    {
+      "label": "question_label",
+      "start": 1403,
+      "end": 1414,
+      "text": "Question 8:"
+    },
+    {
+      "label": "stem",
+      "start": 1414,
+      "end": 1494,
+      "text": " The boy is unable to provide a good reason for his strange behaviour yesterday."
+    },
+    {
+      "label": "option_label",
+      "start": 1496,
+      "end": 1498,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1498,
+      "end": 1504,
+      "text": " allow"
+    },
+    {
+      "label": "option_label",
+      "start": 1506,
+      "end": 1508,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1508,
+      "end": 1516,
+      "text": " perform"
+    },
+    {
+      "label": "option_label",
+      "start": 1518,
+      "end": 1520,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1520,
+      "end": 1525,
+      "text": " give"
+    },
+    {
+      "label": "option_label",
+      "start": 1527,
+      "end": 1529,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1529,
+      "end": 1534,
+      "text": " take"
+    },
+    {
+      "label": "section",
+      "start": 1536,
+      "end": 1692,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the word(s) OPPOSITE in meaning to the underlined word(s) in each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 1694,
+      "end": 1705,
+      "text": "Question 9:"
+    },
+    {
+      "label": "stem",
+      "start": 1705,
+      "end": 1805,
+      "text": " Being very frank, Tom made no bones about his discontent over the plan proposed by the team leader."
+    },
+    {
+      "label": "option_label",
+      "start": 1807,
+      "end": 1809,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1809,
+      "end": 1830,
+      "text": " attempted to express"
+    },
+    {
+      "label": "option_label",
+      "start": 1832,
+      "end": 1834,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1834,
+      "end": 1848,
+      "text": " tried to hide"
+    },
+    {
+      "label": "option_label",
+      "start": 1850,
+      "end": 1852,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 1852,
+      "end": 1870,
+      "text": " failed to control"
+    },
+    {
+      "label": "option_label",
+      "start": 1872,
+      "end": 1874,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 1874,
+      "end": 1890,
+      "text": " wanted to voice"
+    },
+    {
+      "label": "question_label",
+      "start": 1892,
+      "end": 1904,
+      "text": "Question 10:"
+    },
+    {
+      "label": "stem",
+      "start": 1904,
+      "end": 1981,
+      "text": " Despite their striking differences, they have developed a good relationship."
+    },
+    {
+      "label": "option_label",
+      "start": 1983,
+      "end": 1985,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 1985,
+      "end": 1991,
+      "text": " small"
+    },
+    {
+      "label": "option_label",
+      "start": 1993,
+      "end": 1995,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 1995,
+      "end": 2001,
+      "text": " major"
+    },
+    {
+      "label": "option_label",
+      "start": 2003,
+      "end": 2005,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2005,
+      "end": 2011,
+      "text": " clear"
+    },
+    {
+      "label": "option_label",
+      "start": 2013,
+      "end": 2015,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2015,
+      "end": 2019,
+      "text": " big"
+    },
+    {
+      "label": "section",
+      "start": 2021,
+      "end": 2135,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 2137,
+      "end": 2149,
+      "text": "Question 11:"
+    },
+    {
+      "label": "stem",
+      "start": 2149,
+      "end": 2193,
+      "text": " Lucy was _______ runner in the competition."
+    },
+    {
+      "label": "option_label",
+      "start": 2195,
+      "end": 2197,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2197,
+      "end": 2209,
+      "text": " faster than"
+    },
+    {
+      "label": "option_label",
+      "start": 2211,
+      "end": 2213,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2213,
+      "end": 2221,
+      "text": " fastest"
+    },
+    {
+      "label": "option_label",
+      "start": 2223,
+      "end": 2225,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2225,
+      "end": 2232,
+      "text": " faster"
+    },
+    {
+      "label": "option_label",
+      "start": 2234,
+      "end": 2236,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2236,
+      "end": 2248,
+      "text": " the fastest"
+    },
+    {
+      "label": "question_label",
+      "start": 2250,
+      "end": 2262,
+      "text": "Question 12:"
+    },
+    {
+      "label": "stem",
+      "start": 2262,
+      "end": 2290,
+      "text": " I will pick you up _______."
+    },
+    {
+      "label": "option_label",
+      "start": 2292,
+      "end": 2294,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2294,
+      "end": 2331,
+      "text": " until you will arrive at the station"
+    },
+    {
+      "label": "option_label",
+      "start": 2333,
+      "end": 2335,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2335,
+      "end": 2366,
+      "text": " when you arrive at the station"
+    },
+    {
+      "label": "option_label",
+      "start": 2368,
+      "end": 2370,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2370,
+      "end": 2408,
+      "text": " as soon as you arrived at the station"
+    },
+    {
+      "label": "option_label",
+      "start": 2410,
+      "end": 2412,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2412,
+      "end": 2449,
+      "text": " after you had arrived at the station"
+    },
+    {
+      "label": "question_label",
+      "start": 2451,
+      "end": 2463,
+      "text": "Question 13:"
+    },
+    {
+      "label": "stem",
+      "start": 2463,
+      "end": 2560,
+      "text": " A shopping mall was built in the area, _______ the local people access to a wide range of goods."
+    },
+    {
+      "label": "option_label",
+      "start": 2562,
+      "end": 2564,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2564,
+      "end": 2569,
+      "text": " give"
+    },
+    {
+      "label": "option_label",
+      "start": 2571,
+      "end": 2573,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2573,
+      "end": 2580,
+      "text": " giving"
+    },
+    {
+      "label": "option_label",
+      "start": 2582,
+      "end": 2584,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2584,
+      "end": 2590,
+      "text": " given"
+    },
+    {
+      "label": "option_label",
+      "start": 2592,
+      "end": 2594,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2594,
+      "end": 2604,
+      "text": " to giving"
+    },
+    {
+      "label": "question_label",
+      "start": 2606,
+      "end": 2618,
+      "text": "Question 14:"
+    },
+    {
+      "label": "stem",
+      "start": 2618,
+      "end": 2695,
+      "text": " The travel agency reports that most _______ enjoyed the city tour very much."
+    },
+    {
+      "label": "option_label",
+      "start": 2697,
+      "end": 2699,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2699,
+      "end": 2710,
+      "text": " sightseers"
+    },
+    {
+      "label": "option_label",
+      "start": 2712,
+      "end": 2714,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2714,
+      "end": 2725,
+      "text": " spectators"
+    },
+    {
+      "label": "option_label",
+      "start": 2727,
+      "end": 2729,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2729,
+      "end": 2739,
+      "text": " commuters"
+    },
+    {
+      "label": "option_label",
+      "start": 2741,
+      "end": 2743,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2743,
+      "end": 2751,
+      "text": " viewers"
+    },
+    {
+      "label": "question_label",
+      "start": 2753,
+      "end": 2765,
+      "text": "Question 15:"
+    },
+    {
+      "label": "stem",
+      "start": 2765,
+      "end": 2874,
+      "text": " The young star loves appearing on television and is no _______ violet when it comes to expressing her views."
+    },
+    {
+      "label": "option_label",
+      "start": 2876,
+      "end": 2878,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2878,
+      "end": 2886,
+      "text": " rotting"
+    },
+    {
+      "label": "option_label",
+      "start": 2888,
+      "end": 2890,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2890,
+      "end": 2897,
+      "text": " drying"
+    },
+    {
+      "label": "option_label",
+      "start": 2899,
+      "end": 2901,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 2901,
+      "end": 2911,
+      "text": " shrinking"
+    },
+    {
+      "label": "option_label",
+      "start": 2913,
+      "end": 2915,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 2915,
+      "end": 2924,
+      "text": " blooming"
+    },
+    {
+      "label": "question_label",
+      "start": 2926,
+      "end": 2938,
+      "text": "Question 16:"
+    },
+    {
+      "label": "stem",
+      "start": 2938,
+      "end": 2987,
+      "text": " My aunt doesn't like to go out at _______ night."
+    },
+    {
+      "label": "option_label",
+      "start": 2989,
+      "end": 2991,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 2991,
+      "end": 2994,
+      "text": " an"
+    },
+    {
+      "label": "option_label",
+      "start": 2996,
+      "end": 2998,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 2998,
+      "end": 3000,
+      "text": " a"
+    },
+    {
+      "label": "option_label",
+      "start": 3002,
+      "end": 3004,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3004,
+      "end": 3008,
+      "text": " the"
+    },
+    {
+      "label": "option_label",
+      "start": 3010,
+      "end": 3012,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3013,
+      "end": 3027,
+      "text": "∅ (no article)"
+    },
+    {
+      "label": "question_label",
+      "start": 3082,
+      "end": 3094,
+      "text": "Question 17:"
+    },
+    {
+      "label": "stem",
+      "start": 3094,
+      "end": 3159,
+      "text": " The teachers in our school are very helpful and kind _______ us."
+    },
+    {
+      "label": "option_label",
+      "start": 3161,
+      "end": 3163,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3163,
+      "end": 3167,
+      "text": " for"
+    },
+    {
+      "label": "option_label",
+      "start": 3169,
+      "end": 3171,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3171,
+      "end": 3174,
+      "text": " to"
+    },
+    {
+      "label": "option_label",
+      "start": 3176,
+      "end": 3178,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3178,
+      "end": 3181,
+      "text": " in"
+    },
+    {
+      "label": "option_label",
+      "start": 3183,
+      "end": 3185,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3185,
+      "end": 3188,
+      "text": " at"
+    },
+    {
+      "label": "question_label",
+      "start": 3190,
+      "end": 3202,
+      "text": "Question 18:"
+    },
+    {
+      "label": "stem",
+      "start": 3202,
+      "end": 3278,
+      "text": " I stopped _______ in order to get something to eat because I was so hungry."
+    },
+    {
+      "label": "option_label",
+      "start": 3280,
+      "end": 3282,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3282,
+      "end": 3290,
+      "text": " working"
+    },
+    {
+      "label": "option_label",
+      "start": 3292,
+      "end": 3294,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3294,
+      "end": 3305,
+      "text": " to working"
+    },
+    {
+      "label": "option_label",
+      "start": 3307,
+      "end": 3309,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3309,
+      "end": 3316,
+      "text": " worked"
+    },
+    {
+      "label": "option_label",
+      "start": 3318,
+      "end": 3320,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3320,
+      "end": 3328,
+      "text": " to work"
+    },
+    {
+      "label": "question_label",
+      "start": 3330,
+      "end": 3342,
+      "text": "Question 19:"
+    },
+    {
+      "label": "stem",
+      "start": 3342,
+      "end": 3384,
+      "text": " The boy is practising the piano, _______?"
+    },
+    {
+      "label": "option_label",
+      "start": 3386,
+      "end": 3388,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3388,
+      "end": 3396,
+      "text": " does he"
+    },
+    {
+      "label": "option_label",
+      "start": 3398,
+      "end": 3400,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3400,
+      "end": 3409,
+      "text": " isn't he"
+    },
+    {
+      "label": "option_label",
+      "start": 3411,
+      "end": 3413,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3413,
+      "end": 3424,
+      "text": " doesn't he"
+    },
+    {
+      "label": "option_label",
+      "start": 3426,
+      "end": 3428,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3428,
+      "end": 3435,
+      "text": " was he"
+    },
+    {
+      "label": "question_label",
+      "start": 3437,
+      "end": 3449,
+      "text": "Question 20:"
+    },
+    {
+      "label": "stem",
+      "start": 3449,
+      "end": 3562,
+      "text": " To his disappointment, she didn't show up; instead, all the lights went out and the house _______ into darkness."
+    },
+    {
+      "label": "option_label",
+      "start": 3564,
+      "end": 3566,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3566,
+      "end": 3577,
+      "text": " discharged"
+    },
+    {
+      "label": "option_label",
+      "start": 3579,
+      "end": 3581,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3581,
+      "end": 3591,
+      "text": " dispersed"
+    },
+    {
+      "label": "option_label",
+      "start": 3593,
+      "end": 3595,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3595,
+      "end": 3607,
+      "text": " disarranged"
+    },
+    {
+      "label": "option_label",
+      "start": 3609,
+      "end": 3611,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3611,
+      "end": 3621,
+      "text": " dissolved"
+    },
+    {
+      "label": "question_label",
+      "start": 3623,
+      "end": 3635,
+      "text": "Question 21:"
+    },
+    {
+      "label": "stem",
+      "start": 3635,
+      "end": 3719,
+      "text": " A good way for parents and children to get closer is to _______ housework together."
+    },
+    {
+      "label": "option_label",
+      "start": 3721,
+      "end": 3723,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3723,
+      "end": 3726,
+      "text": " do"
+    },
+    {
+      "label": "option_label",
+      "start": 3728,
+      "end": 3730,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3730,
+      "end": 3735,
+      "text": " take"
+    },
+    {
+      "label": "option_label",
+      "start": 3737,
+      "end": 3739,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3739,
+      "end": 3744,
+      "text": " make"
+    },
+    {
+      "label": "option_label",
+      "start": 3746,
+      "end": 3748,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3748,
+      "end": 3753,
+      "text": " turn"
+    },
+    {
+      "label": "question_label",
+      "start": 3755,
+      "end": 3767,
+      "text": "Question 22:"
+    },
+    {
+      "label": "stem",
+      "start": 3767,
+      "end": 3824,
+      "text": " Thanh _______ tea when his sister came home from school."
+    },
+    {
+      "label": "option_label",
+      "start": 3826,
+      "end": 3828,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3828,
+      "end": 3834,
+      "text": " makes"
+    },
+    {
+      "label": "option_label",
+      "start": 3836,
+      "end": 3838,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3838,
+      "end": 3849,
+      "text": " was making"
+    },
+    {
+      "label": "option_label",
+      "start": 3851,
+      "end": 3853,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3853,
+      "end": 3863,
+      "text": " is making"
+    },
+    {
+      "label": "option_label",
+      "start": 3865,
+      "end": 3867,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3867,
+      "end": 3876,
+      "text": " has made"
+    },
+    {
+      "label": "question_label",
+      "start": 3878,
+      "end": 3890,
+      "text": "Question 23:"
+    },
+    {
+      "label": "stem",
+      "start": 3890,
+      "end": 3934,
+      "text": " The plants _______ by my brother every day."
+    },
+    {
+      "label": "option_label",
+      "start": 3936,
+      "end": 3938,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 3938,
+      "end": 3946,
+      "text": " watered"
+    },
+    {
+      "label": "option_label",
+      "start": 3948,
+      "end": 3950,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 3950,
+      "end": 3962,
+      "text": " are watered"
+    },
+    {
+      "label": "option_label",
+      "start": 3964,
+      "end": 3966,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 3966,
+      "end": 3972,
+      "text": " water"
+    },
+    {
+      "label": "option_label",
+      "start": 3974,
+      "end": 3976,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 3976,
+      "end": 3989,
+      "text": " are watering"
+    },
+    {
+      "label": "question_label",
+      "start": 3991,
+      "end": 4003,
+      "text": "Question 24:"
+    },
+    {
+      "label": "stem",
+      "start": 4003,
+      "end": 4053,
+      "text": " Our friends usually _______ early in the morning."
+    },
+    {
+      "label": "option_label",
+      "start": 4055,
+      "end": 4057,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 4057,
+      "end": 4066,
+      "text": " look for"
+    },
+    {
+      "label": "option_label",
+      "start": 4068,
+      "end": 4070,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 4070,
+      "end": 4079,
+      "text": " turn off"
+    },
+    {
+      "label": "option_label",
+      "start": 4081,
+      "end": 4083,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 4083,
+      "end": 4091,
+      "text": " wake up"
+    },
+    {
+      "label": "option_label",
+      "start": 4093,
+      "end": 4095,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 4095,
+      "end": 4102,
+      "text": " put on"
+    },
+    {
+      "label": "question_label",
+      "start": 4104,
+      "end": 4116,
+      "text": "Question 25:"
+    },
+    {
+      "label": "stem",
+      "start": 4116,
+      "end": 4192,
+      "text": " The child took a more _______ role in his learning and made great progress."
+    },
+    {
+      "label": "option_label",
+      "start": 4194,
+      "end": 4196,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 4196,
+      "end": 4205,
+      "text": " activate"
+    },
+    {
+      "label": "option_label",
+      "start": 4207,
+      "end": 4209,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 4209,
+      "end": 4216,
+      "text": " active"
+    },
+    {
+      "label": "option_label",
+      "start": 4218,
+      "end": 4220,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 4220,
+      "end": 4229,
+      "text": " activity"
+    },
+    {
+      "label": "option_label",
+      "start": 4231,
+      "end": 4233,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 4233,
+      "end": 4242,
+      "text": " actively"
+    },
+    {
+      "label": "section",
+      "start": 4244,
+      "end": 4422,
+      "text": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the correct word or phrase that best fits each of the numbered blanks from 26 to 30."
+    },
+    {
+      "label": "stimulus",
+      "start": 4424,
+      "end": 5460,
+      "text": "When trying to understand our own or other people's behaviour, we tend to oversimplify things. We use one or two adjectives to sum each other up. (26) _______, we may think of some friends as having a generally hopeful and positive outlook while others are considered pessimistic and negative. Of course, in (27) _______, none of us is so easily defined. The truth is that we are all made up of characteristics (28) _______ are inconsistent and contradictory: we can be serious and reliable with our colleagues at work but we are more unpredictable and emotional with our nearest and dearest at home. With one person we can be very cautious, but with (29) _______ one, we are adventurous thrill-seekers.\n\nSo, can people be neatly divided into personality types? Or do we (30) _______ our personality according to the differences in our changing moods and situations? Perhaps the idea that personality is fixed is just a meaningless misconception. Maybe we can never truly understand ourselves or other people.\n\n(Adapted from Gold First)"
+    },
+    {
+      "label": "question_label",
+      "start": 5462,
+      "end": 5474,
+      "text": "Question 26:"
+    },
+    {
+      "label": "option_label",
+      "start": 5476,
+      "end": 5478,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5478,
+      "end": 5486,
+      "text": " Because"
+    },
+    {
+      "label": "option_label",
+      "start": 5488,
+      "end": 5490,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5490,
+      "end": 5502,
+      "text": " In contrast"
+    },
+    {
+      "label": "option_label",
+      "start": 5504,
+      "end": 5506,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5506,
+      "end": 5518,
+      "text": " For example"
+    },
+    {
+      "label": "option_label",
+      "start": 5520,
+      "end": 5522,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5522,
+      "end": 5530,
+      "text": " However"
+    },
+    {
+      "label": "question_label",
+      "start": 5532,
+      "end": 5544,
+      "text": "Question 27:"
+    },
+    {
+      "label": "option_label",
+      "start": 5546,
+      "end": 5548,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5548,
+      "end": 5557,
+      "text": " distance"
+    },
+    {
+      "label": "option_label",
+      "start": 5559,
+      "end": 5561,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5561,
+      "end": 5568,
+      "text": " return"
+    },
+    {
+      "label": "option_label",
+      "start": 5570,
+      "end": 5572,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5572,
+      "end": 5580,
+      "text": " reality"
+    },
+    {
+      "label": "option_label",
+      "start": 5582,
+      "end": 5584,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5584,
+      "end": 5591,
+      "text": " theory"
+    },
+    {
+      "label": "question_label",
+      "start": 5593,
+      "end": 5605,
+      "text": "Question 28:"
+    },
+    {
+      "label": "option_label",
+      "start": 5607,
+      "end": 5609,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5609,
+      "end": 5614,
+      "text": " whom"
+    },
+    {
+      "label": "option_label",
+      "start": 5616,
+      "end": 5618,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5618,
+      "end": 5622,
+      "text": " who"
+    },
+    {
+      "label": "option_label",
+      "start": 5624,
+      "end": 5626,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5626,
+      "end": 5632,
+      "text": " which"
+    },
+    {
+      "label": "option_label",
+      "start": 5634,
+      "end": 5636,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5636,
+      "end": 5642,
+      "text": " whose"
+    },
+    {
+      "label": "question_label",
+      "start": 5644,
+      "end": 5656,
+      "text": "Question 29:"
+    },
+    {
+      "label": "option_label",
+      "start": 5658,
+      "end": 5660,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5660,
+      "end": 5668,
+      "text": " another"
+    },
+    {
+      "label": "option_label",
+      "start": 5670,
+      "end": 5672,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5672,
+      "end": 5677,
+      "text": " many"
+    },
+    {
+      "label": "option_label",
+      "start": 5679,
+      "end": 5681,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5681,
+      "end": 5685,
+      "text": " few"
+    },
+    {
+      "label": "option_label",
+      "start": 5687,
+      "end": 5689,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5689,
+      "end": 5694,
+      "text": " most"
+    },
+    {
+      "label": "question_label",
+      "start": 5696,
+      "end": 5708,
+      "text": "Question 30:"
+    },
+    {
+      "label": "option_label",
+      "start": 5710,
+      "end": 5712,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 5712,
+      "end": 5716,
+      "text": " fit"
+    },
+    {
+      "label": "option_label",
+      "start": 5718,
+      "end": 5720,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 5720,
+      "end": 5726,
+      "text": " alter"
+    },
+    {
+      "label": "option_label",
+      "start": 5728,
+      "end": 5730,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 5730,
+      "end": 5735,
+      "text": " grow"
+    },
+    {
+      "label": "option_label",
+      "start": 5737,
+      "end": 5739,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 5739,
+      "end": 5746,
+      "text": " divert"
+    },
+    {
+      "label": "section",
+      "start": 5748,
+      "end": 5897,
+      "text": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the questions from 31 to 35."
+    },
+    {
+      "label": "stimulus",
+      "start": 5899,
+      "end": 7297,
+      "text": "If you walk into the streets and see someone throwing a plastic bottle on the ground, you'll probably get annoyed. But do we react in the same way when we see people throwing rubbish into the sea? We all know how rubbish ruins the environment on land, but we often forget the influence that it can have on environments like the sea, lakes and rivers, too.\n\nFirst of all, water pollution looks terrible. Many beautiful beaches can become covered in rubbish when whatever we have thrown into the water comes ashore. Even rivers and lakes have some plastic bags and bottles floating in them.\n\nSecondly, rubbish can hurt animals and birds that live in or by the water. If they see a plastic bottle, they may think it is food. However, when they try and eat the bottle, it can get caught in their mouth or stomach and stop them from eating anything else. Plastic bottles can also stop dolphins from breathing. Sometimes, fishing boats leave bits of fishing net behind in the water. Fish can get caught in these and die.\n\nFinally, people forget that plastics contain chemicals that stay in the water. This is very bad for both fish and plants. If you eat fish containing these chemicals, then you can also get ill.\n\nIn conclusion, we need to worry about water pollution as much as we care about land or air. We should all protect the seas, lakes and rivers, and remember to take our rubbish away with us."
+    },
+    {
+      "label": "stimulus",
+      "start": 7299,
+      "end": 7307,
+      "text": "(Adapted"
+    },
+    {
+      "label": "stimulus",
+      "start": 7312,
+      "end": 7320,
+      "text": " Empower"
+    },
+    {
+      "label": "question_label",
+      "start": 7376,
+      "end": 7388,
+      "text": "Question 31:"
+    },
+    {
+      "label": "stem",
+      "start": 7388,
+      "end": 7422,
+      "text": " What is the passage mainly about?"
+    },
+    {
+      "label": "option_label",
+      "start": 7424,
+      "end": 7426,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 7426,
+      "end": 7466,
+      "text": " Increased public awareness of pollution"
+    },
+    {
+      "label": "option_label",
+      "start": 7468,
+      "end": 7470,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 7470,
+      "end": 7518,
+      "text": " Preferred methods of protecting water creatures"
+    },
+    {
+      "label": "option_label",
+      "start": 7520,
+      "end": 7522,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 7522,
+      "end": 7574,
+      "text": " Harmful effects of waste on the aquatic environment"
+    },
+    {
+      "label": "option_label",
+      "start": 7576,
+      "end": 7578,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 7578,
+      "end": 7621,
+      "text": " Effective ways to reduce plastic packaging"
+    },
+    {
+      "label": "question_label",
+      "start": 7623,
+      "end": 7635,
+      "text": "Question 32:"
+    },
+    {
+      "label": "stem",
+      "start": 7635,
+      "end": 7699,
+      "text": " The word ruins in paragraph 1 is closest in meaning to _______."
+    },
+    {
+      "label": "option_label",
+      "start": 7701,
+      "end": 7703,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 7703,
+      "end": 7711,
+      "text": " damages"
+    },
+    {
+      "label": "option_label",
+      "start": 7713,
+      "end": 7715,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 7715,
+      "end": 7724,
+      "text": " supports"
+    },
+    {
+      "label": "option_label",
+      "start": 7726,
+      "end": 7728,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 7728,
+      "end": 7737,
+      "text": " replaces"
+    },
+    {
+      "label": "option_label",
+      "start": 7739,
+      "end": 7741,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 7741,
+      "end": 7748,
+      "text": " covers"
+    },
+    {
+      "label": "question_label",
+      "start": 7750,
+      "end": 7762,
+      "text": "Question 33:"
+    },
+    {
+      "label": "stem",
+      "start": 7762,
+      "end": 7810,
+      "text": " The word them in paragraph 2 refers to _______."
+    },
+    {
+      "label": "option_label",
+      "start": 7812,
+      "end": 7814,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 7814,
+      "end": 7831,
+      "text": " rivers and lakes"
+    },
+    {
+      "label": "option_label",
+      "start": 7833,
+      "end": 7835,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 7835,
+      "end": 7860,
+      "text": " plastic bags and bottles"
+    },
+    {
+      "label": "option_label",
+      "start": 7862,
+      "end": 7864,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 7864,
+      "end": 7882,
+      "text": " beautiful beaches"
+    },
+    {
+      "label": "option_label",
+      "start": 7884,
+      "end": 7886,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 7886,
+      "end": 7904,
+      "text": " animals and birds"
+    },
+    {
+      "label": "question_label",
+      "start": 7906,
+      "end": 7918,
+      "text": "Question 34:"
+    },
+    {
+      "label": "stem",
+      "start": 7918,
+      "end": 7989,
+      "text": " According to paragraph 3, fish may die from getting caught in _______."
+    },
+    {
+      "label": "option_label",
+      "start": 7991,
+      "end": 7993,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 7993,
+      "end": 8013,
+      "text": " bits of fishing net"
+    },
+    {
+      "label": "option_label",
+      "start": 8015,
+      "end": 8017,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8017,
+      "end": 8031,
+      "text": " fishing boats"
+    },
+    {
+      "label": "option_label",
+      "start": 8033,
+      "end": 8035,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8035,
+      "end": 8058,
+      "text": " food left in the water"
+    },
+    {
+      "label": "option_label",
+      "start": 8060,
+      "end": 8062,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8062,
+      "end": 8078,
+      "text": " plastic bottles"
+    },
+    {
+      "label": "question_label",
+      "start": 8080,
+      "end": 8092,
+      "text": "Question 35:"
+    },
+    {
+      "label": "stem",
+      "start": 8092,
+      "end": 8154,
+      "text": " Which of the following is NOT true, according to the passage?"
+    },
+    {
+      "label": "option_label",
+      "start": 8156,
+      "end": 8158,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 8158,
+      "end": 8229,
+      "text": " When eaten by sea animals and birds, rubbish can threaten their lives."
+    },
+    {
+      "label": "option_label",
+      "start": 8231,
+      "end": 8233,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 8233,
+      "end": 8299,
+      "text": " When washed ashore, rubbish can spoil the beauty of many beaches."
+    },
+    {
+      "label": "option_label",
+      "start": 8301,
+      "end": 8303,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 8303,
+      "end": 8388,
+      "text": " People eating fish that contain chemicals from rubbish have no risk of getting sick."
+    },
+    {
+      "label": "option_label",
+      "start": 8390,
+      "end": 8392,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 8392,
+      "end": 8472,
+      "text": " Chemicals contained in rubbish will stay in the water and harm fish and plants."
+    },
+    {
+      "label": "section",
+      "start": 8474,
+      "end": 8623,
+      "text": "Read the following passage and mark the letter A, B, C, or D on your answer sheet to indicate the best answer to each of the questions from 36 to 42."
+    },
+    {
+      "label": "stimulus",
+      "start": 8625,
+      "end": 10844,
+      "text": "“Have smartphones destroyed a generation?” Jean Twenge – a psychology professor at San Diego State University – asked in her controversial book, iGen. In the book, she argues that those born after 1995 are facing “a mental-health crisis”, and she believes it can be linked to growing up with their noses pressed against a screen. Her newest study provides more support for that connection, showing that teens who spent more than an hour or two a day interacting with their gadgets were less happy on average than those who had more face time with others.\n\nTwenge's conclusions have come up against criticism in the past. Some have accused her of oversimplifying or overlooking data that may tell a slightly different story. Twenge recognises that her study suggests only a link between screen use and psychological well-being. A possible explanation is that kids are running to their screens to escape from the things in life that are making them unhappy. However, the surveys can't say whether screen time directly changes teens' mental health, the research states.\n\nPhilanthropist Melinda Gates, whose three children were also born after 1995, wrote in The Washington Post, “phones and apps aren't good or bad by themselves, but for adolescents who don't yet have the emotional tools to overcome life's problems, they can aggravate the difficulties of growing up.” At the same time, she said, kids are learning on their devices and connecting in novel ways. Other studies have explored the connection between social media and isolation and how “likes” activate the brain's reward centre. Some analyses have found that moderate use of these technologies is not harmful in itself and can even improve children's social skills and build emotional strength.\n\nThere is no doubt that people are spending more time on these devices and that technology is having a major impact on kids and adults alike. “These are really important devices that have changed our lives in so many ways, not just for the worse but for the better,” said Amanda Lenhart, deputy director of the Better Life Lab at New York America. But the latest research “is looking straight at technology and wanting it to be the scapegoat.”\n\n(Adapted from CNN)"
+    },
+    {
+      "label": "question_label",
+      "start": 10846,
+      "end": 10858,
+      "text": "Question 36:"
+    },
+    {
+      "label": "stem",
+      "start": 10858,
+      "end": 10892,
+      "text": " What is the passage mainly about?"
+    },
+    {
+      "label": "option_label",
+      "start": 10894,
+      "end": 10896,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 10896,
+      "end": 10968,
+      "text": " Practical ways to prevent teenagers from getting addicted to technology"
+    },
+    {
+      "label": "option_label",
+      "start": 10970,
+      "end": 10972,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 10972,
+      "end": 11038,
+      "text": " The reasons behind a professor's book and critical comments on it"
+    },
+    {
+      "label": "option_label",
+      "start": 11040,
+      "end": 11042,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 11042,
+      "end": 11114,
+      "text": " Different views on the psychological effects of technology on teenagers"
+    },
+    {
+      "label": "option_label",
+      "start": 11116,
+      "end": 11118,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 11118,
+      "end": 11187,
+      "text": " The power of smart technology to positively change teenagers' brains"
+    },
+    {
+      "label": "question_label",
+      "start": 11189,
+      "end": 11201,
+      "text": "Question 37:"
+    },
+    {
+      "label": "stem",
+      "start": 11201,
+      "end": 11247,
+      "text": " The word it in paragraph 1 refers to _______."
+    },
+    {
+      "label": "option_label",
+      "start": 11249,
+      "end": 11251,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 11251,
+      "end": 11274,
+      "text": " a mental-health crisis"
+    },
+    {
+      "label": "option_label",
+      "start": 11276,
+      "end": 11278,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 11278,
+      "end": 11301,
+      "text": " her controversial book"
+    },
+    {
+      "label": "option_label",
+      "start": 11303,
+      "end": 11305,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 11305,
+      "end": 11318,
+      "text": " a generation"
+    },
+    {
+      "label": "option_label",
+      "start": 11320,
+      "end": 11322,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 11322,
+      "end": 11331,
+      "text": " a screen"
+    },
+    {
+      "label": "question_label",
+      "start": 11333,
+      "end": 11345,
+      "text": "Question 38:"
+    },
+    {
+      "label": "stem",
+      "start": 11345,
+      "end": 11412,
+      "text": " The word slightly in paragraph 2 is closest in meaning to _______."
+    },
+    {
+      "label": "option_label",
+      "start": 11414,
+      "end": 11416,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 11416,
+      "end": 11424,
+      "text": " clearly"
+    },
+    {
+      "label": "option_label",
+      "start": 11426,
+      "end": 11428,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 11428,
+      "end": 11434,
+      "text": " a lot"
+    },
+    {
+      "label": "option_label",
+      "start": 11436,
+      "end": 11438,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 11438,
+      "end": 11447,
+      "text": " a little"
+    },
+    {
+      "label": "option_label",
+      "start": 11449,
+      "end": 11451,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 11451,
+      "end": 11462,
+      "text": " completely"
+    },
+    {
+      "label": "question_label",
+      "start": 11464,
+      "end": 11476,
+      "text": "Question 39:"
+    },
+    {
+      "label": "stem",
+      "start": 11476,
+      "end": 11549,
+      "text": " According to paragraph 2, teenagers possibly use smartphones to _______."
+    },
+    {
+      "label": "option_label",
+      "start": 11551,
+      "end": 11553,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 11553,
+      "end": 11578,
+      "text": " avoid unhappy situations"
+    },
+    {
+      "label": "option_label",
+      "start": 11580,
+      "end": 11582,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 11582,
+      "end": 11611,
+      "text": " understand themselves better"
+    },
+    {
+      "label": "option_label",
+      "start": 11613,
+      "end": 11615,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 11615,
+      "end": 11636,
+      "text": " create happy stories"
+    },
+    {
+      "label": "option_label",
+      "start": 11638,
+      "end": 11640,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 11640,
+      "end": 11665,
+      "text": " solve real-life problems"
+    },
+    {
+      "label": "question_label",
+      "start": 11693,
+      "end": 11705,
+      "text": "Question 40:"
+    },
+    {
+      "label": "stem",
+      "start": 11705,
+      "end": 11767,
+      "text": " Which of the following is NOT true, according to the passage?"
+    },
+    {
+      "label": "option_label",
+      "start": 11768,
+      "end": 11770,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 11770,
+      "end": 11850,
+      "text": " Twenge's claims about the impact of screen use on teens have gone unchallenged."
+    },
+    {
+      "label": "option_label",
+      "start": 11851,
+      "end": 11853,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 11853,
+      "end": 11940,
+      "text": " Gates states that teenagers are using technology to interact in new, interesting ways."
+    },
+    {
+      "label": "option_label",
+      "start": 11941,
+      "end": 11943,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 11943,
+      "end": 12025,
+      "text": " According to Lenhart, technological devices play a significant role in our lives."
+    },
+    {
+      "label": "option_label",
+      "start": 12026,
+      "end": 12028,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 12028,
+      "end": 12099,
+      "text": " Twenge's book iGen has caused a great deal of discussion and argument."
+    },
+    {
+      "label": "question_label",
+      "start": 12101,
+      "end": 12113,
+      "text": "Question 41:"
+    },
+    {
+      "label": "stem",
+      "start": 12113,
+      "end": 12181,
+      "text": " The word aggravate in paragraph 3 is closest in meaning to _______."
+    },
+    {
+      "label": "option_label",
+      "start": 12182,
+      "end": 12184,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 12184,
+      "end": 12191,
+      "text": " create"
+    },
+    {
+      "label": "option_label",
+      "start": 12192,
+      "end": 12194,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 12194,
+      "end": 12201,
+      "text": " reject"
+    },
+    {
+      "label": "option_label",
+      "start": 12202,
+      "end": 12204,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 12204,
+      "end": 12211,
+      "text": " worsen"
+    },
+    {
+      "label": "option_label",
+      "start": 12212,
+      "end": 12214,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 12214,
+      "end": 12221,
+      "text": " expect"
+    },
+    {
+      "label": "question_label",
+      "start": 12223,
+      "end": 12235,
+      "text": "Question 42:"
+    },
+    {
+      "label": "stem",
+      "start": 12235,
+      "end": 12292,
+      "text": " Which of the following can be inferred from the passage?"
+    },
+    {
+      "label": "option_label",
+      "start": 12293,
+      "end": 12295,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 12295,
+      "end": 12402,
+      "text": " Evidence of technology being responsible for the quality of teenagers' mental health remains inconclusive."
+    },
+    {
+      "label": "option_label",
+      "start": 12403,
+      "end": 12405,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 12405,
+      "end": 12516,
+      "text": " There is only one possible explanation for the link between smartphone use and teens' declining mental health."
+    },
+    {
+      "label": "option_label",
+      "start": 12517,
+      "end": 12519,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 12519,
+      "end": 12626,
+      "text": " Teenagers who aren't yet ready for life challenges shouldn't use smart apps for more than two hours daily."
+    },
+    {
+      "label": "option_label",
+      "start": 12627,
+      "end": 12629,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 12629,
+      "end": 12727,
+      "text": " Immediate action must be taken to encourage the use of smart technology for educational purposes."
+    },
+    {
+      "label": "section",
+      "start": 12729,
+      "end": 12874,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the sentence that best combines each pair of sentences in the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 12876,
+      "end": 12888,
+      "text": "Question 43:"
+    },
+    {
+      "label": "stem",
+      "start": 12888,
+      "end": 12961,
+      "text": " You should go over your test paper. You shouldn't hand it in until then."
+    },
+    {
+      "label": "option_label",
+      "start": 12962,
+      "end": 12964,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 12964,
+      "end": 13033,
+      "text": " Only after you have gone over your test paper should you hand it in."
+    },
+    {
+      "label": "option_label",
+      "start": 13034,
+      "end": 13036,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 13036,
+      "end": 13095,
+      "text": " Were you to go over your test paper, you would hand it in."
+    },
+    {
+      "label": "option_label",
+      "start": 13096,
+      "end": 13098,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 13098,
+      "end": 13166,
+      "text": " Not until you have handed in your test paper should you go over it."
+    },
+    {
+      "label": "option_label",
+      "start": 13167,
+      "end": 13169,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 13169,
+      "end": 13233,
+      "text": " Hardly had you handed in your test paper when you went over it."
+    },
+    {
+      "label": "question_label",
+      "start": 13235,
+      "end": 13247,
+      "text": "Question 44:"
+    },
+    {
+      "label": "stem",
+      "start": 13247,
+      "end": 13312,
+      "text": " She doesn't have a sister. She doesn't have anyone to play with."
+    },
+    {
+      "label": "option_label",
+      "start": 13313,
+      "end": 13315,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 13315,
+      "end": 13372,
+      "text": " If she had a sister, she will have someone to play with."
+    },
+    {
+      "label": "option_label",
+      "start": 13373,
+      "end": 13375,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 13375,
+      "end": 13435,
+      "text": " If she had a sister, she wouldn't have anyone to play with."
+    },
+    {
+      "label": "option_label",
+      "start": 13436,
+      "end": 13438,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 13438,
+      "end": 13496,
+      "text": " If she had a sister, she would have someone to play with."
+    },
+    {
+      "label": "option_label",
+      "start": 13497,
+      "end": 13499,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 13499,
+      "end": 13556,
+      "text": " If she had a sister, she won't have anyone to play with."
+    },
+    {
+      "label": "section",
+      "start": 13558,
+      "end": 13698,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the underlined part that needs correction in each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 13700,
+      "end": 13712,
+      "text": "Question 45:"
+    },
+    {
+      "label": "stem",
+      "start": 13712,
+      "end": 13781,
+      "text": " All of the students should submit his writing assignments by Friday."
+    },
+    {
+      "label": "option_label",
+      "start": 13782,
+      "end": 13783,
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "start": 13799,
+      "end": 13801,
+      "text": " B"
+    },
+    {
+      "label": "option_text",
+      "start": 13814,
+      "end": 13816,
+      "text": " C"
+    },
+    {
+      "label": "option_label",
+      "start": 13830,
+      "end": 13832,
+      "text": " D"
+    },
+    {
+      "label": "question_label",
+      "start": 13834,
+      "end": 13846,
+      "text": "Question 46:"
+    },
+    {
+      "label": "stem",
+      "start": 13846,
+      "end": 13913,
+      "text": " The school organises a trip to Cuc Phuong National Park last week."
+    },
+    {
+      "label": "stem",
+      "start": 13914,
+      "end": 13916,
+      "text": "A "
+    },
+    {
+      "label": "option_text",
+      "start": 13928,
+      "end": 13931,
+      "text": " B "
+    },
+    {
+      "label": "option_text",
+      "start": 13939,
+      "end": 13942,
+      "text": " C "
+    },
+    {
+      "label": "option_label",
+      "start": 13987,
+      "end": 13989,
+      "text": " D"
+    },
+    {
+      "label": "question_label",
+      "start": 13991,
+      "end": 14003,
+      "text": "Question 47:"
+    },
+    {
+      "label": "stem",
+      "start": 14003,
+      "end": 14092,
+      "text": " Like the former village chief, his perceptive successor has an admirable ability to put\n"
+    },
+    {
+      "label": "option_label",
+      "start": 14092,
+      "end": 14093,
+      "text": "A"
+    },
+    {
+      "label": "option_text",
+      "start": 14121,
+      "end": 14125,
+      "text": " B  "
+    },
+    {
+      "label": "option_label",
+      "start": 14159,
+      "end": 14162,
+      "text": " C\n"
+    },
+    {
+      "label": "option_text",
+      "start": 14162,
+      "end": 14236,
+      "text": "aside his emotions and remain impassioned while resolving local conflicts."
+    },
+    {
+      "label": "option_label",
+      "start": 14237,
+      "end": 14238,
+      "text": "D"
+    },
+    {
+      "label": "section",
+      "start": 14240,
+      "end": 14378,
+      "text": "Mark the letter A, B, C, or D on your answer sheet to indicate the sentence that is closest in meaning to each of the following questions."
+    },
+    {
+      "label": "question_label",
+      "start": 14380,
+      "end": 14392,
+      "text": "Question 48:"
+    },
+    {
+      "label": "stem",
+      "start": 14392,
+      "end": 14428,
+      "text": " Mai last went abroad two years ago."
+    },
+    {
+      "label": "option_label",
+      "start": 14429,
+      "end": 14431,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 14431,
+      "end": 14471,
+      "text": " Mai started going abroad two years ago."
+    },
+    {
+      "label": "option_label",
+      "start": 14472,
+      "end": 14474,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 14474,
+      "end": 14509,
+      "text": " Mai has gone abroad for two years."
+    },
+    {
+      "label": "option_label",
+      "start": 14510,
+      "end": 14512,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 14512,
+      "end": 14550,
+      "text": " Mai hasn't gone abroad for two years."
+    },
+    {
+      "label": "option_label",
+      "start": 14551,
+      "end": 14553,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 14553,
+      "end": 14589,
+      "text": " Mai didn't go abroad two years ago."
+    },
+    {
+      "label": "question_label",
+      "start": 14591,
+      "end": 14603,
+      "text": "Question 49:"
+    },
+    {
+      "label": "stem",
+      "start": 14603,
+      "end": 14645,
+      "text": " \"I have found a part-time job,\" Bob said."
+    },
+    {
+      "label": "option_label",
+      "start": 14646,
+      "end": 14648,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 14648,
+      "end": 14692,
+      "text": " Bob said that I have found a part-time job."
+    },
+    {
+      "label": "option_label",
+      "start": 14693,
+      "end": 14695,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 14695,
+      "end": 14735,
+      "text": " Bob said that he found a part-time job."
+    },
+    {
+      "label": "option_label",
+      "start": 14736,
+      "end": 14738,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 14738,
+      "end": 14782,
+      "text": " Bob said that he had found a part-time job."
+    },
+    {
+      "label": "option_label",
+      "start": 14783,
+      "end": 14785,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 14785,
+      "end": 14828,
+      "text": " Bob said that I had found a part-time job."
+    },
+    {
+      "label": "question_label",
+      "start": 14830,
+      "end": 14842,
+      "text": "Question 50:"
+    },
+    {
+      "label": "stem",
+      "start": 14842,
+      "end": 14902,
+      "text": " It is possible that he will redecorate his house this year."
+    },
+    {
+      "label": "option_label",
+      "start": 14903,
+      "end": 14905,
+      "text": "A."
+    },
+    {
+      "label": "option_text",
+      "start": 14905,
+      "end": 14946,
+      "text": " He might redecorate his house this year."
+    },
+    {
+      "label": "option_label",
+      "start": 14947,
+      "end": 14949,
+      "text": "B."
+    },
+    {
+      "label": "option_text",
+      "start": 14949,
+      "end": 14990,
+      "text": " He can't redecorate his house this year."
+    },
+    {
+      "label": "option_label",
+      "start": 14991,
+      "end": 14993,
+      "text": "C."
+    },
+    {
+      "label": "option_text",
+      "start": 14993,
+      "end": 15033,
+      "text": " He must redecorate his house this year."
+    },
+    {
+      "label": "option_label",
+      "start": 15034,
+      "end": 15036,
+      "text": "D."
+    },
+    {
+      "label": "option_text",
+      "start": 15036,
+      "end": 15077,
+      "text": " He won't redecorate his house this year."
+    }
+  ]
+}

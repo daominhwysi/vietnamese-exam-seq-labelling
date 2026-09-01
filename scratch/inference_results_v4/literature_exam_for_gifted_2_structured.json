@@ -1,0 +1,270 @@
+{
+  "file_name": "literature_exam_for_gifted_2.txt",
+  "original_text_length": 2395,
+  "segments": [
+    {
+      "label": "section",
+      "start": 0,
+      "end": 316,
+      "text": "BỘ GIÁO DỤC VÀ ĐÀO TẠO                 KỲ THI CHỌN HỌC SINH GIỎI QUỐC GIA\n                                                             TRUNG HỌC PHỔ THÔNG NĂM HỌC 2025 – 2026\n\nĐỀ THI CHÍNH THỨC\n\nMôn: NGỮ VĂN\nThời gian làm bài: 180 phút (không kể thời gian giao đề)\nNgày thi: 25/12/2025\nĐề thi gồm 01 trang, có 02 câu"
+    },
+    {
+      "label": "question_label",
+      "start": 318,
+      "end": 335,
+      "text": "Câu 1 (8,0 điểm)."
+    },
+    {
+      "label": "section",
+      "start": 335,
+      "end": 352,
+      "text": " Nghị luận xã hội"
+    },
+    {
+      "label": "stem",
+      "start": 353,
+      "end": 465,
+      "text": "Đọc ngữ liệu sau:\n\nTriết gia:\n“Tự lập nghĩa là ‘thoát khỏi bản tính ích kỷ’.”\n\nChàng thanh niên:\n…?!\n\nTriết gia:"
+    },
+    {
+      "label": "stem",
+      "start": 466,
+      "end": 474,
+      "text": "Chính vì"
+    },
+    {
+      "label": "stem",
+      "start": 478,
+      "end": 558,
+      "text": " Adler¹ gọi cảm thức cộng đồng […] là sự quan tâm tới xã hội, quan tâm tới người"
+    },
+    {
+      "label": "stem",
+      "start": 564,
+      "end": 583,
+      "text": " Chúng ta cần thoát"
+    },
+    {
+      "label": "stem",
+      "start": 597,
+      "end": 612,
+      "text": " ích kỷ cố hữu,"
+    },
+    {
+      "label": "stem",
+      "start": 618,
+      "end": 623,
+      "text": " việc"
+    },
+    {
+      "label": "stem",
+      "start": 628,
+      "end": 633,
+      "text": " là “"
+    },
+    {
+      "label": "stem",
+      "start": 651,
+      "end": 653,
+      "text": "”."
+    },
+    {
+      "label": "stem",
+      "start": 673,
+      "end": 675,
+      "text": " “"
+    },
+    {
+      "label": "stem",
+      "start": 678,
+      "end": 680,
+      "text": "”."
+    },
+    {
+      "label": "stem",
+      "start": 684,
+      "end": 699,
+      "text": "àng thanh niên:"
+    },
+    {
+      "label": "stem",
+      "start": 700,
+      "end": 713,
+      "text": "Thầy nói rằng"
+    },
+    {
+      "label": "stem",
+      "start": 729,
+      "end": 738,
+      "text": " bản tính"
+    },
+    {
+      "label": "stem",
+      "start": 742,
+      "end": 746,
+      "text": " kỷ,"
+    },
+    {
+      "label": "stem",
+      "start": 755,
+      "end": 762,
+      "text": " mới có"
+    },
+    {
+      "label": "stem",
+      "start": 766,
+      "end": 773,
+      "text": " tự lập"
+    },
+    {
+      "label": "stem",
+      "start": 786,
+      "end": 787,
+      "text": ":"
+    },
+    {
+      "label": "stem",
+      "start": 792,
+      "end": 796,
+      "text": " vậy"
+    },
+    {
+      "label": "stem",
+      "start": 857,
+      "end": 867,
+      "text": " giới quan"
+    },
+    {
+      "label": "stem",
+      "start": 875,
+      "end": 885,
+      "text": " sinh quan"
+    },
+    {
+      "label": "stem",
+      "start": 891,
+      "end": 906,
+      "text": "ình yêu đã biến"
+    },
+    {
+      "label": "stem",
+      "start": 918,
+      "end": 920,
+      "text": " “"
+    },
+    {
+      "label": "stem",
+      "start": 923,
+      "end": 924,
+      "text": "”"
+    },
+    {
+      "label": "stem",
+      "start": 930,
+      "end": 932,
+      "text": " “"
+    },
+    {
+      "label": "stem",
+      "start": 969,
+      "end": 974,
+      "text": " giải"
+    },
+    {
+      "label": "stem",
+      "start": 996,
+      "end": 1000,
+      "text": " nên"
+    },
+    {
+      "label": "stem",
+      "start": 1059,
+      "end": 1070,
+      "text": " thanh niên"
+    },
+    {
+      "label": "stem",
+      "start": 1072,
+      "end": 1090,
+      "text": "Đón nhận thế giới?"
+    },
+    {
+      "label": "stem",
+      "start": 1104,
+      "end": 1107,
+      "text": "âng"
+    },
+    {
+      "label": "stem",
+      "start": 1117,
+      "end": 1122,
+      "text": " biết"
+    },
+    {
+      "label": "stem",
+      "start": 1131,
+      "end": 1161,
+      "text": " yêu, chủ ngữ của cuộc đời đổi"
+    },
+    {
+      "label": "stem",
+      "start": 1167,
+      "end": 1169,
+      "text": " “"
+    },
+    {
+      "label": "stem",
+      "start": 1345,
+      "end": 1349,
+      "text": " là…"
+    },
+    {
+      "label": "stem",
+      "start": 1362,
+      "end": 1364,
+      "text": "Là"
+    },
+    {
+      "label": "stem",
+      "start": 1368,
+      "end": 1373,
+      "text": " thức"
+    },
+    {
+      "label": "stem",
+      "start": 1378,
+      "end": 1383,
+      "text": " đồng"
+    },
+    {
+      "label": "stem",
+      "start": 1388,
+      "end": 1518,
+      "text": "Từ đoạn đối thoại trên, anh/chị hãy viết bài văn nghị luận bàn về vấn đề: mối quan hệ giữa tự lập, tình yêu và cảm thức cộng đồng."
+    },
+    {
+      "label": "question_label",
+      "start": 1520,
+      "end": 1538,
+      "text": "Câu 2 (12,0 điểm)."
+    },
+    {
+      "label": "section",
+      "start": 1538,
+      "end": 1548,
+      "text": " Nghị luận"
+    },
+    {
+      "label": "stem",
+      "start": 1548,
+      "end": 1556,
+      "text": " văn học"
+    },
+    {
+      "label": "stem",
+      "start": 1557,
+      "end": 2036,
+      "text": "“Chỉ khi tôi không đủ cho tôi, tôi mới nhìn qua mắt những người khác. Thực tại, kể cả khi được nhìn qua mắt của nhiều người, vẫn chưa đủ. […] Tôi sẽ rúc lòng biết xem sự vật mang bộ mặt nào với con chuột hay con ong; tôi sẽ rúc lòng hơn nữa được tri giác thế giới mù hương, với tất cả thông tin và cảm xúc mà nó chứa đựng, cho một con chó.”\n\nNhận định của C.S. Lewis gợi ra vấn đề gì trong hoạt động sáng tác của nhà văn? Bằng trải nghiệm văn học, anh/chị hãy bàn luận vấn đề đó."
+    }
+  ]
+}

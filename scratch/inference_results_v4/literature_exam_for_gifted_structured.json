@@ -1,0 +1,84 @@
+{
+  "file_name": "literature_exam_for_gifted.txt",
+  "original_text_length": 10072,
+  "segments": [
+    {
+      "label": "section",
+      "start": 1802,
+      "end": 1815,
+      "text": " THI KHẢO SÁT"
+    },
+    {
+      "label": "section",
+      "start": 1818,
+      "end": 1823,
+      "text": "ỌN ĐỘ"
+    },
+    {
+      "label": "section",
+      "start": 1824,
+      "end": 1830,
+      "text": " TUYỂN"
+    },
+    {
+      "label": "section",
+      "start": 1832,
+      "end": 1842,
+      "text": "ỌC SINH GI"
+    },
+    {
+      "label": "section",
+      "start": 1843,
+      "end": 1844,
+      "text": "I"
+    },
+    {
+      "label": "section",
+      "start": 1845,
+      "end": 1864,
+      "text": "NĂM HỌC 2025 - 2026"
+    },
+    {
+      "label": "section",
+      "start": 1865,
+      "end": 1877,
+      "text": "Môn: Ngữ văn"
+    },
+    {
+      "label": "section",
+      "start": 1878,
+      "end": 1893,
+      "text": " HƯỚNG DẪN CHẤM"
+    },
+    {
+      "label": "section",
+      "start": 1897,
+      "end": 1906,
+      "text": " Nội dung"
+    },
+    {
+      "label": "stem",
+      "start": 4546,
+      "end": 4548,
+      "text": "àn"
+    },
+    {
+      "label": "stem",
+      "start": 4551,
+      "end": 4586,
+      "text": " thơ ca, nhà nghiên cứu Nguyễn Đăng"
+    },
+    {
+      "label": "stem",
+      "start": 4591,
+      "end": 4600,
+      "text": " cho rằng"
+    },
+    {
+      "label": "stem",
+      "start": 4605,
+      "end": 4608,
+      "text": " ra"
+    }
+  ]
+}

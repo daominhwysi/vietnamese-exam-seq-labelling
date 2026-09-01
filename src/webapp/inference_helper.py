@@ -240,7 +240,7 @@ class ModelManager:
             pass
 
         # Default fallback standard tag mapping
-        base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section"]
+        base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section", "explanation"]
         tag_to_id = {"O": 0}
         for tag in base_tags:
             tag_to_id[f"B-{tag}"] = len(tag_to_id)

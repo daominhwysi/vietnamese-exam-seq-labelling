@@ -62,6 +62,10 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             --color-section: rgba(108, 117, 125, 0.25);
             --border-section: #6c757d;
             --text-section: #ced4da;
+
+            --color-explanation: rgba(20, 184, 166, 0.25);
+            --border-explanation: #14b8a6;
+            --text-explanation: #5eead4;
         }}
         
         body {{
@@ -180,6 +184,11 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             border: 1px solid var(--border-section);
             color: var(--text-section);
         }}
+        .tag-explanation {{
+            background-color: var(--color-explanation);
+            border: 1px solid var(--border-explanation);
+            color: var(--text-explanation);
+        }}
         
         .tag-o {{
             color: #94a3b8;
@@ -218,55 +227,52 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
         
         .sample-meta {{
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #94a3b8;
         }}
         
-        .badge {{
-            font-size: 0.75rem;
-            font-weight: 600;
-            background-color: #334155;
-            color: #cbd5e1;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            text-transform: uppercase;
+        .sample-meta span {{
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
         }}
         
-        .text-renderer {{
-            font-family: inherit;
-            font-size: 1.15rem;
-            white-space: pre-wrap;
+        /* Token rendering area */
+        .token-flow {{
+            line-height: 2.2;
+            font-size: 1rem;
             word-break: break-word;
         }}
         
         .token {{
             display: inline-block;
+            margin: 2px 1px;
+            padding: 1px 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
             position: relative;
-            cursor: help;
-            border-radius: 3px;
-            padding: 1px 2px;
-            margin: 0 0.5px;
-            transition: all 0.2s ease;
         }}
         
         .token:hover {{
+            transform: translateY(-2px);
             filter: brightness(1.2);
-            box-shadow: 0 0 8px currentColor;
-            transform: scale(1.05);
             z-index: 10;
         }}
         
-        /* Tooltip styling */
-        .token::after {{
+        /* Hover tooltip showing full tag */
+        .token:hover::after {{
             content: attr(data-tag);
             position: absolute;
             bottom: 100%;
             left: 50%;
-            transform: translateX(-50%) translateY(-5px);
-            background-color: #020617;
-            color: #ffffff;
+            transform: translateX(-50%);
+            background-color: #0f172a;
+            color: #f8fafc;
             font-size: 0.75rem;
-            font-weight: bold;
+            font-weight: 600;
             padding: 4px 8px;
             border-radius: 4px;
             white-space: nowrap;
@@ -301,6 +307,7 @@ def generate_visualization(jsonl_path: str, output_html_path: str, max_embed_sam
             <div class="legend-item tag-option_text">Option Text</div>
             <div class="legend-item tag-stimulus">Stimulus Passage</div>
             <div class="legend-item tag-section">Section Header</div>
+            <div class="legend-item tag-explanation">Explanation / Barem</div>
         </div>
 
         <div id="samples-container"></div>

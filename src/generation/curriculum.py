@@ -18,7 +18,8 @@ SUBJECT_DISPLAY = {
     "chemistry": "Hóa học",
     "biology": "Sinh học",
     "english": "Tiếng Anh",
-    "literature": "Ngữ văn"
+    "literature": "Ngữ văn",
+    "toeic": "TOEIC English"
 }
 
 def get_curriculum_path(subject: str, grade: int) -> Path:

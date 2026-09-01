@@ -186,12 +186,12 @@ pixi run reconstruct -i output --reconstruct-dest output/reconstructed
 
 ---
 
-### Stage 4 — Dataset Preparation
+### Stage 4 — Offline Dataset Preparation
 
 Tokenizes all exams (synthetic + real), aligns BIO sequence labels to token offsets using multi-scale sliding windows, applies data augmentation, and splits into train/val/test. Also generates ground-truth annotated XML files per source exam.
 
 ```bash
-pixi run prepare-dataset -i output/exams -o output/dataset
+pixi run prepare-offline-dataset -i output/exams -o output/dataset
 ```
 
 **Key options:**
@@ -217,6 +217,7 @@ output/dataset/
 ├── train.jsonl
 ├── val.jsonl
 ├── test.jsonl
+├── raw_exams.jsonl
 ├── label_mapping.json
 └── xml/
     ├── exam_abc123_annotated.xml

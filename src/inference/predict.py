@@ -68,7 +68,7 @@ def load_label_mapping(model_dir: str):
         pass
 
     # 4. Standard base tags fallback
-    base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section"]
+    base_tags = ["question_label", "stem", "option_label", "option_text", "stimulus", "section", "explanation"]
     tag_to_id = {"O": 0}
     for tag in base_tags:
         tag_to_id[f"B-{tag}"] = len(tag_to_id)
