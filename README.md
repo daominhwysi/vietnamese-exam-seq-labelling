@@ -19,17 +19,10 @@ Pipeline sinh dữ liệu, gán nhãn OCR, chuẩn bị dataset và huấn luy�
 
 ---
 
-## 💡 Chọn Chế độ Huấn luyện: Online hay Offline?
+## 💡 Chế độ Huấn luyện: Online vs. Offline
 
-- **Chế độ Online (`--online-augmentation`)** *(Khuyên dùng)*:
-  - Chỉ cần file thô `raw_exams.jsonl` (~35MB) $\rightarrow$ Upload lên Hub trong 3s (`pixi run upload-online-dataset`).
-  - Khi train, mô hình tự đổi template và thêm nhiễu bố cục trực tiếp trong RAM (đa dạng vô hạn).
-  - Thích hợp train trên máy local / server có CPU khỏe.
-
-- **Chế độ Offline (`prepare-offline-dataset`)**:
-  - Cắt sliding window và tokenize sẵn ra file `train.jsonl` (~400MB) $\rightarrow$ Upload bằng `pixi run upload-dataset`.
-  - Nạp thẳng mảng số vào GPU (tốc độ batch nhanh hơn ~20%), tiết kiệm CPU.
-  - Thích hợp train DDP trên Kaggle 2x T4 hoặc Google Colab.
+- **Online (`--online-augmentation`)**: Huấn luyện trực tiếp từ file thô `raw_exams.jsonl`. Augmentation và tokenization được thực hiện trong quá trình nạp batch. Upload dữ liệu thô bằng lệnh `pixi run upload-online-dataset`.
+- **Offline (`prepare-offline-dataset`)**: Tokenize và cắt sliding window trước thành các file `train.jsonl`, `val.jsonl`, `test.jsonl`. Upload toàn bộ splits bằng lệnh `pixi run upload-dataset`.
 
 ---
 
