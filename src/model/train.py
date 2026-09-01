@@ -978,6 +978,9 @@ def run_train(args):
         "hub_token": hf_token,
         "gradient_checkpointing": getattr(args, "gradient_checkpointing", False),
         "gradient_accumulation_steps": getattr(args, "gradient_accumulation_steps", 1),
+        "dataloader_num_workers": getattr(args, "dataloader_num_workers", 4),
+        "dataloader_pin_memory": True,
+        "dataloader_prefetch_factor": 2,
         "seed": getattr(args, "seed", 42),
         "lr_scheduler_type": getattr(args, "lr_scheduler_type", "linear"),
     }
