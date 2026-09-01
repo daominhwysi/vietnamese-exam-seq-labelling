@@ -412,7 +412,6 @@ def run_train(args):
     # keyword-only arguments like self.embeddings(input_ids=input_ids).
     try:
         import peft.utils.other
-        import torch
         original_forward = peft.utils.other.AuxiliaryTrainingWrapper.forward
 
         def patched_forward(self, x=None, *args, **kwargs):
@@ -486,12 +485,8 @@ def run_train(args):
     
     if getattr(args, "online_augmentation", False):
         print(f"Online Dynamic Augmentation enabled! Loading raw question/exam files from '{args.raw_data_dir}'...")
-        from src.data.prepare import get_tag_mappings
+        from src.data.prepare import get_tag_mappings, parse_xml_annotations, infer_metadata_from_path
         tag_to_id, id_to_tag = get_tag_mappings()
-        
-        from pathlib import Path
-        import os
-        from src.data.prepare import parse_xml_annotations, infer_metadata_from_path
         
         raw_path = Path(args.raw_data_dir)
         raw_items = []
