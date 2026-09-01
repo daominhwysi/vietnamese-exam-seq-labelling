@@ -30,7 +30,7 @@ Pipeline sinh dữ liệu, gán nhãn OCR, chuẩn bị dataset và huấn luy�
 
 Dự án sử dụng **Pixi** để quản lý môi trường. Dưới đây là danh sách đầy đủ các lệnh:
 
-### 1. Sinh đề thi nhân tạo (`generate`)
+### 1. Sinh đề thi nhân tạo (`generate` / `exam`)
 ```bash
 # Sinh 5 đề thi ngẫu nhiên
 pixi run generate -n 5
@@ -41,69 +41,94 @@ pixi run generate -n 10 --subject physics --grade 11
 # Sinh đề thi môn Văn với 8 luồng đồng thời
 pixi run generate -n 5 --subject literature --grade 12 --concurrency 8
 ```
-* **Tham số**:
-  * `-n, --num-exams`: Số lượng đề thi cần sinh (mặc định: `1`).
-  * `-s, --subject`: Môn học (`math_algebra`, `math_geometry`, `physics`, `chemistry`, `biology`, `history`, `geography`, `economics_law`, `literature`, `english`, `toeic`).
-  * `-g, --grade`: Khối lớp (`8` đến `12`).
-  * `-c, --concurrency`: Số luồng sinh câu hỏi đồng thời (mặc định: `8`).
-  * `--output-dir`: Thư mục lưu file JSON (mặc định: `output/exams`).
+* **Danh sách toàn bộ tham số**:
+  * `-n, --num-exams` *(int, default: 50)*: Số lượng đề thi cần sinh.
+  * `-o, --output-dir` *(str, default: `output/exams`)*: Thư mục lưu file JSON đề thi.
+  * `-s, --subject` *(str, default: None)*: Lọc môn học (`math_algebra`, `math_geometry`, `physics`, `chemistry`, `biology`, `history`, `geography`, `economics_law`, `literature`, `english`, `toeic`).
+  * `-g, --grade` *(int, default: None)*: Lọc khối lớp (`8`, `9`, `10`, `11`, `12`).
+  * `-c, --concurrency` *(int, default: 2)*: Số luồng sinh câu hỏi đồng thời cho mỗi đề.
+  * `--model` *(str, default: `gpt-5.6-luna`)*: Tên mô hình LLM sử dụng.
+  * `--provider` *(choice: `codex`, `deepseek`, `nvidia`, `vilao`, `xah`, `commandcode`, default: None)*: Nhà cung cấp API LLM.
+  * `--thinking` *(choice: `high`, `max`, `low`, `medium`, `minimal`, `none`, `xhigh`, default: `low`)*: Mức độ reasoning effort.
+
+---
 
 ### 2. Gom dữ liệu thô (`consolidate-raw`)
-Gom toàn bộ đề thi OCR thật và đề synthetic trong `output/` vào file `output/dataset/raw_exams.jsonl`.
+Gom toàn bộ đề thi OCR thật và đề synthetic trong `output/` vào một file JSONL duy nhất.
 ```bash
 pixi run consolidate-raw
 ```
-* **Tham số**:
-  * `--input, -i`: Thư mục đầu vào (mặc định: `output`).
-  * `--output, -o`: Đường dẫn file JSONL đầu ra (mặc định: `output/dataset/raw_exams.jsonl`).
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-dir` *(str, default: `output`)*: Thư mục đầu vào chứa các thư mục con `exams/` và `real_annotated/`.
+  * `-o, --output-file` *(str, default: `output/dataset/raw_exams.jsonl`)*: Đường dẫn file JSONL đầu ra.
+  * `--include-all` *(flag, default: False)*: Bao gồm tất cả tài liệu bất kể trạng thái audit pass/fail.
 
 ---
 
 ### 3. Chuẩn bị Dataset Tokenized Offline (`prepare-offline-dataset` / `prepare-dataset`)
-Cắt sliding window (512, 1024), căn chỉnh nhãn token và xuất ra `train.jsonl`, `val.jsonl`, `test.jsonl`, `xml/`.
+Cắt sliding window, căn chỉnh nhãn token và xuất ra các file split tokenized offline.
 ```bash
 pixi run prepare-offline-dataset
 
-# Tùy chỉnh tham số
+# Tùy chỉnh chi tiết tham số
 sequence-labelling-generator prepare \
     --model jhu-clsp/mmBERT-base \
-    --window-sizes 512,1024 \
-    --strides 128,256 \
+    --max-len 512,1024 \
+    --stride 128,256 \
     --train-ratio 0.8 \
     --val-ratio 0.1 \
-    --test-ratio 0.1
+    --test-ratio 0.1 \
+    --exam-level
 ```
-* **Tham số**:
-  * `--model, -m`: Tên model base để lấy tokenizer (mặc định: `jhu-clsp/mmBERT-base`).
-  * `--window-sizes`: Độ dài cửa sổ trượt (mặc định: `512,1024`).
-  * `--strides`: Bước trượt (mặc định: `128,256`).
-  * `--output-dir, -o`: Thư mục lưu dataset (mặc định: `output/dataset`).
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-dir` *(str, default: `output`)*: Thư mục chứa đề thi nguồn.
+  * `-o, --output-dir` *(str, default: `output/dataset`)*: Thư mục lưu dataset đầu ra.
+  * `--model` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model để lấy tokenizer.
+  * `--max-len` *(str, default: `512,768,1024,2048`)*: Danh sách độ dài cửa sổ trượt (ngăn cách bởi dấu phẩy).
+  * `--stride` *(str, default: `128,192,256,512`)*: Danh sách bước trượt tương ứng (ngăn cách bởi dấu phẩy).
+  * `--train-ratio` *(float, default: 0.8)*: Tỷ lệ chia tập train.
+  * `--val-ratio` *(float, default: 0.1)*: Tỷ lệ chia tập validation.
+  * `--seed` *(int, default: 42)*: Random seed chia split.
+  * `--exam-level` *(flag)*: Ghép toàn bộ đề thi thành chuỗi dài thay vì cắt từng câu hỏi đơn lẻ.
+  * `--latex-placeholder` *(str, default: `[LATEX]`)*: Chuỗi thay thế cho công thức toán LaTeX.
+  * `--typo-rate` *(float, default: 0.02)*: Tỷ lệ chèn lỗi chính tả.
+  * `--space-noise-rate` *(float, default: 0.15)*: Tỷ lệ chèn nhiễu khoảng trắng ngẫu nhiên.
+  * `--latex-mask-prob` *(float, default: 0.5)*: Xác suất ẩn công thức LaTeX thành placeholder.
+  * `--option-drop-prob` *(float, default: 0.05)*: Xác suất loại bỏ ngẫu nhiên 1 phương án lựa chọn.
+  * `--casing-noise-prob` *(float, default: 0.10)*: Xác suất chuyển đổi chữ hoa/thường ngẫu nhiên.
+  * `--synonym-swap-prob` *(float, default: 0.10)*: Xác suất đổi tiền tố câu hỏi sang từ đồng nghĩa.
+  * `--formatting-noise-prob` *(float, default: 0.10)*: Xác suất chèn các thẻ markdown formatting.
+  * `--inline-option-prob` *(float, default: 0.0)*: Xác suất dàn trải phương án trên cùng một dòng.
+  * `--min-inline-spaces` *(int, default: 5)*, `--max-inline-spaces` *(int, default: 30)*: Số space giữa các option inline.
+  * `--min-inline-tabs` *(int, default: 1)*, `--max-inline-tabs` *(int, default: 3)*: Số tab giữa các option inline.
+  * `--grid-2x2-prob` *(float, default: 0.0)*: Xác suất xếp phương án thành dạng lưới 2x2.
+  * `--same-line-stem-options-prob` *(float, default: 0.0)*: Xác suất đặt thân câu hỏi và phương án A trên cùng 1 dòng.
+  * `--flatten-newlines-prob` *(float, default: 0.0)*: Xác suất chuyển toàn bộ dấu xuống dòng thành space.
+  * `--collapse-whitespace-prob` *(float, default: 0.0)*: Xác suất nén khoảng trắng thừa thành space đơn.
+  * `--only-passed` *(flag, default: True)*: Chỉ sử dụng các tài liệu đã đạt kiểm tra chất lượng.
+  * `--include-all` *(flag)*: Sử dụng toàn bộ tài liệu không phân biệt kết quả kiểm tra.
 
 ---
 
-### 4. Upload Dataset lên Hugging Face Hub
-
-#### a. Upload cho Online Training (`upload-online-dataset`)
-Chỉ upload `raw_exams.jsonl` và `label_mapping.json` (dung lượng ~35MB, hoàn tất trong vài giây).
+### 4. Upload Dataset lên Hugging Face Hub (`upload` / `upload-dataset` / `upload-online-dataset`)
 ```bash
+# Upload chế độ Online (chỉ raw_exams.jsonl + label_mapping.json)
 pixi run upload-online-dataset
 
-# Tùy chỉnh repo
-python src/data/upload.py --mode online-only --repo-id daominhwysi/synthetic-seq-labelling-vi-exam-v2
-```
-
-#### b. Upload đầy đủ Offline (`upload-dataset`)
-Upload toàn bộ dataset splits (`train.jsonl`, `val.jsonl`, `test.jsonl`) và thư mục `xml/`.
-```bash
+# Upload chế độ Offline (toàn bộ train/val/test splits + xml/)
 pixi run upload-dataset
 ```
+* **Danh sách toàn bộ tham số**:
+  * `--mode` *(choice: `all`, `online-only`, `raw-only`, `online`, `raw`, default: `all`)*: Chế độ upload.
+  * `--repo-id, --repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: Target repo ID trên Hugging Face.
+  * `--dataset-dir, --dataset_dir` *(str, default: `output/dataset`)*: Thư mục chứa dữ liệu trên máy local.
+  * `--token` *(str, default: None)*: Token xác thực Hugging Face (hoặc lấy từ biến môi trường `HF_TOKEN`).
 
 ---
 
 ### 5. Huấn luyện mô hình (`train`)
-
-#### a. Chế độ Online Augmentation (Tự động tải `raw_exams.jsonl` từ Hub)
 ```bash
+# Huấn luyện PyTorch DDP với Online Dynamic Augmentation
 torchrun --nproc_per_node=2 src/model/train.py \
     --online-augmentation \
     --repo_id daominhwysi/synthetic-seq-labelling-vi-exam-v2 \
@@ -115,48 +140,90 @@ torchrun --nproc_per_node=2 src/model/train.py \
     --enhanced-head \
     --fp16
 ```
-
-#### b. Chế độ Offline Dataset (Từ thư mục local)
-```bash
-torchrun --nproc_per_node=2 src/model/train.py \
-    --data-dir output/dataset \
-    --model_name jhu-clsp/mmBERT-base \
-    --output_dir output/models/mmbert-vi-exam-v5 \
-    --epochs 3 \
-    --batch_size 8 \
-    --lr 5e-5 \
-    --enhanced-head \
-    --fp16
-```
-* **Tham số chính**:
-  * `--model_name`: Model backbone (`jhu-clsp/mmBERT-base` hoặc `answerdotai/ModernBERT-base`).
-  * `--enhanced-head`: Kích hoạt Layer Pooling (4 lớp) + Dense MLP + Multi-Sample Dropout (5 masks) + Focal Loss ($\gamma=2.0$).
-  * `--online-augmentation`: Tự động thêm nhiễu bố cục trực tiếp trong RAM khi huấn luyện.
-  * `--lora_r`, `--lora_alpha`: Cấu hình rank/alpha cho LoRA (mặc định: `16`, `32`).
-  * `--fp16` / `--use_bf16`: Bật huấn luyện Mixed Precision.
+* **Danh sách toàn bộ tham số**:
+  * `--model_name` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model backbone trên Hugging Face.
+  * `--output_dir` *(str, default: `./results`)*: Thư mục lưu checkpoint và adapter weights.
+  * `--repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: Repo ID trên HF Hub để tải dữ liệu.
+  * `--data-dir` *(str, default: None)*: Thư mục local chứa dataset offline splits.
+  * `--online-augmentation` *(flag)*: Bật sinh biến thể bố cục và tokenize trực tiếp trong RAM lúc huấn luyện.
+  * `--raw-data-dir` *(str, default: `output`)*: Thư mục local chứa file `raw_exams.jsonl` hoặc các đề thi gốc.
+  * `--enhanced-head` *(flag, default: True)*: Kích hoạt Weighted Layer Pooling (4 lớp) + Dense MLP + Multi-Sample Dropout (5 masks) + Focal Loss.
+  * `--no-enhanced-head` *(flag)*: Tắt Enhanced Head, dùng linear classification head tiêu chuẩn.
+  * `--focal-gamma` *(float, default: 2.0)*: Hệ số focusing $\gamma$ của Focal Loss.
+  * `--label-smoothing` *(float, default: 0.05)*: Hệ số label smoothing cho loss.
+  * `--no-class-weights` *(flag)*: Tắt trọng số phạt theo tần suất nhãn.
+  * `--real-upsample-factor` *(float, default: 1.0)*: Hệ số nhân trọng số lấy mẫu cho đề thi OCR thật.
+  * `--epochs` *(int, default: 3)*: Số lượng epoch huấn luyện.
+  * `--batch_size` *(int, default: 8)*: Batch size huấn luyện trên mỗi GPU.
+  * `--eval_batch_size` *(int, default: 8)*: Batch size đánh giá validation.
+  * `--eval_accumulation_steps` *(int, default: 10)*: Số bước tích lũy đánh giá trước khi chuyển tensor sang CPU.
+  * `--lr` *(float, default: 5e-4)*: Tốc độ học (Learning rate).
+  * `--lr-scheduler-type` *(str, default: `linear`)*: Loại scheduler (`linear`, `cosine`, `constant`, `cosine_with_restarts`).
+  * `--warmup-ratio` *(float, default: 0.0)*: Tỷ lệ số bước warmup trên tổng số step.
+  * `--warmup-steps` *(int, default: 0)*: Số bước warmup cụ thể.
+  * `--weight_decay` *(float, default: 0.01)*: Hệ số suy giảm trọng số (Weight decay).
+  * `--lora_r` *(int, default: 16)*: Rank $r$ của LoRA adapter.
+  * `--lora_alpha` *(int, default: 32)*: Hệ số scaling $\alpha$ của LoRA.
+  * `--lora_dropout` *(float, default: 0.1)*: Tỷ lệ dropout của LoRA.
+  * `--no-lora` *(flag)*: Tắt LoRA để fine-tune toàn bộ tham số mô hình (Full fine-tuning).
+  * `--fp16` *(flag)*: Bật chế độ huấn luyện Mixed Precision float16.
+  * `--use_bf16` *(flag)*: Bật chế độ huấn luyện Mixed Precision bfloat16.
+  * `--no_fp16` *(flag)*: Tắt chế độ float16.
+  * `--gradient-checkpointing` *(flag)*: Bật gradient checkpointing để tiết kiệm VRAM.
+  * `--gradient-accumulation-steps` *(int, default: 1)*: Số bước tích lũy gradient trước khi cập nhật trọng số.
+  * `--save_total_limit` *(int, default: 2)*: Số lượng checkpoint tối đa được lưu lại.
+  * `--logs_per_epoch` *(int, default: 10)*: Số lần ghi log trong 1 epoch (tự động tính logging steps).
+  * `--logging_steps` *(int, default: None)*: Số bước cố định giữa các lần ghi log (ghi đè `logs_per_epoch`).
+  * `--report_to` *(choice: `wandb`, `tensorboard`, `none`, default: `none`)*: Nền tảng ghi log theo dõi.
+  * `--wandb_project` *(str, default: `vietnamese-exam-seq-labelling`)*: Tên dự án Weights & Biases.
+  * `--push_to_hub` *(flag)*: Tự động đẩy model/adapter lên Hugging Face Hub sau khi huấn luyện xong.
+  * `--hub_model_id` *(str, default: None)*: Target repo ID trên HF Hub để đẩy model lên.
+  * `--hf_token` *(str, default: None)*: Token xác thực Hugging Face.
+  * `--seed` *(int, default: 42)*: Random seed cho việc tái lập kết quả huấn luyện.
 
 ---
 
 ### 6. Phân đoạn thư mục đề thi thô (`batch-inference`)
-Phân đoạn toàn bộ các file `.txt` trong thư mục ra JSON cấu trúc, TXT dự đoán và XML gắn thẻ.
+Phân đoạn toàn bộ các file `.txt` và `.md` trong thư mục ra JSON cấu trúc, TXT dự đoán và XML gắn thẻ.
 ```bash
 pixi run batch-inference
 
-# Tùy chỉnh đường dẫn
+# Tùy chỉnh đường dẫn và mô hình
 python src/inference/predict_folder.py \
-    --input-dir scratch/test_raw_exams \
-    --output-dir scratch/inference_results \
-    --model-path output/models/mmbert-vi-exam-v5
+    -i scratch/test_raw_exams \
+    -o scratch/inference_results \
+    --model-dir output/models/mmbert-vi-exam-v5
 ```
-* **Tham số**:
-  * `--input-dir`: Thư mục chứa file text đề thi thô.
-  * `--output-dir`: Thư mục lưu kết quả xuất ra.
-  * `--model-path`: Đường dẫn model checkpoint / LoRA adapter.
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-dir` *(str, default: `scratch/test_raw_exams`)*: Thư mục chứa các file văn bản đề thi `.txt`/`.md`.
+  * `-o, --output-dir` *(str, default: `inference_output`)*: Thư mục lưu kết quả xuất ra.
+  * `--model-dir` *(str, default: `./results`)*: Đường dẫn thư mục model checkpoint/adapter local hoặc ID repo trên HF Hub.
+  * `--base-model-name` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model backbone.
+  * `--max-length` *(int, default: 1024)*: Chiều dài cửa sổ trượt tokenization.
+  * `--stride` *(int, default: 256)*: Bước trượt overlapping của sliding window.
 
 ---
 
-### 7. Web App
+### 7. Phân đoạn file đơn lẻ (`inference`)
+```bash
+# Phân đoạn trực tiếp chuỗi văn bản
+sequence-labelling-generator inference -m ./results -t "Câu 1: Cho hàm số... A. 1 B. 2"
 
+# Phân đoạn từ file văn bản đơn lẻ
+sequence-labelling-generator inference -m ./results -f exam.txt -o result.json
+```
+* **Danh sách toàn bộ tham số**:
+  * `-m, --model_dir` *(str, default: `./results`)*: Thư mục checkpoint hoặc HF repo.
+  * `--base_model_name` *(str, default: None)*: Tên base model.
+  * `-t, --text` *(str, default: None)*: Chuỗi văn bản đề thi truyền trực tiếp qua CLI.
+  * `-f, --file` *(str, default: None)*: Đường dẫn file văn bản đầu vào.
+  * `-o, --output` *(str, default: None)*: Đường dẫn file lưu kết quả (`.json`, `.xml`, `.txt`).
+  * `--max-length` *(int, default: 1024)*: Chiều dài cửa sổ trượt tokenization.
+  * `--stride` *(int, default: 256)*: Bước trượt overlapping của sliding window.
+
+---
+
+### 8. Web App
 ```bash
 # Trình duyệt quản lý & xem nhãn đề thi (Cổng 8000)
 pixi run view-exams
@@ -167,29 +234,51 @@ pixi run view-inference
 
 ---
 
-### 8. Kiểm thử (`test`)
-```bash
-pixi run test
-```
-
----
-
 ### 9. Upload Model lên Hugging Face Hub (`upload-model`)
 ```bash
 pixi run upload-model
 
-# Hoặc chỉ định rõ repo
+# Tùy chỉnh chi tiết
 sequence-labelling-generator upload-model \
     --model-dir output/models/mmbert-vi-exam-v5 \
-    --repo-id daominhwysi/mmbert-small-vi-exam-seq-labeling-v5
+    --repo-id daominhwysi/mmbert-small-vi-exam-seq-labeling-v5 \
+    --private
 ```
+* **Danh sách toàn bộ tham số**:
+  * `--model-dir` *(str, default: `./results`)*: Thư mục chứa trọng số model/adapter đã train.
+  * `--repo-id` *(str, default: None)*: ID repo model đích trên HF Hub.
+  * `--token` *(str, default: None)*: HF write token.
+  * `--private` *(flag, default: False)*: Thiết lập repo ở chế độ private.
+  * `--commit-message` *(str, default: None)*: Commit message tùy chỉnh.
+  * `--dataset-repo` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: ID repo dataset tham chiếu trong Model Card.
 
 ---
 
-### 10. Tiện ích Bảo trì Dữ liệu Gốc (`fix-root-data`)
-Script audit và chuẩn hóa lại các file XML/JSON cũ trên đĩa để đưa trích dẫn nguồn `(Adapted from...)`, `(Nguồn:...)` vào trong thẻ `<stimulus>`.
+### 10. Trực quan hóa nhãn Token HTML (`visualize`)
+Tạo trang web HTML độc lập trực quan hóa căn chỉnh nhãn token và character span.
+```bash
+pixi run visualize
+```
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-file` *(str, default: `output/dataset/train.jsonl`)*: File JSONL chứa token và nhãn.
+  * `-o, --output-html` *(str, default: `output/dataset/sample_visualization.html`)*: Đường dẫn file HTML đầu ra.
+  * `--max-samples` *(int, default: 1000)*: Số mẫu tối đa nhúng vào trang HTML.
+
+---
+
+### 11. Tiện ích Bảo trì Dữ liệu Gốc (`fix-root-data`)
+Script audit và sửa các file XML/JSON cũ trên đĩa để đưa trích dẫn nguồn `(Adapted from...)`, `(Nguồn:...)` vào trong thẻ `<stimulus>`.
 ```bash
 pixi run fix-root-data
+```
+* **Danh sách toàn bộ tham số**:
+  * `--input-dir` *(str, default: `output`)*: Thư mục chứa các file XML/JSON cần rà soát và sửa.
+
+---
+
+### 12. Kiểm thử tự động (`test`)
+```bash
+pixi run test
 ```
 
 ---
