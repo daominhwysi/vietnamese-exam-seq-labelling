@@ -23,8 +23,12 @@ accelerate = "*"
 
 [tool.pixi.tasks]
 generate = "sequence-labelling-generator exam"
+prepare-offline-dataset = "sequence-labelling-generator prepare --model jhu-clsp/mmBERT-base --exam-level"
 prepare-dataset = "sequence-labelling-generator prepare --model jhu-clsp/mmBERT-base --exam-level"
+consolidate-raw = "sequence-labelling-generator consolidate-raw"
+fix-root-data = "python src/data/fix_root_data.py --input-dir output"
 upload-dataset = "sequence-labelling-generator upload"
+upload-online-dataset = "sequence-labelling-generator upload --mode online-only"
 train = "sequence-labelling-generator train --model_name jhu-clsp/mmBERT-base"
 upload-model = "sequence-labelling-generator upload-model"
 visualize = "sequence-labelling-generator visualize"

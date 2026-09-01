@@ -37,9 +37,9 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "data_preparation": {
         "input_dir": "output",
         "output_dir": "output/dataset",
-        "train_ratio": 0.80,
+        "train_ratio": 0.85,
         "val_ratio": 0.10,
-        "test_ratio": 0.10,
+        "test_ratio": 0.05,
         "seed": 42,
         "exam_level": True,
         "sliding_windows": {

@@ -24,7 +24,8 @@ BASE_TAGS = [
     "option_label",
     "option_text",
     "stimulus",
-    "section"
+    "section",
+    "explanation"
 ]
 
 def get_tag_mappings() -> Tuple[Dict[str, int], Dict[int, str]]:
@@ -156,15 +157,32 @@ def spans_to_xml(raw_text: str, spans: List[Dict[str, Any]]) -> str:
 
     return "".join(result)
 
+def sanitize_nested_explanation_tags(text: str) -> str:
+    """
+    Strips any entity tags accidentally nested inside <explanation>...</explanation>
+    (e.g., <option_label>a.</option_label> or <stem> inside explanation),
+    ensuring that the explanation block remains a single continuous span.
+    """
+    if not text or "<explanation>" not in text:
+        return text
+
+    def _clean_inner(match):
+        inner = match.group(1)
+        cleaned = re.sub(r'</?(?:stem|option_label|option_text|question_label|stimulus|section)>', '', inner)
+        return f"<explanation>{cleaned}</explanation>"
+
+    return re.sub(r'<explanation>(.*?)</explanation>', _clean_inner, text, flags=re.DOTALL)
+
 def parse_xml_annotations(tagged_text: str) -> Tuple[str, List[Dict[str, Any]]]:
     """
     Parses an inline XML-tagged string into raw untagged text and character span dictionaries.
     Resolves self-closing stimulus anchors into <stimulus> tags before span computation.
     Only recognized entity tags are stripped and recorded as spans; other tags are preserved verbatim.
     """
+    tagged_text = sanitize_nested_explanation_tags(tagged_text)
     tagged_text = resolve_stimulus_anchors(tagged_text)
 
-    allowed_tags = {"question_label", "stem", "option_label", "option_text", "stimulus", "section"}
+    allowed_tags = {"question_label", "stem", "option_label", "option_text", "stimulus", "section", "explanation"}
     raw_chars = []
     spans = []
 
@@ -677,7 +695,7 @@ def process_single_question(
         config.latex_mask_prob = 1.0
     return process_single_question_legacy(q_data, tokenizer, tag_to_id, id_to_tag, config)
 
-def main():
+def parse_args():
     parser = argparse.ArgumentParser(description="XLM-RoBERTa Sequence Labelling Dataset Preparer")
     parser.add_argument(
         "-i", "--input-dir",
@@ -854,9 +872,145 @@ def main():
         action="store_true",
         help="Include all documents regardless of audit status"
     )
+    return parser.parse_args()
 
-    args = parser.parse_args()
-    run_prepare_dataset(args)
+def consolidate_raw_exams(
+    input_dir: Union[str, Path] = "output",
+    output_file: Union[str, Path] = "output/dataset/raw_exams.jsonl",
+    filter_passed: bool = True,
+    include_synthetic: bool = True,
+    include_real: bool = True
+) -> List[Dict[str, Any]]:
+    """
+    Scans input_dir for synthetic mock exams and audited real OCR exams.
+    Filters out unpassed audits and consolidates all clean documents into a single raw_exams.jsonl.
+    """
+    input_path = Path(input_dir)
+    output_file_path = Path(output_file)
+    output_file_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    records = []
+    seen_ids = set()
+
+    for dirpath, _, filenames in os.walk(input_path, followlinks=True):
+        dp = Path(dirpath)
+        rel_str = str(dp)
+        if "output/dataset" in rel_str or "dataset/xml" in rel_str:
+            continue
+
+        # 1. Real annotated XML files
+        if include_real and ("merged.xml" in filenames or any(fn.endswith("_annotated.xml") for fn in filenames)):
+            xml_name = "merged.xml" if "merged.xml" in filenames else next(fn for fn in filenames if fn.endswith("_annotated.xml"))
+            fp = dp / xml_name
+            
+            if filter_passed:
+                audit_file = dp / "audit_report.json"
+                if audit_file.exists():
+                    try:
+                        audit = json.loads(audit_file.read_text(encoding="utf-8"))
+                        if audit.get("decision", "").strip().upper() != "PASS" or audit.get("is_malfunctioned", False):
+                            continue
+                    except Exception:
+                        continue
+            try:
+                content = fp.read_text(encoding="utf-8")
+                raw_text, spans = parse_xml_annotations(content)
+                if spans:
+                    meta = infer_metadata_from_path(fp, input_path)
+                    exam_id = meta.get("exam_id", fp.stem)
+                    if exam_id not in seen_ids:
+                        seen_ids.add(exam_id)
+                        records.append({
+                            "exam_id": exam_id,
+                            "is_real": True,
+                            "subject": meta.get("subject", "general"),
+                            "grade": meta.get("grade", 12),
+                            "category": meta.get("category", "root"),
+                            "raw_text": raw_text,
+                            "spans": spans,
+                            "raw_xml": spans_to_xml(raw_text, spans),
+                            "source_file": str(fp.relative_to(input_path)) if fp.is_relative_to(input_path) else fp.name
+                        })
+            except Exception:
+                pass
+
+        # 2. JSON files (synthetic exams, questions, or real JSONs)
+        for fn in filenames:
+            if not fn.endswith(".json") or fn.startswith("chunk_") or fn in ["label_mapping.json", "audit_report.json", "train_stats.json", "val_stats.json", "test_stats.json", "raw_exams.jsonl"]:
+                continue
+            fp = dp / fn
+            
+            try:
+                with open(fp, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+            except Exception:
+                continue
+
+            if isinstance(data, dict):
+                # Real JSON exam
+                if include_real and data.get("is_real", False) and "raw_text" in data and "spans" in data:
+                    exam_id = data.get("exam_id", fp.stem)
+                    if exam_id not in seen_ids:
+                        seen_ids.add(exam_id)
+                        meta = infer_metadata_from_path(fp, input_path)
+                        records.append({
+                            "exam_id": exam_id,
+                            "is_real": True,
+                            "subject": data.get("subject", meta.get("subject", "general")),
+                            "grade": data.get("grade", meta.get("grade", 12)),
+                            "category": data.get("category", meta.get("category", "root")),
+                            "raw_text": data["raw_text"],
+                            "spans": data["spans"],
+                            "raw_xml": data.get("raw_xml") or spans_to_xml(data["raw_text"], data["spans"]),
+                            "source_file": str(fp.relative_to(input_path)) if fp.is_relative_to(input_path) else fp.name
+                        })
+
+                # Synthetic compiled exam
+                elif include_synthetic and "sections" in data:
+                    exam_id = data.get("exam_id", fp.stem)
+                    if exam_id not in seen_ids:
+                        seen_ids.add(exam_id)
+                        rec = reconstruct_exam(data, ReconstructorConfig())
+                        records.append({
+                            "exam_id": exam_id,
+                            "is_real": False,
+                            "subject": data.get("subject", "general"),
+                            "grade": data.get("grade", 12),
+                            "category": "synthetic",
+                            "raw_text": rec["raw_text"],
+                            "spans": rec["spans"],
+                            "raw_xml": spans_to_xml(rec["raw_text"], rec["spans"]),
+                            "sections": data.get("sections"),
+                            "source_file": str(fp.relative_to(input_path)) if fp.is_relative_to(input_path) else fp.name
+                        })
+
+                # Synthetic single question
+                elif include_synthetic and (data.get("stem") or data.get("stimulus") or data.get("questions")):
+                    q_id = data.get("question_id", fp.stem)
+                    if q_id not in seen_ids:
+                        seen_ids.add(q_id)
+                        rec = reconstruct_question(data, ReconstructorConfig())
+                        records.append({
+                            "exam_id": q_id,
+                            "is_real": False,
+                            "subject": data.get("subject", "general"),
+                            "grade": data.get("grade", 12),
+                            "category": "synthetic",
+                            "raw_text": rec["raw_text"],
+                            "spans": rec["spans"],
+                            "raw_xml": spans_to_xml(rec["raw_text"], rec["spans"]),
+                            "question_data": data,
+                            "source_file": str(fp.relative_to(input_path)) if fp.is_relative_to(input_path) else fp.name
+                        })
+
+    with open(output_file_path, "w", encoding="utf-8") as f:
+        for r in records:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    n_real = sum(1 for r in records if r.get("is_real", False))
+    n_synth = len(records) - n_real
+    print(f"Successfully consolidated {len(records)} raw exams ({n_real} real, {n_synth} synthetic) -> '{output_file_path}'")
+    return records
 
 def run_prepare_dataset(args):
     if args.train_ratio + args.val_ratio > 1.0 or args.train_ratio < 0.0 or args.val_ratio < 0.0:
@@ -874,13 +1028,27 @@ def run_prepare_dataset(args):
         print(f"Error: Input directory '{args.input_dir}' does not exist.")
         sys.exit(1)
         
+    def _is_excluded(p: Path) -> bool:
+        p_str = str(p.resolve())
+        out_str = str(output_path.resolve())
+        if p_str.startswith(out_str):
+            return True
+        if "/dataset/" in p_str or "\\dataset\\" in p_str:
+            return True
+        if "/.cache/" in p_str or "\\.cache\\" in p_str:
+            return True
+        if p.name.startswith("chunk_"):
+            return True
+        return False
+
     def _find_files(root: Path, pattern: str) -> List[Path]:
         matches = []
         for dirpath, _, filenames in os.walk(root, followlinks=True):
             dp = Path(dirpath)
             for fn in filenames:
-                if fn.endswith(pattern) or Path(fn).match(pattern):
-                    matches.append(dp / fn)
+                fp = dp / fn
+                if (fn.endswith(pattern) or Path(fn).match(pattern)) and not _is_excluded(fp):
+                    matches.append(fp)
         return matches
 
     json_files = _find_files(input_path, "question_*.json")
@@ -890,9 +1058,9 @@ def run_prepare_dataset(args):
     # Also find XML annotations (e.g. merged.xml, *_annotated.xml, or any XML files in source directories)
     xml_files = _find_files(input_path, "merged.xml")
     if not xml_files:
-        xml_files = _find_files(input_path, "*_annotated.xml")
+        xml_files = [f for f in _find_files(input_path, "*_annotated.xml") if not _is_excluded(f)]
     if not xml_files:
-        xml_files = [f for f in _find_files(input_path, "*.xml") if not f.name.startswith("chunk_") and "output/dataset/xml" not in str(f)]
+        xml_files = [f for f in _find_files(input_path, "*.xml") if not _is_excluded(f)]
 
     if not json_files and not exam_files and not real_exam_files and not xml_files:
         print(f"No question JSON files, exam JSON files, real exam JSON files, or annotated XML files found in '{args.input_dir}'. Please generate data first.")
@@ -940,30 +1108,22 @@ def run_prepare_dataset(args):
     
     # Build the shared ReconstructorConfig
     reconstructor_config = ReconstructorConfig(
-        typo_rate=args.typo_rate,
-        space_noise_rate=args.space_noise_rate,
-        latex_mask_prob=args.latex_mask_prob,
+        typo_rate=getattr(args, "typo_rate", 0.02),
+        space_noise_rate=getattr(args, "space_noise_rate", 0.15),
+        latex_mask_prob=getattr(args, "latex_mask_prob", 0.5),
         latex_placeholder=latex_placeholder,
-        enable_permutations=args.enable_permutations,
-        option_drop_prob=args.option_drop_prob,
-        casing_noise_prob=args.casing_noise_prob,
-        synonym_swap_prob=args.synonym_swap_prob,
-        formatting_noise_prob=args.formatting_noise_prob,
+        enable_permutations=getattr(args, "enable_permutations", False),
+        option_drop_prob=getattr(args, "option_drop_prob", 0.05),
+        casing_noise_prob=getattr(args, "casing_noise_prob", 0.10),
+        synonym_swap_prob=getattr(args, "synonym_swap_prob", 0.10),
+        formatting_noise_prob=getattr(args, "formatting_noise_prob", 0.10),
         inline_option_prob=getattr(args, "inline_option_prob", 0.0),
-        min_inline_spaces=getattr(args, "min_inline_spaces", 1),
-        max_inline_spaces=getattr(args, "max_inline_spaces", 30),
-        min_inline_tabs=getattr(args, "min_inline_tabs", 1),
-        max_inline_tabs=getattr(args, "max_inline_tabs", 3),
         grid_2x2_prob=getattr(args, "grid_2x2_prob", 0.0),
         same_line_stem_options_prob=getattr(args, "same_line_stem_options_prob", 0.0),
         flatten_newlines_prob=getattr(args, "flatten_newlines_prob", 0.0),
-        collapse_whitespace_prob=getattr(args, "collapse_whitespace_prob", 0.0)
+        collapse_whitespace_prob=getattr(args, "collapse_whitespace_prob", 0.0),
     )
-        
-    print(f"Processing data: found {len(json_files)} question file(s), {len(exam_files)} exam file(s), and {len(xml_files)} XML exam file(s)...")
-    processed_samples = []
-
-    # Prepare xml output directory for annotated XML files
+    
     xml_output_path = output_path / "xml"
     xml_output_path.mkdir(parents=True, exist_ok=True)
 
@@ -977,174 +1137,189 @@ def run_prepare_dataset(args):
         except Exception as xe:
             print(f"Warning: Could not write XML for '{stem}': {xe}")
 
-    # 1. Process individual question files
-    num_q_files = len(json_files)
-    for q_idx, file_path in enumerate(json_files):
+    # Collect all source documents into a registry for document-level partitioning
+    all_documents: List[Dict[str, Any]] = []
+    
+    for f in json_files:
+        all_documents.append({
+            "doc_id": f.stem,
+            "doc_type": "question",
+            "file_path": f
+        })
+        
+    for f in exam_files:
+        all_documents.append({
+            "doc_id": f.stem,
+            "doc_type": "exam",
+            "file_path": f
+        })
+        
+    filter_passed = not getattr(args, "include_all", False)
+    for f in xml_files:
+        if filter_passed:
+            audit_file = f.parent / "audit_report.json"
+            if audit_file.exists():
+                try:
+                    audit = json.loads(audit_file.read_text(encoding="utf-8"))
+                    decision = str(audit.get("decision", "")).strip().upper()
+                    is_malfunctioned = audit.get("is_malfunctioned", False)
+                    if decision != "PASS" or is_malfunctioned:
+                        continue
+                except Exception:
+                    pass
+        meta = infer_metadata_from_path(f, input_path)
+        all_documents.append({
+            "doc_id": meta["exam_id"],
+            "doc_type": "xml",
+            "file_path": f,
+            "meta": meta
+        })
+
+    print(f"Collected {len(all_documents)} total source documents (Questions: {len(json_files)}, Exams: {len(exam_files)}, XMLs: {len(all_documents) - len(json_files) - len(exam_files)}).")
+
+    # Document-level seeded shuffle and split to strictly eliminate data leakage
+    rng_split = random.Random(args.seed)
+    rng_split.shuffle(all_documents)
+
+    n_total_docs = len(all_documents)
+    n_train_docs = int(n_total_docs * args.train_ratio)
+    n_val_docs = int(n_total_docs * args.val_ratio)
+
+    doc_splits = {
+        "train": all_documents[:n_train_docs],
+        "val": all_documents[n_train_docs:n_train_docs + n_val_docs],
+        "test": all_documents[n_train_docs + n_val_docs:]
+    }
+
+    def process_doc_to_samples(doc: Dict[str, Any]) -> List[Dict[str, Any]]:
+        doc_type = doc["doc_type"]
+        file_path = doc["file_path"]
+        samples = []
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                q_data = json.load(f)
-
-            if args.exam_level:
-                samples = process_question_as_exam_level(q_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
-                for s in samples:
-                    s["metadata"]["source_file"] = file_path.name
-                    processed_samples.append(s)
-            else:
-                sample = process_single_question_legacy(q_data, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
-                if sample:
-                    sample["metadata"]["source_file"] = file_path.name
-                    processed_samples.append(sample)
-
-            # Generate XML from ground-truth spans
-            try:
-                q_rec = reconstruct_question(q_data, ReconstructorConfig())
-                _save_xml(file_path.stem, q_rec["raw_text"], q_rec["spans"])
-            except Exception:
-                pass
-
-        except Exception as e:
-            print(f"Warning: Failed to process question {file_path.name}: {e}")
-
-        if (q_idx + 1) % 50 == 0 or (q_idx + 1) == num_q_files:
-            print(f"[Progress] Processed {q_idx + 1}/{num_q_files} individual questions...")
-            
-    # 2. Process exam files
-    exam_q_count = 0
-    num_exam_files = len(exam_files)
-    for exam_idx, file_path in enumerate(exam_files):
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                exam_data = json.load(f)
-
-            if args.exam_level:
-                samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
-                for s in samples:
-                    s["metadata"]["source_file"] = file_path.name
-                    processed_samples.append(s)
-                    exam_q_count += 1
-            else:
-                sections = exam_data.get("sections", {})
-                for section_title, questions in sections.items():
-                    for idx, q_data in enumerate(questions):
-                        q_copy = dict(q_data)
-                        if "subject" not in q_copy and "subject" in exam_data:
-                            q_copy["subject"] = exam_data["subject"]
-                        if "grade" not in q_copy and "grade" in exam_data:
-                            q_copy["grade"] = exam_data["grade"]
-
-                        sample = process_single_question_legacy(q_copy, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
-                        if sample:
-                            sample["metadata"]["source_file"] = f"{file_path.name}::{section_title}::q_{idx}"
-                            processed_samples.append(sample)
-                            exam_q_count += 1
-
-            # Generate XML from ground-truth spans (one XML per source exam)
-            try:
-                if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
-                    _save_xml(file_path.stem, exam_data["raw_text"], exam_data["spans"])
+            if doc_type == "question":
+                with open(file_path, "r", encoding="utf-8") as f:
+                    q_data = json.load(f)
+                if args.exam_level:
+                    doc_samples = process_question_as_exam_level(q_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
+                    for s in doc_samples:
+                        s["metadata"]["source_file"] = file_path.name
+                        samples.append(s)
                 else:
-                    exam_rec = reconstruct_exam(exam_data, ReconstructorConfig())
-                    _save_xml(file_path.stem, exam_rec["raw_text"], exam_rec["spans"])
-            except Exception:
-                pass
+                    sample = process_single_question_legacy(q_data, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
+                    if sample:
+                        sample["metadata"]["source_file"] = file_path.name
+                        samples.append(sample)
+                try:
+                    q_rec = reconstruct_question(q_data, ReconstructorConfig())
+                    _save_xml(file_path.stem, q_rec["raw_text"], q_rec["spans"])
+                except Exception:
+                    pass
 
-        except Exception as e:
-            print(f"Warning: Failed to process exam {file_path.name}: {e}")
+            elif doc_type == "exam":
+                with open(file_path, "r", encoding="utf-8") as f:
+                    exam_data = json.load(f)
+                if args.exam_level:
+                    doc_samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
+                    for s in doc_samples:
+                        s["metadata"]["source_file"] = file_path.name
+                        samples.append(s)
+                else:
+                    sections = exam_data.get("sections", {})
+                    for section_title, questions in sections.items():
+                        for idx, q_data in enumerate(questions):
+                            q_copy = dict(q_data)
+                            if "subject" not in q_copy and "subject" in exam_data:
+                                q_copy["subject"] = exam_data["subject"]
+                            if "grade" not in q_copy and "grade" in exam_data:
+                                q_copy["grade"] = exam_data["grade"]
+                            sample = process_single_question_legacy(q_copy, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
+                            if sample:
+                                sample["metadata"]["source_file"] = f"{file_path.name}::{section_title}::q_{idx}"
+                                samples.append(sample)
+                try:
+                    if exam_data.get("is_real", False) and "raw_text" in exam_data and "spans" in exam_data:
+                        _save_xml(file_path.stem, exam_data["raw_text"], exam_data["spans"])
+                    else:
+                        exam_rec = reconstruct_exam(exam_data, ReconstructorConfig())
+                        _save_xml(file_path.stem, exam_rec["raw_text"], exam_rec["spans"])
+                except Exception:
+                    pass
 
-        if (exam_idx + 1) % 10 == 0 or (exam_idx + 1) == num_exam_files:
-            print(f"[Progress] Processed {exam_idx + 1}/{num_exam_files} exams...")
-
-    # 3. Process annotated XML exam documents
-    num_xml_files = len(xml_files)
-    if num_xml_files > 0:
-        filter_passed = not getattr(args, "include_all", False)
-        print(f"Processing {num_xml_files} annotated XML file(s) (Audit Filter: {'Enabled (only PASS)' if filter_passed else 'Disabled'})...")
-        skipped_non_pass = 0
-        for x_idx, file_path in enumerate(xml_files):
-            try:
-                # Audit check
-                if filter_passed:
-                    audit_file = file_path.parent / "audit_report.json"
-                    if audit_file.exists():
-                        try:
-                            audit = json.loads(audit_file.read_text(encoding="utf-8"))
-                            decision = str(audit.get("decision", "")).strip().upper()
-                            is_malfunctioned = audit.get("is_malfunctioned", False)
-                            if decision != "PASS" or is_malfunctioned:
-                                skipped_non_pass += 1
-                                continue
-                        except Exception as ae:
-                            print(f"Warning: Could not check audit for {file_path.name}: {ae}")
-
+            elif doc_type == "xml":
                 content = file_path.read_text(encoding="utf-8")
                 raw_text, spans = parse_xml_annotations(content)
-                if not spans:
-                    print(f"Warning: No valid spans found in XML '{file_path.name}'. Skipping.")
-                    continue
+                if spans:
+                    meta = doc.get("meta") or infer_metadata_from_path(file_path, input_path)
+                    rel_source = str(file_path.relative_to(input_path)) if file_path.is_relative_to(input_path) else file_path.name
+                    exam_data = {
+                        "exam_id": meta["exam_id"],
+                        "is_real": True,
+                        "raw_text": raw_text,
+                        "spans": spans,
+                        "subject": meta["subject"],
+                        "grade": meta["grade"],
+                        "category": meta["category"],
+                        "source_file": rel_source
+                    }
+                    if args.exam_level:
+                        doc_samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
+                        for s in doc_samples:
+                            s["metadata"]["source_file"] = rel_source
+                            samples.append(s)
+                    else:
+                        sample = process_single_question_legacy(exam_data, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
+                        if sample:
+                            sample["metadata"]["source_file"] = rel_source
+                            samples.append(sample)
+                    _save_xml(meta["exam_id"], raw_text, spans)
+        except Exception as e:
+            print(f"Warning: Failed to process document {file_path.name}: {e}")
 
-                meta = infer_metadata_from_path(file_path, input_path)
-                rel_source = str(file_path.relative_to(input_path)) if file_path.is_relative_to(input_path) else file_path.name
-                exam_data = {
-                    "exam_id": meta["exam_id"],
-                    "is_real": True,
-                    "raw_text": raw_text,
-                    "spans": spans,
-                    "subject": meta["subject"],
-                    "grade": meta["grade"],
-                    "category": meta["category"],
-                    "source_file": rel_source
-                }
+        return samples
 
-                if args.exam_level:
-                    samples = process_exam_level(exam_data, tokenizer, tag_to_id, id_to_tag, window_configs, reconstructor_config)
-                    for s in samples:
-                        s["metadata"]["source_file"] = rel_source
-                        processed_samples.append(s)
-                else:
-                    sample = process_single_question_legacy(exam_data, tokenizer, tag_to_id, id_to_tag, reconstructor_config)
-                    if sample:
-                        sample["metadata"]["source_file"] = rel_source
-                        processed_samples.append(sample)
+    total_samples = 0
+    split_counts = {}
 
-                # Save ground-truth XML to output/dataset/xml/
-                _save_xml(meta["exam_id"], raw_text, spans)
+    for split_name, docs in doc_splits.items():
+        print(f"\nProcessing {split_name} split ({len(docs)} documents)...")
+        split_samples = []
+        for d_idx, doc in enumerate(docs):
+            s_list = process_doc_to_samples(doc)
+            split_samples.extend(s_list)
+            if (d_idx + 1) % 50 == 0 or (d_idx + 1) == len(docs):
+                print(f"  [{split_name}] Processed {d_idx + 1}/{len(docs)} documents ({len(split_samples)} window samples generated)...")
+        
+        # Shuffle window chunks within the split
+        rng_split.shuffle(split_samples)
+        split_counts[split_name] = len(split_samples)
+        total_samples += len(split_samples)
 
-            except Exception as e:
-                print(f"Warning: Failed to process XML file {file_path.name}: {e}")
-
-            if (x_idx + 1) % 20 == 0 or (x_idx + 1) == num_xml_files:
-                print(f"[Progress] Processed {x_idx + 1}/{num_xml_files} XML exam documents...")
-            
-    print(f"Successfully prepared {len(processed_samples)} training samples (sources include individual question files, compiled exam files, and annotated XML exams).")
-    
-    # Shuffle and split
-    random.seed(args.seed)
-    random.shuffle(processed_samples)
-    
-    n_total = len(processed_samples)
-    n_train = int(n_total * args.train_ratio)
-    n_val = int(n_total * args.val_ratio)
-    
-    train_samples = processed_samples[:n_train]
-    val_samples = processed_samples[n_train:n_train+n_val]
-    test_samples = processed_samples[n_train+n_val:]
-    
-    splits = {
-        "train": train_samples,
-        "val": val_samples,
-        "test": test_samples
-    }
-    
-    for split_name, samples in splits.items():
         split_file = output_path / f"{split_name}.jsonl"
         with open(split_file, "w", encoding="utf-8") as f:
-            for s in samples:
+            for s in split_samples:
                 f.write(json.dumps(s, ensure_ascii=False) + "\n")
-        print(f"Saved {len(samples)} samples to '{split_file}'")
-        
+        print(f"Saved {len(split_samples)} samples to '{split_file}'")
+
+    # Also export consolidated raw_exams.jsonl for on-the-fly cloud training
+    print("\nConsolidating raw exams to 'raw_exams.jsonl'...")
+    try:
+        consolidate_raw_exams(
+            input_dir=input_path,
+            output_file=output_path / "raw_exams.jsonl",
+            filter_passed=not getattr(args, "include_all", False)
+        )
+    except Exception as ce:
+        print(f"Warning: Could not consolidate raw_exams.jsonl: {ce}")
+
     print("\nDataset preparation completed successfully!")
-    print(f"Total samples: {n_total} (Train: {len(train_samples)}, Val: {len(val_samples)}, Test: {len(test_samples)})")
+    print(f"Total documents: {n_total_docs} (Train: {len(doc_splits['train'])}, Val: {len(doc_splits['val'])}, Test: {len(doc_splits['test'])})")
+    print(f"Total window samples: {total_samples} (Train: {split_counts.get('train', 0)}, Val: {split_counts.get('val', 0)}, Test: {split_counts.get('test', 0)})")
     print(f"Label mapping saved to '{output_path / 'label_mapping.json'}'")
+    print(f"Consolidated raw dataset saved to '{output_path / 'raw_exams.jsonl'}'")
+
+def main():
+    args = parse_args()
+    run_prepare_dataset(args)
 
 if __name__ == "__main__":
     main()

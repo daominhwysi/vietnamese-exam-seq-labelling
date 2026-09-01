@@ -54,7 +54,6 @@ class TestExamCompiler(unittest.TestCase):
         self.assertIn(SECTION_MC, sections)
         self.assertIn(SECTION_TF, sections)
         self.assertIn(SECTION_SA, sections)
-        self.assertIn(SECTION_ESSAY, sections)
         
         mc_questions = sections[SECTION_MC]
         self.assertTrue(len(mc_questions) >= 10)
@@ -111,13 +110,33 @@ class TestExamCompiler(unittest.TestCase):
         self.assertEqual(exam_data["grade"], 11)
         
         sections = exam_data["sections"]
-        self.assertIn(SECTION_LIT_READING, sections)
-        self.assertIn(SECTION_LIT_WRITING, sections)
+        self.assertEqual(len(sections), 2)
+        total_questions = sum(len(q_list) for q_list in sections.values())
+        self.assertTrue(2 <= total_questions <= 3)
+
+    @patch('src.generation.exam_compiler.generate_single_question')
+    def test_generate_single_exam_toeic(self, mock_gen):
+        mock_gen.return_value = {
+            "stem": "Ms. Clara requested that the report be delivered _____ Friday.",
+            "options": ["(A) by", "(B) on", "(C) at", "(D) with"],
+            "raw_text": "Dummy TOEIC raw text",
+            "spans": [{"start": 0, "end": 5}],
+            "problem_type_level": "VD"
+        }
         
-        # Literature must only have these 2 sections
-        self.assertEqual(set(sections.keys()), {SECTION_LIT_READING, SECTION_LIT_WRITING})
-        self.assertEqual(len(sections[SECTION_LIT_READING]), 1)
-        self.assertEqual(len(sections[SECTION_LIT_WRITING]), 2)
+        exam_data = generate_single_exam(
+            subject=Subject.TOEIC,
+            grade=12,
+            concurrency=2
+        )
+        
+        self.assertIsNotNone(exam_data)
+        self.assertEqual(exam_data["subject"], "toeic")
+        self.assertEqual(exam_data["grade"], 12)
+        
+        sections = exam_data["sections"]
+        self.assertIn("PART 5 - INCOMPLETE SENTENCES", sections)
+        self.assertIn("PART 7 - READING COMPREHENSION", sections)
 
     @patch('src.generation.exam_compiler.generate_single_exam')
     @patch('src.generation.exam_compiler.get_available_curricula')

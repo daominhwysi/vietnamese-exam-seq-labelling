@@ -1,0 +1,1158 @@
+{
+  "file_name": "official_math_exam_2025.txt",
+  "original_text_length": 10035,
+  "segments": [
+    {
+      "label": "section",
+      "start": 8,
+      "end": 36,
+      "text": " là bản chuyển chữ (OCR) đầy"
+    },
+    {
+      "label": "section",
+      "start": 42,
+      "end": 61,
+      "text": " chính xác cấu trúc"
+    },
+    {
+      "label": "section",
+      "start": 74,
+      "end": 75,
+      "text": "4"
+    },
+    {
+      "label": "section",
+      "start": 112,
+      "end": 134,
+      "text": " các hình ảnh bạn cung"
+    },
+    {
+      "label": "section",
+      "start": 138,
+      "end": 139,
+      "text": "."
+    },
+    {
+      "label": "section",
+      "start": 243,
+      "end": 247,
+      "text": " đọc"
+    },
+    {
+      "label": "section",
+      "start": 250,
+      "end": 253,
+      "text": " sử"
+    },
+    {
+      "label": "section",
+      "start": 258,
+      "end": 259,
+      "text": "."
+    },
+    {
+      "label": "section",
+      "start": 266,
+      "end": 320,
+      "text": "### **BỘ GIÁO DỤC VÀ ĐÀO TẠO**\n\n**ĐỀ THI CHÍNH THỨC**\n"
+    },
+    {
+      "label": "section",
+      "start": 322,
+      "end": 342,
+      "text": "Đề thi có 04 trang)*"
+    },
+    {
+      "label": "section",
+      "start": 344,
+      "end": 394,
+      "text": "**KỲ THI TỐT NGHIỆP TRUNG HỌC PHỔ THÔNG NĂM 2025**"
+    },
+    {
+      "label": "section",
+      "start": 397,
+      "end": 412,
+      "text": "Môn thi: TOÁN**"
+    },
+    {
+      "label": "section",
+      "start": 414,
+      "end": 433,
+      "text": "Thời gian làm bài: "
+    },
+    {
+      "label": "section",
+      "start": 434,
+      "end": 469,
+      "text": "0 phút, không kể thời gian phát đề*"
+    },
+    {
+      "label": "section",
+      "start": 493,
+      "end": 591,
+      "text": "### **PHẦN I. Thí sinh trả lời từ câu 1 đến câu 12. Mỗi câu hỏi thí sinh chỉ chọn một phương án.**"
+    },
+    {
+      "label": "question_label",
+      "start": 593,
+      "end": 603,
+      "text": "**Câu 1:**"
+    },
+    {
+      "label": "stem",
+      "start": 603,
+      "end": 746,
+      "text": " Cho khối chóp O.ABC có OA vuông góc với mặt phẳng (ABC), tam giác ABC vuông tại A và OA = 2, AB = 3, AC = 6. Thể tích của khối chóp O.ABC bằng"
+    },
+    {
+      "label": "option_label",
+      "start": 749,
+      "end": 756,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 757,
+      "end": 760,
+      "text": "36."
+    },
+    {
+      "label": "option_label",
+      "start": 762,
+      "end": 769,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 770,
+      "end": 772,
+      "text": "6."
+    },
+    {
+      "label": "option_label",
+      "start": 774,
+      "end": 781,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 782,
+      "end": 785,
+      "text": "12."
+    },
+    {
+      "label": "option_label",
+      "start": 787,
+      "end": 794,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 795,
+      "end": 798,
+      "text": "18."
+    },
+    {
+      "label": "question_label",
+      "start": 800,
+      "end": 810,
+      "text": "**Câu 2:**"
+    },
+    {
+      "label": "stem",
+      "start": 810,
+      "end": 910,
+      "text": " Cho hình lăng trụ ABC.A'B'C' (xem hình dưới). Đường thẳng B'C' song song với mặt phẳng nào sau đây?"
+    },
+    {
+      "label": "option_label",
+      "start": 913,
+      "end": 920,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 920,
+      "end": 930,
+      "text": " (A'B'C')."
+    },
+    {
+      "label": "option_label",
+      "start": 932,
+      "end": 939,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 939,
+      "end": 946,
+      "text": " (ABC)."
+    },
+    {
+      "label": "option_label",
+      "start": 948,
+      "end": 955,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 955,
+      "end": 964,
+      "text": " (AB'C')."
+    },
+    {
+      "label": "option_label",
+      "start": 966,
+      "end": 973,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 973,
+      "end": 981,
+      "text": " (B'BC)."
+    },
+    {
+      "label": "question_label",
+      "start": 983,
+      "end": 993,
+      "text": "**Câu 3:**"
+    },
+    {
+      "label": "stem",
+      "start": 993,
+      "end": 1042,
+      "text": " Họ nguyên hàm của hàm số f(x) = sin x + cos x là"
+    },
+    {
+      "label": "option_label",
+      "start": 1045,
+      "end": 1052,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1052,
+      "end": 1071,
+      "text": " cos x - sin x + C."
+    },
+    {
+      "label": "option_label",
+      "start": 1073,
+      "end": 1080,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1080,
+      "end": 1100,
+      "text": " -cos x - sin x + C."
+    },
+    {
+      "label": "option_label",
+      "start": 1102,
+      "end": 1109,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1109,
+      "end": 1128,
+      "text": " cos x + sin x + C."
+    },
+    {
+      "label": "option_label",
+      "start": 1130,
+      "end": 1137,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1137,
+      "end": 1157,
+      "text": " -cos x + sin x + C."
+    },
+    {
+      "label": "question_label",
+      "start": 1159,
+      "end": 1169,
+      "text": "**Câu 4:**"
+    },
+    {
+      "label": "stem",
+      "start": 1169,
+      "end": 1209,
+      "text": " Nghiệm của phương trình 2^{2x+1} = 8 là"
+    },
+    {
+      "label": "option_label",
+      "start": 1212,
+      "end": 1219,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1219,
+      "end": 1228,
+      "text": " x = 3/2."
+    },
+    {
+      "label": "option_label",
+      "start": 1230,
+      "end": 1237,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1237,
+      "end": 1244,
+      "text": " x = 1."
+    },
+    {
+      "label": "option_label",
+      "start": 1246,
+      "end": 1253,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1253,
+      "end": 1260,
+      "text": " x = 3."
+    },
+    {
+      "label": "option_label",
+      "start": 1262,
+      "end": 1269,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1269,
+      "end": 1278,
+      "text": " x = 5/2."
+    },
+    {
+      "label": "question_label",
+      "start": 1280,
+      "end": 1290,
+      "text": "**Câu 5:**"
+    },
+    {
+      "label": "stem",
+      "start": 1290,
+      "end": 1432,
+      "text": " Trong không gian với hệ tọa độ Oxyz, mặt phẳng đi qua gốc tọa độ và nhận n = (-1; 0; 3) làm một vectơ pháp tuyến có phương trình tổng quát là"
+    },
+    {
+      "label": "option_label",
+      "start": 1435,
+      "end": 1442,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1442,
+      "end": 1455,
+      "text": " -y + 3z = 0."
+    },
+    {
+      "label": "option_label",
+      "start": 1457,
+      "end": 1464,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1464,
+      "end": 1477,
+      "text": " -x + 3z = 0."
+    },
+    {
+      "label": "option_label",
+      "start": 1479,
+      "end": 1486,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1486,
+      "end": 1499,
+      "text": " -x + 3y = 0."
+    },
+    {
+      "label": "option_label",
+      "start": 1501,
+      "end": 1508,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1508,
+      "end": 1521,
+      "text": " -x - 3z = 0."
+    },
+    {
+      "label": "question_label",
+      "start": 1523,
+      "end": 1533,
+      "text": "**Câu 6:**"
+    },
+    {
+      "label": "stem",
+      "start": 1533,
+      "end": 1835,
+      "text": " Cho hàm số y = (ax + b) / (cx + d) (ac ≠ 0, ad - bc ≠ 0) có bảng biến thiên như dưới đây.\n\n| x | -∞ |  | -2 |  | +∞ |\n| --- | --- | --- | --- | --- | --- |\n| y' |  | - | || | - |  |\n| y | 1 → |  | || | +∞ → |  |\n|  |  | -∞ | || |  | 1 |\n\nĐường tiệm cận đứng của đồ thị hàm số đã cho có phương trình là"
+    },
+    {
+      "label": "option_label",
+      "start": 1838,
+      "end": 1845,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1845,
+      "end": 1853,
+      "text": " x = -2."
+    },
+    {
+      "label": "option_label",
+      "start": 1855,
+      "end": 1862,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1862,
+      "end": 1870,
+      "text": " y = -2."
+    },
+    {
+      "label": "option_label",
+      "start": 1872,
+      "end": 1879,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1879,
+      "end": 1886,
+      "text": " y = 1."
+    },
+    {
+      "label": "option_label",
+      "start": 1888,
+      "end": 1895,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 1895,
+      "end": 1902,
+      "text": " x = 1."
+    },
+    {
+      "label": "question_label",
+      "start": 1904,
+      "end": 1914,
+      "text": "**Câu 7:**"
+    },
+    {
+      "label": "stem",
+      "start": 1914,
+      "end": 2053,
+      "text": " Trong không gian với hệ tọa độ Oxyz, cho mặt phẳng (P): 2x - 4y + 3z - 9 = 0. Vectơ nào sau đây là một vectơ pháp tuyến của mặt phẳng (P)?"
+    },
+    {
+      "label": "option_label",
+      "start": 2056,
+      "end": 2063,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2063,
+      "end": 2080,
+      "text": " n₂ = (2; 4; -3)."
+    },
+    {
+      "label": "option_label",
+      "start": 2082,
+      "end": 2089,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2089,
+      "end": 2106,
+      "text": " n₃ = (-2; 4; 3)."
+    },
+    {
+      "label": "option_label",
+      "start": 2108,
+      "end": 2115,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2115,
+      "end": 2131,
+      "text": " n₁ = (2; 4; 3)."
+    },
+    {
+      "label": "option_label",
+      "start": 2133,
+      "end": 2140,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2140,
+      "end": 2157,
+      "text": " n₄ = (2; -4; 3)."
+    },
+    {
+      "label": "question_label",
+      "start": 2164,
+      "end": 2174,
+      "text": "**Câu 8:**"
+    },
+    {
+      "label": "stem",
+      "start": 2174,
+      "end": 2287,
+      "text": " Cho hình chóp tứ giác đều S.ABCD (xem hình bên). Gọi O là giao điểm của AC và BD. Phát biểu nào sau đây là đúng?"
+    },
+    {
+      "label": "option_label",
+      "start": 2290,
+      "end": 2297,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2297,
+      "end": 2322,
+      "text": " SA + SB + SC + SD = 2SO."
+    },
+    {
+      "label": "option_label",
+      "start": 2324,
+      "end": 2331,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2331,
+      "end": 2356,
+      "text": " SA + SB + SC + SD = 4SO."
+    },
+    {
+      "label": "option_label",
+      "start": 2358,
+      "end": 2365,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2365,
+      "end": 2389,
+      "text": " SA + SB + SC + SD = SO."
+    },
+    {
+      "label": "option_label",
+      "start": 2391,
+      "end": 2398,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2398,
+      "end": 2421,
+      "text": " SA + SB + SC + SD = 0."
+    },
+    {
+      "label": "question_label",
+      "start": 2423,
+      "end": 2433,
+      "text": "**Câu 9:**"
+    },
+    {
+      "label": "stem",
+      "start": 2433,
+      "end": 2819,
+      "text": " Một người chia thời lượng (đơn vị: giây) thực hiện các cuộc gọi điện thoại của mình trong một tuần thành sáu nhóm và lập bảng tần số ghép nhóm như sau.\n\n| Nhóm | [0; 30) | [30; 60) | [60; 90) | [90; 120) | [120; 150) | [150; 180) |\n| --- | --- | --- | --- | --- | --- | --- |\n| Tần số | 10 | 11 | 8 | 6 | 4 | 1 |\n\nTứ phân vị thứ ba Q₃ (đơn vị: giây) của mẫu số liệu ghép nhóm trên bằng"
+    },
+    {
+      "label": "option_label",
+      "start": 2822,
+      "end": 2829,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2830,
+      "end": 2834,
+      "text": "100."
+    },
+    {
+      "label": "option_label",
+      "start": 2836,
+      "end": 2843,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2844,
+      "end": 2848,
+      "text": "105."
+    },
+    {
+      "label": "option_label",
+      "start": 2850,
+      "end": 2857,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2858,
+      "end": 2861,
+      "text": "90."
+    },
+    {
+      "label": "option_label",
+      "start": 2863,
+      "end": 2870,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2871,
+      "end": 2874,
+      "text": "95."
+    },
+    {
+      "label": "question_label",
+      "start": 2876,
+      "end": 2887,
+      "text": "**Câu 10:**"
+    },
+    {
+      "label": "stem",
+      "start": 2887,
+      "end": 2928,
+      "text": " Tập nghiệm của phương trình sin x = 1 là"
+    },
+    {
+      "label": "option_label",
+      "start": 2931,
+      "end": 2938,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2938,
+      "end": 2963,
+      "text": " S = {π/2 + k2π | k ∈ ℤ}."
+    },
+    {
+      "label": "option_label",
+      "start": 2965,
+      "end": 2972,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2972,
+      "end": 2990,
+      "text": " S = {kπ | k ∈ ℤ}."
+    },
+    {
+      "label": "option_label",
+      "start": 2992,
+      "end": 2999,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 2999,
+      "end": 3023,
+      "text": " S = {π/2 + kπ | k ∈ ℤ}."
+    },
+    {
+      "label": "option_label",
+      "start": 3025,
+      "end": 3032,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3032,
+      "end": 3051,
+      "text": " S = {k2π | k ∈ ℤ}."
+    },
+    {
+      "label": "question_label",
+      "start": 3053,
+      "end": 3064,
+      "text": "**Câu 11:**"
+    },
+    {
+      "label": "stem",
+      "start": 3064,
+      "end": 3237,
+      "text": " Trong mặt phẳng với hệ tọa độ Oxy, diện tích S của hình phẳng giới hạn bởi đồ thị hàm số y = 2x + 1, trục hoành và hai đường thẳng x = 1, x = 2 được xác định bằng công thức"
+    },
+    {
+      "label": "option_label",
+      "start": 3240,
+      "end": 3247,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3247,
+      "end": 3269,
+      "text": " S = ∫₁² (2x + 1)² dx."
+    },
+    {
+      "label": "option_label",
+      "start": 3271,
+      "end": 3278,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3278,
+      "end": 3301,
+      "text": " S = π ∫₁² (2x + 1) dx."
+    },
+    {
+      "label": "option_label",
+      "start": 3303,
+      "end": 3310,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3310,
+      "end": 3334,
+      "text": " S = π ∫₁² (2x + 1)² dx."
+    },
+    {
+      "label": "option_label",
+      "start": 3336,
+      "end": 3343,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3343,
+      "end": 3364,
+      "text": " S = ∫₁² (2x + 1) dx."
+    },
+    {
+      "label": "question_label",
+      "start": 3366,
+      "end": 3377,
+      "text": "**Câu 12:**"
+    },
+    {
+      "label": "stem",
+      "start": 3377,
+      "end": 3449,
+      "text": " Cho cấp số cộng (u_n) với u₁ = 2 và công sai d = 3. Giá trị của u₅ bằng"
+    },
+    {
+      "label": "option_label",
+      "start": 3452,
+      "end": 3459,
+      "text": " **A.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3460,
+      "end": 3463,
+      "text": "12."
+    },
+    {
+      "label": "option_label",
+      "start": 3465,
+      "end": 3472,
+      "text": " **B.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3473,
+      "end": 3476,
+      "text": "15."
+    },
+    {
+      "label": "option_label",
+      "start": 3478,
+      "end": 3485,
+      "text": " **C.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3486,
+      "end": 3489,
+      "text": "14."
+    },
+    {
+      "label": "option_label",
+      "start": 3491,
+      "end": 3498,
+      "text": " **D.**"
+    },
+    {
+      "label": "option_text",
+      "start": 3499,
+      "end": 3502,
+      "text": "17."
+    },
+    {
+      "label": "section",
+      "start": 3509,
+      "end": 3629,
+      "text": "### **PHẦN II. Thí sinh trả lời từ câu 1 đến câu 4. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.**"
+    },
+    {
+      "label": "question_label",
+      "start": 3631,
+      "end": 3641,
+      "text": "**Câu 1:**"
+    },
+    {
+      "label": "stem",
+      "start": 3641,
+      "end": 4095,
+      "text": " Một phần mềm nhận dạng tin nhắn quảng cáo trên điện thoại bằng cách dựa theo từ khóa để đánh dấu một số tin nhắn được gửi đến. Qua một thời gian dài sử dụng, người ta thấy rằng trong số tất cả các tin nhắn gửi đến, có 15% số tin nhắn bị đánh dấu. Trong số các tin nhắn bị đánh dấu, có 10% số tin nhắn không phải là quảng cáo. Trong số các tin nhắn không bị đánh dấu, có 15% số tin nhắn là quảng cáo.\nChọn ngẫu nhiên một tin nhắn được gửi đến điện thoại."
+    },
+    {
+      "label": "option_label",
+      "start": 4098,
+      "end": 4105,
+      "text": " **a)**"
+    },
+    {
+      "label": "option_text",
+      "start": 4105,
+      "end": 4158,
+      "text": " Xác suất để tin nhắn đó không bị đánh dấu bằng 0,85."
+    },
+    {
+      "label": "option_label",
+      "start": 4160,
+      "end": 4167,
+      "text": " **b)**"
+    },
+    {
+      "label": "option_text",
+      "start": 4167,
+      "end": 4258,
+      "text": " Xác suất để tin nhắn đó không phải là quảng cáo, biết rằng nó không bị đánh dấu, bằng 0,8."
+    },
+    {
+      "label": "option_label",
+      "start": 4260,
+      "end": 4267,
+      "text": " **c)**"
+    },
+    {
+      "label": "option_text",
+      "start": 4267,
+      "end": 4326,
+      "text": " Xác suất để tin nhắn đó không phải là quảng cáo bằng 0,75."
+    },
+    {
+      "label": "option_label",
+      "start": 4328,
+      "end": 4335,
+      "text": " **d)**"
+    },
+    {
+      "label": "option_text",
+      "start": 4335,
+      "end": 4430,
+      "text": " Xác suất để tin nhắn đó không bị đánh dấu, biết rằng nó không phải là quảng cáo, nhỏ hơn 0,95."
+    },
+    {
+      "label": "question_label",
+      "start": 4432,
+      "end": 4442,
+      "text": "**Câu 2:**"
+    },
+    {
+      "label": "stem",
+      "start": 4442,
+      "end": 5138,
+      "text": " Đối với ngành nuôi trồng thủy sản, việc kiểm soát lượng thuốc tồn dư trong nước là một nhiệm vụ quan trọng nhằm đáp ứng các tiêu chuẩn an toàn về môi trường. Khi nghiên cứu một loại thuốc trị bệnh trong nuôi trồng thủy sản, người ta sử dụng thuốc đó một lần và theo dõi nồng độ thuốc tồn dư trong nước kể từ lúc sử dụng thuốc. Kết quả cho thấy nồng độ thuốc y(t) (đơn vị: mg/lít) tồn dư trong nước tại thời điểm t ngày (t ≥ 0) kể từ lúc sử dụng thuốc, thỏa mãn y(t) > 0 và y'(t) = k.y(t) (t ≥ 0), trong đó k là hằng số khác không. Đo nồng độ thuốc tồn dư trong nước tại các thời điểm t = 6 (ngày); t = 12 (ngày) nhận được kết quả lần lượt là 2 mg/lít; 1 mg/lít. Cho biết y(t) = e^{g(t)} (t ≥ 0)."
+    },
+    {
+      "label": "option_label",
+      "start": 5141,
+      "end": 5148,
+      "text": " **a)**"
+    },
+    {
+      "label": "option_text",
+      "start": 5148,
+      "end": 5201,
+      "text": " g(t) = kt + C (t ≥ 0) với C là một hằng số xác định."
+    },
+    {
+      "label": "option_label",
+      "start": 5203,
+      "end": 5210,
+      "text": " **b)**"
+    },
+    {
+      "label": "option_text",
+      "start": 5210,
+      "end": 5227,
+      "text": " k = -(ln 2) / 6."
+    },
+    {
+      "label": "option_label",
+      "start": 5229,
+      "end": 5236,
+      "text": " **c)**"
+    },
+    {
+      "label": "option_text",
+      "start": 5236,
+      "end": 5248,
+      "text": " C = 4 ln 2."
+    },
+    {
+      "label": "option_label",
+      "start": 5250,
+      "end": 5257,
+      "text": " **d)**"
+    },
+    {
+      "label": "option_text",
+      "start": 5257,
+      "end": 5361,
+      "text": " Nồng độ thuốc tồn dư trong nước tại thời điểm t = 21 (ngày) kể từ lúc sử dụng thuốc lớn hơn 0,4 mg/lít."
+    },
+    {
+      "label": "question_label",
+      "start": 5368,
+      "end": 5378,
+      "text": "**Câu 3:**"
+    },
+    {
+      "label": "stem",
+      "start": 5378,
+      "end": 6141,
+      "text": " Mô hình toán học sau đây được sử dụng trong quan sát chuyển động của một vật. Trong không gian cho hệ tọa độ Oxyz có i, j, k lần lượt là các vectơ đơn vị trên các trục Ox, Oy, Oz và độ dài của mỗi vectơ đơn vị đó bằng 1 mét. Cho hai điểm A và B, trong đó điểm A có tọa độ là (7; 7; 0). Một vật (coi như là một hạt) chuyển động thẳng với tốc độ phụ thuộc thời gian t (giây) theo công thức v(t) = βt + 300 (m/giây), trong đó β là hằng số dương và 0 ≤ t ≤ 6. Ở thời điểm ban đầu (t = 0), vật đi qua A với tốc độ 300 m/giây và hướng tới B. Sau 2 giây kể từ thời điểm ban đầu, vật đi được quãng đường 606 m. Gọi u = (a; b; c) là vectơ cùng hướng với vectơ AB. Biết rằng |u| = 1 và góc giữa vectơ u lần lượt với các vectơ i, j, k có số đo tương ứng bằng 60°, 60°, 45°."
+    },
+    {
+      "label": "option_label",
+      "start": 6144,
+      "end": 6151,
+      "text": " **a)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6151,
+      "end": 6164,
+      "text": " a = cos 60°."
+    },
+    {
+      "label": "option_label",
+      "start": 6166,
+      "end": 6173,
+      "text": " **b)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6173,
+      "end": 6233,
+      "text": " Phương trình đường thẳng AB là (x - 7)/1 = (y - 7)/1 = z/2."
+    },
+    {
+      "label": "option_label",
+      "start": 6235,
+      "end": 6242,
+      "text": " **c)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6242,
+      "end": 6249,
+      "text": " β = 3."
+    },
+    {
+      "label": "option_label",
+      "start": 6251,
+      "end": 6258,
+      "text": " **d)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6258,
+      "end": 6350,
+      "text": " Giả sử sau 5 giây kể từ thời điểm ban đầu, vật đến điểm B(x_B; y_B; z_B). Khi đó x_B > 776."
+    },
+    {
+      "label": "question_label",
+      "start": 6352,
+      "end": 6362,
+      "text": "**Câu 4:**"
+    },
+    {
+      "label": "stem",
+      "start": 6362,
+      "end": 6394,
+      "text": " Cho hàm số f(x) = x³ - 3x + 91."
+    },
+    {
+      "label": "option_label",
+      "start": 6397,
+      "end": 6404,
+      "text": " **a)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6404,
+      "end": 6449,
+      "text": " Hàm số đã cho có đạo hàm là f'(x) = 3x² - 3."
+    },
+    {
+      "label": "option_label",
+      "start": 6451,
+      "end": 6458,
+      "text": " **b)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6458,
+      "end": 6507,
+      "text": " Phương trình f'(x) = 0 có tập nghiệm là S = {1}."
+    },
+    {
+      "label": "option_label",
+      "start": 6509,
+      "end": 6516,
+      "text": " **c)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6516,
+      "end": 6527,
+      "text": " f(1) = 89."
+    },
+    {
+      "label": "option_label",
+      "start": 6529,
+      "end": 6536,
+      "text": " **d)**"
+    },
+    {
+      "label": "option_text",
+      "start": 6536,
+      "end": 6596,
+      "text": " Giá trị nhỏ nhất của hàm số f(x) trên đoạn [-2; 2] bằng 89."
+    },
+    {
+      "label": "section",
+      "start": 6603,
+      "end": 6657,
+      "text": "### **PHẦN III. Thí sinh trả lời từ câu 1 đến câu 6.**"
+    },
+    {
+      "label": "question_label",
+      "start": 6659,
+      "end": 6669,
+      "text": "**Câu 1:**"
+    },
+    {
+      "label": "stem",
+      "start": 6669,
+      "end": 7269,
+      "text": " Bạn Nam tham gia cuộc thi giải mật thư. Theo quy tắc của cuộc thi, người chơi cần chọn ra sáu số từ tập S = {41; 42; 43; 44; 45; 46; 47; 48; 49} và xếp mỗi số vào đúng một vị trí trong sáu vị trí A, B, C, M, N, P như hình bên sao cho mỗi vị trí chỉ được xếp một số. Mật thư sẽ được giải nếu các bộ ba số xuất hiện ở những bộ ba vị trí (A, M, B); (B, N, C); (C, P, A) tạo thành các cấp số cộng theo thứ tự đó. Bạn Nam chọn ngẫu nhiên sáu số trong tập S và xếp ngẫu nhiên vào các vị trí được yêu cầu. Gọi xác suất để bạn Nam giải được mật thư ở lần chọn và xếp đó là a. Giá trị của 4/a bằng bao nhiêu?"
+    },
+    {
+      "label": "question_label",
+      "start": 7271,
+      "end": 7281,
+      "text": "**Câu 2:**"
+    },
+    {
+      "label": "stem",
+      "start": 7281,
+      "end": 7603,
+      "text": " Cho hình chóp S.ABCD có đáy ABCD là hình vuông với AB = 6. Biết rằng hình chiếu vuông góc của S trên mặt phẳng (ABCD) là trọng tâm H của tam giác ABC và SH = 3√2. Khoảng cách giữa hai đường thẳng AC và SD bằng bao nhiêu (không làm tròn kết quả các phép tính trung gian, chỉ làm tròn kết quả cuối cùng đến hàng phần trăm)?"
+    },
+    {
+      "label": "section",
+      "start": 7605,
+      "end": 7608,
+      "text": "---"
+    },
+    {
+      "label": "question_label",
+      "start": 7610,
+      "end": 7620,
+      "text": "**Câu 3:**"
+    },
+    {
+      "label": "stem",
+      "start": 7620,
+      "end": 8125,
+      "text": " Để gây quỹ từ thiện, câu lạc bộ thiện nguyện của một trường THPT tổ chức hoạt động bán hàng với hai mặt hàng là nước chanh và khoai chiên. Câu lạc bộ thiết kế hai thực đơn. Thực đơn 1 có giá tiền một suất bán là nước chanh và khoai chiên. Thực đơn 2 có giá 60 nghìn đồng, bao gồm ba cốc nước chanh và hai túi khoai chiên. Biết rằng câu lạc bộ chỉ làm được không quá 165 cốc nước chanh và 100 túi khoai chiên. Số tiền lớn nhất mà câu lạc bộ có thể nhận được sau khi bán hết hàng bằng bao nhiêu nghìn đồng?"
+    },
+    {
+      "label": "question_label",
+      "start": 8127,
+      "end": 8137,
+      "text": "**Câu 4:**"
+    },
+    {
+      "label": "stem",
+      "start": 8137,
+      "end": 8834,
+      "text": " Có bốn ngăn (trong một giá để sách) được đánh số thứ tự 1, 2, 3, 4 và tám quyển sách khác nhau. Bạn An xếp hết tám quyển sách nói trên vào bốn ngăn đó sao cho mỗi ngăn có ít nhất một quyển sách và các quyển sách được xếp thẳng đứng thành một hàng ngang với gáy sách quay ra ngoài ở mỗi ngăn. Khi đã xếp xong tám quyển sách, hai cách xếp của bạn An được gọi là giống nhau nếu chúng thỏa mãn đồng thời hai điều kiện sau đây:\n\n* Với từng ngăn, số lượng quyển sách ở ngăn đó là như nhau trong cả hai cách xếp;\n* Với từng ngăn, thứ tự từ trái sang phải của các quyển sách được xếp là như nhau trong cả hai cách xếp.\n\nGọi T là số cách xếp đôi một khác nhau của bạn An. Giá trị của T/400 bằng bao nhiêu?"
+    },
+    {
+      "label": "question_label",
+      "start": 8836,
+      "end": 8846,
+      "text": "**Câu 5:**"
+    },
+    {
+      "label": "stem",
+      "start": 8846,
+      "end": 9278,
+      "text": " Nếu một doanh nghiệp sản xuất x sản phẩm trong một tháng (x ∈ ℕ^*; 1 ≤ x ≤ 4500) thì doanh thu nhận được khi bán hết số sản phẩm đó là F(x) = -0,01x² + 450x (nghìn đồng), trong khi chi phí sản xuất bình quân cho mỗi sản phẩm là G(x) = 30000/x + 340 (nghìn đồng). Giả sử số sản phẩm sản xuất ra luôn được bán hết. Trong một tháng, doanh nghiệp đó cần sản xuất ít nhất bao nhiêu sản phẩm để lợi nhuận thu được lớn hơn 100 triệu đồng?"
+    },
+    {
+      "label": "question_label",
+      "start": 9280,
+      "end": 9290,
+      "text": "**Câu 6:**"
+    },
+    {
+      "label": "stem",
+      "start": 9290,
+      "end": 9875,
+      "text": " Để đặt một vật trang trí trên mặt bàn, người ta thiết kế một chân đế như sau. Lấy một khối gỗ có dạng khối chóp cụt tứ giác đều với độ dài hai cạnh đáy lần lượt bằng 7,4 cm và 10,4 cm, bề dày của khối gỗ bằng 1,5 cm. Sau đó khoét bỏ đi một phần của khối gỗ sao cho phần đó có dạng vật thể H, ở đó H nhận được bằng cách cắt khối cầu bán kính 5,5 cm bởi một mặt phẳng cắt mà mặt cắt là hình tròn bán kính 3,5 cm (xem hình dưới).\n\nThể tích của khối chân đế bằng bao nhiêu centimét khối (không làm tròn kết quả các phép tính trung gian, chỉ làm tròn kết quả cuối cùng đến hàng phần mười)?"
+    },
+    {
+      "label": "section",
+      "start": 9877,
+      "end": 9952,
+      "text": "--------------------------------- **HẾT** ---------------------------------"
+    },
+    {
+      "label": "section",
+      "start": 9954,
+      "end": 10034,
+      "text": "* *Thí sinh không được sử dụng tài liệu;*\n* *Giám thị không giải thích gì thêm.*"
+    }
+  ]
+}

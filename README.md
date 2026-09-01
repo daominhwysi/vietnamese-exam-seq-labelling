@@ -1,22 +1,311 @@
-# Vietnamese Exam Sequence Labelling — Data Generation & Model Training Pipeline
+# Vietnamese Exam Sequence Labelling Pipeline
 
-An end-to-end pipeline for generating curriculum-aligned synthetic Vietnamese exam data, annotating real OCR exam papers, building token-classification datasets, and fine-tuning LoRA-adapted sequence labelling models (mmBERT-base, ModernBERT) on the Hugging Face ecosystem.
+Pipeline sinh dữ liệu, gán nhãn OCR, chuẩn bị dataset và huấn luyện mô hình Sequence Labeling (mmBERT-base, ModernBERT) để bóc tách cấu trúc đề thi giáo dục Việt Nam và đề thi ngoại ngữ.
 
 ---
 
-## 🌟 Key Features
+## 🌟 Key Capabilities
 
-| Feature | Details |
-|---|---|
-| **LLM-driven data generation** | DeepSeek reasoning & flash models generate curriculum-aligned exam questions across 9 subjects and grades 8–12 |
-| **Real OCR annotation** | Semi-automated OCR pipeline annotates real exam PDFs with ground-truth XML entity tags |
-| **Rich data augmentation** | Typo injection, spacing noise, LaTeX masking, casing noise, prefix synonym swaps, inline option formatting, option drop simulation |
-| **Multi-scale sliding window** | Tokenizes long documents at 512 / 768 / 1024 / 2048 token windows with configurable stride overlap |
-| **Real sample upsampling** | `WeightedRandomSampler` at training time balances scarce real exam samples vs. abundant synthetic ones |
-| **LoRA / full fine-tuning** | PEFT LoRA adapters or full fine-tune via Hugging Face `Trainer` with BF16/FP16/FP32 auto-detection |
-| **HF Hub integration** | Auto-generated dataset cards & model cards; uploads splits + XML annotation files to HF datasets and models |
-| **Batch inference + XML output** | `inference_folder.py` segments raw `.txt` files and produces structured JSON, token prediction tables, and inline-tagged XML |
-| **Interactive web dashboard** | FastAPI + Jinja2 exam viewer with color-coded span highlighting |
+- **Bóc tách cấu trúc đề thi**: Phân đoạn tự động nhãn câu hỏi (`question_label`), thân câu hỏi (`stem`), nhãn phương án (`option_label`), nội dung phương án (`option_text`), bài đọc/ngữ liệu (`stimulus`), tiêu đề phần thi (`section`), lời giải & barem điểm (`explanation`).
+- **Hỗ trợ 11 môn học & nhiều format kỳ thi**:
+  - THPT Quốc gia (GDPT 2018): Toán (Đại số & Hình học), Vật lí, Hóa học, Sinh học, Lịch sử, Địa lí, GD Kinh tế & Pháp luật, Tiếng Anh.
+  - Ngữ văn: Đọc hiểu 5 câu, Nghị luận xã hội 200 chữ, Nghị luận văn học 600 chữ (kèm barem 4 tiêu chí), đề HSGQG (20.0đ).
+  - Ngoại ngữ: TOEIC trọn vẹn 7 Parts (Single/Multi Passages, Chat Chains, Bảng biểu).
+  - Đánh giá Năng lực (ĐHQG HN/HCM) & Đánh giá Tư duy (ĐHBK HN).
+- **Sinh dữ liệu nhân tạo (Synthetic Data)**: Sinh câu hỏi và biên soạn đề thi bám sát chương trình lớp 8–12 qua DeepSeek reasoning models.
+- **Xử lý đề thi scan/PDF thực tế (Real OCR Pipeline)**: OCR PDF sang Markdown và tự động gán nhãn XML.
+- **Template Bank & Data Augmentation**: Kho 168 mẫu tiêu đề, lời giải, barem điểm và bảng đáp án kết hợp nhiễu bố cục (nén khoảng trắng, casing, markdown styling, LaTeX formulas).
+- **Web App**: Giao diện duyệt đề thi (cổng 8000) và ứng dụng phân đoạn trực tiếp (cổng 8001).
+
+---
+
+## 💡 Chế độ Huấn luyện: Online vs. Offline
+
+- **Online (`--online-augmentation`)**: Huấn luyện trực tiếp từ file thô `raw_exams.jsonl`. Augmentation và tokenization được thực hiện trong quá trình nạp batch. Upload dữ liệu thô bằng lệnh `pixi run upload-online-dataset`.
+- **Offline (`prepare-offline-dataset`)**: Tokenize và cắt sliding window trước thành các file `train.jsonl`, `val.jsonl`, `test.jsonl`. Upload toàn bộ splits bằng lệnh `pixi run upload-dataset`.
+
+---
+
+## ⚡ CLI & Pixi Tasks Reference
+
+Dự án sử dụng **Pixi** để quản lý môi trường. Dưới đây là danh sách đầy đủ các lệnh:
+
+### 1. Sinh đề thi nhân tạo (`generate` / `exam`)
+```bash
+# Sinh 5 đề thi ngẫu nhiên
+pixi run generate -n 5
+
+# Sinh 10 đề thi môn Vật lí lớp 11
+pixi run generate -n 10 --subject physics --grade 11
+
+# Sinh đề thi môn Văn với 8 luồng đồng thời
+pixi run generate -n 5 --subject literature --grade 12 --concurrency 8
+```
+* **Danh sách toàn bộ tham số**:
+  * `-n, --num-exams` *(int, default: 50)*: Số lượng đề thi cần sinh.
+  * `-o, --output-dir` *(str, default: `output/exams`)*: Thư mục lưu file JSON đề thi.
+  * `-s, --subject` *(str, default: None)*: Lọc môn học (`math_algebra`, `math_geometry`, `physics`, `chemistry`, `biology`, `history`, `geography`, `economics_law`, `literature`, `english`, `toeic`).
+  * `-g, --grade` *(int, default: None)*: Lọc khối lớp (`8`, `9`, `10`, `11`, `12`).
+  * `-c, --concurrency` *(int, default: 2)*: Số luồng sinh câu hỏi đồng thời cho mỗi đề.
+  * `--model` *(str, default: `gpt-5.6-luna`)*: Tên mô hình LLM sử dụng.
+  * `--provider` *(choice: `codex`, `deepseek`, `nvidia`, `vilao`, `xah`, `commandcode`, default: None)*: Nhà cung cấp API LLM.
+  * `--thinking` *(choice: `high`, `max`, `low`, `medium`, `minimal`, `none`, `xhigh`, default: `low`)*: Mức độ reasoning effort.
+
+---
+
+### 2. Gom dữ liệu thô (`consolidate-raw`)
+Gom toàn bộ đề thi OCR thật và đề synthetic trong `output/` vào một file JSONL duy nhất.
+```bash
+pixi run consolidate-raw
+```
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-dir` *(str, default: `output`)*: Thư mục đầu vào chứa các thư mục con `exams/` và `real_annotated/`.
+  * `-o, --output-file` *(str, default: `output/dataset/raw_exams.jsonl`)*: Đường dẫn file JSONL đầu ra.
+  * `--include-all` *(flag, default: False)*: Bao gồm tất cả tài liệu bất kể trạng thái audit pass/fail.
+
+---
+
+### 3. Chuẩn bị Dataset Tokenized Offline (`prepare-offline-dataset` / `prepare-dataset`)
+Cắt sliding window, căn chỉnh nhãn token và xuất ra các file split tokenized offline.
+```bash
+pixi run prepare-offline-dataset
+
+# Tùy chỉnh chi tiết tham số
+sequence-labelling-generator prepare \
+    --model jhu-clsp/mmBERT-base \
+    --max-len 512,1024 \
+    --stride 128,256 \
+    --train-ratio 0.85 \
+    --val-ratio 0.10 \
+    --test-ratio 0.05 \
+    --exam-level
+```
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-dir` *(str, default: `output`)*: Thư mục chứa đề thi nguồn.
+  * `-o, --output-dir` *(str, default: `output/dataset`)*: Thư mục lưu dataset đầu ra.
+  * `--model` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model để lấy tokenizer.
+  * `--max-len` *(str, default: `512,768,1024,2048`)*: Danh sách độ dài cửa sổ trượt (ngăn cách bởi dấu phẩy).
+  * `--stride` *(str, default: `128,192,256,512`)*: Danh sách bước trượt tương ứng (ngăn cách bởi dấu phẩy).
+  * `--train-ratio` *(float, default: 0.85)*: Tỷ lệ chia tập train.
+  * `--val-ratio` *(float, default: 0.10)*: Tỷ lệ chia tập validation.
+  * `--seed` *(int, default: 42)*: Random seed chia split.
+  * `--exam-level` *(flag)*: Ghép toàn bộ đề thi thành chuỗi dài thay vì cắt từng câu hỏi đơn lẻ.
+  * `--latex-placeholder` *(str, default: `[LATEX]`)*: Chuỗi thay thế cho công thức toán LaTeX.
+  * `--typo-rate` *(float, default: 0.02)*: Tỷ lệ chèn lỗi chính tả.
+  * `--space-noise-rate` *(float, default: 0.15)*: Tỷ lệ chèn nhiễu khoảng trắng ngẫu nhiên.
+  * `--latex-mask-prob` *(float, default: 0.5)*: Xác suất ẩn công thức LaTeX thành placeholder.
+  * `--option-drop-prob` *(float, default: 0.05)*: Xác suất loại bỏ ngẫu nhiên 1 phương án lựa chọn.
+  * `--casing-noise-prob` *(float, default: 0.10)*: Xác suất chuyển đổi chữ hoa/thường ngẫu nhiên.
+  * `--synonym-swap-prob` *(float, default: 0.10)*: Xác suất đổi tiền tố câu hỏi sang từ đồng nghĩa.
+  * `--formatting-noise-prob` *(float, default: 0.10)*: Xác suất chèn các thẻ markdown formatting.
+  * `--inline-option-prob` *(float, default: 0.0)*: Xác suất dàn trải phương án trên cùng một dòng.
+  * `--min-inline-spaces` *(int, default: 5)*, `--max-inline-spaces` *(int, default: 30)*: Số space giữa các option inline.
+  * `--min-inline-tabs` *(int, default: 1)*, `--max-inline-tabs` *(int, default: 3)*: Số tab giữa các option inline.
+  * `--grid-2x2-prob` *(float, default: 0.0)*: Xác suất xếp phương án thành dạng lưới 2x2.
+  * `--same-line-stem-options-prob` *(float, default: 0.0)*: Xác suất đặt thân câu hỏi và phương án A trên cùng 1 dòng.
+  * `--flatten-newlines-prob` *(float, default: 0.0)*: Xác suất chuyển toàn bộ dấu xuống dòng thành space.
+  * `--collapse-whitespace-prob` *(float, default: 0.0)*: Xác suất nén khoảng trắng thừa thành space đơn.
+  * `--only-passed` *(flag, default: True)*: Chỉ sử dụng các tài liệu đã đạt kiểm tra chất lượng.
+  * `--include-all` *(flag)*: Sử dụng toàn bộ tài liệu không phân biệt kết quả kiểm tra.
+
+---
+
+### 4. Upload Dataset lên Hugging Face Hub (`upload` / `upload-dataset` / `upload-online-dataset`)
+```bash
+# Upload chế độ Online (chỉ raw_exams.jsonl + label_mapping.json)
+pixi run upload-online-dataset
+
+# Upload chế độ Offline (toàn bộ train/val/test splits + xml/)
+pixi run upload-dataset
+```
+* **Danh sách toàn bộ tham số**:
+  * `--mode` *(choice: `all`, `online-only`, `raw-only`, `online`, `raw`, default: `all`)*: Chế độ upload.
+  * `--repo-id, --repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: Target repo ID trên Hugging Face.
+  * `--dataset-dir, --dataset_dir` *(str, default: `output/dataset`)*: Thư mục chứa dữ liệu trên máy local.
+  * `--token` *(str, default: None)*: Token xác thực Hugging Face (hoặc lấy từ biến môi trường `HF_TOKEN`).
+
+---
+
+### 5. Huấn luyện mô hình (`train`)
+```bash
+# Huấn luyện PyTorch DDP với Online Dynamic Augmentation
+torchrun --nproc_per_node=2 src/model/train.py \
+    --online-augmentation \
+    --repo_id daominhwysi/synthetic-seq-labelling-vi-exam-v2 \
+    --model_name jhu-clsp/mmBERT-base \
+    --output_dir output/models/mmbert-vi-exam-v5 \
+    --epochs 3 \
+    --batch_size 8 \
+    --lr 5e-5 \
+    --enhanced-head \
+    --fp16
+```
+* **Danh sách toàn bộ tham số**:
+  * `--model_name` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model backbone trên Hugging Face.
+  * `--output_dir` *(str, default: `./results`)*: Thư mục lưu checkpoint và adapter weights.
+  * `--repo_id` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: Repo ID trên HF Hub để tải dữ liệu.
+  * `--data-dir` *(str, default: None)*: Thư mục local chứa dataset offline splits.
+  * `--online-augmentation` *(flag)*: Bật sinh biến thể bố cục và tokenize trực tiếp trong RAM lúc huấn luyện.
+  * `--raw-data-dir` *(str, default: `output`)*: Thư mục local chứa file `raw_exams.jsonl` hoặc các đề thi gốc.
+  * `--train_ratio` *(float, default: 0.85)*: Tỷ lệ tập train khi chia online.
+  * `--val_ratio` *(float, default: 0.10)*: Tỷ lệ tập validation khi chia online.
+  * `--test_ratio` *(float, default: 0.05)*: Tỷ lệ tập test khi chia online.
+  * `--enhanced-head` *(flag, default: True)*: Kích hoạt Weighted Layer Pooling (4 lớp) + Dense MLP + Multi-Sample Dropout (5 masks) + Focal Loss.
+  * `--no-enhanced-head` *(flag)*: Tắt Enhanced Head, dùng linear classification head tiêu chuẩn.
+  * `--focal-gamma` *(float, default: 2.0)*: Hệ số focusing $\gamma$ của Focal Loss.
+  * `--label-smoothing` *(float, default: 0.05)*: Hệ số label smoothing cho loss.
+  * `--no-class-weights` *(flag)*: Tắt trọng số phạt theo tần suất nhãn.
+  * `--real-upsample-factor` *(float, default: 1.0)*: Hệ số nhân trọng số lấy mẫu cho đề thi OCR thật.
+  * `--epochs` *(int, default: 3)*: Số lượng epoch huấn luyện.
+  * `--batch_size` *(int, default: 8)*: Batch size huấn luyện trên mỗi GPU.
+  * `--eval_batch_size` *(int, default: 8)*: Batch size đánh giá validation.
+  * `--eval_accumulation_steps` *(int, default: 10)*: Số bước tích lũy đánh giá trước khi chuyển tensor sang CPU.
+  * `--lr` *(float, default: 5e-4)*: Tốc độ học (Learning rate).
+  * `--lr-scheduler-type` *(str, default: `linear`)*: Loại scheduler (`linear`, `cosine`, `constant`, `cosine_with_restarts`).
+  * `--warmup-ratio` *(float, default: 0.0)*: Tỷ lệ số bước warmup trên tổng số step.
+  * `--warmup-steps` *(int, default: 0)*: Số bước warmup cụ thể.
+  * `--weight_decay` *(float, default: 0.01)*: Hệ số suy giảm trọng số (Weight decay).
+  * `--lora_r` *(int, default: 16)*: Rank $r$ của LoRA adapter.
+  * `--lora_alpha` *(int, default: 32)*: Hệ số scaling $\alpha$ của LoRA.
+  * `--lora_dropout` *(float, default: 0.1)*: Tỷ lệ dropout của LoRA.
+  * `--no-lora` *(flag)*: Tắt LoRA để fine-tune toàn bộ tham số mô hình (Full fine-tuning).
+  * `--fp16` *(flag)*: Bật chế độ huấn luyện Mixed Precision float16.
+  * `--use_bf16` *(flag)*: Bật chế độ huấn luyện Mixed Precision bfloat16.
+  * `--no_fp16` *(flag)*: Tắt chế độ float16.
+  * `--gradient-checkpointing` *(flag)*: Bật gradient checkpointing để tiết kiệm VRAM.
+  * `--gradient-accumulation-steps` *(int, default: 1)*: Số bước tích lũy gradient trước khi cập nhật trọng số.
+  * `--save_total_limit` *(int, default: 2)*: Số lượng checkpoint tối đa được lưu lại.
+  * `--logs_per_epoch` *(int, default: 10)*: Số lần ghi log trong 1 epoch (tự động tính logging steps).
+  * `--logging_steps` *(int, default: None)*: Số bước cố định giữa các lần ghi log (ghi đè `logs_per_epoch`).
+  * `--report_to` *(choice: `wandb`, `tensorboard`, `none`, default: `none`)*: Nền tảng ghi log theo dõi.
+  * `--wandb_project` *(str, default: `vietnamese-exam-seq-labelling`)*: Tên dự án Weights & Biases.
+  * `--push_to_hub` *(flag)*: Tự động đẩy model/adapter lên Hugging Face Hub sau khi huấn luyện xong.
+  * `--hub_model_id` *(str, default: None)*: Target repo ID trên HF Hub để đẩy model lên.
+  * `--hf_token` *(str, default: None)*: Token xác thực Hugging Face.
+  * `--seed` *(int, default: 42)*: Random seed cho việc tái lập kết quả huấn luyện.
+
+---
+
+### 6. Phân đoạn thư mục đề thi thô (`batch-inference`)
+Phân đoạn toàn bộ các file `.txt` và `.md` trong thư mục ra JSON cấu trúc, TXT dự đoán và XML gắn thẻ.
+```bash
+pixi run batch-inference
+
+# Tùy chỉnh đường dẫn và mô hình
+python src/inference/predict_folder.py \
+    -i scratch/test_raw_exams \
+    -o scratch/inference_results \
+    --model-dir output/models/mmbert-vi-exam-v5
+```
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-dir` *(str, default: `scratch/test_raw_exams`)*: Thư mục chứa các file văn bản đề thi `.txt`/`.md`.
+  * `-o, --output-dir` *(str, default: `inference_output`)*: Thư mục lưu kết quả xuất ra.
+  * `--model-dir` *(str, default: `./results`)*: Đường dẫn thư mục model checkpoint/adapter local hoặc ID repo trên HF Hub.
+  * `--base-model-name` *(str, default: `jhu-clsp/mmBERT-base`)*: Tên base model backbone.
+  * `--max-length` *(int, default: 1024)*: Chiều dài cửa sổ trượt tokenization.
+  * `--stride` *(int, default: 256)*: Bước trượt overlapping của sliding window.
+
+---
+
+### 7. Phân đoạn file đơn lẻ (`inference`)
+```bash
+# Phân đoạn trực tiếp chuỗi văn bản
+sequence-labelling-generator inference -m ./results -t "Câu 1: Cho hàm số... A. 1 B. 2"
+
+# Phân đoạn từ file văn bản đơn lẻ
+sequence-labelling-generator inference -m ./results -f exam.txt -o result.json
+```
+* **Danh sách toàn bộ tham số**:
+  * `-m, --model_dir` *(str, default: `./results`)*: Thư mục checkpoint hoặc HF repo.
+  * `--base_model_name` *(str, default: None)*: Tên base model.
+  * `-t, --text` *(str, default: None)*: Chuỗi văn bản đề thi truyền trực tiếp qua CLI.
+  * `-f, --file` *(str, default: None)*: Đường dẫn file văn bản đầu vào.
+  * `-o, --output` *(str, default: None)*: Đường dẫn file lưu kết quả (`.json`, `.xml`, `.txt`).
+  * `--max-length` *(int, default: 1024)*: Chiều dài cửa sổ trượt tokenization.
+  * `--stride` *(int, default: 256)*: Bước trượt overlapping của sliding window.
+
+---
+
+### 8. Web App
+```bash
+# Trình duyệt quản lý & xem nhãn đề thi (Cổng 8000)
+pixi run view-exams
+
+# Ứng dụng phân đoạn đề thi trực tiếp (Cổng 8001)
+pixi run view-inference
+```
+
+---
+
+### 9. Upload Model lên Hugging Face Hub (`upload-model`)
+```bash
+pixi run upload-model
+
+# Tùy chỉnh chi tiết
+sequence-labelling-generator upload-model \
+    --model-dir output/models/mmbert-vi-exam-v5 \
+    --repo-id daominhwysi/mmbert-small-vi-exam-seq-labeling-v5 \
+    --private
+```
+* **Danh sách toàn bộ tham số**:
+  * `--model-dir` *(str, default: `./results`)*: Thư mục chứa trọng số model/adapter đã train.
+  * `--repo-id` *(str, default: None)*: ID repo model đích trên HF Hub.
+  * `--token` *(str, default: None)*: HF write token.
+  * `--private` *(flag, default: False)*: Thiết lập repo ở chế độ private.
+  * `--commit-message` *(str, default: None)*: Commit message tùy chỉnh.
+  * `--dataset-repo` *(str, default: `daominhwysi/synthetic-seq-labelling-vi-exam-v2`)*: ID repo dataset tham chiếu trong Model Card.
+
+---
+
+### 10. Trực quan hóa nhãn Token HTML (`visualize`)
+Tạo trang web HTML độc lập trực quan hóa căn chỉnh nhãn token và character span.
+```bash
+pixi run visualize
+```
+* **Danh sách toàn bộ tham số**:
+  * `-i, --input-file` *(str, default: `output/dataset/train.jsonl`)*: File JSONL chứa token và nhãn.
+  * `-o, --output-html` *(str, default: `output/dataset/sample_visualization.html`)*: Đường dẫn file HTML đầu ra.
+  * `--max-samples` *(int, default: 1000)*: Số mẫu tối đa nhúng vào trang HTML.
+
+---
+
+### 11. Tiện ích Bảo trì Dữ liệu Gốc (`fix-root-data`)
+Script audit và sửa các file XML/JSON cũ trên đĩa để đưa trích dẫn nguồn `(Adapted from...)`, `(Nguồn:...)` vào trong thẻ `<stimulus>`.
+```bash
+pixi run fix-root-data
+```
+* **Danh sách toàn bộ tham số**:
+  * `--input-dir` *(str, default: `output`)*: Thư mục chứa các file XML/JSON cần rà soát và sửa.
+
+---
+
+### 12. Kiểm thử tự động (`test`)
+```bash
+pixi run test
+```
+
+---
+
+## 🚀 Pipeline Overview
+
+Quy trình hoạt động gồm 3 bước:
+1. **Chuẩn bị Dữ liệu**: Sinh câu hỏi qua LLM + Gán nhãn đề OCR thật $\rightarrow$ Gom vào `raw_exams.jsonl` (`consolidate-raw`).
+2. **Huấn luyện Mô hình**: Upload dữ liệu lên Hub (`upload-online-dataset`) $\rightarrow$ Huấn luyện `mmBERT-base` với Enhanced Head và Focal Loss trên multi-GPU (Kaggle/Server).
+3. **Phân đoạn & Khai thác**: Chạy bóc tách cấu trúc đề thi qua CLI (`batch-inference`) hoặc Web App (`view-inference`).
+
+---
+
+## 🏷️ Sequence Labeling Tag Set
+
+| Tag | Đối tượng gán nhãn | Ví dụ |
+| :--- | :--- | :--- |
+| `question_label` | Tiền tố câu hỏi | `Câu 1:`, `Question 5:`, `Bài 2.` |
+| `stem` | Thân câu hỏi (văn bản, công thức LaTeX) | `Cho hàm số $y=f(x)$ liên tục trên $\mathbb{R}$...` |
+| `option_label` | Ký hiệu phương án | `A.`, `B.`, `C.`, `D.`, `a)`, `b)` |
+| `option_text` | Nội dung phương án | `x = 2 hoặc x = 3` |
+| `stimulus` | Đoạn văn đọc hiểu / Ngữ liệu dùng chung | Đoạn trích văn học, bài báo, trích dẫn nguồn |
+| `section` | Tiêu đề phần thi, chỉ dẫn làm bài | `PHẦN I. Câu trắc nghiệm...`, `PART 7` |
+| `explanation` | Lời giải chi tiết, barem điểm, bảng đáp án | `* Lời giải: ...`, `| Câu | Đáp án | Điểm |` |
 
 ---
 
@@ -24,425 +313,79 @@ An end-to-end pipeline for generating curriculum-aligned synthetic Vietnamese ex
 
 ```text
 .
-├── pyproject.toml                  # Project config, Pixi task definitions, and dependencies
-├── pixi.lock                       # Exact cross-platform lockfile (conda-forge + PyPI)
-├── AGENTS.md                       # Agent instructions, schemas, and project structure reference
-├── README.md                       # This file
+├── pyproject.toml                  # Cấu hình Pixi tasks và dependencies
+├── pixi.lock                       # Lockfile môi trường
+├── config.yaml                     # Cấu hình pipeline chung
+├── AGENTS.md                       # Tài liệu hướng dẫn agent
+├── README.md                       # Tài liệu dự án (file này)
 │
-├── tests/                          # Unit test suite
-│   ├── test_curriculum.py
-│   ├── test_exam_compiler.py
-│   ├── test_prepare_dataset.py
-│   ├── test_parser.py
-│   └── test_reconstructor.py
+├── tests/                          # 82 Unit tests
+│   ├── test_template_bank.py       # Test Template Bank và formatting
+│   ├── test_reconstructor.py       # Test tái tạo văn bản và spans
+│   ├── test_fix_root_data.py       # Test sửa dữ liệu gốc XML/JSON
+│   ├── test_prepare_dataset.py     # Test tokenizer alignment và sliding window
+│   ├── test_enhanced_head.py       # Test Layer Pooling, MSD và Focal Loss
+│   ├── test_iter_logger.py         # Test logger huấn luyện
+│   ├── test_exam_compiler.py       # Test compiler đề thi
+│   ├── test_curriculum.py          # Test curriculum loader
+│   ├── test_parser.py              # Test XML parser
+│   └── test_codex_provider.py      # Test LLM client
 │
-├── scratch/                        # Debug & utility scripts (not part of main pipeline)
-│   ├── check_alignment.py
-│   ├── debug_alignment.py
-│   ├── debug_model.py
-│   ├── count_tokens.py
-│   ├── incremental_train.py
-│   ├── inspect_exam_spans.py
-│   └── ...
+├── logs/                           # Báo cáo kỹ thuật & token usage
+│   ├── RUN_3_REPORT.md             # Báo cáo lỗi Run #3
+│   ├── RUN_4_REPORT.md             # Báo cáo kết quả Run #4 (Recall 97.2%)
+│   ├── RUN_5_PREPARATION_REPORT.md # Báo cáo chuẩn bị Run #5
+│   └── token_usage_<DATE>.jsonl    # Log token DeepSeek API
 │
-├── logs/                           # API token-usage logs (gitignored JSONL)
-│   └── token_usage_<YYYY-MM-DD>.jsonl
+├── output/                         # Dữ liệu xuất ra (gitignored)
+│   ├── dataset/                    # Dataset chuẩn hóa (raw_exams.jsonl, splits, label_mapping.json, xml/)
+│   ├── exams/                      # Đề thi synthetic JSON
+│   └── real_annotated/             # Đề thi OCR thật JSON/XML
 │
-├── output/                         # Generated artifacts (gitignored)
-│   ├── curriculum/                 # Cached curriculum JSON files
-│   ├── exams/                      # Generated mock exam JSON files
-│   │   ├── exam_*.json             # Synthetic compiled exams
-│   │   └── real_exam_*.json        # Real OCR-annotated exams
-│   └── dataset/                    # Prepared tokenized dataset
-│       ├── train.jsonl
-│       ├── val.jsonl
-│       ├── test.jsonl
-│       ├── label_mapping.json
-│       └── xml/                    # Ground-truth inline-tagged XML per source exam
-│           └── *_annotated.xml
+├── scratch/                        # Scripts kiểm thử & đánh giá định dạng
+│   ├── test_customer_formats.py    # Test định dạng ĐGNL, ĐGTD, SAT, IELTS
+│   ├── test_toeic_deep.py          # Test TOEIC bảng biểu và song ngữ
+│   ├── test_toeic_remaining.py     # Test TOEIC chat chains và triple passages
+│   ├── generate_bio_lit_50.py      # Script sinh batch đề Văn & Sinh
+│   └── generate_toeic_lit_50.py    # Script sinh batch đề Văn & TOEIC
 │
-├── real_data_annotator/            # Real exam OCR + annotation tools
-│   ├── pdf_converter.py            # OCR PDF → markdown text
-│   ├── annotate_ocr.py             # LLM-annotates OCR text → real_exam_*.json + XML
-│   └── out/                        # Intermediate annotation outputs
-│
-└── src/                            # Main source package
-    ├── cli.py                      # Unified CLI entry point (all pipeline subcommands)
-    ├── token_tracker.py            # Thread-safe DeepSeek token usage logger
+└── src/                            # Mã nguồn chính
+    ├── cli.py                      # CLI console entry point
     │
-    ├── generation/                 # Stage 1–3: Data Generation
-    │   ├── curriculum.py           # Subject/grade curriculum generation & caching
-    │   ├── deepseek_client.py      # DeepSeek API client wrapper
-    │   ├── exam_compiler.py        # Compiles questions into section-grouped mock exams
-    │   ├── generator.py            # Orchestrates LLM prompting & question generation
-    │   ├── parser.py               # Parses LLM XML output into structured question dicts
-    │   └── reconstructor.py        # Rebuilds raw text from JSON + computes character-level spans
+    ├── data/                       # Xử lý dữ liệu & OCR
+    │   ├── fix_root_data.py        # Sửa dữ liệu gốc XML/JSON
+    │   ├── prepare.py              # Tokenize dataset & sliding window
+    │   ├── upload.py               # Upload dataset lên HF Hub (online-only / all)
+    │   ├── pdf_converter.py        # OCR PDF sang Markdown
+    │   └── annotate_ocr.py         # Gán nhãn Markdown OCR sang JSON/XML
     │
-    ├── training/                   # Stage 4–8: Dataset + Training + Inference + Upload
-    │   ├── prepare_dataset.py      # Tokenizes exams, aligns BIO labels, splits dataset, generates XML
-    │   ├── train.py                # LoRA/full fine-tune training with WeightedRandomSampler
-    │   ├── inference.py            # Single-input inference with trained adapter
-    │   ├── inference_folder.py     # Batch inference → JSON + TXT + annotated XML per file
-    │   ├── upload_dataset.py       # Uploads dataset + auto-generated dataset card to HF Hub
-    │   ├── upload_model.py         # Uploads model + auto-generated model card to HF Hub
-    │   └── visualize_samples.py    # Generates standalone HTML token-span visualizer
+    ├── generation/                 # Sinh dữ liệu
+    │   ├── template_bank.py        # Template bank (168 mẫu layout)
+    │   ├── reconstructor.py        # Tái tạo raw text & offset spans
+    │   ├── generator.py            # Prompt AI sinh câu hỏi
+    │   ├── exam_compiler.py        # Biên soạn đề thi hoàn chỉnh
+    │   ├── curriculum.py           # Quản lý khung chương trình
+    │   ├── parser.py               # Parse XML câu hỏi từ LLM
+    │   └── deepseek_client.py      # Client DeepSeek API
     │
-    └── webapp/                     # FastAPI exam viewer
-        ├── main.py
-        └── templates/              # Jinja2 templates (dashboard, exam viewer, dataset browser)
+    ├── model/                      # Huấn luyện & Export
+    │   ├── head.py                 # Enhanced Classification Head & Focal Loss
+    │   ├── train.py                # Train script (LoRA, DDP, Online/Offline)
+    │   ├── upload.py               # Upload model lên HF Hub
+    │   └── export.py               # Export model sang ONNX
+    │
+    ├── inference/                  # Suy diễn
+    │   ├── predict.py              # Single inference
+    │   └── predict_folder.py       # Batch inference thư mục
+    │
+    ├── utils/                      # Tiện ích
+    │   ├── config.py               # Parse config.yaml
+    │   ├── token_tracker.py        # Token tracker logger
+    │   └── visualize.py            # Tạo HTML visualizer
+    │
+    └── webapp/                     # Web Application
+        ├── main.py                 # FastAPI exam viewer (Cổng 8000)
+        ├── inference_app.py        # FastAPI live inference (Cổng 8001)
+        ├── inference_helper.py     # Sliding window & LaTeX masking helper
+        └── templates/              # Jinja2 templates
 ```
-
----
-
-## ⚙️ Setup
-
-This project uses **[Pixi](https://pixi.sh)** for hermetic, cross-platform environment management.
-
-### 1. Install Pixi
-
-```bash
-curl -fsSL https://pixi.sh/install.sh | bash
-```
-
-### 2. Install dependencies
-
-```bash
-pixi install
-```
-
-### 3. Configure environment variables
-
-Create a `.env` file in the project root:
-
-```bash
-DEEPSEEK_API_KEY=sk-...      # DeepSeek API key for question generation
-HF_TOKEN=hf_...              # Hugging Face write token for upload/download
-```
-
-> [!WARNING]
-> Never commit `.env` or any file containing API keys to version control.
-
----
-
-## 🚀 Pipeline Workflow
-
-The full pipeline runs in 8 stages. Each stage is a `pixi run` task.
-
-```
-┌─────────────────┐    ┌──────────────────┐    ┌──────────────────┐
-│  1. curriculum  │───▶│  2. exam/generate │───▶│  3. (reconstruct)│
-└─────────────────┘    └──────────────────┘    └──────────────────┘
-                                                         │
-                        ┌────────────────────────────────┘
-                        ▼
-               ┌─────────────────┐    ┌──────────────┐    ┌──────────────┐
-               │  4. prepare     │───▶│  5. train    │───▶│  6. inference│
-               └─────────────────┘    └──────────────┘    └──────────────┘
-                        │                    │
-                        ▼                    ▼
-               ┌──────────────────┐  ┌────────────────┐
-               │ upload-dataset   │  │  upload-model  │
-               └──────────────────┘  └────────────────┘
-```
-
-### Stage 1 — Curriculum Generation
-
-Generate subject/grade curricula (chapters, units, problem types) used to steer question generation:
-
-```bash
-# Single subject/grade
-pixi run curriculum --subject physics --grade 11
-
-# All subjects & grades concurrently
-pixi run curriculum --all --concurrency 8
-```
-
-Output: `output/curriculum/{subject}_g{grade}.json`
-
----
-
-### Stage 2 — Mock Exam Generation
-
-Synthesize section-grouped mock exams. Each exam contains multiple questions across question types (multiple choice, true/false, short answer, ordering, group questions):
-
-```bash
-pixi run generate -n 300 --concurrency 8
-
-# Filter to a specific subject/grade
-pixi run generate -n 50 --subject history --grade 12
-```
-
-Output: `output/exams/exam_*.json`
-
----
-
-### Stage 3 — (Optional) Text Reconstruction
-
-Re-reconstruct raw text and offset spans from existing question JSON files (useful after schema changes):
-
-```bash
-pixi run reconstruct -i output --reconstruct-dest output/reconstructed
-```
-
----
-
-### Stage 4 — Dataset Preparation
-
-Tokenizes all exams (synthetic + real), aligns BIO sequence labels to token offsets using multi-scale sliding windows, applies data augmentation, and splits into train/val/test. Also generates ground-truth annotated XML files per source exam.
-
-```bash
-pixi run prepare-dataset -i output/exams -o output/dataset
-```
-
-**Key options:**
-
-| Flag | Default | Description |
-|---|---|---|
-| `--model` | `jhu-clsp/mmBERT-base` | Tokenizer to use |
-| `--exam-level` | off | Process at exam level (vs. question level) |
-| `--max-len` | `512,768,1024,2048` | Sliding window sizes |
-| `--stride` | `128,192,256,512` | Overlap strides |
-| `--typo-rate` | `0.02` | Typo injection rate |
-| `--space-noise-rate` | `0.15` | Whitespace noise rate |
-| `--latex-mask-prob` | `0.5` | LaTeX `$...$` masking probability |
-| `--casing-noise-prob` | `0.10` | Random casing noise |
-| `--synonym-swap-prob` | `0.10` | Prefix synonym swap |
-| `--inline-option-prob` | `0.0` | Inline option formatting probability |
-| `--option-drop-prob` | `0.05` | Simulate truncated options (OCR cuts) |
-
-Output:
-
-```
-output/dataset/
-├── train.jsonl
-├── val.jsonl
-├── test.jsonl
-├── label_mapping.json
-└── xml/
-    ├── exam_abc123_annotated.xml
-    ├── real_exam_xyz_annotated.xml
-    └── ...
-```
-
----
-
-### Stage 5 — Train Token Classifier
-
-Fine-tune with LoRA adapters (or full fine-tuning) using HF `Trainer`. Supports weighted sampling to upsample real exam data:
-
-```bash
-pixi run train \
-  --repo_id daominhwysi/synthetic-seq-labelling-vi-exam-v2 \
-  --epochs 5 \
-  --batch_size 8 \
-  --real-upsample-factor 5.0
-```
-
-**Key options:**
-
-| Flag | Default | Description |
-|---|---|---|
-| `--repo_id` | `daominhwysi/synthetic-seq-labelling-vi-exam-v2` | HF dataset repo to load |
-| `--model_name` | `jhu-clsp/mmBERT-base` | Base model |
-| `--lora_r` | `16` | LoRA rank |
-| `--lora_alpha` | `32` | LoRA alpha |
-| `--real-upsample-factor` | `1.0` | Weight multiplier for real samples (e.g. `5.0` = 5× more frequent) |
-| `--no-lora` | off | Full fine-tune instead of LoRA |
-| `--report_to` | `none` | Log integration to report metrics to (`wandb`, `tensorboard`, `none`) |
-| `--wandb_project` | `vietnamese-exam-seq-labelling` | Weights & Biases project name |
-| `--warmup-ratio` | `0.0` | LR warmup ratio |
-| `--gradient-checkpointing` | off | Save GPU memory |
-| `--no-class-weights` | off | Disable inverse-frequency class weighting |
-
-Output: `./results/` (LoRA adapter weights + `label_mapping.json`)
-
----
-
-### Stage 6 — Batch Inference
-
-Run the trained model over a folder of raw `.txt` files. Produces three output files per input:
-
-```bash
-pixi run batch-inference \
-  -i path/to/txt_files/ \
-  -o inference_output/ \
-  --model-dir ./results \
-  --max-length 1024 \
-  --stride 256
-```
-
-Per input file `exam.txt`, outputs:
-
-| File | Content |
-|---|---|
-| `exam_structured.json` | Structured segment list with labels and text |
-| `exam_predictions.txt` | Token-level tabular prediction table |
-| `exam_annotated.xml` | Inline-tagged XML matching `annotate_ocr.py` format |
-
-**XML example:**
-```xml
-<question_label>Câu 1.</question_label> <stem>Cho phương trình $x^2 - 5x + 6 = 0$.</stem>
-<option_label>A.</option_label> <option_text>x = 2 hoặc x = 3</option_text>
-<option_label>B.</option_label> <option_text>x = 1 hoặc x = 6</option_text>
-```
-
----
-
-### Stage 7 — Upload Dataset to HF Hub
-
-Uploads `output/dataset/` (splits + `label_mapping.json` + `xml/` subfolder) and auto-generates a dataset card:
-
-```bash
-pixi run upload-dataset
-
-# Custom target repo
-sequence-labelling-generator upload \
-  --repo-id myuser/my-dataset \
-  --dataset-dir output/dataset
-```
-
----
-
-### Stage 8 — Upload Model to HF Hub
-
-Uploads `./results/` and auto-generates a model card from `adapter_config.json` + `label_mapping.json`:
-
-```bash
-pixi run upload-model
-
-# Custom options
-sequence-labelling-generator upload-model \
-  --model-dir ./results \
-  --repo-id myuser/vi-exam-seq-labeller \
-  --private
-```
-
----
-
-### Visualization & Web Dashboard
-
-```bash
-# Standalone HTML token-span alignment visualizer
-pixi run visualize -i output/dataset/train.jsonl -o output/dataset/viz.html
-
-# FastAPI interactive exam viewer (http://127.0.0.1:8000)
-pixi run view-exams
-```
-
----
-
-## 📊 Data Contracts
-
-### Tag Set (BIO Schema)
-
-| Tag | Description | Example |
-|---|---|---|
-| `question_label` | Question/sub-question number prefix | `"Câu 1:"`, `"Question 2."` |
-| `stem` | Main question body text | `"Cho hàm số $y = f(x)$..."` |
-| `option_label` | Option letter prefix | `"A."`, `"B."`, `"a)"` |
-| `option_text` | Option content text | `"Hàm số đồng biến trên $(0; +∞)"` |
-| `stimulus` | Shared reading passage / stimulus for group questions | `"Đọc đoạn văn sau..."` |
-| `section` | Section headers and exam directions | `"PHẦN I. Trắc nghiệm"` |
-
-All tags use the BIO prefix scheme: `B-<tag>` for the first token, `I-<tag>` for continuation, `O` for outside.
-
-### Dataset Sample Schema
-
-Each line in `train.jsonl`, `val.jsonl`, `test.jsonl`:
-
-```json
-{
-  "tokens":         ["▁Câu", "▁1", ".", "▁Cho", "..."],
-  "input_ids":      [0, 12, 34, 56, ...],
-  "attention_mask": [1, 1, 1, 1, ...],
-  "labels":         [1, 2, 0, 3, ...],
-  "tags":           ["B-question_label", "I-question_label", "O", "B-stem", "..."],
-  "metadata": {
-    "subject":       "physics",
-    "grade":         11,
-    "is_real":       false,
-    "exam_id":       "exam_abc123",
-    "question_type": "multiple_choice",
-    "difficulty":    "comprehend",
-    "max_len":       512,
-    "stride":        128,
-    "chunk_idx":     0,
-    "total_chunks":  1
-  }
-}
-```
-
-### Subjects & Grades
-
-**Subjects:** `economics_law` · `geography` · `history` · `math_algebra` · `math_geometry` · `physics` · `chemistry` · `english` · `literature`
-
-**Grades:** 8 · 9 · 10 · 11 · 12
-
-**Question types:** `multiple_choice` · `true_false` · `short_answer` · `ordering` · `group_multiple_choice` · `group_short_answer`
-
-**Difficulty levels:** `recognize` · `comprehend` · `low_application` · `application` · `high_application`
-
-### Question JSON Schema
-
-#### Standard Question
-
-```json
-{
-  "is_group": false,
-  "stem": "Nguyên tố nào có tính kim loại mạnh nhất?",
-  "options": ["Na", "K", "Li", "Cs"],
-  "answer": "B",
-  "explanation": "Kali (K) có năng lượng ion hoá thứ nhất thấp nhất...",
-  "subject": "chemistry",
-  "grade": 10,
-  "question_type": "multiple_choice",
-  "difficulty": "comprehend"
-}
-```
-
-#### Group Question
-
-```json
-{
-  "is_group": true,
-  "stimulus": "Đọc đoạn văn sau và trả lời các câu hỏi...",
-  "questions": [
-    {
-      "stem": "Ý chính của đoạn văn là gì?",
-      "options": ["A...", "B...", "C...", "D..."],
-      "answer": "A",
-      "explanation": "..."
-    }
-  ],
-  "subject": "english",
-  "grade": 12,
-  "question_type": "group_multiple_choice",
-  "difficulty": "application"
-}
-```
-
----
-
-## 🛠️ Development
-
-```bash
-# Run all unit tests
-pixi run test
-
-# Check API token balance
-python scratch/get_balance.py
-
-# Inspect generated dataset splits
-python scratch/inspect_local_data.py
-
-# Verify span alignment accuracy
-python scratch/check_xml_accuracy.py
-```
-
----
-
-## 🔗 Related Resources
-
-- **Dataset:** [daominhwysi/synthetic-seq-labelling-vi-exam-v2](https://huggingface.co/datasets/daominhwysi/synthetic-seq-labelling-vi-exam-v2)
-- **Model:** [daominhwysi/mmbert-base-vi-exam-seq-labeling](https://huggingface.co/daominhwysi/mmbert-base-vi-exam-seq-labeling)
-- **Base model:** [jhu-clsp/mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base)

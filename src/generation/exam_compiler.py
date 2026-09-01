@@ -26,6 +26,15 @@ SECTION_ESSAY = "PHẦN IV. Tự luận"
 SECTION_LIT_READING = "I. ĐỌC HIỂU"
 SECTION_LIT_WRITING = "II. VIẾT"
 
+# Các định nghĩa phần thi TOEIC tiêu chuẩn
+SECTION_TOEIC_PART1 = "PART 1 - PHOTOGRAPHS"
+SECTION_TOEIC_PART2 = "PART 2 - QUESTION-RESPONSE"
+SECTION_TOEIC_PART3 = "PART 3 - SHORT CONVERSATIONS"
+SECTION_TOEIC_PART4 = "PART 4 - SHORT TALKS"
+SECTION_TOEIC_PART5 = "PART 5 - INCOMPLETE SENTENCES"
+SECTION_TOEIC_PART6 = "PART 6 - TEXT COMPLETION"
+SECTION_TOEIC_PART7 = "PART 7 - READING COMPREHENSION"
+
 # Chỉ dẫn chi tiết cho từng phần thi Tiếng Anh (Đóng vai trò là Section Headers)
 ENG_INST_EXCHANGE = "Mark the letter A, B, C, or D on your answer sheet to indicate the sentence that best completes each of the following exchanges."
 ENG_INST_STRESS = "Mark the letter A, B, C, or D on your answer sheet to indicate the word that differs from the other three in the position of stress in each of the following questions."
@@ -384,31 +393,69 @@ def generate_exam_tasks(
                 )
             )
 
+    elif subject == Subject.TOEIC:
+        # Part 1: Photographs (1-2 questions)
+        for _ in range(random.randint(1, 2)):
+            pt1 = random.choice(["toeic_part1_human_action", "toeic_part1_object_spatial", "toeic_part1_outdoor_transit"])
+            tasks.append((SECTION_TOEIC_PART1, QuestionType.MULTIPLE_CHOICE, None, {"problem_type_filter": pt1}))
+
+        # Part 2: Question-Response (2-3 questions)
+        for _ in range(random.randint(2, 3)):
+            pt2 = random.choice(["toeic_part2_wh_questions", "toeic_part2_indirect_responses"])
+            tasks.append((SECTION_TOEIC_PART2, QuestionType.MULTIPLE_CHOICE, None, {"problem_type_filter": pt2}))
+
+        # Part 3: Short Conversations (1-2 group questions)
+        for _ in range(random.randint(1, 2)):
+            pt3 = random.choice(["toeic_part3_dialogue_operations", "toeic_part3_dialogue_graphic"])
+            tasks.append((SECTION_TOEIC_PART3, QuestionType.GROUP_MULTIPLE_CHOICE, None, {"problem_type_filter": pt3}))
+
+        # Part 4: Short Talks (1 group question)
+        pt4 = random.choice(["toeic_part4_public_announcements", "toeic_part4_voicemail_messages"])
+        tasks.append((SECTION_TOEIC_PART4, QuestionType.GROUP_MULTIPLE_CHOICE, None, {"problem_type_filter": pt4}))
+
+        # Part 5: Incomplete Sentences (6-10 questions)
+        grammar_pts = [
+            "toeic_part5_word_form",
+            "toeic_part5_verb_tenses_voice",
+            "toeic_part5_conjunctions_prepositions",
+            "toeic_part5_business_collocations",
+        ]
+        for _ in range(random.randint(6, 10)):
+            pt5 = random.choice(grammar_pts)
+            tasks.append((SECTION_TOEIC_PART5, QuestionType.MULTIPLE_CHOICE, None, {"problem_type_filter": pt5}))
+
+        # Part 6: Text Completion (1 group question)
+        pt6 = random.choice(["toeic_part6_internal_memos", "toeic_part6_customer_advisories"])
+        tasks.append((SECTION_TOEIC_PART6, QuestionType.GROUP_MULTIPLE_CHOICE, None, {"problem_type_filter": pt6}))
+
+        # Part 7: Reading Comprehension (1 Single + 1 Multi Passage)
+        pt7_s = random.choice(["toeic_part7_chat_chains", "toeic_part7_invoices_tables", "toeic_part7_sentence_placement"])
+        tasks.append((SECTION_TOEIC_PART7, QuestionType.GROUP_MULTIPLE_CHOICE, None, {"problem_type_filter": pt7_s}))
+
+        pt7_m = random.choice(["toeic_part7_double_passages", "toeic_part7_triple_passages"])
+        tasks.append((SECTION_TOEIC_PART7, QuestionType.GROUP_MULTIPLE_CHOICE, None, {"problem_type_filter": pt7_m}))
+
     elif subject == Subject.LITERATURE:
-        tasks.append(
-            (
-                SECTION_LIT_READING,
-                QuestionType.GROUP_SHORT_ANSWER,
-                None,
-                {"problem_type_filter": "reading_comprehension_literature"},
-            )
-        )
-        tasks.append(
-            (
-                SECTION_LIT_WRITING,
-                QuestionType.SHORT_ANSWER,
-                Difficulty.APPLICATION,
-                {"problem_type_filter": "literary_analysis_paragraph"},
-            )
-        )
-        tasks.append(
-            (
-                SECTION_LIT_WRITING,
-                QuestionType.SHORT_ANSWER,
-                Difficulty.HIGH_APPLICATION,
-                {"problem_type_filter": "social_argumentation_essay"},
-            )
-        )
+        paradigm = random.choices(["standard", "comparative", "dual_drama", "hsg"], weights=[0.35, 0.25, 0.20, 0.20], k=1)[0]
+
+        if paradigm == "standard":
+            read_pt = random.choice(["reading_comprehension_literature_poetry", "reading_comprehension_literature"])
+            tasks.append((SECTION_LIT_READING, QuestionType.GROUP_SHORT_ANSWER, None, {"problem_type_filter": read_pt}))
+            tasks.append((SECTION_LIT_WRITING, QuestionType.SHORT_ANSWER, Difficulty.APPLICATION, {"problem_type_filter": "social_argumentation_paragraph"}))
+            tasks.append((SECTION_LIT_WRITING, QuestionType.SHORT_ANSWER, Difficulty.HIGH_APPLICATION, {"problem_type_filter": "literary_analysis_essay_600"}))
+        elif paradigm == "comparative":
+            read_pt = random.choice(["reading_comprehension_literature_multimodal", "reading_comprehension_literature"])
+            tasks.append((SECTION_LIT_READING, QuestionType.GROUP_SHORT_ANSWER, None, {"problem_type_filter": read_pt}))
+            tasks.append((SECTION_LIT_WRITING, QuestionType.SHORT_ANSWER, Difficulty.APPLICATION, {"problem_type_filter": "social_argumentation_paragraph"}))
+            tasks.append((SECTION_LIT_WRITING, QuestionType.SHORT_ANSWER, Difficulty.HIGH_APPLICATION, {"problem_type_filter": "literary_comparative_essay_600"}))
+        elif paradigm == "dual_drama":
+            read_pt = random.choice(["reading_comprehension_literature_drama", "reading_comprehension_literature_dual"])
+            tasks.append((SECTION_LIT_READING, QuestionType.GROUP_SHORT_ANSWER, None, {"problem_type_filter": read_pt}))
+            tasks.append((SECTION_LIT_WRITING, QuestionType.SHORT_ANSWER, Difficulty.APPLICATION, {"problem_type_filter": "social_applied_writing"}))
+            tasks.append((SECTION_LIT_WRITING, QuestionType.SHORT_ANSWER, Difficulty.HIGH_APPLICATION, {"problem_type_filter": "literary_analysis_essay_600"}))
+        else: # HSGQG format
+            tasks.append(("PHẦN I. NGHỊ LUẬN XÃ HỘI (8,0 điểm)", QuestionType.SHORT_ANSWER, Difficulty.HIGH_APPLICATION, {"problem_type_filter": "social_philosophical_dialogue_hsg"}))
+            tasks.append(("PHẦN II. NGHỊ LUẬN VĂN HỌC (12,0 điểm)", QuestionType.SHORT_ANSWER, Difficulty.HIGH_APPLICATION, {"problem_type_filter": "literary_reception_theory_hsg"}))
 
     else:
         num_mc = random.randint(10, 20)
@@ -427,7 +474,7 @@ def generate_exam_tasks(
         for _ in range(num_tf):
             tasks.append((SECTION_TF, QuestionType.TRUE_FALSE, None, {}))
 
-        num_sa = 6 if random.random() < 0.5 else random.randint(0, 6)
+        num_sa = random.randint(1, 6)
         for _ in range(num_sa):
             qtype = random.choices(
                 [QuestionType.SHORT_ANSWER, QuestionType.GROUP_SHORT_ANSWER],
@@ -520,6 +567,9 @@ def generate_single_exam(
                 sections[section_name] = []
             sections[section_name].append(clean_q)
             success_count += 1
+
+    # Loại bỏ các section rỗng không có câu hỏi
+    sections = {k: v for k, v in sections.items() if len(v) > 0}
 
     if success_count == 0:
         return None

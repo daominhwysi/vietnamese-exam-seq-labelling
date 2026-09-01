@@ -118,14 +118,14 @@ def main():
     p_exam.add_argument("--subject", type=str, help="Filter generation for a specific subject")
     p_exam.add_argument("--grade", type=int, help="Filter generation for a specific grade")
 
-    # 5. prepare
-    p_prep = subparsers.add_parser("prepare", help="Stage 5: Prepare tokenized datasets for training")
+    # 5. prepare (offline dataset)
+    p_prep = subparsers.add_parser("prepare", aliases=["prepare-offline", "prepare-offline-dataset"], help="Stage 5: Prepare offline tokenized datasets for training")
     p_prep.add_argument("-i", "--input-dir", type=str, default="output", help="Input folder of question files")
     p_prep.add_argument("-o", "--output-dir", type=str, default="output/dataset", help="Output folder for training dataset split")
     p_prep.add_argument("--model", type=str, default="jhu-clsp/mmBERT-base", help="Base model/tokenizer name")
     p_prep.add_argument("--latex-placeholder", type=str, default="[LATEX]", help="Placeholder for LaTeX equations")
-    p_prep.add_argument("--train-ratio", type=float, default=0.8, help="Ratio of training set")
-    p_prep.add_argument("--val-ratio", type=float, default=0.1, help="Ratio of validation set")
+    p_prep.add_argument("--train-ratio", type=float, default=0.85, help="Ratio of training set")
+    p_prep.add_argument("--val-ratio", type=float, default=0.10, help="Ratio of validation set")
     p_prep.add_argument("--seed", type=int, default=42, help="Seed for splitting")
     p_prep.add_argument("--exam-level", action="store_true", help="Process at exam level")
     p_prep.add_argument("--max-len", type=str, default="512,768,1024,2048", help="Sequence lengths")
@@ -143,6 +143,10 @@ def main():
     p_prep.add_argument("--max-inline-spaces", type=int, default=30, help="Maximum random spaces to inject between inline options")
     p_prep.add_argument("--min-inline-tabs", type=int, default=1, help="Minimum random tabs to inject between inline options")
     p_prep.add_argument("--max-inline-tabs", type=int, default=3, help="Maximum random tabs to inject between inline options")
+    p_prep.add_argument("--grid-2x2-prob", type=float, default=0.0, help="Probability of formatting options in a 2x2 grid layout")
+    p_prep.add_argument("--same-line-stem-options-prob", type=float, default=0.0, help="Probability of placing stem and first option on the same line")
+    p_prep.add_argument("--flatten-newlines-prob", type=float, default=0.0, help="Probability of flattening all newlines and tabs into single spaces")
+    p_prep.add_argument("--collapse-whitespace-prob", type=float, default=0.0, help="Probability of collapsing repeated spaces/tabs into a single space")
     p_prep.add_argument("--only-passed", action="store_true", default=True, help="Only include documents that passed quality audit (default: True)")
     p_prep.add_argument("--include-all", action="store_true", help="Include all documents regardless of audit status")
 
@@ -204,6 +208,13 @@ def main():
         default="output/dataset",
         help="Local folder with train/val/test JSONL splits and xml/ subfolder (default: 'output/dataset')",
     )
+    p_upl.add_argument(
+        "--mode",
+        type=str,
+        default="all",
+        choices=["all", "online-only", "raw-only", "online", "raw"],
+        help="Upload mode: 'all' (entire folder) or 'online-only' / 'raw-only' (only raw_exams.jsonl + label_mapping.json)",
+    )
 
     # 8b. upload-model
     p_upl_m = subparsers.add_parser("upload-model", help="Upload trained model/adapter checkpoint to Hugging Face Hub")
@@ -243,7 +254,13 @@ def main():
         help="HF dataset repo to reference in the model card (default: 'daominhwysi/synthetic-seq-labelling-vi-exam-v2')",
     )
 
-    # 9. visualize
+    # 9. consolidate-raw
+    p_cons = subparsers.add_parser("consolidate-raw", help="Consolidate synthetic and audited real exams into a single raw_exams.jsonl")
+    p_cons.add_argument("-i", "--input-dir", type=str, default="output", help="Input directory containing exams/ and real_annotated/")
+    p_cons.add_argument("-o", "--output-file", type=str, default="output/dataset/raw_exams.jsonl", help="Output path for consolidated raw_exams.jsonl")
+    p_cons.add_argument("--include-all", action="store_true", help="Include all documents regardless of audit pass/fail")
+
+    # 10. visualize
     p_vis = subparsers.add_parser("visualize", help="Generate an HTML interactive visualizer for token span labels")
     p_vis.add_argument("-i", "--input-file", type=str, default="output/dataset/train.jsonl", help="Path to jsonl file to visualize")
     p_vis.add_argument("-o", "--output-html", type=str, default="output/dataset/sample_visualization.html", help="Output path for HTML")
@@ -307,7 +324,7 @@ def main():
             provider=args.provider
         )
 
-    elif args.command == "prepare":
+    elif args.command in ["prepare", "prepare-offline", "prepare-offline-dataset"]:
         from src.data.prepare import run_prepare_dataset
         run_prepare_dataset(args)
 
@@ -333,6 +350,7 @@ def main():
             token=args.token,
             repo_id=args.repo_id,
             dataset_dir=args.dataset_dir,
+            mode=args.mode,
         )
 
     elif args.command == "upload-model":
@@ -344,6 +362,14 @@ def main():
             private=args.private,
             commit_message=args.commit_message,
             dataset_repo=args.dataset_repo,
+        )
+
+    elif args.command == "consolidate-raw":
+        from src.data.prepare import consolidate_raw_exams
+        consolidate_raw_exams(
+            input_dir=args.input_dir,
+            output_file=args.output_file,
+            filter_passed=not args.include_all
         )
 
     elif args.command == "visualize":

@@ -16,6 +16,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 import torch
 
+try:
+    import seqeval
+    HAS_SEQEVAL = True
+except ImportError:
+    HAS_SEQEVAL = False
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Train XLM-RoBERTa for Sequence Labeling using LoRA and AMP")
     parser.add_argument(
@@ -238,6 +244,24 @@ def parse_args():
         help="Enable dynamic on-the-fly online data augmentation during training (default: False)"
     )
     parser.add_argument(
+        "--train_ratio",
+        type=float,
+        default=0.85,
+        help="Ratio of training set for online splitting (default: 0.85)"
+    )
+    parser.add_argument(
+        "--val_ratio",
+        type=float,
+        default=0.10,
+        help="Ratio of validation set for online splitting (default: 0.10)"
+    )
+    parser.add_argument(
+        "--test_ratio",
+        type=float,
+        default=0.05,
+        help="Ratio of test set for online splitting (default: 0.05)"
+    )
+    parser.add_argument(
         "--dataloader_num_workers",
         type=int,
         default=4,
@@ -275,8 +299,8 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         import random
-        from src.generation.reconstructor import reconstruct_question, ReconstructorConfig
-        from src.data.prepare import align_tokens_to_spans
+        from src.generation.reconstructor import reconstruct_question, reconstruct_exam, ReconstructorConfig
+        from src.data.prepare import align_tokens_to_spans, mask_latex_in_real_data
         
         item = self.raw_items[idx]
         
@@ -309,9 +333,22 @@ class OnlineAugmentedDataset(torch.utils.data.Dataset):
         else:
             aug_config = ReconstructorConfig(randomize_q_num=False)
 
-        rec = reconstruct_question(item, aug_config)
-        raw_text = rec["raw_text"]
-        spans = rec["spans"]
+        # Handle real OCR exams vs synthetic exams/questions
+        if item.get("is_real", False) and "raw_text" in item and "spans" in item:
+            raw_text = item["raw_text"]
+            spans = item["spans"]
+            if self.is_train and aug_config.latex_mask_prob > 0.0:
+                raw_text, spans = mask_latex_in_real_data(
+                    raw_text, spans, aug_config.latex_placeholder, aug_config.latex_mask_prob, random
+                )
+        elif "sections" in item:
+            rec = reconstruct_exam(item, aug_config)
+            raw_text = rec["raw_text"]
+            spans = rec["spans"]
+        else:
+            rec = reconstruct_question(item, aug_config)
+            raw_text = rec["raw_text"]
+            spans = rec["spans"]
 
         tokenized = self.tokenizer(
             raw_text,
@@ -453,40 +490,126 @@ def run_train(args):
         tag_to_id, id_to_tag = get_tag_mappings()
         
         from pathlib import Path
+        import os
+        from src.data.prepare import parse_xml_annotations, infer_metadata_from_path
+        
         raw_path = Path(args.raw_data_dir)
-        raw_files = list(raw_path.glob("question_*.json")) + list(raw_path.glob("**/exam_*.json"))
         raw_items = []
-        for rf in raw_files:
-            try:
-                with open(rf, "r", encoding="utf-8") as fp:
-                    data = json.load(fp)
-                    if isinstance(data, list):
-                        raw_items.extend(data)
-                    elif isinstance(data, dict):
-                        if "sections" in data:
-                            for sec_name, q_list in data["sections"].items():
-                                raw_items.extend(q_list)
-                        else:
-                            raw_items.append(data)
-            except Exception:
-                pass
-                
+        
+        # 1. Fast path: load directly from consolidated raw_exams.jsonl if available
+        jsonl_candidates = []
+        if raw_path.is_file() and raw_path.name.endswith(".jsonl"):
+            jsonl_candidates.append(raw_path)
+        elif (raw_path / "raw_exams.jsonl").exists():
+            jsonl_candidates.append(raw_path / "raw_exams.jsonl")
+        elif (raw_path / "dataset" / "raw_exams.jsonl").exists():
+            jsonl_candidates.append(raw_path / "dataset" / "raw_exams.jsonl")
+
+        if jsonl_candidates:
+            target_jsonl = jsonl_candidates[0]
+            print(f"Loading consolidated raw exams from '{target_jsonl}'...")
+            with open(target_jsonl, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip():
+                        try:
+                            raw_items.append(json.loads(line))
+                        except Exception:
+                            pass
+
         if not raw_items:
-            print(f"Warning: No raw questions found in '{args.raw_data_dir}'. Falling back to offline dataset from Hub.")
+            # Walk directory following symlinks (e.g. output/real_annotated -> sequence_labelling_annotated)
+            for dirpath, _, filenames in os.walk(raw_path, followlinks=True):
+                dp = Path(dirpath)
+                for fn in filenames:
+                    fp = dp / fn
+                    
+                    # 1. Real annotated XML files (e.g. merged.xml)
+                    if fn == "merged.xml" or fn.endswith("_annotated.xml"):
+                        audit_file = dp / "audit_report.json"
+                        if audit_file.exists():
+                            try:
+                                audit = json.loads(audit_file.read_text(encoding="utf-8"))
+                                if audit.get("decision", "").strip().upper() != "PASS" or audit.get("is_malfunctioned", False):
+                                    continue
+                            except Exception:
+                                pass
+                        try:
+                            content = fp.read_text(encoding="utf-8")
+                            raw_text, spans = parse_xml_annotations(content)
+                            if spans:
+                                meta = infer_metadata_from_path(fp, raw_path)
+                                raw_items.append({
+                                    "exam_id": meta.get("exam_id", fp.stem),
+                                    "is_real": True,
+                                    "raw_text": raw_text,
+                                    "spans": spans,
+                                    "subject": meta.get("subject", "general"),
+                                    "grade": meta.get("grade", 12)
+                                })
+                        except Exception:
+                            pass
+                    
+                    # 2. JSON files (synthetic questions, compiled exams, real JSONs)
+                    elif fn.endswith(".json") and not fn.startswith("chunk_") and fn not in ["label_mapping.json", "audit_report.json", "train_stats.json", "val_stats.json", "test_stats.json"]:
+                        if fn.startswith("question_") or fn.startswith("exam_") or fn.startswith("real_") or fn == "merged.json":
+                            try:
+                                with open(fp, "r", encoding="utf-8") as f:
+                                    data = json.load(f)
+                                if isinstance(data, list):
+                                    raw_items.extend(data)
+                                elif isinstance(data, dict):
+                                    if data.get("is_real", False) and "raw_text" in data and "spans" in data:
+                                        raw_items.append(data)
+                                    elif "sections" in data:
+                                        raw_items.append(data)
+                                    else:
+                                        raw_items.append(data)
+                            except Exception:
+                                pass
+                
+        if not raw_items and args.repo_id:
+            print(f"No local raw items found. Attempting to download 'raw_exams.jsonl' from Hugging Face dataset '{args.repo_id}'...")
+            try:
+                from huggingface_hub import hf_hub_download
+                downloaded_file = hf_hub_download(
+                    repo_id=args.repo_id,
+                    filename="raw_exams.jsonl",
+                    repo_type="dataset",
+                    token=hf_token
+                )
+                print(f"Downloaded '{downloaded_file}'. Loading raw exams...")
+                with open(downloaded_file, "r", encoding="utf-8") as f:
+                    for line in f:
+                        if line.strip():
+                            try:
+                                raw_items.append(json.loads(line))
+                            except Exception:
+                                pass
+            except Exception as e:
+                print(f"Notice: Could not download 'raw_exams.jsonl' from Hub ({e}).")
+
+        if not raw_items:
+            print(f"Warning: No raw questions found in '{args.raw_data_dir}' or Hub. Falling back to offline dataset from Hub.")
         else:
             import random as rand_mod
             print(f"Successfully loaded {len(raw_items)} raw items for online dynamic augmentation.")
             rng_split = rand_mod.Random(args.seed)
             rng_split.shuffle(raw_items)
-            val_size = max(10, int(len(raw_items) * 0.1))
-            train_items = raw_items[val_size:]
+            val_size = max(5, int(len(raw_items) * getattr(args, "val_ratio", 0.10)))
+            test_size = max(5, int(len(raw_items) * getattr(args, "test_ratio", 0.05)))
+            if len(raw_items) <= val_size + test_size:
+                val_size = max(1, len(raw_items) // 10)
+                test_size = max(1, len(raw_items) // 20)
+            train_items = raw_items[val_size + test_size:]
             val_items = raw_items[:val_size]
+            test_items = raw_items[val_size:val_size + test_size]
             
             train_dataset_obj = OnlineAugmentedDataset(train_items, None, tag_to_id, is_train=True)
             eval_dataset_obj = OnlineAugmentedDataset(val_items, None, tag_to_id, is_train=False)
+            test_dataset_obj = OnlineAugmentedDataset(test_items, None, tag_to_id, is_train=False)
             
-            # Dummy dataset wrapper for step calculation
-            dataset = {"train": train_items, "validation": val_items}
+            # Dataset wrapper supporting train, validation, and test splits
+            dataset = {"train": train_dataset_obj, "validation": eval_dataset_obj, "test": test_dataset_obj}
 
     if train_dataset_obj is None:
         print(f"Downloading dataset and label mapping from HF: '{args.repo_id}'...")
@@ -557,6 +680,8 @@ def run_train(args):
     if train_dataset_obj is not None:
         train_dataset_obj.tokenizer = tokenizer
         eval_dataset_obj.tokenizer = tokenizer
+        if test_dataset_obj is not None:
+            test_dataset_obj.tokenizer = tokenizer
 
     # 5. Initialize Model
     use_enhanced = getattr(args, "enhanced_head", True)
@@ -746,7 +871,7 @@ def run_train(args):
         "logging_steps": dynamic_logging_steps,
         "disable_tqdm": True,
         "load_best_model_at_end": True,
-        "metric_for_best_model": "f1" if "seqeval" in sys.modules or "seqeval" in globals() else "accuracy",
+        "metric_for_best_model": "f1" if HAS_SEQEVAL else "f1_macro",
         "greater_is_better": True,
         "fp16": fp16_enabled,
         "bf16": bf16_enabled,
@@ -790,8 +915,21 @@ def run_train(args):
         print("Calculating entity-tied class weights from training dataset...")
         from collections import Counter
         label_counts = Counter()
-        for sample in dataset["train"]:
-            label_counts.update([l for l in sample["labels"] if l != -100])
+        if train_dataset_obj is not None:
+            # Online mode: estimate entity frequencies from raw spans in train_items
+            for item in getattr(train_dataset_obj, "raw_items", []):
+                for span in item.get("spans", []):
+                    tag_name = span.get("label", "")
+                    approx_tokens = max(1, len(span.get("text", "").split()))
+                    b_id = tag_to_id.get(f"B-{tag_name}")
+                    i_id = tag_to_id.get(f"I-{tag_name}")
+                    if b_id is not None:
+                        label_counts[b_id] += 1
+                    if i_id is not None and approx_tokens > 1:
+                        label_counts[i_id] += (approx_tokens - 1)
+        else:
+            for sample in dataset["train"]:
+                label_counts.update([l for l in sample["labels"] if l != -100])
         
         # 1. Aggregate token counts by base entity name (e.g., 'stimulus', 'stem', 'question_label')
         # This prevents 1-token boundary B-tags from receiving an artificially high weight compared to multi-token I-tags.
@@ -875,7 +1013,7 @@ def run_train(args):
 
             if n_real == 0:
                 print("[WeightedSampler] Warning: no real samples found in train split (is_real=False for all). "
-                      "Falling back to uniform sampling. Re-run prepare-dataset to propagate is_real metadata.")
+                      "Falling back to uniform sampling. Re-run prepare-offline-dataset to propagate is_real metadata.")
                 return super().get_train_dataloader()
 
             from torch.utils.data import WeightedRandomSampler, DataLoader
@@ -1102,7 +1240,8 @@ def run_train(args):
 
     # 12. Run final test split evaluation
     print("Evaluating on test split...")
-    test_results = trainer.evaluate(eval_dataset=dataset["test"])
+    test_eval_set = test_dataset_obj if (test_dataset_obj is not None) else dataset.get("test", eval_dataset_final)
+    test_results = trainer.evaluate(eval_dataset=test_eval_set)
     print("\n" + "=" * 60)
     print("FINAL TEST SET RESULTS:")
     for k, v in test_results.items():

@@ -4,6 +4,13 @@ import itertools
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Any, Tuple
 from src.webapp.inference_helper import is_valid_latex
+from src.generation.template_bank import (
+    format_barem_table,
+    format_answer_grid,
+    get_random_explanation_prefix,
+    get_random_end_solution_header,
+    get_random_section_header
+)
 
 # Available prefix templates for Question labels
 DEFAULT_QUESTION_PREFIXES = [
@@ -99,6 +106,14 @@ class ReconstructorConfig:
     same_line_stem_options_prob: float = 0.0
     flatten_newlines_prob: float = 0.0
     collapse_whitespace_prob: float = 0.0
+
+    # Explanation & Barem Augmentations
+    prob_no_barem: float = 0.25
+    prob_inline_barem: float = 0.35
+    prob_answer_grid: float = 0.15
+    prob_end_section: float = 0.15
+    prob_table_barem: float = 0.10
+    inline_explanation: bool = False
 
 def collapse_consecutive_whitespaces(raw_text: str, spans: List[Dict[str, Any]]) -> Tuple[str, List[Dict[str, Any]]]:
     """
@@ -547,7 +562,8 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                 stimulus = re.sub(rf'\({i}\)\s*(?:_{{2,}}|\.{{2,}}|\[\s*BLANK\s*\]|<\s*blank\s*/?>)', f'({i}) <blank />', stimulus)
         append_segment(stimulus, "stimulus")
         
-        sub_questions = q_data.get("questions", [])
+        sub_questions = [dict(sq) for sq in q_data.get("questions", [])]
+        result["questions"] = sub_questions
         if sub_questions:
             sep_stim = config.separator_context_questions if config.separator_context_questions is not None else config.separator_stimulus_questions
             if is_flatten:
@@ -574,7 +590,18 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     options = options[:keep_count]
                     
                 if config.enable_permutations and options and len(options) >= 2:
-                    rng.shuffle(options)
+                    orig_ans = sub_q.get("answer", "")
+                    opt_letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+                    orig_idx = opt_letters.index(orig_ans) if orig_ans in opt_letters else -1
+                    if 0 <= orig_idx < len(options):
+                        correct_val = options[orig_idx]
+                        rng.shuffle(options)
+                        if correct_val in options:
+                            new_idx = options.index(correct_val)
+                            sub_q["answer"] = opt_letters[new_idx % len(opt_letters)]
+                    else:
+                        rng.shuffle(options)
+                sub_q["options"] = options
                 
                 if options:
                     append_segment(sep_stem_opt, "separator")
@@ -591,8 +618,22 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                         if sep:
                             append_segment(sep, "separator")
                             
+                if config.inline_explanation and sub_q.get("explanation"):
+                    expl = sub_q["explanation"].strip()
+                    if expl:
+                        append_segment(sep_stem_opt, "separator")
+                        prefix = rng.choice(["* Lời giải: ", "Lời giải: ", "Hướng dẫn giải: ", "Giải: "])
+                        append_segment(f"{prefix}{expl}", "explanation")
+
                 if idx < len(sub_questions) - 1:
                     append_segment(sep_questions, "separator")
+
+        if config.inline_explanation and q_data.get("explanation") and not any(sq.get("explanation") for sq in sub_questions):
+            expl = q_data["explanation"].strip()
+            if expl:
+                append_segment(sep_stem_opt, "separator")
+                prefix = rng.choice(["* Lời giải: ", "Lời giải chi tiết: ", "Hướng dẫn giải: "])
+                append_segment(f"{prefix}{expl}", "explanation")
     else:
         q_label = format_prefix(q_prefix_tpl, actual_start_q_num)
         q_label = augment_q_label(q_label, config, rng)
@@ -673,6 +714,13 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
                     sep = get_opt_separator(opt_idx, len(options))
                     if sep:
                         append_segment(sep, "separator")
+        
+        if config.inline_explanation and q_data.get("explanation"):
+            expl = q_data["explanation"].strip()
+            if expl:
+                append_segment(sep_stem_opt, "separator")
+                prefix = get_random_explanation_prefix(rng)
+                append_segment(f"{prefix}{expl}", "explanation")
                         
     if config.collapse_whitespace_prob > 0.0 and rng.random() < config.collapse_whitespace_prob:
         raw_text, spans = collapse_consecutive_whitespaces(raw_text, spans)
@@ -680,6 +728,34 @@ def reconstruct_question(q_data: Dict[str, Any], config: Optional[ReconstructorC
     result["raw_text"] = raw_text
     result["spans"] = spans
     return result
+
+def generate_ordering_choices(labels: List[str], separator: str, rng: random.Random) -> List[str]:
+    """Generates 4 multiple choice ordering options (1 correct, up to 3 distractors)."""
+    correct_seq = separator.join(labels)
+    all_perms = list(itertools.permutations(labels))
+    all_seqs = [separator.join(p) for p in all_perms]
+    distractors = [s for s in all_seqs if s != correct_seq]
+    if len(distractors) >= 3:
+        selected_distractors = rng.sample(distractors, 3)
+    else:
+        selected_distractors = distractors
+    candidates = [correct_seq] + selected_distractors
+    rng.shuffle(candidates)
+    return candidates
+
+def build_answer_key_grid(questions_data: List[Tuple[int, str]], rng: random.Random) -> str:
+    """
+    Builds a markdown answer key grid with 18 diverse layout formats.
+    questions_data: list of (q_num, answer_str)
+    """
+    return format_answer_grid(questions_data, rng)
+
+def build_table_barem(questions_data: List[Tuple[int, str, str]], rng: random.Random) -> str:
+    """
+    Builds a markdown scoring table barem with 18 diverse layout styles.
+    questions_data: list of (q_num, expl_text, points_str)
+    """
+    return format_barem_table(questions_data, rng)
 
 def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorConfig] = None) -> Dict[str, Any]:
     """
@@ -742,8 +818,25 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
     append_document_segment(header_text, "separator")
     append_document_segment(config.separator_questions, "separator")
     
+    # Sample Barem / Explanation presentation mode
+    mode_choices = ["none", "inline", "answer_grid", "end_section", "table_barem"]
+    mode_weights = [
+        config.prob_no_barem,
+        config.prob_inline_barem,
+        config.prob_answer_grid,
+        config.prob_end_section,
+        config.prob_table_barem,
+    ]
+    total_w = sum(mode_weights)
+    if total_w > 0:
+        normalized_w = [w / total_w for w in mode_weights]
+        barem_mode = rng.choices(mode_choices, weights=normalized_w, k=1)[0]
+    else:
+        barem_mode = "none"
+
     sections = exam_data.get("sections", {})
     q_num = 1
+    collected_questions = []
     
     for section_title, questions in sections.items():
         sec_title_text = f"{section_title}\n"
@@ -793,10 +886,19 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
                 grid_2x2_prob=config.grid_2x2_prob,
                 same_line_stem_options_prob=config.same_line_stem_options_prob,
                 flatten_newlines_prob=config.flatten_newlines_prob,
-                collapse_whitespace_prob=0.0
+                collapse_whitespace_prob=0.0,
+                inline_explanation=(barem_mode == "inline")
             )
             
             q_reconstructed = reconstruct_question(q, q_config, start_q_num=q_num)
+            
+            # Record questions for end-of-exam presentation (using reconstructed / permuted data)
+            if q.get("is_group"):
+                for sq_idx, sq in enumerate(q_reconstructed.get("questions", q.get("questions", []))):
+                    collected_questions.append((q_num + sq_idx, sq))
+            else:
+                collected_questions.append((q_num, q_reconstructed))
+
             q_text = q_reconstructed["raw_text"]
             q_spans = q_reconstructed["spans"]
             
@@ -818,6 +920,50 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
                 q_num += 1
                 
         append_document_segment(config.separator_questions, "separator")
+
+    # End-of-exam Barem / Solution presentation
+    if barem_mode == "end_section" and collected_questions:
+        append_document_segment(config.separator_questions, "separator")
+        sec_title = f"{get_random_end_solution_header(rng)}\n"
+        append_document_segment(sec_title, "section")
+        append_document_segment(config.separator_stem_options, "separator")
+        
+        for num, q_item in collected_questions:
+            q_label = f"Câu {num}: "
+            append_document_segment(q_label, "question_label")
+            expl = q_item.get("explanation", "").strip()
+            if not expl:
+                ans = q_item.get("answer", "A")
+                expl = f"Chọn {ans}."
+            prefix = rng.choice(["Lời giải: ", "Hướng dẫn: ", "Gợi ý: ", "Chi tiết: ", ""])
+            append_document_segment(f"{prefix}{expl}\n\n", "explanation")
+
+    elif barem_mode == "table_barem" and collected_questions:
+        append_document_segment(config.separator_questions, "separator")
+        sec_title = f"{rng.choice(['### BẢNG ĐÁP ÁN VÀ THANG ĐIỂM', '## HƯỚNG DẪN CHẤM VÀ BIỂU ĐIỂM', '# BIỂU ĐIỂM VÀ ĐÁP ÁN CHI TIẾT', '## THANG ĐIỂM CHẤM THI', '### BẢNG BAREM ĐIỂM', '# HƯỚNG DẪN CHẤM VÀ THANG ĐIỂM CHÍNH THỨC'])}\n"
+        append_document_segment(sec_title, "section")
+        append_document_segment(config.separator_stem_options, "separator")
+        
+        table_items = []
+        for num, q_item in collected_questions:
+            expl = q_item.get("explanation", "").strip()
+            if not expl:
+                ans = q_item.get("answer", "A")
+                expl = f"Chọn {ans}."
+            pts = rng.choice(["0.25", "0.20", "0.50", "1.00"])
+            table_items.append((num, expl, pts))
+        table_str = build_table_barem(table_items, rng)
+        append_document_segment(f"{table_str}\n\n", "explanation")
+
+    elif barem_mode == "answer_grid" and collected_questions:
+        append_document_segment(config.separator_questions, "separator")
+        sec_title = f"{rng.choice(['### BẢNG ĐÁP ÁN TRẮC NGHIỆM', '## BẢNG ĐÁP ÁN', '## ĐÁP ÁN CÁC MÃ ĐỀ', '### BẢNG TRA CỨU ĐÁP ÁN', '# BẢNG ĐÁP ÁN TRẮC NGHIỆM KHÁCH QUAN', '## ĐÁP ÁN TRẮC NGHIỆM THAM KHẢO'])}\n"
+        append_document_segment(sec_title, "section")
+        append_document_segment(config.separator_stem_options, "separator")
+        
+        grid_items = [(num, q_item.get("answer", "A")) for num, q_item in collected_questions]
+        grid_str = build_answer_key_grid(grid_items, rng)
+        append_document_segment(f"{grid_str}\n\n", "explanation")
         
     stripped_text = full_text.lstrip()
     leading_stripped = len(full_text) - len(stripped_text)
@@ -847,17 +993,3 @@ def reconstruct_exam(exam_data: Dict[str, Any], config: Optional[ReconstructorCo
     result["raw_text"] = raw_text
     result["spans"] = global_spans
     return result
-
-def generate_ordering_choices(labels: List[str], separator: str, rng: random.Random) -> List[str]:
-    """Generates 4 multiple choice ordering options (1 correct, up to 3 distractors)."""
-    correct_seq = separator.join(labels)
-    all_perms = list(itertools.permutations(labels))
-    all_seqs = [separator.join(p) for p in all_perms]
-    distractors = [s for s in all_seqs if s != correct_seq]
-    if len(distractors) >= 3:
-        selected_distractors = rng.sample(distractors, 3)
-    else:
-        selected_distractors = distractors
-    candidates = [correct_seq] + selected_distractors
-    rng.shuffle(candidates)
-    return candidates

@@ -1,6 +1,7 @@
 import unittest
 from src.generation.reconstructor import (
     reconstruct_question,
+    reconstruct_exam,
     ReconstructorConfig,
     generate_ordering_choices
 )
@@ -575,6 +576,158 @@ class TestReconstructor(unittest.TestCase):
         self.assertTrue(is_valid_latex("(-\\infty, 5]"))
         # Invalid / plain words
         self.assertFalse(is_valid_latex("(đây là khoảng)"))
+
+    def test_inline_explanation(self):
+        q_data = {
+            "is_group": False,
+            "stem": "Tính giá trị tích phân $I$.",
+            "options": ["1", "2", "3", "4"],
+            "answer": "B",
+            "explanation": "Ta có $I = \\int_0^1 2x dx = 1$. Do đó chọn B.",
+            "question_type": "multiple_choice",
+            "subject": "math_algebra",
+            "grade": 12,
+            "difficulty": "comprehend"
+        }
+        config = ReconstructorConfig(
+            inline_explanation=True,
+            randomize_q_num=False,
+            seed="expl_seed"
+        )
+        enriched = reconstruct_question(q_data, config, start_q_num=1)
+        raw_text = enriched["raw_text"]
+        spans = enriched["spans"]
+        expl_spans = [s for s in spans if s["label"] == "explanation"]
+        self.assertEqual(len(expl_spans), 1)
+        self.assertIn("Do đó chọn B.", expl_spans[0]["text"])
+        for s in spans:
+            self.assertEqual(raw_text[s["start"]:s["end"]], s["text"])
+
+    def test_reconstruct_exam_barem_modes(self):
+        from src.generation.reconstructor import reconstruct_exam
+        exam_data = {
+            "subject": "chemistry",
+            "grade": 12,
+            "sections": {
+                "Phần 1. Trắc nghiệm": [
+                    {
+                        "is_group": False,
+                        "stem": "Công thức của glucozơ là",
+                        "options": ["C6H12O6", "C12H22O11", "C2H5OH", "CH3COOH"],
+                        "answer": "A",
+                        "explanation": "Glucozơ có công thức phân tử là C6H12O6.",
+                        "question_type": "multiple_choice"
+                    },
+                    {
+                        "is_group": False,
+                        "stem": "Chất nào sau đây là ancol?",
+                        "options": ["C2H5OH", "CH3CHO", "CH3COOH", "HCOOCH3"],
+                        "answer": "A",
+                        "explanation": "C2H5OH là ancol etylic.",
+                        "question_type": "multiple_choice"
+                    }
+                ]
+            }
+        }
+
+        # 1. Mode 0: Pure Exam (prob_no_barem=1.0)
+        c0 = ReconstructorConfig(prob_no_barem=1.0, prob_inline_barem=0, prob_answer_grid=0, prob_end_section=0, prob_table_barem=0, seed="m0")
+        res0 = reconstruct_exam(exam_data, c0)
+        labels0 = [s["label"] for s in res0["spans"]]
+        self.assertNotIn("explanation", labels0)
+
+        # 2. Mode 1: Inline Explanation (prob_inline_barem=1.0)
+        c1 = ReconstructorConfig(prob_no_barem=0, prob_inline_barem=1.0, prob_answer_grid=0, prob_end_section=0, prob_table_barem=0, seed="m1")
+        res1 = reconstruct_exam(exam_data, c1)
+        labels1 = [s["label"] for s in res1["spans"]]
+        self.assertIn("explanation", labels1)
+
+        # 3. Mode 2: End-of-exam Section (prob_end_section=1.0)
+        c2 = ReconstructorConfig(prob_no_barem=0, prob_inline_barem=0, prob_answer_grid=0, prob_end_section=1.0, prob_table_barem=0, seed="m2")
+        res2 = reconstruct_exam(exam_data, c2)
+        labels2 = [s["label"] for s in res2["spans"]]
+        self.assertIn("explanation", labels2)
+        self.assertIn("ĐÁP ÁN", res2["raw_text"])
+
+        # 4. Mode 3: Table Barem (prob_table_barem=1.0)
+        c3 = ReconstructorConfig(prob_no_barem=0, prob_inline_barem=0, prob_answer_grid=0, prob_end_section=0, prob_table_barem=1.0, seed="m3")
+        res3 = reconstruct_exam(exam_data, c3)
+        labels3 = [s["label"] for s in res3["spans"]]
+        self.assertIn("explanation", labels3)
+        self.assertIn("| Câu |", res3["raw_text"])
+
+        # 5. Mode 4: Answer Grid (prob_answer_grid=1.0)
+        c4 = ReconstructorConfig(prob_no_barem=0, prob_inline_barem=0, prob_answer_grid=1.0, prob_end_section=0, prob_table_barem=0, seed="m4")
+        res4 = reconstruct_exam(exam_data, c4)
+        labels4 = [s["label"] for s in res4["spans"]]
+        self.assertIn("explanation", labels4)
+        self.assertIn("BẢNG ĐÁP ÁN", res4["raw_text"])
+
+        # Verify all spans in all modes match raw_text slices
+        for res in [res0, res1, res2, res3, res4]:
+            for s in res["spans"]:
+                self.assertEqual(res["raw_text"][s["start"]:s["end"]], s["text"])
+
+    def test_group_question_permutation_answer_remapping(self):
+        q_group = {
+            "is_group": True,
+            "stimulus": "Đọc đoạn văn sau và trả lời câu hỏi.",
+            "subject": "literature",
+            "grade": 12,
+            "questions": [
+                {
+                    "stem": "Nội dung chính là gì?",
+                    "options": ["Đáp án đúng", "Sai 1", "Sai 2", "Sai 3"],
+                    "answer": "A"
+                }
+            ]
+        }
+        # Run with permutations enabled
+        config = ReconstructorConfig(
+            enable_permutations=True,
+            seed="perm_seed_123"
+        )
+        res = reconstruct_question(q_group, config)
+        self.assertIn("questions", res)
+        perm_sub_q = res["questions"][0]
+        # The correct option text is 'Đáp án đúng'
+        opt_letters = ["A", "B", "C", "D"]
+        correct_idx = perm_sub_q["options"].index("Đáp án đúng")
+        expected_ans = opt_letters[correct_idx]
+        self.assertEqual(perm_sub_q["answer"], expected_ans)
+
+    def test_exam_answer_grid_matches_permuted_answers(self):
+        exam_data = {
+            "subject": "chemistry",
+            "grade": 12,
+            "sections": {
+                "Phần 1. Trắc nghiệm": [
+                    {
+                        "is_group": False,
+                        "stem": "Công thức của glucozơ là",
+                        "options": ["C6H12O6", "C12H22O11", "C2H5OH", "CH3COOH"],
+                        "answer": "A",
+                        "question_type": "multiple_choice"
+                    }
+                ]
+            }
+        }
+        config = ReconstructorConfig(
+            enable_permutations=True,
+            prob_answer_grid=1.0,
+            prob_no_barem=0,
+            prob_inline_barem=0,
+            prob_end_section=0,
+            prob_table_barem=0,
+            seed="perm_exam_seed_456"
+        )
+        res = reconstruct_exam(exam_data, config)
+        # Find reconstructed option matching C6H12O6
+        raw_text = res["raw_text"]
+        for letter in ["A", "B", "C", "D"]:
+            if f"{letter}. C6H12O6" in raw_text:
+                # Answer grid should indicate this letter
+                self.assertIn(f"1 | {letter}", raw_text)
 
 if __name__ == '__main__':
     unittest.main()
